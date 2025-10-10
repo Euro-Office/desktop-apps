@@ -134,8 +134,8 @@
         else if ( [theme isEqualToString:uiThemeWhite] ) return UIColorFromRGB(0x444);
         else return NSColor.whiteColor;
     } else if ([name isEqualToString:btnPortalActiveBackgroundColor]) {
-        if ( [theme isEqualToString:uiThemeDark] ) return UIColorFromRGB(0x404040);
-        else if ( [theme isEqualToString:uiThemeContrastDark] ) return UIColorFromRGB(0x2a2a2a);
+        if ( [theme isEqualToString:uiThemeDark] ) return UIColorFromRGB(0x555555);
+        else if ( [theme isEqualToString:uiThemeContrastDark] ) return UIColorFromRGB(0x121212);
         else if ( [theme isEqualToString:uiThemeLight] ) return UIColorFromRGB(0xf7f7f7);
         else if ( [theme isEqualToString:uiThemeClassicLight] ) return UIColorFromRGB(0xf7f7f7);
         else if ( [theme isEqualToString:uiThemeGray] ) return UIColorFromRGB(0xf7f7f7);
