@@ -4,6 +4,7 @@
 # include <gtk/gtk.h>
 # include <gio/gio.h>
 # include <glib.h>
+# include "cascapplicationmanagerwrapper.h"
 #endif
 #include "defines.h"
 #include "utils.h"
@@ -182,6 +183,54 @@ auto getUserThemesPath() -> QString
 }
 
 #ifdef __linux__
+static const char *XDG_DSK_DBUS_SENDER = "org.freedesktop.portal.Desktop",
+                  *XDG_STN_DBUS_ITF    = "org.freedesktop.portal.Settings",
+                  *XDG_DSK_DBUS_PATH   = "/org/freedesktop/portal/desktop";
+
+static void onSettingsChanged(GDBusConnection *conn, const gchar *sender,
+                              const gchar *obj_path, const gchar *interface,
+                              const gchar *signal_name, GVariant *params, gpointer data)
+{
+    const gchar *ns;
+    const gchar *key;
+    GVariant *value;
+    g_variant_get(params, "(&s&s@v)", &ns, &key, &value);
+    if (!value) return;
+
+    GVariant *inner = g_variant_get_variant(value);
+    if (!inner) {
+        g_variant_unref(value);
+        return;
+    }
+    if (g_strcmp0(ns, "org.freedesktop.appearance") == 0) {
+        if (g_strcmp0(key, "color-scheme") == 0) {
+            guint32 color_scheme = g_variant_get_uint32(inner);
+            // 0: No preference
+            // 1: Prefer dark appearance
+            // 2: Prefer light appearance
+
+            static int last_is_dark = -1;
+            int is_dark = (color_scheme == 1);
+            if (last_is_dark != is_dark) {
+                last_is_dark = is_dark;
+
+                NSEditorApi::CAscCefMenuEvent * ns_event = new NSEditorApi::CAscCefMenuEvent(ASC_MENU_EVENT_TYPE_CEF_EXECUTE_COMMAND);
+                NSEditorApi::CAscExecCommand * pData = new NSEditorApi::CAscExecCommand;
+                pData->put_Command(L"system:changed");
+
+                QJsonObject _json_obj{{"colorscheme", is_dark == 1 ? "dark" : "light"}};
+                pData->put_Param(Utils::stringifyJson(_json_obj).toStdWString());
+
+                ns_event->m_pData = pData;
+                ns_event->m_nSenderId = 0;
+                AscAppManager::getInstance().OnEvent(ns_event);
+            }
+        }
+    }
+    g_variant_unref(inner);
+    g_variant_unref(value);
+}
+
 static bool themeExists(const char *theme)
 {
     char path[256];
@@ -300,29 +349,46 @@ public:
         QSettings _reg("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
         is_system_theme_dark = _reg.value("AppsUseLightTheme", 1).toInt() == 0;
 #else
-        if ( WindowHelper::getEnvInfo() == WindowHelper::KDE ) {
-            QColor color = QPalette().base().color();
-            int r, g, b;
-            color.getRgb(&r, &g, &b);
-            int lum = int(0.299*r + 0.587*g + 0.114*b);
-            is_system_theme_dark = !(lum > 127);
-        } else {
-            GSettings * sett = g_settings_new("org.gnome.desktop.interface");
-            GVariant * val = g_settings_get_value(sett, "gtk-theme");
-            char * env = nullptr;
-            g_variant_get(val, "s", &env);
-            if ( env ) {
-                is_system_theme_dark = !(QString::fromUtf8(env).toLower().indexOf("dark") == -1);
+        dbus_conn = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr);
+        if (dbus_conn) {
+            GError *err = NULL;
+            GVariant *value = g_dbus_connection_call_sync(
+                dbus_conn,
+                XDG_DSK_DBUS_SENDER,
+                XDG_DSK_DBUS_PATH,
+                XDG_STN_DBUS_ITF,
+                "ReadOne",
+                g_variant_new("(ss)", "org.freedesktop.appearance", "color-scheme"),
+                NULL, G_DBUS_CALL_FLAGS_NONE, -1,
+                NULL, &err);
 
-                free(env);
+            if (!err) {
+                if (value) {
+                    GVariant *inner;
+                    g_variant_get(value, "(v)", &inner);
+                    if (inner) {
+                        guint32 color_scheme = g_variant_get_uint32(inner);
+                        g_variant_unref(inner);
+                        // 0: No preference
+                        // 1: Prefer dark appearance
+                        // 2: Prefer light appearance
+                        is_system_theme_dark = (color_scheme == 1);
+                    }
+                    g_variant_unref(value);
+                }
+            } else {
+                g_error_free(err);
             }
 
-            g_object_unref(sett);
+            settings_signal = g_dbus_connection_signal_subscribe(
+                dbus_conn,
+                XDG_DSK_DBUS_SENDER,
+                XDG_STN_DBUS_ITF,
+                "SettingChanged",
+                XDG_DSK_DBUS_PATH,
+                NULL, G_DBUS_SIGNAL_FLAGS_NONE,
+                onSettingsChanged, NULL, NULL);
         }
-
-        // TODO: "system" theme blocked because bug 59804
-        if ( user_theme == THEME_ID_SYSTEM )
-            user_theme = THEME_DEFAULT_LIGHT_ID;
 #endif
 
         current = new CTheme;
@@ -369,6 +435,14 @@ public:
             delete current;
             current = nullptr;
         }
+
+#ifdef __linux__
+        if (dbus_conn) {
+            if (settings_signal != 0)
+                g_dbus_connection_signal_unsubscribe(dbus_conn, settings_signal);
+            g_object_unref(dbus_conn);
+        }
+#endif
     }
 
     auto setCurrent(const QString& id, bool force = false) -> bool
@@ -493,6 +567,10 @@ public:
     CTheme * current = nullptr;
     CTheme * dark = nullptr;
     CTheme * light = nullptr;
+#ifdef __linux__
+    GDBusConnection *dbus_conn = nullptr;
+    guint settings_signal = 0;
+#endif
 };
 
 /*
