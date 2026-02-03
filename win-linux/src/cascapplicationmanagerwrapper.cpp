@@ -1414,11 +1414,11 @@ void CAscApplicationManagerWrapper::initializeApp()
                                         {"type", _app.m_themes->current().stype()},
                                         {"id", QString::fromStdWString(_app.m_themes->current().id())},
                                         {"addlocal", "on"}
-#ifndef Q_OS_LINUX
+// #ifndef Q_OS_LINUX
                                         ,{"system", _app.m_themes->isSystemSchemeDark() ? "dark" : "light"}
-#else
-                                        ,{"system", "disabled"}
-#endif
+// #else
+//                                         ,{"system", "disabled"}
+// #endif
                                      });
 
     AscAppManager::getInstance().m_oSettings.macroses_support = reg_system.value("macrosDisabled", true).toBool();
