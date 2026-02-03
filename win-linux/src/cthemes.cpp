@@ -357,7 +357,7 @@ public:
                 XDG_DSK_DBUS_SENDER,
                 XDG_DSK_DBUS_PATH,
                 XDG_STN_DBUS_ITF,
-                "ReadOne",
+                "Read",
                 g_variant_new("(ss)", "org.freedesktop.appearance", "color-scheme"),
                 NULL, G_DBUS_CALL_FLAGS_NONE, -1,
                 NULL, &err);
@@ -367,12 +367,16 @@ public:
                     GVariant *inner;
                     g_variant_get(value, "(v)", &inner);
                     if (inner) {
-                        guint32 color_scheme = g_variant_get_uint32(inner);
+                        GVariant *final = g_variant_get_variant(inner);
+                        if (final) {
+                            guint32 color_scheme = g_variant_get_uint32(final);
+                            g_variant_unref(final);
+                            // 0: No preference
+                            // 1: Prefer dark appearance
+                            // 2: Prefer light appearance
+                            is_system_theme_dark = (color_scheme == 1);
+                        }
                         g_variant_unref(inner);
-                        // 0: No preference
-                        // 1: Prefer dark appearance
-                        // 2: Prefer light appearance
-                        is_system_theme_dark = (color_scheme == 1);
                     }
                     g_variant_unref(value);
                 }
