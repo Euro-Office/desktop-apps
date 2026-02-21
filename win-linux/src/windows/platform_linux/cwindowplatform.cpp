@@ -36,6 +36,7 @@
 #include "utils.h"
 #include <QTimer>
 #include <QPainter>
+#include <QPainterPath>
 #include <QX11Info>
 #include <xcb/xcb.h>
 

@@ -51,9 +51,9 @@
 #include "cascapplicationmanagerwrapper.h"
 #include "qdpichecker.h"
 #include "common/File.h"
-#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+//#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
 # include <QDesktopWidget>
-#endif
+//#endif
 
 #ifdef _WIN32
 # include <QDesktopServices>

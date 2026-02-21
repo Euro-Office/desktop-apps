@@ -1,10 +1,19 @@
 
 #include "cthemes.h"
 #ifdef Q_OS_LINUX
+# undef signals
+# undef slots
+# undef emit
+
 # include <gtk/gtk.h>
 # include <gio/gio.h>
 # include <glib.h>
 # include "cascapplicationmanagerwrapper.h"
+
+# define signals Q_SIGNALS
+# define slots Q_SLOTS
+# define emit Q_EMIT
+# define foreach Q_FOREACH
 #endif
 #include "defines.h"
 #include "utils.h"
