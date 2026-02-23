@@ -71,6 +71,16 @@ execute_process(
     WORKING_DIRECTORY ${OPENSSL_3RDPARTY_DIR_ABS}
 )
 
+message( "Fetch and build CEF" )
+set(CEF_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/cef")
+set(CEF_INSTALL_DIR "${EO_CORE_3RD_PARTY_INSTALL_DIR}/cef")
+get_filename_component(CEF_3RDPARTY_DIR_ABS "${CEF_3RDPARTY_DIR}" ABSOLUTE)
+get_filename_component(CEF_INSTALL_DIR_ABS "${CEF_INSTALL_DIR}" ABSOLUTE)
+#execute_process(
+#    COMMAND_ECHO STDOUT
+#    COMMAND ./nc-build.sh "${EO_CORE_3RD_PARTY_WORK_DIR}/cef" "${CEF_INSTALL_DIR}"
+#    WORKING_DIRECTORY ${CEF_3RDPARTY_DIR_ABS}
+#)
 
 # 2. Find Qt Packages
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
@@ -186,6 +196,7 @@ set(COMMON_SOURCES
     src/cappeventfilter.cpp
     src/iconfactory.cpp
     src/cthemes.cpp
+    ${CORE_ROOT_DIR}/Common/3dParty/openssl/common/common_openssl.cpp
 )
 
 
@@ -283,6 +294,11 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/extras.qrc")
     qt_add_resources(RESOURCES extras.qrc)
 endif()
 
+set(CEF_ROOT "/cef_binary")
+
+list(APPEND CMAKE_MODULE_PATH "${CEF_ROOT}/cmake")
+find_package(CEF REQUIRED)
+
 add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 
 find_package(Boost REQUIRED COMPONENTS filesystem system)
@@ -303,10 +319,17 @@ target_include_directories(DesktopEditors PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common
     ${CMAKE_CURRENT_SOURCE_DIR}/extras/update-daemon/src/classes
     ${OPENSSL_INSTALL_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
+    ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
 )
 
-# 9. Linking
+target_link_directories(DesktopEditors PRIVATE
+    "${CEF_ROOT}/Release"        # Path to libcef.so
+    "${CEF_ROOT}/build/libcef_dll_wrapper" # Path to libcef_dll_wrapper.a (usually in a subfolder)
+)
+
 target_link_libraries(DesktopEditors PRIVATE
+    # --- UI and High Level ---
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Svg
     Qt${QT_VERSION_MAJOR}::PrintSupport
@@ -314,19 +337,36 @@ target_link_libraries(DesktopEditors PRIVATE
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
     ${PLATFORM_LIBS}
     ${DBUS_LIBRARIES}
-    PdfFile
-    DjVuFile
-    XpsFile
-    UnicodeConverter
+
+    # --- Circular Dependency Group ---
+    # This forces the linker to resolve symbols between core libs and dependencies
+    -Wl,--start-group
+        qtascdocumentscore
+        ascdocumentscore
+        kernel             # Provides NSOpenSSL
+        kernel_network
+        graphics
+        UnicodeConverter
+        PdfFile
+        DjVuFile
+        XpsFile
+        cef_dll_wrapper
+        ${OPENSSL_INSTALL_DIR_ABS}/lib/libssl.a
+        ${OPENSSL_INSTALL_DIR_ABS}/lib/libcrypto.a
+        #${Boost_LIBRARIES} # Resolves boost::filesystem
+    -Wl,--end-group
+
+    # --- Main CEF Binary ---
+    cef                                 
+
+    # --- System Essentials ---
     hunspell
     ooxmlsignature
-    kernel
-    kernel_network
-    graphics
-    ascdocumentscore
-    qtascdocumentscore
-    ${OPENSSL_INSTALL_DIR_ABS}/lib/libssl.a
-    ${OPENSSL_INSTALL_DIR_ABS}/lib/libcrypto.a
+    X11
+    dl
+    pthread
+    rt
+    z
 )
 
 if(LINUX)
