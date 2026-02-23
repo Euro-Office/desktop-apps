@@ -450,8 +450,18 @@ namespace CEditorTools
 
         if ( result ) {
             CAscTabData * data = new CAscTabData(opts.name);
-            if (!(opts.srctype == etTemplateFile))
-                data->setUrl(opts.wurl);
+            if (!(opts.srctype == etTemplateFile)) {
+                std::wstring url{opts.wurl};
+                std::wstring app_scheme = AscAppManager::getInstance().GetExternalSchemeName();
+                if ( !app_scheme.empty() ) {
+                    std::wstring app_action_open = app_scheme + L"//open|";
+                    if (opts.wurl.rfind(app_action_open) == 0) {
+                        url.clear();
+                    }
+                }
+
+                data->setUrl(url);
+            }
             data->setCloudName(opts.cloud);
             data->setIsLocal( opts.srctype == etLocalFile || opts.srctype == etNewFile || opts.srctype == etTemplateFile ||
                            (opts.srctype == etRecentFile && !CExistanceController::isFileRemote(opts.url)) );
