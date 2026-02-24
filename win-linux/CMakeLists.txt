@@ -16,6 +16,10 @@ set(DESKTOP_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../desktop-sdk")
 
 include(${CORE_ROOT_DIR}/common.cmake)
 
+if(NOT TARGET hunspell-wrapper)
+    add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell-wrapper)
+endif()
+
 if(NOT TARGET PdfFile)
     add_subdirectory(${CORE_ROOT_DIR}/PdfFile PdfFile)
 endif()
@@ -26,10 +30,6 @@ endif()
 
 if(NOT TARGET DjVuFile)
     add_subdirectory(${CORE_ROOT_DIR}/DjVuFile DjVuFile)
-endif()
-
-if(NOT TARGET hunspell)
-    add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell)
 endif()
 
 if(NOT TARGET ooxmlsignature)
@@ -301,8 +301,6 @@ find_package(CEF REQUIRED)
 
 add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 
-find_package(Boost REQUIRED COMPONENTS filesystem system)
-
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DBUS REQUIRED dbus-1)
@@ -353,14 +351,13 @@ target_link_libraries(DesktopEditors PRIVATE
         cef_dll_wrapper
         ${OPENSSL_INSTALL_DIR_ABS}/lib/libssl.a
         ${OPENSSL_INSTALL_DIR_ABS}/lib/libcrypto.a
-        #${Boost_LIBRARIES} # Resolves boost::filesystem
     -Wl,--end-group
 
     # --- Main CEF Binary ---
     cef                                 
 
     # --- System Essentials ---
-    hunspell
+    hunspell_wrapper
     ooxmlsignature
     X11
     dl
