@@ -752,12 +752,6 @@ li.menu-item {
     &:nth-child(even) {
       background-color: @background-normal-element-light;
     }
-    
-    &:hover {
-      .col-more, .col-pin  {
-        opacity: 1;
-      }
-    }
 
     &:hover {
       background-color: @highlight-button-hover;
@@ -784,6 +778,22 @@ li.menu-item {
         .icon {
           opacity: 1;
         }
+      }
+    }
+
+    @media (min-width: 1037px) and (max-width: 1068px) {
+      &.pinned .col-pin {
+        opacity: 0;
+
+        .icon {
+          opacity: 0;
+        }
+      }
+    }
+
+    &:hover {
+      .col-more, .col-pin  {
+        opacity: 1;
       }
     }
 
