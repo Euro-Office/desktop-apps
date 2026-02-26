@@ -1090,10 +1090,14 @@
             
             ASCEditorWindowController *windowController = nil;
             if (self.mainWindowController && self.mainWindowController.window) {
-                NSRect mainFrame = self.mainWindowController.window.frame;
+                ASCTitleWindowController *mainWindowController = (ASCTitleWindowController *)self.mainWindowController;
+                NSRect mainFrame = [mainWindowController normalFrame];
                 mainFrame.origin.x += 30;
                 mainFrame.origin.y -= 30;
                 windowController = [ASCEditorWindowController initWithFrame:mainFrame];
+                if ( [mainWindowController.window isZoomed] ) {
+                    [windowController.window setIsZoomed:YES];
+                }
             } else {
                 windowController = [ASCEditorWindowController initWithDefaultFrame];
             }
@@ -1738,8 +1742,8 @@
     NSDictionary *widgetInfo = @{@"widgetType": @"window", @"captionHeight": TOOLBTN_HEIGHT};
     [webView setParentWidgetInfoWithJson:[widgetInfo jsonString]];
     
-    NSWindow * mainWindow = self.mainWindowController.window;
-    NSSize size = [mainWindow frame].size;
+    ASCTitleWindowController *mainWindowController = (ASCTitleWindowController *)self.mainWindowController;
+    NSSize size = [mainWindowController normalFrame].size;
     NSRect windowFrame = NSMakeRect(screenPoint.x - 200, screenPoint.y - size.height + 11, size.width, size.height);
         
     ASCEditorWindowController *windowController = [ASCEditorWindowController initWithFrame:windowFrame];

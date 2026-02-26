@@ -45,7 +45,7 @@
 #import "ASCHelper.h"
 
 @interface ASCTitleWindowController ()
-
+@property (nonatomic, assign) NSRect savedNormalFrame;
 @end
 
 @implementation ASCTitleWindowController
@@ -56,6 +56,8 @@
     self.window.title = productName;
     
     [super windowDidLoad];
+    self.savedNormalFrame = [self.window frame];
+
     [self.window setFrameAutosaveName:@"MainWindow"];
     [self setShouldCascadeWindows:NO];
     
@@ -85,6 +87,32 @@
 //    }
     
     return [controller shouldCloseWindow];
+}
+
+- (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame {
+    if ( ![window isZoomed] ) {
+        self.savedNormalFrame = [window frame];
+    }
+    return YES;
+}
+
+- (void)windowWillEnterFullScreen:(NSNotification *)notification {
+    NSWindow *window = notification.object;
+    if ( ![window isZoomed] ) {
+        self.savedNormalFrame = [window frame];
+    }
+}
+
+- (NSRect)normalFrame {
+    ASCTitleWindow *window = (ASCTitleWindow *)self.window;
+    BOOL isFullScreen = ([window styleMask] & NSWindowStyleMaskFullScreen) != 0;
+    NSRect frame;
+    if ( [window isZoomed] || isFullScreen ) {
+        frame = self.savedNormalFrame;
+    } else {
+        frame = [window frame];
+    }
+    return frame;
 }
 
 - (float)defaultTitleBarHeight {

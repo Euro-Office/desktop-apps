@@ -43,5 +43,6 @@
 
 @interface ASCTitleWindowController : NSWindowController
 - (BOOL)shouldPerformClose;
+- (NSRect)normalFrame;
 @property (nonatomic) ASCTitleBarController *titlebarController;
 @end
