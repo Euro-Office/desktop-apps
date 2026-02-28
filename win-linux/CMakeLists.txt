@@ -71,17 +71,6 @@ execute_process(
     WORKING_DIRECTORY ${OPENSSL_3RDPARTY_DIR_ABS}
 )
 
-message( "Fetch and build CEF" )
-set(CEF_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/cef")
-set(CEF_INSTALL_DIR "${EO_CORE_3RD_PARTY_INSTALL_DIR}/cef")
-get_filename_component(CEF_3RDPARTY_DIR_ABS "${CEF_3RDPARTY_DIR}" ABSOLUTE)
-get_filename_component(CEF_INSTALL_DIR_ABS "${CEF_INSTALL_DIR}" ABSOLUTE)
-#execute_process(
-#    COMMAND_ECHO STDOUT
-#    COMMAND ./nc-build.sh "${EO_CORE_3RD_PARTY_WORK_DIR}/cef" "${CEF_INSTALL_DIR}"
-#    WORKING_DIRECTORY ${CEF_3RDPARTY_DIR_ABS}
-#)
-
 # 2. Find Qt Packages
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
@@ -91,6 +80,10 @@ if(LINUX)
     add_definitions(-DLINUX -D_LINUX -D_X11)
     # Equivalent to x11extras for Qt6 if needed, or use X11 directly
 endif()
+
+set(CEF_ROOT "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/cef")
+list(APPEND CMAKE_MODULE_PATH "${CEF_ROOT}/cmake")
+find_package(CEF REQUIRED)
 
 # 3. Definitions & Global Config
 add_definitions(-D__DONT_WRITE_IN_APP_TITLE)
@@ -294,11 +287,6 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/extras.qrc")
     qt_add_resources(RESOURCES extras.qrc)
 endif()
 
-set(CEF_ROOT "/cef_binary")
-
-list(APPEND CMAKE_MODULE_PATH "${CEF_ROOT}/cmake")
-find_package(CEF REQUIRED)
-
 add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 
 
@@ -322,8 +310,10 @@ target_include_directories(DesktopEditors PRIVATE
 )
 
 target_link_directories(DesktopEditors PRIVATE
-    "${CEF_ROOT}/Release"        # Path to libcef.so
-    "${CEF_ROOT}/build/libcef_dll_wrapper" # Path to libcef_dll_wrapper.a (usually in a subfolder)
+    $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
+    $<$<CONFIG:Debug>:${CEF_ROOT}/dll-wrapper-debug/libcef_dll_wrapper>
+    $<$<CONFIG:Release>:${CEF_ROOT}/Release>
+    $<$<CONFIG:Release>:${CEF_ROOT}/dll-wrapper-release/libcef_dll_wrapper>
 )
 
 target_link_libraries(DesktopEditors PRIVATE
