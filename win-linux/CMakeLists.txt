@@ -1,7 +1,10 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
+
 
 # 1. Project Setup
 project(DesktopEditors VERSION 1.0 LANGUAGES CXX C)
+
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -59,6 +62,40 @@ endif()
 if(NOT TARGET qtascdocumentscore)
     add_subdirectory(${DESKTOP_SDK_ROOT}/ChromiumBasedEditors/lib/qt_wrapper/ qtascdocumentscore)
 endif()
+
+if(NOT TARGET doctrenderer)
+    add_subdirectory(${CORE_ROOT_DIR}/DesktopEditor/doctrenderer doctrenderer)
+endif()
+
+if(NOT TARGET DocxRenderer)
+    add_subdirectory(${CORE_ROOT_DIR}/DocxRenderer DocxRenderer)
+endif()
+
+if(NOT TARGET Fb2File)
+    add_subdirectory(${CORE_ROOT_DIR}/Fb2File Fb2File)
+endif()
+
+if(NOT TARGET EpubFile)
+    add_subdirectory(${CORE_ROOT_DIR}/EpubFile EpubFile)
+endif()
+
+if(NOT TARGET HtmlFile2)
+    add_subdirectory(${CORE_ROOT_DIR}/HtmlFile2 HtmlFile2)
+endif()
+
+if(NOT TARGET OFDFile)
+    add_subdirectory(${CORE_ROOT_DIR}/OFDFile OFDFile)
+endif()
+
+if(NOT TARGET IWorkFile)
+    add_subdirectory(${CORE_ROOT_DIR}/Apple IWorkFile)
+endif()
+
+if(NOT TARGET HWPFile)
+    add_subdirectory(${CORE_ROOT_DIR}/HwpFile HWPFile)
+endif()
+
+add_subdirectory( "${CORE_ROOT_DIR}/X2tConverter/build/cmake" x2t )
 
 message( "Fetch and build OpenSSL" )
 set(OPENSSL_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/openssl")
@@ -289,6 +326,7 @@ endif()
 
 add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 
+set_default_options(DesktopEditors) 
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DBUS REQUIRED dbus-1)
@@ -361,10 +399,78 @@ if(LINUX)
         Qt${QT_VERSION_MAJOR}::DBus
         Qt${QT_VERSION_MAJOR}::X11Extras
     )
+
+    target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")
 endif()
 
 # 10. Translations
 file(GLOB TS_FILES "langs/*.ts")
 qt5_create_translation(DesktopEditors TS_FILES ${TS_FILES})
+
+# 1. Explicitly set your CEF Path
+set(CEF_LIB_PATH "${CEF_ROOT}/Release")
+set(CEF_RESOURCES_PATH "${CEF_ROOT}/Resources")
+
+set(CMAKE_INSTALL_PREFIX "/desktopeditors")
+set(CMAKE_INSTALL_BINDIR ".")
+
+# 2. Main Target Installation
+install(TARGETS 
+    editors_helper
+    DesktopEditors
+    ascdocumentscore
+    qtascdocumentscore
+    ooxmlsignature
+    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# 3. Runtime Dependencies via install(CODE)
+#install(CODE "
+#    file(GET_RUNTIME_DEPENDENCIES
+#        EXECUTABLES \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/DesktopEditors\"
+#        RESOLVED_DEPENDENCIES_VAR _resolved
+#        UNRESOLVED_DEPENDENCIES_VAR _unresolved
+#        DIRECTORIES \"${CEF_LIB_PATH}\"
+#        PRE_EXCLUDE_REGEXES \"api-ms-\" \"ext-ms-\"
+#        POST_EXCLUDE_REGEXES \"system32\" \"^/lib\" \"^/usr\"
+#    )
+#    foreach(_dep \${_resolved})
+#        file(INSTALL \"\${_dep}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\")
+#    endforeach()
+#")
+
+# CEF Binaries
+install(DIRECTORY "${CEF_LIB_PATH}/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FILES_MATCHING
+    PATTERN "*.so"
+    PATTERN "*.so.*"
+    PATTERN "*.bin"
+    PATTERN "*.json"
+)
+
+# CEF Resources (pak files, locales, icudtl.dat)
+install(DIRECTORY "${CEF_RESOURCES_PATH}/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FILES_MATCHING PATTERN "lib*.so*"
+)
+
+install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/plugins/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "libboost*.so*"
+#)
+#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "libhunspell*.so*"
+#)
 
 #qt6: qt_add_translations...
