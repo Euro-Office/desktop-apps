@@ -95,7 +95,9 @@ if(NOT TARGET HWPFile)
     add_subdirectory(${CORE_ROOT_DIR}/HwpFile HWPFile)
 endif()
 
-add_subdirectory( "${CORE_ROOT_DIR}/X2tConverter/build/cmake" x2t )
+if(NOT TARGET x2t)
+    add_subdirectory( "${CORE_ROOT_DIR}/X2tConverter/build/cmake" x2t )
+endif()
 
 message( "Fetch and build OpenSSL" )
 set(OPENSSL_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/openssl")
