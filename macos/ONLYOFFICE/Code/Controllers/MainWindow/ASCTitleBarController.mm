@@ -589,6 +589,7 @@ static float kASCRTLTabsRightMargin = 0;
     [control removeTab:tab animated:NO];
     webView.data.url = tab.params[@"url"];
     webView.data.path = tab.params[@"path"];
+    webView.data.cloudName = tab.params[@"cloud"];
     
     AppDelegate *app = [NSApp delegate];
     [app dragDetachedTab:webView atScreenPoint:screenPoint withEvent:event];
