@@ -114,7 +114,7 @@ execute_process(
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
 
-if(LINUX)
+if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus X11Extras)
     add_definitions(-DLINUX -D_LINUX -D_X11)
     # Equivalent to x11extras for Qt6 if needed, or use X11 directly
@@ -351,9 +351,9 @@ target_include_directories(DesktopEditors PRIVATE
 
 target_link_directories(DesktopEditors PRIVATE
     $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
-    $<$<CONFIG:Debug>:${CEF_ROOT}/dll-wrapper-debug/libcef_dll_wrapper>
+    #$<$<CONFIG:Debug>:${CEF_ROOT}/dll-wrapper-debug/libcef_dll_wrapper>
     $<$<CONFIG:Release>:${CEF_ROOT}/Release>
-    $<$<CONFIG:Release>:${CEF_ROOT}/dll-wrapper-release/libcef_dll_wrapper>
+    #$<$<CONFIG:Release>:${CEF_ROOT}/dll-wrapper-release/libcef_dll_wrapper>
 )
 
 target_link_libraries(DesktopEditors PRIVATE
@@ -369,8 +369,8 @@ target_link_libraries(DesktopEditors PRIVATE
     # --- Circular Dependency Group ---
     # This forces the linker to resolve symbols between core libs and dependencies
     -Wl,--start-group
-        qtascdocumentscore
         ascdocumentscore
+        qtascdocumentscore
         kernel             # Provides NSOpenSSL
         kernel_network
         graphics
@@ -378,7 +378,7 @@ target_link_libraries(DesktopEditors PRIVATE
         PdfFile
         DjVuFile
         XpsFile
-        cef_dll_wrapper
+        #cef_dll_wrapper
         ${OPENSSL_INSTALL_DIR_ABS}/lib/libssl.a
         ${OPENSSL_INSTALL_DIR_ABS}/lib/libcrypto.a
     -Wl,--end-group
@@ -396,7 +396,7 @@ target_link_libraries(DesktopEditors PRIVATE
     z
 )
 
-if(LINUX)
+if(UNIX)
     target_link_libraries(DesktopEditors PRIVATE
         Qt${QT_VERSION_MAJOR}::DBus
         Qt${QT_VERSION_MAJOR}::X11Extras
