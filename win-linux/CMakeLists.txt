@@ -19,6 +19,20 @@ set(DESKTOP_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../desktop-sdk")
 
 include(${CORE_ROOT_DIR}/common.cmake)
 
+message( "Fetch and build icu (DESKTOPEDITOR VERSION 60)" )
+set(ICU_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/icu")
+set(ICU_INSTALL_DIR "${EO_CORE_3RD_PARTY_INSTALL_DIR}/icu60")
+set(ICU_MAJOR_VER "60")
+set(ICU_MINOR_VER "3")
+get_filename_component(ICU_3RDPARTY_DIR_ABS "${ICU_3RDPARTY_DIR}" ABSOLUTE)
+get_filename_component(ICU_INSTALL_DIR_ABS "${ICU_INSTALL_DIR}" ABSOLUTE)
+execute_process(
+    COMMAND_ECHO STDOUT
+    COMMAND ./nc-build.sh "${EO_CORE_3RD_PARTY_WORK_DIR}/icu60" "${ICU_INSTALL_DIR}" ${ICU_MAJOR_VER} ${ICU_MINOR_VER}
+    WORKING_DIRECTORY ${ICU_3RDPARTY_DIR_ABS}
+)
+
+
 if(NOT TARGET hunspell-wrapper)
     add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell-wrapper)
 endif()
@@ -111,6 +125,12 @@ execute_process(
 )
 
 # 2. Find Qt Packages
+set(QT_ROOT "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/qt/Qt-5.9.9/gcc_64/")
+set(QT_DIR "${QT_ROOT}/lib/cmake/Qt5")
+#set(QT_DIR "/build-cache-desktop/vcpkg_installed/x64-linux-dynamic/qt/Qt-5.9.9/gcc_64/lib/cmake/Qt5/")
+set(Qt5_DIR "${QT_ROOT}/lib/cmake/Qt5")
+#set(Qt5_DIR "/build-cache-desktop/vcpkg_installed/x64-linux-dynamic/qt/Qt-5.9.9/gcc_64/lib/cmake/Qt5/")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
 
@@ -321,9 +341,9 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 # 7. Create Executable
-qt_add_resources(RESOURCES resources.qrc)
+qt5_add_resources(RESOURCES resources.qrc)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/extras.qrc")
-    qt_add_resources(RESOURCES extras.qrc)
+    qt5_add_resources(RESOURCES extras.qrc)
 endif()
 
 add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
@@ -354,6 +374,7 @@ target_link_directories(DesktopEditors PRIVATE
     #$<$<CONFIG:Debug>:${CEF_ROOT}/dll-wrapper-debug/libcef_dll_wrapper>
     $<$<CONFIG:Release>:${CEF_ROOT}/Release>
     #$<$<CONFIG:Release>:${CEF_ROOT}/dll-wrapper-release/libcef_dll_wrapper>
+    ${ICU_INSTALL_DIR}/include
 )
 
 target_link_libraries(DesktopEditors PRIVATE
@@ -400,6 +421,9 @@ if(UNIX)
     target_link_libraries(DesktopEditors PRIVATE
         Qt${QT_VERSION_MAJOR}::DBus
         Qt${QT_VERSION_MAJOR}::X11Extras
+        ${ICU_INSTALL_DIR_ABS}/lib/libicuuc.so.${ICU_MAJOR_VER}
+        ${ICU_INSTALL_DIR_ABS}/lib/libicudata.so.${ICU_MAJOR_VER}
+        ${ICU_INSTALL_DIR_ABS}/lib/libicui18n.so.${ICU_MAJOR_VER}
     )
 
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")
@@ -462,9 +486,50 @@ install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
     FILES_MATCHING PATTERN "lib*.so*"
 )
 
-install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/plugins/"
+install(DIRECTORY "${ICU_INSTALL_DIR_ABS}/lib/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FILES_MATCHING PATTERN "lib*.so*"
+)
+
+#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtbase/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "lib*.so*"
+#)
+
+#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtmultimedia/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "lib*.so*"
+#)
+
+#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtmultimedia/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "lib*.so*"
+#)
+
+
+#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtsvg/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "lib*.so*"
+#)
+
+#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtbase/plugins/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#)
+
+install(DIRECTORY "${QT_ROOT}/lib/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FILES_MATCHING PATTERN "lib*.so*"
+)
+
+install(DIRECTORY "${QT_ROOT}/plugins/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/plugins/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#)
+
+
 
 #install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
 #    DESTINATION ${CMAKE_INSTALL_BINDIR}
