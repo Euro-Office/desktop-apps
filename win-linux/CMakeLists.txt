@@ -113,6 +113,14 @@ if(NOT TARGET x2t)
     add_subdirectory( "${CORE_ROOT_DIR}/X2tConverter/build/cmake" x2t )
 endif()
 
+if(NOT TARGET allfontsgen)
+    add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/AllFontsGen" allfontsgen )
+endif()
+
+if(NOT TARGET allthemesgen)
+    add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/allthemesgen" allthemesgen )
+endif()
+
 message( "Fetch and build OpenSSL" )
 set(OPENSSL_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/openssl")
 set(OPENSSL_INSTALL_DIR "${EO_CORE_3RD_PARTY_INSTALL_DIR}/openssl_build_linux_64")
@@ -127,10 +135,7 @@ execute_process(
 # 2. Find Qt Packages
 set(QT_ROOT "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/qt/Qt-5.9.9/gcc_64/")
 set(QT_DIR "${QT_ROOT}/lib/cmake/Qt5")
-#set(QT_DIR "/build-cache-desktop/vcpkg_installed/x64-linux-dynamic/qt/Qt-5.9.9/gcc_64/lib/cmake/Qt5/")
 set(Qt5_DIR "${QT_ROOT}/lib/cmake/Qt5")
-#set(Qt5_DIR "/build-cache-desktop/vcpkg_installed/x64-linux-dynamic/qt/Qt-5.9.9/gcc_64/lib/cmake/Qt5/")
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
 
@@ -481,10 +486,10 @@ install(DIRECTORY "${CEF_RESOURCES_PATH}/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-    FILES_MATCHING PATTERN "lib*.so*"
-)
+#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "lib*.so*"
+#)
 
 install(DIRECTORY "${ICU_INSTALL_DIR_ABS}/lib/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -523,6 +528,11 @@ install(DIRECTORY "${QT_ROOT}/lib/"
 
 install(DIRECTORY "${QT_ROOT}/plugins/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    FILES_MATCHING PATTERN "lib*.so*"
 )
 
 #install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/plugins/"
