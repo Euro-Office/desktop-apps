@@ -730,7 +730,7 @@ int CMainWindow::trySaveDocument(int index)
         default:{
             m_pTabs->editorCloseRequest(index);
             m_pTabs->panel(index)->cef()->Apply(new CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_SAVE));
-            Utils::processMoreEvents();
+            Utils::processMoreEvents(100);
 
             modal_res = MODAL_RESULT_YES;
             break;}
