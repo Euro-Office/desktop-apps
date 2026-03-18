@@ -442,7 +442,9 @@ qt5_create_translation(DesktopEditors TS_FILES ${TS_FILES})
 set(CEF_LIB_PATH "${CEF_ROOT}/Release")
 set(CEF_RESOURCES_PATH "${CEF_ROOT}/Resources")
 
-set(CMAKE_INSTALL_PREFIX "/desktopeditors")
+
+
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/desktopeditors" CACHE PATH "Default install path" FORCE)
 set(CMAKE_INSTALL_BINDIR ".")
 
 # 2. Main Target Installation
@@ -455,21 +457,6 @@ install(TARGETS
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-# 3. Runtime Dependencies via install(CODE)
-#install(CODE "
-#    file(GET_RUNTIME_DEPENDENCIES
-#        EXECUTABLES \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/DesktopEditors\"
-#        RESOLVED_DEPENDENCIES_VAR _resolved
-#        UNRESOLVED_DEPENDENCIES_VAR _unresolved
-#        DIRECTORIES \"${CEF_LIB_PATH}\"
-#        PRE_EXCLUDE_REGEXES \"api-ms-\" \"ext-ms-\"
-#        POST_EXCLUDE_REGEXES \"system32\" \"^/lib\" \"^/usr\"
-#    )
-#    foreach(_dep \${_resolved})
-#        file(INSTALL \"\${_dep}\" DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}\")
-#    endforeach()
-#")
 
 # CEF Binaries
 install(DIRECTORY "${CEF_LIB_PATH}/"
@@ -486,40 +473,10 @@ install(DIRECTORY "${CEF_RESOURCES_PATH}/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "lib*.so*"
-#)
-
 install(DIRECTORY "${ICU_INSTALL_DIR_ABS}/lib/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
     FILES_MATCHING PATTERN "lib*.so*"
 )
-
-#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtbase/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "lib*.so*"
-#)
-
-#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtmultimedia/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "lib*.so*"
-#)
-
-#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtmultimedia/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "lib*.so*"
-#)
-
-
-#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtsvg/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "lib*.so*"
-#)
-
-#install(DIRECTORY "/qt-build/qt-everywhere-src-5.15.2/qtbase/plugins/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#)
 
 install(DIRECTORY "${QT_ROOT}/lib/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -535,19 +492,40 @@ install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64
     FILES_MATCHING PATTERN "lib*.so*"
 )
 
-#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/plugins/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#)
 
+#Install Core dependencies
+install(TARGETS 
+    UnicodeConverter
+    kernel
+    kernel_network
+    Fb2File
+    PdfFile
+    HtmlFile2
+    EpubFile
+    XpsFile
+    OFDFile
+    DjVuFile
+    DocxRenderer
+    doctrenderer
+    IWorkFile
+    HWPFile
+    graphics
+    x2tlib
+    allfontsgen
+    allthemesgen
+    x2t
+    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
+)
 
+install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
+    FILES_MATCHING PATTERN "lib*.so*"
+)
 
-#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "libboost*.so*"
-#)
-#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "libhunspell*.so*"
-#)
+install(DIRECTORY "${EO_CORE_3RD_PARTY_INSTALL_DIR}/icu/lib/"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
+    FILES_MATCHING PATTERN "lib*.so*"
+)
 
 #qt6: qt_add_translations...
