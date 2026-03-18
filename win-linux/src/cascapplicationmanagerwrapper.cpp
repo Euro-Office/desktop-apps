@@ -1706,13 +1706,15 @@ namespace Drop {
                 QObject::connect(drop_timer, &QTimer::timeout, []{
                     CMainWindow * main_window = CAscApplicationManagerWrapper::mainWindow();
                     QPoint current_cursor = QCursor::pos();
-                    if ( main_window->canPinTabAtPoint(current_cursor)
+                    if ( drop_handle && main_window->canPinTabAtPoint(current_cursor)
                             && !isMainWindowCoveredByAnotherWindow(main_window, (QWidget*)drop_handle, current_cursor) ) {
                         if ( current_cursor == last_cursor_pos ) {
                             drop_timer->stop();
 
-                            if ( WindowHelper::isLeftButtonPressed() )
+                            if ( WindowHelper::isLeftButtonPressed() ) {
                                 callback_to_attach(CAscApplicationManagerWrapper::editorWindowFromHandle(drop_handle) );
+                                drop_handle = 0;
+                            }
                         } else {
                             last_cursor_pos = current_cursor;
                         }
