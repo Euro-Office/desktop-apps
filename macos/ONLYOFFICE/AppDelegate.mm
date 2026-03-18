@@ -450,12 +450,9 @@
                 [self safeCloseEditorWindows];
             }
             
-            return NO;
-            
         } else
         if (result == NSAlertSecondButtonReturn) {
             // Cancel
-            return NO;
             
         } else {
             // Delete and Quit
@@ -475,8 +472,9 @@
                 [controller.window close];
             }
             
-            return NO;
         }
+        
+        return NO;
     }
     return YES;
 }
