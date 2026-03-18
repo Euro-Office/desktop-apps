@@ -40,6 +40,7 @@
 #else
 # include <unistd.h>
 # include "platform_linux/singleapplication.h"
+# include "platform_linux/xcbutils.h"
 # ifdef DOCUMENTSCORE_OPENSSL_SUPPORT
 #  include "platform_linux/cdialogcertificateinfo.h"
 # endif
@@ -1679,9 +1680,10 @@ namespace Drop {
             }
             return hwnd != (HWND)mainWindow->winId();
         }
-#else
-#endif
         return false;
+#else
+        return XcbUtils::isWindowCoveredAt(mainWindow->winId(), ignoringWindow->winId(), pt.x(), pt.y());
+#endif
     }
 
     const int drop_timeout = 300;

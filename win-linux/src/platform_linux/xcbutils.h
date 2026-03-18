@@ -47,6 +47,7 @@ void findWindowAsync(const char *window_name, void *user_data,
                      void(*callback)(xcb_window_t, void*));
 void getWindowStack(std::vector<xcb_window_t> &winStack);
 void setInputEnabled(xcb_window_t window, bool enabled);
+bool isWindowCoveredAt(xcb_window_t winId, xcb_window_t ignoringWinId, int x, int y);
 }
 
 #endif // XCBUTILS_H
