@@ -459,8 +459,7 @@ public:
                 do {
                     WId wid = (WId)hWnd;
 #else
-            std::vector<xcb_window_t> winStack;
-            XcbUtils::getWindowStack(winStack);
+            std::vector<xcb_window_t> winStack = XcbUtils::getWindowStack();
             for (auto it = winStack.rbegin(); it != winStack.rend(); it++) {
                 WId wid = (WId)(*it);
 #endif

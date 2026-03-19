@@ -233,8 +233,8 @@ core_linux {
                 $$PWD/extras/update-daemon/src/classes/csocket.cpp
 
     CONFIG += link_pkgconfig
-    PKGCONFIG += glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xext libnotify
-    LIBS += -lX11 -lX11-xcb -lcups
+    PKGCONFIG += glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xcb-shape xext libnotify
+    LIBS += -lX11 -lcups
 
     cef_version_107 {
         LIBS += $$PWD/../../build_tools/tools/linux/sysroot/ubuntu14/libdbus-1.so.3
