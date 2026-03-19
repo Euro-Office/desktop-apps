@@ -1730,10 +1730,22 @@
     }
 }
 
+- (BOOL)isMainWindowCoveredByAnotherWindowAtPoint:(NSPoint)point ignoringWindow:(NSWindow *)window {
+    ASCTitleBarController *titlebarController = [self titleBarController];
+    if (!titlebarController) {
+        return NO;
+    }
+    NSInteger mainWindowNumber = [titlebarController.view.window windowNumber];
+    NSInteger current = [NSWindow windowNumberAtPoint:point belowWindowWithWindowNumber:[window windowNumber]];
+    return (current != 0 && current != mainWindowNumber);
+}
+
 - (void)handleDropTimer {
     ASCTitleBarController *titlebarController = [self titleBarController];
     NSPoint currentCursor = [NSEvent mouseLocation];
-    if (titlebarController && [titlebarController canPinTabAtPoint:currentCursor]) {
+    if (titlebarController &&
+        ![self isMainWindowCoveredByAnotherWindowAtPoint:currentCursor ignoringWindow:self.dropEditorWindow] &&
+        [titlebarController canPinTabAtPoint:currentCursor]) {
         if (NSEqualPoints(currentCursor, lastCursorPos)) {
             [self stopDropTimer];
             
@@ -1774,7 +1786,8 @@
         self.dropEditorWindow = editorWindow;
         
         NSPoint pos = [NSEvent mouseLocation];
-        if ([titlebarController canPinTabAtPoint:pos]) {
+        if (![self isMainWindowCoveredByAnotherWindowAtPoint:pos ignoringWindow:editorWindow] &&
+            [titlebarController canPinTabAtPoint:pos]) {
             if (!dropTimer) {
                 dropTimer = [NSTimer scheduledTimerWithTimeInterval:0.15
                                                              target:self

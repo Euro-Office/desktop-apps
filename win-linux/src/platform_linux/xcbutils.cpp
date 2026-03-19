@@ -187,6 +187,71 @@ void XcbUtils::getWindowStack(std::vector<xcb_window_t> &winStack)
     }
 }
 
+bool XcbUtils::isWindowCoveredAt(xcb_window_t winId, xcb_window_t ignoringWinId, int x, int y)
+{
+    xcb_connection_t *conn = QX11Info::connection();
+    if (!conn) return false;
+
+    const char *prop_name = "_NET_CLIENT_LIST_STACKING";
+    xcb_intern_atom_cookie_t atom_cookie = xcb_intern_atom(conn, 1, strlen(prop_name), prop_name);
+    xcb_intern_atom_reply_t *atom_reply = xcb_intern_atom_reply(conn, atom_cookie, nullptr);
+    if (!atom_reply) return false;
+
+    xcb_atom_t stacking_atom = atom_reply->atom;
+    free(atom_reply);
+    if (stacking_atom == XCB_ATOM_NONE) return false;
+
+    const xcb_window_t default_root = (xcb_window_t)QX11Info::appRootWindow();
+    xcb_get_property_cookie_t prop_cookie = xcb_get_property(conn, 0, default_root, stacking_atom, XCB_ATOM_WINDOW, 0, 1024);
+    xcb_get_property_reply_t *prop_reply = xcb_get_property_reply(conn, prop_cookie, nullptr);
+    if (!prop_reply) return false;
+
+    int win_count = xcb_get_property_value_length(prop_reply) / sizeof(xcb_window_t);
+    xcb_window_t *win_list = static_cast<xcb_window_t *>(xcb_get_property_value(prop_reply));
+
+    bool result = false;
+
+    for (int i = win_count - 1; i >= 0; i--) {
+        xcb_window_t wid = win_list[i];
+        if (wid == ignoringWinId)
+            continue;
+
+        xcb_get_window_attributes_cookie_t attr_cookie = xcb_get_window_attributes(conn, wid);
+        xcb_get_window_attributes_reply_t *attr_reply = xcb_get_window_attributes_reply(conn, attr_cookie, nullptr);
+        if (!attr_reply) continue;
+
+        bool visible = (attr_reply->map_state == XCB_MAP_STATE_VIEWABLE);
+        free(attr_reply);
+        if (!visible) continue;
+
+        xcb_get_geometry_cookie_t geom_cookie = xcb_get_geometry(conn, wid);
+        xcb_get_geometry_reply_t *geom_reply = xcb_get_geometry_reply(conn, geom_cookie, nullptr);
+        if (!geom_reply) continue;
+
+        int w = geom_reply->width;
+        int h = geom_reply->height;
+        const xcb_window_t wid_root = geom_reply->root;
+        free(geom_reply);
+
+        xcb_translate_coordinates_cookie_t trans_cookie = xcb_translate_coordinates(conn, wid, wid_root, 0, 0);
+        xcb_translate_coordinates_reply_t *trans_reply = xcb_translate_coordinates_reply(conn, trans_cookie, nullptr);
+        if (!trans_reply) continue;
+
+        int wx = trans_reply->dst_x;
+        int wy = trans_reply->dst_y;
+        free(trans_reply);
+
+        if (x < wx || x >= wx + w || y < wy || y >= wy + h)
+            continue;
+
+        result = (wid != winId);
+        break;
+    }
+
+    free(prop_reply);
+    return result;
+}
+
 void XcbUtils::setInputEnabled(xcb_window_t window, bool enabled)
 {
     Display* disp = QX11Info::display();
