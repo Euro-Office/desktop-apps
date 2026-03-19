@@ -513,6 +513,8 @@ install(TARGETS
     x2tlib
     allfontsgen
     allthemesgen
+    StarMathConverter
+    ooxmlsignature
     x2t
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
