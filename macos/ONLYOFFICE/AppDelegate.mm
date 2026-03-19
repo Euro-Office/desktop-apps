@@ -58,6 +58,7 @@
 #import "ASCExternalController.h"
 #import "ASCEditorJSVariables.h"
 #import "ASCThemesController.h"
+#import "ASCEventsController.h"
 #import "NSAlert+SynchronousSheet.h"
 #import "NSString+Extensions.h"
 #import "NSDictionary+Extensions.h"
@@ -78,6 +79,7 @@
 @property (nonatomic, weak) NSWindow *dropEditorWindow;
 @property (nonatomic, assign) BOOL terminationAlreadyHandled;
 @property (nonatomic, assign) BOOL hasFilesToOpenOnLaunch;
+@property (nonatomic, assign) BOOL terminationDialogPending;
 @end
 
 @implementation AppDelegate
@@ -340,6 +342,10 @@
         return NSTerminateNow;
     }
     
+    if (self.terminationDialogPending) {
+        return NSTerminateCancel;
+    }
+    
     if (![self shouldTerminateApplication])
         return NSTerminateCancel;
     
@@ -355,12 +361,6 @@
 
 - (BOOL)shouldTerminateApplication {
     NSInteger unsaved = 0;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameFullscreen
-                                                        object:nil
-                                                      userInfo:@{@"fullscreen" : @(NO),
-                                                                 @"terminate"  : @(YES)
-                                                               }];
     NSMutableArray * locked_uuids = [NSMutableArray array];
     
     ASCCommonViewController * controller = nil;
@@ -407,6 +407,7 @@
     }
     
     if (unsaved > 0) {
+        void (^showTerminationDialog)(void) = ^{
         NSString * productName = [ASCHelper appName];
         
         NSAlert *alert = [[NSAlert alloc] init];
@@ -450,12 +451,9 @@
                 [self safeCloseEditorWindows];
             }
             
-            return NO;
-            
         } else
         if (result == NSAlertSecondButtonReturn) {
             // Cancel
-            return NO;
             
         } else {
             // Delete and Quit
@@ -474,9 +472,26 @@
             for (NSWindowController *controller in controllers) {
                 [controller.window close];
             }
-            
-            return NO;
         }
+        };
+        
+        if ([ASCEventsController hasFullscreenState]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameFullscreen
+                                                                object:nil
+                                                              userInfo:@{@"fullscreen" : @(NO),
+                                                                         @"terminate"  : @(YES)
+                                                                       }];
+            self.terminationDialogPending = YES;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.terminationDialogPending = NO;
+                showTerminationDialog();
+            });
+            
+        } else {
+            showTerminationDialog();
+        }
+        
+        return NO;
     }
     return YES;
 }
