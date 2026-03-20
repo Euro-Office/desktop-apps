@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS dokuments (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Rādīt galveno logu";
+
+/* No comment provided by engineer. */
+"Close" = "Aizvērt";
+
+/* No comment provided by engineer. */
+"Close saved" = "Aizvērt saglabāto";
+
+/* No comment provided by engineer. */
+"Close all" = "Aizvērt visu";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Rādīt mapē";
+
+/* No comment provided by engineer. */
+"Move to start" = "Pārvietot, lai sāktu";
+
+/* No comment provided by engineer. */
+"Move to end" = "Pārvietot uz beigām";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Atspraust cilni";
+
+/* No comment provided by engineer. */
+"Create new" = "Izveidot jaunu";
+
+/* No comment provided by engineer. */
 "Yes" = "Jā";
 
 /* No comment provided by engineer. */

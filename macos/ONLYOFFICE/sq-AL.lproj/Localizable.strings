@@ -215,7 +215,34 @@
 "Word 2007 Document" = "Dokument Word 2007";
 
 /* No comment provided by engineer. */
-"XML Paper Specification" = "Letër specifikimi XML";
+"XML Paper Specification" = "Dokument OpenXPS (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Shfaqni dritaren kryesore";
+
+/* No comment provided by engineer. */
+"Close" = "Mbyllni";
+
+/* No comment provided by engineer. */
+"Close saved" = "Mbyllni të ruajtur";
+
+/* No comment provided by engineer. */
+"Close all" = "Mbyllni të gjitha";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Shfaqni në dosje";
+
+/* No comment provided by engineer. */
+"Move to start" = "Zhvendosni në fillim";
+
+/* No comment provided by engineer. */
+"Move to end" = "Zhvendosni në fund";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Hiqni skedën";
+
+/* No comment provided by engineer. */
+"Create new" = "Krijoni të ri/e";
 
 /* No comment provided by engineer. */
 "Yes" = "Po";

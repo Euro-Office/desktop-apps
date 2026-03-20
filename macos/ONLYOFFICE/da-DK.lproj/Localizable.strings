@@ -191,6 +191,33 @@
 "XML Paper Specification" = "OpenXPS-dokument (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Vis hovedvindue";
+
+/* No comment provided by engineer. */
+"Close" = "Luk";
+
+/* No comment provided by engineer. */
+"Close saved" = "Luk gemt";
+
+/* No comment provided by engineer. */
+"Close all" = "Luk alle";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Vis i mappe";
+
+/* No comment provided by engineer. */
+"Move to start" = "Flyt til start";
+
+/* No comment provided by engineer. */
+"Move to end" = "Flyt til slutningen";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Frigør fanen";
+
+/* No comment provided by engineer. */
+"Create new" = "Opret ny";
+
+/* No comment provided by engineer. */
 "Yes" = "Ja";
 
 /* No comment provided by engineer. */

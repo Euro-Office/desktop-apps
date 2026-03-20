@@ -194,6 +194,33 @@
 "XML Paper Specification" = "Документ OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Показати головне вікно";
+
+/* No comment provided by engineer. */
+"Close" = "Закрити";
+
+/* No comment provided by engineer. */
+"Close saved" = "Закрити збережене";
+
+/* No comment provided by engineer. */
+"Close all" = "Закрити все";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Показати в папці";
+
+/* No comment provided by engineer. */
+"Move to start" = "Перемістити на початок";
+
+/* No comment provided by engineer. */
+"Move to end" = "Перемістити в кінець";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Відкріпити вкладку";
+
+/* No comment provided by engineer. */
+"Create new" = "Новий документ";
+
+/* No comment provided by engineer. */
 "Yes" = "Так";
 
 /* No comment provided by engineer. */

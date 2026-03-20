@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS 檔案(*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "顯示主視窗";
+
+/* No comment provided by engineer. */
+"Close" = "關閉";
+
+/* No comment provided by engineer. */
+"Close saved" = "關閉已儲存";
+
+/* No comment provided by engineer. */
+"Close all" = "關閉所有";
+
+/* No comment provided by engineer. */
+"Show in folder" = "在資料夾中顯示";
+
+/* No comment provided by engineer. */
+"Move to start" = "移至起始位置";
+
+/* No comment provided by engineer. */
+"Move to end" = "移至結尾";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "取消固定選項卡";
+
+/* No comment provided by engineer. */
+"Create new" = "新增";
+
+/* No comment provided by engineer. */
 "Yes" = "是";
 
 /* No comment provided by engineer. */

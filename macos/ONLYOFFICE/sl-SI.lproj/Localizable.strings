@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS dokument (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Prikaži glavno okno";
+
+/* No comment provided by engineer. */
+"Close" = "Zapri";
+
+/* No comment provided by engineer. */
+"Close saved" = "Zapri shranjeno";
+
+/* No comment provided by engineer. */
+"Close all" = "Zapri vse";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Prikaži v mapi";
+
+/* No comment provided by engineer. */
+"Move to start" = "Premakni na začetek";
+
+/* No comment provided by engineer. */
+"Move to end" = "Premakni na konec";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Odpni zavihek";
+
+/* No comment provided by engineer. */
+"Create new" = "Ustvari novo";
+
+/* No comment provided by engineer. */
 "Yes" = "Da";
 
 /* No comment provided by engineer. */

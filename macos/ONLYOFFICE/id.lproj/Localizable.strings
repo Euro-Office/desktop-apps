@@ -200,6 +200,33 @@
 "XML Paper Specification" = "Dokumen OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Tampilkan jendela utama";
+
+/* No comment provided by engineer. */
+"Close" = "Menutup";
+
+/* No comment provided by engineer. */
+"Close saved" = "Tutup tersimpan";
+
+/* No comment provided by engineer. */
+"Close all" = "Tutup semua";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Tampilkan di dalam folder";
+
+/* No comment provided by engineer. */
+"Move to start" = "Pindahkan ke awal";
+
+/* No comment provided by engineer. */
+"Move to end" = "Pindah ke akhir";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Lepaskan pin tab";
+
+/* No comment provided by engineer. */
+"Create new" = "Buat yang baru";
+
+/* No comment provided by engineer. */
 "Yes" = "Ya";
 
 /* No comment provided by engineer. */

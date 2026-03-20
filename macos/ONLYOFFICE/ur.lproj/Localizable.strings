@@ -212,10 +212,40 @@
 "Word 97-2003 Document" = "ورڈ 97-2003 دستاویز";
 
 /* No comment provided by engineer. */
-"Word 2007 Document" = "ورڈ 2007 دستاویز";
+"Word 2007 Document" = "ورڈ 2007 دستاویز (*.doc)";
 
 /* No comment provided by engineer. */
-"XML Paper Specification" = "XML کاغذ کی تفصیلات";
+"XML Paper Specification" = "XML کاغذ کی تفصیلات (*.xps)";
+
+/* No comment provided by engineer. */
+"XML Paper Specification" = "دستاویز OpenXPS (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "مین ونڈو دکھائیں";
+
+/* No comment provided by engineer. */
+"Close" = "بند";
+
+/* No comment provided by engineer. */
+"Close saved" = "بند محفوظ ہو گیا-";
+
+/* No comment provided by engineer. */
+"Close all" = "سب بند کرو";
+
+/* No comment provided by engineer. */
+"Show in folder" = "فولڈر میں دکھائیں";
+
+/* No comment provided by engineer. */
+"Move to start" = "شروع کرنے کے لیے آگے بڑھیں۔";
+
+/* No comment provided by engineer. */
+"Move to end" = "اختتام پر منتقل کریں۔";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "ٹیب کو ان پن کریں۔";
+
+/* No comment provided by engineer. */
+"Create new" = "نیا بنائیں";
 
 /* No comment provided by engineer. */
 "Yes" = "جی ہاں";

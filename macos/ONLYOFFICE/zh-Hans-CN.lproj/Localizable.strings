@@ -215,7 +215,34 @@
 "Word 2007 Document" = "Office Open XML 文档（*.docx)";
 
 /* No comment provided by engineer. */
-"XML Paper Specification" = "OpenXPS文件（*.xps）";
+"XML Paper Specification" = "OpenXPS 文档 (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "显示主窗口";
+
+/* No comment provided by engineer. */
+"Close" = "关闭";
+
+/* No comment provided by engineer. */
+"Close saved" = "关闭已保存的文件";
+
+/* No comment provided by engineer. */
+"Close all" = "全部关闭";
+
+/* No comment provided by engineer. */
+"Show in folder" = "在文件夹中显示";
+
+/* No comment provided by engineer. */
+"Move to start" = "移到开头";
+
+/* No comment provided by engineer. */
+"Move to end" = "移到末尾";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "取消固定标签页";
+
+/* No comment provided by engineer. */
+"Create new" = "新建";
 
 /* No comment provided by engineer. */
 "Yes" = "是";

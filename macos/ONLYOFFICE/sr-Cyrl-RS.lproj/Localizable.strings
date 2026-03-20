@@ -218,6 +218,33 @@
 "XML Paper Specification" = "OpenXPS документ (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Прикажи главни прозор";
+
+/* No comment provided by engineer. */
+"Close" = "Затвори";
+
+/* No comment provided by engineer. */
+"Close saved" = "Затвори сачувано";
+
+/* No comment provided by engineer. */
+"Close all" = "Затвори све";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Прикажи у фасцикли";
+
+/* No comment provided by engineer. */
+"Move to start" = "Премести на почетак";
+
+/* No comment provided by engineer. */
+"Move to end" = "Премести на крај";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Откачи картицу";
+
+/* No comment provided by engineer. */
+"Create new" = "Креирај нову";
+
+/* No comment provided by engineer. */
 "Yes" = "Да";
 
 /* No comment provided by engineer. */

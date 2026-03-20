@@ -197,6 +197,33 @@
 "XML Paper Specification" = "OpenXPS dokument (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Näita peamist akent";
+
+/* No comment provided by engineer. */
+"Close" = "Sule";
+
+/* No comment provided by engineer. */
+"Close saved" = "Suletud salvestatud";
+
+/* No comment provided by engineer. */
+"Close all" = "Sulge kõik";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Kuva kaustas";
+
+/* No comment provided by engineer. */
+"Move to start" = "Liigu algusesse";
+
+/* No comment provided by engineer. */
+"Move to end" = "Liigu lõppu";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Vabasta vahekaart";
+
+/* No comment provided by engineer. */
+"Create new" = "Loo uus";
+
+/* No comment provided by engineer. */
 "Yes" = "Jah";
 
 /* No comment provided by engineer. */

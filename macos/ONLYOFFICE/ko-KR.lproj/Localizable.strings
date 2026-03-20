@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS 문서(*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "메인 창 표시";
+
+/* No comment provided by engineer. */
+"Close" = "닫기";
+
+/* No comment provided by engineer. */
+"Close saved" = "닫기 저장됨";
+
+/* No comment provided by engineer. */
+"Close all" = "모두 닫기";
+
+/* No comment provided by engineer. */
+"Show in folder" = "폴더에서 보기";
+
+/* No comment provided by engineer. */
+"Move to start" = "시작 위치로 이동";
+
+/* No comment provided by engineer. */
+"Move to end" = "끝으로 이동";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "탭 고정 해제";
+
+/* No comment provided by engineer. */
+"Create new" = "새로 만들기";
+
+/* No comment provided by engineer. */
 "Yes" = "네";
 
 /* No comment provided by engineer. */

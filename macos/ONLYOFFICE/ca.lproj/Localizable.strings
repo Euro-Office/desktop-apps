@@ -203,6 +203,33 @@
 "XML Paper Specification" = "Document OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Mostra la finestra principal";
+
+/* No comment provided by engineer. */
+"Close" = "Tanca";
+
+/* No comment provided by engineer. */
+"Close saved" = "Tanca desat";
+
+/* No comment provided by engineer. */
+"Close all" = "Tanca-ho tot";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Mostra a la carpeta";
+
+/* No comment provided by engineer. */
+"Move to start" = "Moure per començar";
+
+/* No comment provided by engineer. */
+"Move to end" = "Moure al final";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Desfixar pestanya";
+
+/* No comment provided by engineer. */
+"Create new" = "Crea'n un de nou";
+
+/* No comment provided by engineer. */
 "Yes" = "Si";
 
 /* No comment provided by engineer. */

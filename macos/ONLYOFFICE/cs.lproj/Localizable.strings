@@ -197,6 +197,33 @@
 "XML Paper Specification" = "Dokument OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Zobrazit hlavní okno";
+
+/* No comment provided by engineer. */
+"Close" = "Zavřít";
+
+/* No comment provided by engineer. */
+"Close saved" = "Zavřít uložené";
+
+/* No comment provided by engineer. */
+"Close all" = "Zavřít vše";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Zobrazit ve složce";
+
+/* No comment provided by engineer. */
+"Move to start" = "Přesunout na začátek";
+
+/* No comment provided by engineer. */
+"Move to end" = "Přesunout na konec";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Odepnout kartu";
+
+/* No comment provided by engineer. */
+"Create new" = "Vytvořit nový";
+
+/* No comment provided by engineer. */
 "Yes" = "Ano";
 
 /* No comment provided by engineer. */

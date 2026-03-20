@@ -218,6 +218,33 @@
 "XML Paper Specification" = "OpenXPS Document (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Show main window";
+
+/* No comment provided by engineer. */
+"Close" = "Close";
+
+/* No comment provided by engineer. */
+"Close saved" = "Close saved";
+
+/* No comment provided by engineer. */
+"Close all" = "Close all";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Show in folder";
+
+/* No comment provided by engineer. */
+"Move to start" = "Move to start";
+
+/* No comment provided by engineer. */
+"Move to end" = "Move to end";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Unpin tab";
+
+/* No comment provided by engineer. */
+"Create new" = "Create new";
+
+/* No comment provided by engineer. */
 "Yes" = "Yes";
 
 /* No comment provided by engineer. */

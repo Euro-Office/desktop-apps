@@ -134,6 +134,33 @@
 "XML Paper Specification" = "OpenXPS-dokument (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Visa huvudfönstret";
+
+/* No comment provided by engineer. */
+"Close" = "Stäng";
+
+/* No comment provided by engineer. */
+"Close saved" = "Stäng sparad";
+
+/* No comment provided by engineer. */
+"Close all" = "Stäng alla";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Visa i mapp";
+
+/* No comment provided by engineer. */
+"Move to start" = "Flytta till början";
+
+/* No comment provided by engineer. */
+"Move to end" = "Flytta till slutet";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Lossa fliken";
+
+/* No comment provided by engineer. */
+"Create new" = "Skapa ny";
+
+/* No comment provided by engineer. */
 "Yes" = "Ja";
 
 /* No comment provided by engineer. */

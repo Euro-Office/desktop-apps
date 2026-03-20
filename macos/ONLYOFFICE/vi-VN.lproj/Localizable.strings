@@ -209,6 +209,33 @@
 "XML Paper Specification" = "Tài liệu OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Hiển thị cửa sổ chính";
+
+/* No comment provided by engineer. */
+"Close" = "Đóng";
+
+/* No comment provided by engineer. */
+"Close saved" = "Đóng đã lưu";
+
+/* No comment provided by engineer. */
+"Close all" = "Đóng tất cả";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Hiển thị trong thư mục";
+
+/* No comment provided by engineer. */
+"Move to start" = "Di chuyển để bắt đầu";
+
+/* No comment provided by engineer. */
+"Move to end" = "Di chuyển đến cuối";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Bỏ ghim ta";
+
+/* No comment provided by engineer. */
+"Create new" = "Tạo mới";
+
+/* No comment provided by engineer. */
 "Yes" = "Có";
 
 /* No comment provided by engineer. */

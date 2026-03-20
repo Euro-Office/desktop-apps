@@ -215,6 +215,33 @@
 "XML Paper Specification" = "OpenXPSドキュメント (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "メインウィンドウを表示";
+
+/* No comment provided by engineer. */
+"Close" = "閉じる";
+
+/* No comment provided by engineer. */
+"Close saved" = "保存して閉じる";
+
+/* No comment provided by engineer. */
+"Close all" = "すべて閉じる";
+
+/* No comment provided by engineer. */
+"Show in folder" = "フォルダーに表示";
+
+/* No comment provided by engineer. */
+"Move to start" = "先頭に移動";
+
+/* No comment provided by engineer. */
+"Move to end" = "末尾に移動";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "タブの固定を解除";
+
+/* No comment provided by engineer. */
+"Create new" = "新規作成";
+
+/* No comment provided by engineer. */
 "Yes" = "はい";
 
 /* No comment provided by engineer. */

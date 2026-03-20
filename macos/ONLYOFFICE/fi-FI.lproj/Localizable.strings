@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS-asiakirja (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Näytä pääikkuna";
+
+/* No comment provided by engineer. */
+"Close" = "Sulje";
+
+/* No comment provided by engineer. */
+"Close saved" = "Sulje tallennettu";
+
+/* No comment provided by engineer. */
+"Close all" = "Sulje kaikki";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Näytä hakemistossa";
+
+/* No comment provided by engineer. */
+"Move to start" = "Siirry alkuun";
+
+/* No comment provided by engineer. */
+"Move to end" = "Siirrä loppuun";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Irrota välilehti";
+
+/* No comment provided by engineer. */
+"Create new" = "Luo Uusi";
+
+/* No comment provided by engineer. */
 "Yes" = "Kyllä";
 
 /* No comment provided by engineer. */

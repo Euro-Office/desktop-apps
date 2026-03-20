@@ -191,7 +191,34 @@
 "Word 2007 Document" = "Office Open XML փաստաթուղթ (*.docx)";
 
 /* No comment provided by engineer. */
-"XML Paper Specification" = "OpenXPS փաստաթուղթ (*.xps)";
+"XML Paper Specification" = "OpenXPS Փաստաթուղթ (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Ցուցադրել հիմնական պատուհանը";
+
+/* No comment provided by engineer. */
+"Close" = "Փակել";
+
+/* No comment provided by engineer. */
+"Close saved" = "Փակել պահպանվածը";
+
+/* No comment provided by engineer. */
+"Close all" = "Փակել բոլորը";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Ցույց տալ թղթապանակում";
+
+/* No comment provided by engineer. */
+"Move to start" = "Տեղափոխել սկիզբ";
+
+/* No comment provided by engineer. */
+"Move to end" = "Տեղափոխել վերջ";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Ապամրացնել ներդիրը";
+
+/* No comment provided by engineer. */
+"Create new" = "Ստեղծել նորը";
 
 /* No comment provided by engineer. */
 "Yes" = "Այո";

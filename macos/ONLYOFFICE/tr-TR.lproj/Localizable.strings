@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS Belgesi (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Ana pencereyi göster";
+
+/* No comment provided by engineer. */
+"Close" = "Kapat";
+
+/* No comment provided by engineer. */
+"Close saved" = "Kapat kaydedildi";
+
+/* No comment provided by engineer. */
+"Close all" = "Tümünü kapat";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Klasörde göster";
+
+/* No comment provided by engineer. */
+"Move to start" = "Başlamak için hareket et";
+
+/* No comment provided by engineer. */
+"Move to end" = "Sonuna geç";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Sekmeyi sabitle'yi kaldır";
+
+/* No comment provided by engineer. */
+"Create new" = "Yeni oluştur";
+
+/* No comment provided by engineer. */
 "Yes" = "Evet";
 
 /* No comment provided by engineer. */

@@ -218,6 +218,33 @@
 "XML Paper Specification" = "مستند أوبن إكس بي إس (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "إظهار النافذة الرئيسية";
+
+/* No comment provided by engineer. */
+"Close" = "إغلاق";
+
+/* No comment provided by engineer. */
+"Close saved" = "تم الحفظ مع الإغلاق";
+
+/* No comment provided by engineer. */
+"Close all" = "إغلاق الكل";
+
+/* No comment provided by engineer. */
+"Show in folder" = "عرض في المجلد";
+
+/* No comment provided by engineer. */
+"Move to start" = "انتقل للبدء";
+
+/* No comment provided by engineer. */
+"Move to end" = "انتقل إلى النهاية";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "إلغاء تثبيت علامة التبويب";
+
+/* No comment provided by engineer. */
+"Create new" = "أنشئ جديد";
+
+/* No comment provided by engineer. */
 "Yes" = "نعم";
 
 /* No comment provided by engineer. */

@@ -212,6 +212,33 @@
 "XML Paper Specification" = "OpenXPS ලේඛනය (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "ප්‍රධාන කවුළුව පෙන්වන්න";
+
+/* No comment provided by engineer. */
+"Close" = "වසන්න";
+
+/* No comment provided by engineer. */
+"Close saved" = "සුරකින ලද ඒවා වසන්න";
+
+/* No comment provided by engineer. */
+"Close all" = "සියල්ල වසන්න";
+
+/* No comment provided by engineer. */
+"Show in folder" = "ෆෝල්ඩරය තුළ පෙන්වන්න";
+
+/* No comment provided by engineer. */
+"Move to start" = "ආරම්භයට ගෙන යන්න";
+
+/* No comment provided by engineer. */
+"Move to end" = "අවසානයට ගෙන යන්න";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "ටැබය ගලවන්න";
+
+/* No comment provided by engineer. */
+"Create new" = "අළුතින් සාදන්න";
+
+/* No comment provided by engineer. */
 "Yes" = "ඔව්";
 
 /* No comment provided by engineer. */

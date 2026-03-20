@@ -194,7 +194,34 @@
 "Word 2007 Document" = "Office Open XML Document (*.docx)";
 
 /* No comment provided by engineer. */
-"XML Paper Specification" = "OpenXPS Document (*.xps)";
+"XML Paper Specification" = "OpenXPS-document (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Toon het hoofdvenster";
+
+/* No comment provided by engineer. */
+"Close" = "Sluiten";
+
+/* No comment provided by engineer. */
+"Close saved" = "Opgeslagen sluiten";
+
+/* No comment provided by engineer. */
+"Close all" = "Alles sluiten";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Weergeven in map";
+
+/* No comment provided by engineer. */
+"Move to start" = "Verplaats naar de startpagina";
+
+/* No comment provided by engineer. */
+"Move to end" = "Ga naar het einde";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Tab losmaken";
+
+/* No comment provided by engineer. */
+"Create new" = "Nieuw maken";
 
 /* No comment provided by engineer. */
 "Yes" = "Ja";

@@ -215,7 +215,34 @@
 "Word 2007 Document" = "Document Office Open XML (*.docx)";
 
 /* No comment provided by engineer. */
-"XML Paper Specification" = "Document OpenXPS (*.xps)";
+"XML Paper Specification" = "OpenXPS Document (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Afficher la fenêtre principale";
+
+/* No comment provided by engineer. */
+"Close" = "Fermer";
+
+/* No comment provided by engineer. */
+"Close saved" = "Fermer les fichiers enregistrés";
+
+/* No comment provided by engineer. */
+"Close all" = "Tout fermer";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Afficher dans le dossier";
+
+/* No comment provided by engineer. */
+"Move to start" = "Déplacer au début";
+
+/* No comment provided by engineer. */
+"Move to end" = "Déplacer à la fin";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Desépingler l'onglet";
+
+/* No comment provided by engineer. */
+"Create new" = "Créer un nouveau";
 
 /* No comment provided by engineer. */
 "Yes" = "Oui";

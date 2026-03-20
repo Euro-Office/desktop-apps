@@ -194,6 +194,33 @@
 "XML Paper Specification" = "OpenXPS Cáipéis (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Taispeáin an phríomhfhuinneog";
+
+/* No comment provided by engineer. */
+"Close" = "Dún";
+
+/* No comment provided by engineer. */
+"Close saved" = "Dún sábháilte";
+
+/* No comment provided by engineer. */
+"Close all" = "Dún gach rud";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Taispeáin sa bhfillteán";
+
+/* No comment provided by engineer. */
+"Move to start" = "Bog go dtí an tús";
+
+/* No comment provided by engineer. */
+"Move to end" = "Bog go dtí an deireadh";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Díphionáil an cluaisín";
+
+/* No comment provided by engineer. */
+"Create new" = "Cruthaigh nua";
+
+/* No comment provided by engineer. */
 "Yes" = "Tá";
 
 /* No comment provided by engineer. */

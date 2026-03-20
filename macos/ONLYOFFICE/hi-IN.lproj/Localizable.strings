@@ -191,6 +191,33 @@
 "XML Paper Specification" = "OpenXPS दस्तावेज़(*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "मुख्य विंडो दिखाएँ";
+
+/* No comment provided by engineer. */
+"Close" = "बंद करना";
+
+/* No comment provided by engineer. */
+"Close saved" = "सहेजा गया बंद करें";
+
+/* No comment provided by engineer. */
+"Close all" = "सभी बंद करें";
+
+/* No comment provided by engineer. */
+"Show in folder" = "फ़ोल्डर में दिखाओ";
+
+/* No comment provided by engineer. */
+"Move to start" = "प्रारंभ करने के लिए ले जाएँ";
+
+/* No comment provided by engineer. */
+"Move to end" = "अंत पर जाएँ";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "टैब अनपिन करें";
+
+/* No comment provided by engineer. */
+"Create new" = "नया निर्माण";
+
+/* No comment provided by engineer. */
 "Yes" = "हाँ";
 
 /* No comment provided by engineer. */

@@ -203,6 +203,33 @@
 "XML Paper Specification" = "Дакумент OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Паказаць галоўнае акно";
+
+/* No comment provided by engineer. */
+"Close" = "Закрыць";
+
+/* No comment provided by engineer. */
+"Close saved" = "Закрыць захаванае";
+
+/* No comment provided by engineer. */
+"Close all" = "Закрыць усе";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Паказаць у каталозе";
+
+/* No comment provided by engineer. */
+"Move to start" = "Перамясціць у пачатак";
+
+/* No comment provided by engineer. */
+"Move to end" = "Перамясціць у канец";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Адмацаваць укладку";
+
+/* No comment provided by engineer. */
+"Create new" = "Стварыць новую";
+
+/* No comment provided by engineer. */
 "Yes" = "Так";
 
 /* No comment provided by engineer. */

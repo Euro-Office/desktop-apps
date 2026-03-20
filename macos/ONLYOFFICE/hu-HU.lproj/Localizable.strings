@@ -194,6 +194,33 @@
 "XML Paper Specification" = "Open XPS-dokumentumformátum (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Főablak megjelenítése";
+
+/* No comment provided by engineer. */
+"Close" = "Közeli";
+
+/* No comment provided by engineer. */
+"Close saved" = "Mentett elemek bezárása";
+
+/* No comment provided by engineer. */
+"Close all" = "Összes bezárása";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Megjelenítés mappában";
+
+/* No comment provided by engineer. */
+"Move to start" = "Mozgasd a kezdéshez";
+
+/* No comment provided by engineer. */
+"Move to end" = "Áthelyezés a végére";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Lap rögzítésének feloldása";
+
+/* No comment provided by engineer. */
+"Create new" = "Új létrehozása";
+
+/* No comment provided by engineer. */
 "Yes" = "Igen";
 
 /* No comment provided by engineer. */

@@ -218,6 +218,33 @@
 "XML Paper Specification" = "מסמך OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "הצגת חלון ראשי";
+
+/* No comment provided by engineer. */
+"Close" = "סגירה";
+
+/* No comment provided by engineer. */
+"Close saved" = "סגירת נשמר";
+
+/* No comment provided by engineer. */
+"Close all" = "סגירת הכל";
+
+/* No comment provided by engineer. */
+"Show in folder" = "הצגה בתיקייה";
+
+/* No comment provided by engineer. */
+"Move to start" = "העברה להתחלה";
+
+/* No comment provided by engineer. */
+"Move to end" = "העברה לסוף";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "ניתוק הצמדה של לשונית";
+
+/* No comment provided by engineer. */
+"Create new" = "יצירת חדש";
+
+/* No comment provided by engineer. */
 "Yes" = "כן";
 
 /* No comment provided by engineer. */

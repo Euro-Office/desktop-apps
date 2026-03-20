@@ -218,6 +218,33 @@
 "XML Paper Specification" = "Documento OpenXPS (*.xps)";
 
 /* No comment provided by engineer. */
+"Show main window" = "Mostra finestra principale";
+
+/* No comment provided by engineer. */
+"Close" = "Chiudi";
+
+/* No comment provided by engineer. */
+"Close saved" = "Chiudi salvato";
+
+/* No comment provided by engineer. */
+"Close all" = "Chiudi tutto";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Mostra nella cartella";
+
+/* No comment provided by engineer. */
+"Move to start" = "Sposta all'inizio";
+
+/* No comment provided by engineer. */
+"Move to end" = "Sposta alla fine";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Rimuovi scheda dai fissati in alto";
+
+/* No comment provided by engineer. */
+"Create new" = "Crea nuovo";
+
+/* No comment provided by engineer. */
 "Yes" = "Si";
 
 /* No comment provided by engineer. */
