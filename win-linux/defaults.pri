@@ -233,7 +233,7 @@ core_linux {
                 $$PWD/extras/update-daemon/src/classes/csocket.cpp
 
     CONFIG += link_pkgconfig
-    PKGCONFIG += glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xcb-shape xext libnotify
+    PKGCONFIG += glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xcb-shape libnotify
     LIBS += -lX11 -lcups
 
     cef_version_107 {
