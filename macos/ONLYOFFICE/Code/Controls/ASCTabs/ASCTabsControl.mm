@@ -934,7 +934,8 @@ static NSString * const kASCTabsMulticastDelegateKey = @"asctabsmulticastDelegat
     tab.hidden = NO;
     tab.frame = CGRectOffset(tab.frame, 0, -CGRectGetHeight(self.scrollView.frame));
 
-    [self.tabsView setFrame:CGRectMake(0.0, 0.0, CGRectGetMaxX(tab.frame), CGRectGetHeight(self.scrollView.frame))];
+    if ( [self userInterfaceLayoutDirection] != NSUserInterfaceLayoutDirectionRightToLeft )
+        [self.tabsView setFrame:CGRectMake(0.0, 0.0, CGRectGetMaxX(tab.frame), CGRectGetHeight(self.scrollView.frame))];
 
     tab.delegate = self;
     tab.target   = self;
