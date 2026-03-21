@@ -1287,6 +1287,10 @@
 //}
 
 - (void)tabs:(ASCTabsControl *)control didAddTab:(ASCTabView *)tab {
+    [self tabs:control didInsertTab:tab atIndex:-1];
+}
+
+- (void)tabs:(ASCTabsControl *)control didInsertTab:(ASCTabView *)tab atIndex:(NSInteger)index {
     if (tab.params) {
         BOOL isReattaching = [tab.params[@"reattaching"] boolValue];
         NSCefView *existingCefView = (NSCefView *)tab.webView;
@@ -1441,7 +1445,13 @@
 
         NSTabViewItem * item = [[NSTabViewItem alloc] initWithIdentifier:tab.uuid];
         item.label = tab.title;
-        [self.tabView addTabViewItem:item];
+        if (index < 0) {
+            [self.tabView addTabViewItem:item];
+        } else {
+            NSUInteger tabViewCount = self.tabView.tabViewItems.count;
+            NSUInteger visualIndex = MIN((NSUInteger)index, tabViewCount);
+            [self.tabView insertTabViewItem:item atIndex:visualIndex];
+        }
         [item.view addSubview:cefView];
         [cefView autoPinEdgesToSuperviewEdges];
         
