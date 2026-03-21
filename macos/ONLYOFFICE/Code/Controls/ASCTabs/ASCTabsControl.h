@@ -50,6 +50,7 @@
 @optional
 - (void)tabs:(ASCTabsControl *)control didResize:(CGRect)rect;
 - (void)tabs:(ASCTabsControl *)control didAddTab:(ASCTabView *)tab;
+- (void)tabs:(ASCTabsControl *)control didInsertTab:(ASCTabView *)tab atIndex:(NSInteger)index;
 - (BOOL)tabs:(ASCTabsControl *)control willRemovedTab:(ASCTabView *)tab;
 - (void)tabs:(ASCTabsControl *)control didRemovedTab:(ASCTabView *)tab;
 - (void)tabs:(ASCTabsControl *)control didSelectTab:(ASCTabView *)tab;

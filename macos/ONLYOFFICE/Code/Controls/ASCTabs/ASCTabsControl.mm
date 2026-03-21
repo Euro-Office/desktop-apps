@@ -953,8 +953,8 @@ static NSString * const kASCTabsMulticastDelegateKey = @"asctabsmulticastDelegat
         [self invalidateRestorableState];
     }];
 
-    if (_delegate && [_delegate respondsToSelector:@selector(tabs:didAddTab:)]) {
-        [_delegate tabs:self didAddTab:tab];
+    if (_delegate && [_delegate respondsToSelector:@selector(tabs:didInsertTab:atIndex:)]) {
+        [_delegate tabs:self didInsertTab:tab atIndex:index];
     }
 
     if (selected) {
