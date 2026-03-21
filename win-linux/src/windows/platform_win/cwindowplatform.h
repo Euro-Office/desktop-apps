@@ -35,7 +35,7 @@
 
 #include "windows/cwindowbase.h"
 #include <QtWidgets/QApplication>
-
+#include <qtcomp/qnativeevent.h>
 
 struct FRAME {
     FRAME() : left(0), top(0)
@@ -71,7 +71,7 @@ protected:
 
 private:
     virtual void changeEvent(QEvent*) final;
-    virtual bool nativeEvent(const QByteArray&, void*, long*) final;
+    virtual bool nativeEvent(const QByteArray&, void*, long_ptr*) final;
 
     QTimer *m_propertyTimer;
     double m_dpi;

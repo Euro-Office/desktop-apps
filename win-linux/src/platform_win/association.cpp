@@ -33,14 +33,20 @@
 #include "association.h"
 #include "utils.h"
 #include "defines.h"
-#include "components/cmessage.h"
+
 #include "cascapplicationmanagerwrapper.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <shlwapi.h>
 #include <ShlObj.h>
 #include <ctime>
+#ifdef __OS_WIN_XP
+# include "components/cmessage.h"
+#else
+# include "components/cnotification.h"
+#endif
 
+#define DLG_RESULT_NONE -2
 #define DAY_TO_SEC 24*3600
 #define REG_FILE_ASSOC "SOFTWARE\\" REG_GROUP_KEY "\\" REG_APP_NAME "\\Capabilities\\FileAssociations"
 
@@ -62,8 +68,9 @@
 // }
 #endif
 
-class Association::AssociationPrivate
+class Association::AssociationPrivate : public QObject
 {
+    Q_OBJECT
 public:
     AssociationPrivate();
     ~AssociationPrivate();
@@ -78,6 +85,9 @@ public:
     std::unordered_map<std::wstring, std::wstring> m_extMap;
     class DialogSchedule;
     DialogSchedule *m_pDialogSchedule;
+
+public slots:
+    void showAssociationMessage(QWidget *parent, const std::vector<std::wstring> &unassocFileExts, bool forceModal = false, int result = DLG_RESULT_NONE);
 };
 
 class Association::AssociationPrivate::DialogSchedule : public QObject
@@ -132,10 +142,13 @@ void Association::AssociationPrivate::DialogSchedule::addToSchedule(const std::w
         m_timer->start();
 }
 
-Association::AssociationPrivate::AssociationPrivate() : m_pDialogSchedule(new DialogSchedule(this))
+Association::AssociationPrivate::AssociationPrivate() :
+    QObject(),
+    m_pDialogSchedule(new DialogSchedule(this))
 {
+    GET_REGISTRY_SYSTEM(reg_system)
     GET_REGISTRY_USER(reg_user)
-    m_ignoreAssocMsg = reg_user.value("ignoreAssocMsg", false).toBool() || IsPackage(Portable);
+    m_ignoreAssocMsg = reg_system.value("ignoreAssocMsg", false).toBool() || reg_user.value("ignoreAssocMsg", false).toBool() || IsPackage(Portable);
     if (!m_ignoreAssocMsg)
         m_lastCheck = time_t(reg_user.value("lastAssocCheck", 0).toLongLong());
 
@@ -211,39 +224,61 @@ void Association::AssociationPrivate::tryProposeAssociation(QWidget *parent, con
         unassocFileExts.push_back(fileExt);
 
     if (!unassocFileExts.empty()) {
+        showAssociationMessage(parent, unassocFileExts);
+    }
+}
+
+void Association::AssociationPrivate::showAssociationMessage(QWidget *parent, const std::vector<std::wstring> &unassocFileExts, bool forceModal, int result)
+{
+    if (result == DLG_RESULT_NONE) {
         QString msg = unassocFileExts.size() == 1 ? QObject::tr("Do you want to make %1 your default application for extension: %2?")
                                                         .arg(QString(WINDOW_NAME), QString::fromStdWString(unassocFileExts[0])) :
                                                     QObject::tr("Do you want to make %1 your default application for all supported extensions?")
                                                         .arg(QString(WINDOW_NAME));
-        int res = CMessage::showMessage(parent, msg, MsgType::MSG_INFO, MsgBtns::mbYesDefNo, &m_ignoreAssocMsg, QObject::tr("Do not show this message again"));
+#ifndef __OS_WIN_XP
+        if (!forceModal && AscAppManager::notificationSupported()) {
+            if (CNotification::instance().show(QObject::tr("Set Default App"), msg,
+                       MsgBtns::mbYesDefNo, [=](int res) {
+                            QMetaObject::invokeMethod(this, "showAssociationMessage", Qt::QueuedConnection, Q_ARG(QWidget*, parent),
+                                Q_ARG(std::vector<std::wstring>, unassocFileExts), Q_ARG(bool, res == NOTIF_FAILED), Q_ARG(int, res));
+                       })) {
+                return;
+            }
+        }
+#endif
+        CMessageOpts opts;
+        opts.checkBoxState = &m_ignoreAssocMsg;
+        opts.chekBoxText = QObject::tr("Do not show this message again");
+        result = CMessage::showMessage(parent, msg, MsgType::MSG_INFO, MsgBtns::mbYesDefNo, opts);
         if (m_ignoreAssocMsg) {
             GET_REGISTRY_USER(reg_user)
             reg_user.setValue("ignoreAssocMsg", true);
         }
+    }
 
-        if (res == MODAL_RESULT_YES) {
-            if (Utils::getWinVersion() >= Utils::WinVer::Win10) {
-                ShellExecute(NULL, L"open", L"ms-settings:defaultapps", NULL, NULL, SW_SHOWNORMAL);
-
-            } else
-            if (Utils::getWinVersion() >= Utils::WinVer::Win8) {
-#ifndef __OS_WIN_XP
-                HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-                if (SUCCEEDED(hr)) {
-                    IApplicationAssociationRegistrationUI *ar;
-                    HRESULT hr = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, 0, CLSCTX_INPROC_SERVER,
-                                                  IID_IApplicationAssociationRegistrationUI, (void**)&ar);
-                    if (SUCCEEDED(hr)) {
-                        ar->LaunchAdvancedAssociationUI(TEXT(APP_REG_NAME));
-                        ar->Release();
-                    }
-                    CoUninitialize();
-                }
-#endif
-            } else {
-                associate(unassocFileExts);
-            }
-        }
+    if (result == MODAL_RESULT_YES) {
+        associate(unassocFileExts);
+//         return;
+//         if (Utils::getWinVersion() >= Utils::WinVer::Win10) {
+//             ShellExecute(NULL, L"open", L"ms-settings:defaultapps", NULL, NULL, SW_SHOWNORMAL);
+//         } else
+//         if (Utils::getWinVersion() >= Utils::WinVer::Win8) {
+// #ifndef __OS_WIN_XP
+//             HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+//             if (SUCCEEDED(hr)) {
+//                 IApplicationAssociationRegistrationUI *ar;
+//                 HRESULT hr = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, 0, CLSCTX_INPROC_SERVER,
+//                                               IID_IApplicationAssociationRegistrationUI, (void**)&ar);
+//                 if (SUCCEEDED(hr)) {
+//                     ar->LaunchAdvancedAssociationUI(TEXT(APP_REG_NAME));
+//                     ar->Release();
+//                 }
+//                 CoUninitialize();
+//             }
+// #endif
+//         } else {
+//             associate(unassocFileExts);
+//         }
     }
 }
 
@@ -275,6 +310,39 @@ void Association::AssociationPrivate::associate(const std::vector<std::wstring> 
     }
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 #else
+    if (Utils::getWinVersion() > Utils::WinVer::Win7) {
+        std::wstring args(L"--assoc \"");
+        for (const auto &ext : unassocFileExts) {
+            auto it = m_extMap.find(ext);
+            if (it != m_extMap.end()) {
+                args.append(it->first);
+                args.append(L":");
+                args.append(it->second);
+                args.append(L";");
+            }
+        }
+        args.append(L"\"");
+
+        QString appPath = qApp->applicationDirPath();
+        appPath += "/" + QString(REG_APP_NAME);
+        std::wstring path = appPath.toStdWString();
+
+        SHELLEXECUTEINFO shExInfo = {0};
+        shExInfo.cbSize = sizeof(shExInfo);
+        shExInfo.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_NO_CONSOLE | SEE_MASK_FLAG_NO_UI;
+        shExInfo.hwnd = NULL;
+        shExInfo.lpVerb = L"open";
+        shExInfo.lpFile = path.c_str();
+        shExInfo.lpParameters = args.c_str();
+        shExInfo.lpDirectory = NULL;
+        shExInfo.nShow = SW_HIDE;
+        shExInfo.hInstApp = NULL;
+        if (ShellExecuteEx(&shExInfo)) {
+            CloseHandle(shExInfo.hProcess);
+        }
+        return;
+    }
+
     HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
     if (SUCCEEDED(hr)) {
         IApplicationAssociationRegistration *pAr;
@@ -363,3 +431,5 @@ void Association::chekForAssociations(int uid)
         }
     }
 }
+
+#include "association.moc"

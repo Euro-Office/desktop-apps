@@ -1,0 +1,267 @@
+/* No comment provided by engineer. */
+"%@ Help" = "%@ مدد";
+
+/* No comment provided by engineer. */
+"About %@" = "تقریباً %@";
+
+/* No comment provided by engineer. */
+"Acknowledgments" = "اعترافات";
+
+/* No comment provided by engineer. */
+"Before signing the document, it must be saved." = "دستاویز پر دستخط کرنے سے پہلے، اسے محفوظ کرنا ضروری ہے۔";
+
+/* No comment provided by engineer. */
+"Cancel" = "منسوخ";
+
+/* No comment provided by engineer. */
+"Cannot open file of Digital Signature" = "ڈیجیٹل دستخط کی فائل نہیں کھول سکتا";
+
+/* No comment provided by engineer. */
+"Cannot open file of Private Key" = "پرائیویٹ کلید کی فائل نہیں کھولی جا سکتی";
+
+/* No comment provided by engineer. */
+"Cannot open folder of the file location." = "فائل لوکیشن کا فولڈر نہیں کھولا جا سکتا۔";
+
+/* No comment provided by engineer. */
+"Comma-Separated Values" = "کوما سے الگ کردہ اقدار";
+
+/* No comment provided by engineer. */
+"Create portal" = "پورٹل بنائیں";
+
+/* No comment provided by engineer. */
+"Delete and Quit" = "حذف کریں اور چھوڑیں۔";
+
+/* No comment provided by engineer. */
+"DjVu File" = "DjVu فائل";
+
+/* No comment provided by engineer. */
+"Do you want to save the changes made to the document \"%@\"?" = "کیا آپ دستاویز \"%@\" میں کی گئی تبدیلیوں کو محفوظ کرنا چاہتے ہیں؟";
+
+/* No comment provided by engineer. */
+"Document %ld.docx" = "دستاویز %ld.docx";
+
+/* No comment provided by engineer. */
+"Document %ld.pdf" = "دستاویز %ld.pdf";
+
+/* No comment provided by engineer. */
+"Document template" = "دستاویز کا سانچہ";
+
+/* No comment provided by engineer. */
+"Don't Save" = "محفوظ نہ کریں۔";
+
+/* No comment provided by engineer. */
+"Excel 97-2003 Spreadsheet" = "ایکسل 97-2003 اسپریڈشیٹ";
+
+/* No comment provided by engineer. */
+"Excel 2007 Spreadsheet" = "ایکسل 2007 اسپریڈشیٹ";
+
+/* No comment provided by engineer. */
+"FictionBook File" = "فکشن بک فائل";
+
+/* No comment provided by engineer. */
+"File \"%@\" can not be open or not exist." = "فائل \"%@\" کھلی نہیں ہوسکتی ہے یا موجود نہیں ہے۔";
+
+/* No comment provided by engineer. */
+"File can not be open." = "فائل کھلی نہیں ہو سکتی۔";
+
+/* No comment provided by engineer. */
+"File Format:" = "فائل کی شکل:";
+
+/* No comment provided by engineer. */
+"Hide %@" = "چھپائیں %@";
+
+/* No comment provided by engineer. */
+"If you don't review your documents, all your changeses will be lost." = "اگر آپ اپنی دستاویزات کا جائزہ نہیں لیتے ہیں تو آپ کی تمام تبدیلیاں ضائع ہو جائیں گی۔";
+
+/* No comment provided by engineer. */
+"If you have already purchased %@, you should find your activation key in an email confirmation." = "اگر آپ پہلے ہی %@ خرید چکے ہیں، تو آپ کو اپنی ایکٹیویشن کلید ای میل کی تصدیق میں ملنی چاہیے۔";
+
+/* No comment provided by engineer. */
+"License Agreement" = "لائسنس کا معاہدہ";
+
+/* No comment provided by engineer. */
+"Macro-enabled Presentation" = "میکرو فعال پریزنٹیشن";
+
+/* No comment provided by engineer. */
+"Macro-enabled spreadsheet template" = "میکرو فعال اسپریڈشیٹ ٹیمپلیٹ";
+
+/* No comment provided by engineer. */
+"Mobipocket e-book" = "موبی پاکٹ ای بک";
+
+/* No comment provided by engineer. */
+"new-document" = "نئی دستاویز";
+
+/* No comment provided by engineer. */
+"new-pdfform" = "اسپریڈشیٹ";
+
+/* No comment provided by engineer. */
+"new-presentation" = "نئی پیشکش";
+
+/* No comment provided by engineer. */
+"new-spreadsheet" = "نئی اسپریڈشیٹ";
+
+/* No comment provided by engineer. */
+"No" = "نہیں";
+
+/* No comment provided by engineer. */
+"OK" = "ٹھیک ہے";
+
+/* No comment provided by engineer. */
+"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE ڈیجیٹل دستخط فائل نہیں کھول سکتا۔ دوسری فائل کھولنے کی کوشش کریں۔";
+
+/* No comment provided by engineer. */
+"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE نجی کلید نہیں کھول سکتا۔ دوسری فائل کھولنے کی کوشش کریں۔";
+
+/* No comment provided by engineer. */
+"OpenDocument Document Template" = "دستاویز دستاویز ٹیمپلیٹ کھولیں۔";
+
+/* No comment provided by engineer. */
+"OpenDocument Presentation Template" = "دستاویز پریزنٹیشن ٹیمپلیٹ کھولیں۔";
+
+/* No comment provided by engineer. */
+"OpenDocument Spreadsheet Template" = "دستاویز اسپریڈشیٹ ٹیمپلیٹ کھولیں۔";
+
+/* No comment provided by engineer. */
+"Opening" = "کھلنا";
+
+/* No comment provided by engineer. */
+"OpenOffice Document" = "اوپن آفس دستاویز";
+
+/* No comment provided by engineer. */
+"OpenOffice Presentation" = "اوپن آفس پریزنٹیشن";
+
+/* No comment provided by engineer. */
+"OpenOffice Spreadsheet" = "اوپن آفس اسپریڈشیٹ";
+
+/* No comment provided by engineer. */
+"PDF File" = "پی ڈی ایف فائل";
+
+/* No comment provided by engineer. */
+"PDF/A File" = "PDF/A فائل";
+
+/* No comment provided by engineer. */
+"Plain Text" = "سادہ متن";
+
+/* No comment provided by engineer. */
+"PowerPoint 97-2003 Presentation" = "پاورپوائنٹ 97-2003 پریزنٹیشن";
+
+/* No comment provided by engineer. */
+"PowerPoint 2007 Presentation" = "پاورپوائنٹ 2007 پریزنٹیشن";
+
+/* No comment provided by engineer. */
+"PowerPoint Slide Show" = "پاورپوائنٹ سلائیڈ شو";
+
+/* No comment provided by engineer. */
+"Preparing..." = "تیاری کر رہا ہے...";
+
+/* No comment provided by engineer. */
+"Presentation %ld.pptx" = "پیشکش %ld.pptx";
+
+/* No comment provided by engineer. */
+"Presentation template" = "پریزنٹیشن ٹیمپلیٹ";
+
+/* No comment provided by engineer. */
+"Presenter View" = "پیش کنندہ کا منظر";
+
+/* No comment provided by engineer. */
+"Quit %@" = "چھوڑیں %@";
+
+/* No comment provided by engineer. */
+"Review Changes..." = "تبدیلیوں کا جائزہ لیں...";
+
+/* No comment provided by engineer. */
+"Rich Text Document" = "رچ ٹیکسٹ دستاویز";
+
+/* No comment provided by engineer. */
+"Save" = "محفوظ کریں۔";
+
+/* No comment provided by engineer. */
+"Save the document?" = "دستاویز کو محفوظ کریں؟";
+
+/* No comment provided by engineer. */
+"Signature Details" = "دستخط کی تفصیلات";
+
+/* No comment provided by engineer. */
+"Spreadsheet %ld.xlsx" = "اسپریڈ شیٹ %ld.xlsx";
+
+/* No comment provided by engineer. */
+"Spreadsheet template" = "اسپریڈشیٹ ٹیمپلیٹ";
+
+/* No comment provided by engineer. */
+"Thank you for evaluating %@!" = "%@ کا جائزہ لینے کے لیے آپ کا شکریہ!";
+
+/* No comment provided by engineer. */
+"The document \"%@\" must be built. Continue?" = "دستاویز \"%@\" بننا ضروری ہے۔ جاری رکھیں؟";
+
+/* No comment provided by engineer. */
+"To open the file location, it must be saved." = "فائل کا مقام کھولنے کے لیے، اسے محفوظ کرنا ضروری ہے۔";
+
+/* No comment provided by engineer. */
+"Unconfirmed" = "غیر تصدیق شدہ";
+
+/* No comment provided by engineer. */
+"Untitled" = "بلا عنوان";
+
+/* No comment provided by engineer. */
+"Web Page" = "ویب صفحہ";
+
+/* No comment provided by engineer. */
+"With access to pro features" = "پرو خصوصیات تک رسائی کے ساتھ";
+
+/* No comment provided by engineer. */
+"Word 97-2003 Document" = "ورڈ 97-2003 دستاویز";
+
+/* No comment provided by engineer. */
+"Word 2007 Document" = "ورڈ 2007 دستاویز (*.doc)";
+
+/* No comment provided by engineer. */
+"XML Paper Specification" = "XML کاغذ کی تفصیلات (*.xps)";
+
+/* No comment provided by engineer. */
+"XML Paper Specification" = "دستاویز OpenXPS (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "مین ونڈو دکھائیں";
+
+/* No comment provided by engineer. */
+"Close" = "بند";
+
+/* No comment provided by engineer. */
+"Close saved" = "بند محفوظ ہو گیا-";
+
+/* No comment provided by engineer. */
+"Close all" = "سب بند کرو";
+
+/* No comment provided by engineer. */
+"Show in folder" = "فولڈر میں دکھائیں";
+
+/* No comment provided by engineer. */
+"Move to start" = "شروع کرنے کے لیے آگے بڑھیں۔";
+
+/* No comment provided by engineer. */
+"Move to end" = "اختتام پر منتقل کریں۔";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "ٹیب کو ان پن کریں۔";
+
+/* No comment provided by engineer. */
+"Create new" = "نیا بنائیں";
+
+/* No comment provided by engineer. */
+"Yes" = "جی ہاں";
+
+/* No comment provided by engineer. */
+"You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?" = "آپ کے پاس غیر تصدیق شدہ تبدیلیوں کے ساتھ %1$ld %2$@ دستاویزات ہیں۔ کیا آپ چھوڑنے سے پہلے ان تبدیلیوں کا جائزہ لینا چاہتے ہیں؟";
+
+/* No comment provided by engineer. */
+"You have successfully activated %@." = "آپ نے کامیابی سے %@ کو چالو کر لیا ہے۔";
+
+/* No comment provided by engineer. */
+"Your changes will be lost if you don’t save them." = "اگر آپ انہیں محفوظ نہیں کرتے ہیں تو آپ کی تبدیلیاں ضائع ہو جائیں گی۔";
+
+/* No comment provided by engineer. */
+"Your subscription has expired.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount." = "آپ کی رکنیت ختم ہو گئی ہے۔\n\nپروگرام غیر فعال موڈ میں کام کرتا ہے۔\n\nاب آپ رعایت کے ساتھ اپنی رکنیت کو طول یا اپ گریڈ کر سکتے ہیں۔";
+
+/* No comment provided by engineer. */
+"Your subscription is about to expire\n(%d days left).\n\nWe have a special offer for you." = "آپ کی رکنیت ختم ہونے والی ہے۔\n(%d دن باقی ہیں)۔\n\nہمارے پاس آپ کے لیے ایک خصوصی پیشکش ہے۔";
+

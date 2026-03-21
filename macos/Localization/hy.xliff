@@ -453,7 +453,7 @@ We have a special offer for you.</source>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Նոր PDF Ֆորմ</target>
+        <target>Նոր PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>    </body>
   </file>
@@ -1350,8 +1350,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Հեղինակային իրավունք © 2025 Ascensio System SIA։ Բոլոր իրավունքները պաշտպանված են։</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Հեղինակային իրավունք © 2026 Ascensio System SIA։ Բոլոր իրավունքները պաշտպանված են։</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

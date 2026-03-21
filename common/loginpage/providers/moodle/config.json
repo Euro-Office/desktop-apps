@@ -7,6 +7,7 @@
     "editorPage": "/mod/onlyofficeeditor/view.php",
     "editorFrameSize": "finite",
     "cryptoSupport": "true",
+    "order": 4,
     "icons": {
         "themeLight":{
             "connectionsList": "./assets/listicon.svg",

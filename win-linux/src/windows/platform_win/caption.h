@@ -42,6 +42,8 @@
 #include <QCoreApplication>
 #include "utils.h"
 
+#include <qtcomp/qnativeevent.h>
+
 #define RESIZE_AREA_PART 0.14
 
 
@@ -96,13 +98,16 @@ private:
         if (!buttonAtPos(pos)) {
             ::ReleaseCapture();
             ::PostMessage(hwnd_root, cmd, isResizingAvailable() && isPointInResizeArea(pos.y()) ? HTTOP : HTCAPTION, POINTTOPOINTS(pt));
+#ifndef QT_VERSION_6
+            // TODO: crash on mouse down
             QCoreApplication::postEvent(parent(), new QEvent(QEvent::MouseButtonPress));
+#endif
             return true;
         }
         return false;
     }
 
-    virtual bool nativeEvent(const QByteArray &eventType, void *message, long *result) override
+    virtual bool nativeEvent(const QByteArray &eventType, void *message, long_ptr *result) override
     {
     #if (QT_VERSION == QT_VERSION_CHECK(5, 11, 1))
         MSG* msg = *reinterpret_cast<MSG**>(message);

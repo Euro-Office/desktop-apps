@@ -1,13 +1,16 @@
 
 :root {
     .theme-contrast-dark {
-        --background-normal: #1e1e1e;
+        --background-normal: #2a2a2a;
         --background-tabbar: #2a2a2a;
         --background-button: #1e1e1e;
         --background-primary-button: #e6e6e6;
         --background-accent-button: #3483db;
-        --background-scrim: fade(#000, 60%);
         --background-scroll-thumb: #424242;
+        --background-action-panel: #212121;
+        --background-icon-normal: #2a2a2a;
+        --background-normal-element-light: #2a2a2a;
+        --background-normal-element: @background-normal;
 
         --highlight-button-hover: #424242;
         --highlight-button-pressed: #666666;
@@ -20,12 +23,15 @@
         --highlight-text-select: #96c8fd;
         --highlight-scroll-thumb-hover: #666666;
         --highlight-scroll-track-hover: fade(#fff, 3%);
+        --highlight-toolbar-tab-underline-document: #4A87E7;
+        --highlight-sidebar-item-pressed: #212121;
 
         --border-tabbar: #616161;
         --border-divider: #414141;
         --border-regular-control: #696969;
         --border-control-focus: #b8b8b8;
-        --border-error: #f62211;
+        --border-sidebar: 0 none;
+        --border-sidebar-icon: #616161;
 
         --text-normal: #e8e8e8;
         --text-normal-pressed: #e8e8e8;
@@ -34,10 +40,17 @@
         --text-link: #acbfff;
         --text-inverse: #121212;
         --text-contrast-background: #fff;
+        --text-negative: var(--text-normal);
 
         --icon-normal: #e8e8e8;
 
         --disabled-element-opacity: .3;
         --theme-inverted-image-filter: invert(1);
+
+        --chb-check-mark-background: var(--text-normal);
+        --chb-background-normal: var(--background-normal);
+        --chb-background-checked: var(--background-normal);
+        --chb-border-normal: var(--border-regular-control);
+        --chb-border-checked: var(--border-regular-control);
     }
 }

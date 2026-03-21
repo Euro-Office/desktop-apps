@@ -38,10 +38,6 @@
 #define reUserName          "([^\\.]+)\\.?([^\\.]+)?"
 #define reCmdLang           "--(keep)?lang[:|=](\\w{2,5})"
 
-
-#define FILE_DOWNLOAD_START     3
-#define FILE_DOWNLOAD_END       4
-
 #define APP_NAME "DesktopEditors"
 #define APP_TITLE "ONLYOFFICE"
 #ifdef __linux
@@ -51,7 +47,7 @@
 # define DESKTOP_FILE_NAME "onlyoffice-desktopeditors"
 #else
 # define APP_DATA_PATH "/ONLYOFFICE/DesktopEditors"
-# define APP_REG_NAME  "ONLYOFFICE Editors"
+# define APP_REG_NAME  "ONLYOFFICE"
 # define REG_GROUP_KEY "ONLYOFFICE"
 # define REG_UNINST_KEY "ONLYOFFICE Desktop Editors"
 # define APP_MUTEX_NAME "TEAMLAB"
@@ -70,7 +66,6 @@
 #define FILE_PREFIX "onlyoffice_"
 
 #define URL_SITE                "http://www.onlyoffice.com"
-//#define URL_APPCAST_UPDATES     ""
 #define URL_SIGNUP              "https://onlyoffice.com/registration.aspx?desktop=true"
 
 #define GET_REGISTRY_USER(variable) \
@@ -92,22 +87,9 @@
 typedef unsigned char BYTE;
 #else
 # define UM_INSTALL_UPDATE      WM_USER+254
-# define UM_CLOSE_MAINWINDOW    WM_USER+253
 #endif
 
 #define UM_ENDMOVE (QEvent::User + 2)
-
-#ifdef _WIN32
-# define WINDOW_BACKGROUND_COLOR RGB(241, 241, 241)              // #f1f1f1
-# define TABBAR_BACKGROUND_COLOR QRgb(WINDOW_BACKGROUND_COLOR)
-#else
-# define WINDOW_BACKGROUND_COLOR "#f1f1f1"
-# define TABBAR_BACKGROUND_COLOR WINDOW_BACKGROUND_COLOR
-#endif
-
-#define TAB_COLOR_PRESENTATION  "#aa5252"
-#define TAB_COLOR_SPREADSHEET   "#40865c"
-#define TAB_COLOR_DOCUMENT      "#446995"
 
 #define TO_WSTR(str)            L ## str
 #define WSTR(str)               TO_WSTR(str)
@@ -123,45 +105,7 @@ typedef unsigned char BYTE;
 #define INSTANCE_SVC_PORT 12012
 #define INSTANCE_APP_PORT 13012
 
-#define BTN_TEXT_CANCEL QObject::tr("Cancel")
-#define BTN_TEXT_YES    QObject::tr("Yes")
-#define BTN_TEXT_NO     QObject::tr("No")
-#define BTN_TEXT_OK     QObject::tr("OK")
-#define BTN_TEXT_SKIP   QObject::tr("Skip")
-#define BTN_TEXT_BUY    QObject::tr("Buy Now")
-#define BTN_TEXT_ACTIVATE   QObject::tr("Activate")
-#define BTN_TEXT_CONTINUE   QObject::tr("Continue")
 #define WARNING_LAUNCH_WITH_ADMIN_RIGHTS "App can't working correctly under admin rights."
-
-enum class MsgBtns {
-    mbOk = 0,
-    mbYesNo,
-    mbYesDefNo,
-    mbYesNoCancel,
-    mbYesDefNoCancel,
-    mbOkCancel,
-    mbOkDefCancel,
-    mbYesDefSkipNo,
-    mbBuy,
-    mbActivateDefContinue,
-    mbContinue
-};
-enum class MsgType {
-    MSG_INFO = 0,
-    MSG_WARN,
-    MSG_CONFIRM,
-    MSG_ERROR
-};
-enum MsgRes {
-    MODAL_RESULT_CANCEL = 0,
-    MODAL_RESULT_YES,
-    MODAL_RESULT_NO,
-    MODAL_RESULT_OK,
-    MODAL_RESULT_SKIP,
-    MODAL_RESULT_BUY,
-    MODAL_RESULT_ACTIVATE,
-    MODAL_RESULT_CONTINUE
-};
 
 #include "defines_p.h"
 

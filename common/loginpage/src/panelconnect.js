@@ -39,7 +39,7 @@
     window.relpath = !/mac os/i.test(navigator.userAgent) ? '.' : '..';
     window.config = { portals: {
         update: function() {
-            config.portals.checklist = sdk.externalClouds();
+            config.portals.checklist = utils.fn.sortProviders(sdk.externalClouds());
 
             if ( config.portals.checklist ) {
                 let _providers = {};
@@ -72,110 +72,23 @@
 
         args.id&&(args.id=`id=${args.id}`)||(args.id='');
 
-        var _html_empty_panel_with_carousel =
-                        `<div id="box-empty-portals" class="empty flex-center offcet-center">
-                            <section class="center-box">
-                              <h3 class="empty-title" l10n style="margin:0 0 60px;">${_lang.portalEmptyTitle}</h3>
-                              <div class='carousel'>
-                                <figure class='carousel__slidebox'>
-                                    <div class='carousel__slide'>
-                                        <p class='carousel__slide__text title' l10n>${_lang.emptySlide1Title}</p>
-                                        <p class='carousel__slide__text descr' l10n>${_lang.emptySlide1Text}</p>
-                                        <svg class='carousel__slide__img'>
-                                            <use xlink:href='#connect1' data-src='connect1'>
-                                        </svg>
-                                    </div>
-                                    <div class='carousel__slide'>
-                                        <p class='carousel__slide__text title' l10n>${_lang.emptySlide2Title}</p>
-                                        <p class='carousel__slide__text descr' l10n>${_lang.emptySlide2Text}</p>
-                                        <svg class='carousel__slide__img'>
-                                            <use xlink:href='#connect2' data-src='connect2'>
-                                        </svg>
-                                    </div>
-                                    <div class='carousel__slide active'>
-                                        <p class='carousel__slide__text title' l10n>${_lang.emptySlide3Title}</p>
-                                        <p class='carousel__slide__text descr' l10n>${_lang.emptySlide3Text}</p>
-                                        <svg class='carousel__slide__img'>
-                                            <use xlink:href='#connect3' data-src='connect3'>
-                                        </svg>
-                                    </div>
-                                </figure>
-                                <nav class='carousel__scrolls'>
-                                    <div class='carousel__scroll__btn prev' value='prev'></div>
-                                    <div class='carousel__scroll__btn next' value='next'></div>
-                                </nav>
-                              </div>
-                              <div class="tools-connect">
-                                <button class="btn btn--landing newportal" l10n>${_lang.btnCreatePortal}</button>
-                                <section class="link-connect">
-                                  <label l10n>${_lang.textHavePortal}</label><a class="login link" l10n href="#">${_lang.btnConnect}</a>
-                                </section>
-                              </div>
-                            </section>
-                        </div>`;
 
-        var _html_empty_panel_with_providers =
-                            `<div id="box-empty-portals" class="empty flex-center">
-                                <section id='connect-empty-var-2'>
-                                    <h3 class="empty-title" style="margin:0;" l10n>${_lang.portalEmptyTitle}</h3>
-                                    <h4 class='text-description' style='margin-bottom:50px;' l10n='portalEmptyDescr'>${_lang.portalEmptyDescr}</h4>
-                                    <section class='tools-connect2'>
-                                        <div id='box-providers-premium-button' />
-                                        <div id="box-providers-buttons" style='font-size:0;' />
-                                    </section>
-                                    <h4 class='text-description separate-top' style='margin-bottom:8px;' l10n='portalEmptyAdv1'>${_lang.portalEmptyAdv1}</h4>
-                                    <div class="tools-connect">
-                                        <button class="btn btn--landing newportal" l10n>${_lang.btnCreatePortal}</button>
-                                        <section class="link-connect">
-                                            <label l10n>${_lang.textHavePortal}</label><a class="login link" href="#" l10n>${_lang.btnConnect}</a>
-                                        </section>
-                                    </div>
-                                </section>
-                            </div>`;
-
-        var _html = `<div ${args.id} class="action-panel ${args.action}">
-                      ${config.portals.checklist.length > 1 ? _html_empty_panel_with_providers : _html_empty_panel_with_carousel}
-                      <div id="box-portals">
-                        <div class="flexbox">
-                          <h3 class="table-caption" l10n>${_lang.portalListTitle}</h3>
-                          <div class="table-box flex-fill"><table class="table-files list"></table></div>
-                          <div class="lst-tools">
-                            <button id="btn-addportal" class="btn btn--primary login" l10n>${_lang.btnAddPortal}</button>
-                          </div>
-                        </div>
-                      </div>
+        this.tpl_sidebar =
+                    `<div class="sidebar-block-title">
+                        <span l10n>${_lang.actClouds}</span>
+                        <button class="btn-quick login">
+                            ${isSvgIcons? `<svg class = "icon"><use xlink:href="#plus"></use></svg>` : ''}
+                                <i class="icon tool-icon__20 plus" />
+                        </button>
+                    </div>
+                    <div class="sidebar-block-content flexbox scrollable">
+                        <div class="table-box flex-fill"><table class="table-files list"></table></div>
                     </div>`;
 
-        if ( config.portals.checklist.length ) {
-            const provider_button_template = (provider, name, icons) => {
-                                                const icon_light = icons ? icons.themeLight.buttonLogo : '',
-                                                        icon_dark = icons ? icons.themeDark.buttonLogo : '';
-                                                const button_el = `<img class='icon icon__light' src='${relpath}/providers/${provider}/${icon_light}'></img>
-                                                                    <img class='icon icon__dark' src='${relpath}/providers/${provider}/${icon_dark}'></img>`;
-                                                return `<button class="btn btn--big btn--svg login" data-cprov='${provider}'>
-                                                            ${!!icons ? button_el : name}
-                                                        </button>`;
-                                            }
-
-            _html = $(_html);
-            let $box = $('<div />');
-            config.portals.checklist.forEach(item => {
-                if ( !!item.icons && !!item.icons.themeLight ) {
-                    const btn = provider_button_template(item.provider, item.name, item.icons);
-
-                    item.provider != 'onlyoffice' ? $box.append(btn) :
-                            _html.find('#box-providers-premium-button').append(btn);
-                }
-            });
-
-            _html.find('#box-providers-buttons').append($box.children());
-        }
-
-        args.tplPage = _html;
         args.menu = '.main-column.tool-menu';
         args.field = '.main-column.col-center';
         args.itemindex = 2;
-        args.itemtext = _lang.actConnectTo;
+        args.tplItem = 'nomenuitem';
 
         baseView.prototype.constructor.call(this, args);
     };
@@ -186,24 +99,31 @@
 
     utils.fn.extend(ViewPortals.prototype, {
         render: function() {
-            baseView.prototype.render.apply(this, arguments);
 
-            this.$panelNoPortals = this.$panel.find('#box-empty-portals');
-            this.$panelPortalList = this.$panel.find('#box-portals');
+            const $placeholder = $(this.opts.placeholder);
+            $placeholder.html(this.tpl_sidebar);
+
+            this.$sidebarPortalList = $(this.opts.placeholder);
         },
         portaltemplate: function(info, edit) {
             let _row = `<td class="row-cell cicon">
-                            <svg class='icon'><use href='#${info.iconid}'></svg>
+                            <div class="icon-box">
+                                <svg class='icon'><use href='#${info.iconid}'></svg>
+                            </div>
                         </td>
-                        <td class="row-cell">
-                            <p class="cportal primary">${utils.skipUrlProtocol(info.portal)}</p>
-                            <p class="cuser minor">${info.user}${info.email.length && (' (' + info.email + ')') || ''}</p>
+                        <td class="row-cell info">
+                            <div class="info-content">
+                                <p class="cportal primary" title="${info.portal}">${utils.skipUrlProtocol(info.portal)}</p>
+                                <p class="cuser minor">${info.user}${info.email.length && (' (' + info.email + ')') || ''}</p>
+                            <div>
                         </td>
                         <td class="cell-tools">
                             <div class="hlayout">
-                                <button class="btn-quick logout" tooltip="${utils.Lang.menuLogout}">
-                                    ${isSvgIcons? `<svg class = "icon"><use xlink:href="#logout"></use></svg>` : ''}
-                                    <i class="icon img-el theme-inverted" />
+                                <button class="btn-quick more">
+                                    <svg class = "icon" data-precls="tool-icon" data-iconname="more">
+                                        <use xlink:href="#more"></use>
+                                    </svg>
+                                    ${!isSvgIcons ? `<i class="icon tool-icon more" />` : ''}
                                 </button>
                             </span>
                         </td>`;
@@ -220,12 +140,66 @@
 
             return edit===true ? _row : `<tr id=${info.elid}>${_row}</tr>`;
         },
-        onscale: function (pasteSvg) {
-            $('button.logout',this.$panelPortalList).each(function (){
-                let elm = $(this);
-                if(pasteSvg && !elm.find('svg').length)
-                    elm.append($('<svg class = "icon"><use xlink:href="#logout"></use></svg>'));
+        portalsemptypage: function() {
+            const _lang = utils.Lang;
+            const _page_tpl = `<div id="box-empty-portals" class="empty flex-center">
+                                <section id='connect-empty-var-2'>
+                                    <!--h3 class="empty-title" style="margin:0;" l10n>${_lang.portalEmptyTitle}</h3-->
+                                    <h4 class='text-description' l10n='portalEmptyDescr'>${_lang.portalEmptyDescr}</h4>
+                                    <section class='tools-connect2 connect'>
+                                        <div id='box-providers-premium-button' />
+                                        <div id="box-providers-buttons" style='font-size:0;' />
+                                    </section>
+                                    <h4 class='text-description separate-top' l10n='portalEmptyAdv1'>${_lang.portalEmptyAdv1}</h4>
+                                    <div class="tools-connect">
+                                        <button class="btn btn--landing newportal" l10n>${_lang.btnCreatePortal}</button>
+                                        <section class="link-connect">
+                                            <label l10n>${_lang.textHavePortal}</label><a class="login link" href="#" l10n>${_lang.btnConnect}</a>
+                                        </section>
+                                    </div>
+                                </section>
+                            </div>`;
+
+            const provider_button_template = (provider, name, icons) => {
+                                                const icon_light = icons ? icons.themeLight.buttonLogo : '',
+                                                        icon_dark = icons ? icons.themeDark.buttonLogo : '';
+                                                const button_el = `<img class='icon icon__light' src='${relpath}/providers/${provider}/${icon_light}'></img>
+                                                                    <img class='icon icon__dark' src='${relpath}/providers/${provider}/${icon_dark}'></img>`;
+                                                return `<button class="btn btn--big btn--svg login" data-cprov='${provider}'>
+                                                            ${!!icons ? button_el : name}
+                                                        </button>`;
+                                            }
+
+            const html_empty_panel = $(_page_tpl);
+            let $box = $('<div />');
+            config.portals.checklist.forEach(item => {
+                if ( !!item.icons && !!item.icons.themeLight ) {
+                    const btn = provider_button_template(item.provider, item.name, item.icons);
+
+                    item.provider != 'onlyoffice' ? $box.append(btn) :
+                            html_empty_panel.find('#box-providers-premium-button').append(btn);
+                }
             });
+
+            html_empty_panel.find('#box-providers-buttons').append($box.children());
+
+            return html_empty_panel;
+        },
+        onscale: function (pasteSvg) {
+            if (pasteSvg) {
+                $('.btn-quick.login').each(function () {
+                    if (!$(this).find('svg.icon').length) {
+                        $(this).prepend('<svg class="icon"><use xlink:href="#plus"></use></svg>');
+                    }
+                });
+            }
+            // if ( !pasteSvg ) {
+            //     $('button .icon.more',this.$panelPortalList).each(function (){
+            //         let elm = $(this);
+            //         if( !elm.find('i.icon').length )
+            //             elm.append($('<i class="icon tool-icon more" />'));
+            //     });
+            // }
         }
     });
 
@@ -275,8 +249,6 @@
         };
 
         function _do_logout(model) {
-            // var model = portalCollection.find('name', info);
-            // model && model.set('logged', false);
 
             let info = {domain:model.path};
             const _provider = config.portals.providers.find(model.provider);
@@ -312,17 +284,12 @@
 
                 window.sdk && window.sdk.checkAuth && window.sdk.checkAuth(auth_arr);
 
-                this.view.$panelNoPortals.hide();
-                this.view.$panelPortalList.show();
-            } else {
-                this.view.$panelNoPortals.show();
-                this.view.$panelPortalList.hide();
-            }
+            } 
         };
 
         var _init_collection = function() {
                 collection = new Collection({
-                    view: this.view.$panelPortalList,
+                    view: this.view.$sidebarPortalList,
                     list: '.table-files.list'
                 });
 
@@ -352,14 +319,15 @@
 
                 collection.events.changed.attach((collection, model, value) => {
                     if ( !!value ) {
-                        if ( value.logged != undefined )
-                            this.view.$panelPortalList.find('#' + model.uid)[model.logged?'addClass':'removeClass']('logged');
+                        if ( value.logged != undefined ) {
+                            // this.view.$sidebarPortalList.find('#' + model.uid)[model.logged?'addClass':'removeClass']('logged');
+                        }
                         else
                         if ( value.user ) {
-                            let el = this.view.$panelPortalList.find('#' + model.uid);
+                            let el = this.view.$sidebarPortalList.find('#' + model.uid);
                             el.html(
                                 $(this.view.portaltemplate({
-                                    portal: model.name,
+                                    portal: model.path,
                                     iconid: _create_icon_id(model.provider),
                                     iconsrc: _get_icon_scr(model.provider),
                                     themeicons: _get_theme_icons(model.provider),
@@ -367,8 +335,8 @@
                                     email: model.email}, true)));
                         } else
                         if ( value.removed != undefined ) {
-                            value.removed ? $('#' + model.uid, this.view.$panelPortalList).addClass('lost') :
-                                    $('#' + model.uid, this.view.$panelPortalList).removeClass('lost');
+                            value.removed ? $('#' + model.uid, this.view.$sidebarPortalList).addClass('lost') :
+                                    $('#' + model.uid, this.view.$sidebarPortalList).removeClass('lost');
                         }
                     }
                 });
@@ -376,7 +344,7 @@
                 collection.events.inserted.attach((collection, model) => {
                     let $listPortals = collection.view.find('.table-files.list');
                     let $item = $(this.view.portaltemplate({
-                        portal: model.name,
+                        portal: model.path,
                         iconid: _create_icon_id(model.provider),
                         iconsrc: _get_icon_scr(model.provider),
                         themeicons: _get_theme_icons(model.provider),
@@ -385,8 +353,20 @@
                         elid: model.uid
                     }));
                     
-                    $item.find('.logout').click(model, e => {
-                        _do_logout(e.data);
+
+                    $item.find('.more').click(model, e => {
+                        if ( ppmenu.contextdata ) {
+                            const m = ppmenu.contextdata;
+                            if ( m.uid != model.uid )
+                                Menu.closeAll();
+                        }
+
+                        if ( !Menu.opened ) {
+                            ppmenu.disableItem('portal:logout', !model.logged);
+                            ppmenu.showUnderElem(e.currentTarget, model);
+                        } else {
+                            Menu.closeAll();
+                        }
 
                         e.stopPropagation && e.stopPropagation();
                         return false;
@@ -397,6 +377,18 @@
 
                 collection.events.click.attach((collection, model)=>{
                     _on_context_menu(undefined, 'portal:open', model);
+
+                    // TODO: doubful variant to check portal availability on click instead of on launch
+                    if ( model.get('exists') === undefined )
+                        (new DialogConnect).portalexists(model.path, model.provider)
+                                .then(data => {
+                                    model.set('exists', true)
+                                    // data.status == 'success' && _is_logged && model.set('logged', true); 
+                                }, error => {
+                                    $('#' + model.uid, this.view.$sidebarPortalList).toggleClass('unavail', true);
+                                    model.set('logged', false)
+                                    model.set('exists', false)
+                });
                 });
 
                 collection.events.contextmenu.attach((collection, model, e)=>{
@@ -429,15 +421,17 @@
                 let model = collection.find('name', i);
 
                 if (model) {
-                    model.set('logged', false)
+                    // TODO: doubful variant to check portal availability on click instead of on launch
+                    model.set('logged', obj[i].length > 0)
 
-                    const _is_logged = obj[i].length > 0;
-                    (new DialogConnect).portalexists(model.path, model.provider)
-                            .then(data => {
-                                data.status == 'success' && _is_logged && model.set('logged', true); 
-                            }, error => {
-                                $('#' + model.uid, this.view.$panelPortalList).toggleClass('unavail', true);
-                            });
+                    // model.set('logged', false)
+                    // const _is_logged = obj[i].length > 0;
+                    // (new DialogConnect).portalexists(model.path, model.provider)
+                    //         .then(data => {
+                    //             data.status == 'success' && _is_logged && model.set('logged', true); 
+                    //         }, error => {
+                    //             $('#' + model.uid, this.view.$sidebarPortalList).toggleClass('unavail', true);
+                    //         });
                 }
             };
         };
@@ -588,35 +582,8 @@
             else carousel.$items.eq(_pre_index).removeClass('migrate pre-active active pro-active').addClass('pre-active');
         };
 
-        function _initCarousel() {
-            let _$panel = this.view.$panelNoPortals;
-            carousel.$items = _$panel.find('.carousel__slide');
-            let _activeindex = carousel.$items.filter('.active').index();
-
-            if ( !(navigator.userAgent.indexOf("Windows NT 5.") < 0) ||
-                    !(navigator.userAgent.indexOf("Windows NT 6.0") < 0) )
-            {
-                $('.carousel', _$panel).addClass('winxp');
-            }
-
-            let _pre_index = _activeindex - 1,
-                _pro_index = _activeindex + 1;
-
-            if ( _pre_index < 0 ) _pre_index = carousel.$items.length - 1;
-            if ( _pro_index > carousel.$items.length - 1 ) _pro_index = 0;
-            carousel.$items.eq(_pre_index).addClass('pre-active');
-            carousel.$items.eq(_pro_index).addClass('pro-active');
-
-            _$panel.find('.carousel__scrolls > .carousel__scroll__btn')
-                .on('click', e => {
-                    _scrollCarousel(e.target.getAttribute('value'));
-                });
-
-            _on_theme_changed(localStorage.getItem('ui-theme-id'));
-        };
 
         function _on_lang_changed(ol,nl) {
-            $('.btn-quick.logout',this.$panelPortalList).attr('tooltip',utils.Lang.menuLogout);
         };
 
         function _on_theme_changed(name, type) {
@@ -667,11 +634,21 @@
                 _init_collection.call(this);
                 _update_portals.call(this);
                 _init_ppmenu.call(this);
-                _initCarousel.call(this);
+                // _initCarousel.call(this);
 
                 $('body').on('click', '.login', e=>{
-                    let _data = $(e.currentTarget).data();
-                    !_data ? _do_connect.call(this) : _do_connect.call(this, {provider:_data.cprov});
+                    var portals = PortalsStore.portals();
+                    if (portals.length) {
+                        let _data = $(e.currentTarget).data();
+                        !_data ? _do_connect.call(this) : _do_connect.call(this, {provider:_data.cprov});
+                    } else { 
+                        new DialogProviders({
+                            bodyTemplate: this.view.portalsemptypage(),
+                            onConnect: (e, provider) => {
+                                _do_connect.call(this, provider ? {provider} : {});
+                            }
+                        }).show();
+                    }
                 });
 
                 window.CommonEvents.on('portal:create', _on_create_portal);

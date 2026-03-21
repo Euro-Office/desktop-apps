@@ -25,6 +25,7 @@ public:
     enum class ColorRole {
         ecrWindowBackground
         , ecrWindowBorder
+        , ecrBorderControlFocus
         , ecrTextNormal
         , ecrTextPretty
         , ecrTextInverse
@@ -71,8 +72,16 @@ public:
         , ecrTabThemeType
     };
 
+    CTheme(const CTheme &other);
+    CTheme(CTheme &&other) noexcept;
+    ~CTheme();
+
+    CTheme& operator=(const CTheme&);
+    CTheme& operator=(CTheme&&) noexcept;
+
     auto fromFile(const QString&) -> bool;
     auto fromJson(const QString&) -> bool;
+    auto json() const -> QString;
 
     auto id() const -> std::wstring;
     auto originalId() const -> std::wstring;
@@ -84,10 +93,10 @@ public:
     auto value(ColorRole, const std::wstring& def = L"") const -> std::wstring;
     auto isDark() const -> bool;
     auto isSystem() const -> bool;
+    auto isValid() const -> bool;
 
 private:
-    CTheme(const QString& id = QString());
-    ~CTheme();
+    CTheme(const QString& path = QString());
 
     class CThemePrivate;
     CThemePrivate * m_priv = nullptr;
@@ -104,6 +113,7 @@ public:
     auto current() -> const CTheme&;
     auto defaultDark() -> const CTheme&;
     auto defaultLight() -> const CTheme&;
+    auto localFromId(const QString &id) const -> CTheme;
 
 //    auto addLocalTheme(const std::wstring&) -> bool;
     auto addLocalTheme(QJsonObject&, const QString& filepath) -> bool;

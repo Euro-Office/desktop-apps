@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ONLYOFFICE Release Notes</title>
+    <style type="text/css">
+        /* variables */
+        :root {
+            --color-black: #141923;
+            --color-white: #fff;
+            --color-gray-100: #f7fafc;
+            --color-gray-200: #edf2f7;
+            --color-gray-300: #e2e8f0;
+            --color-gray-400: #cbd5e0;
+            --color-gray-500: #a0aec0;
+            --color-gray-600: #718096;
+            --color-gray-700: #4a5568;
+            --color-gray-800: #2d3748;
+            --color-gray-900: #1a202c;
+        }
+        body {
+            background: var(--color-white);
+            color: var(--color-gray-800);
+            font: 12px "Lucida Grande", "Lucida Sans Unicode", Verdana, Lucida, Helvetica, sans-serif;
+        }
+        h1, h2, h3 {
+            color: var(--color-gray-800);
+            font-weight: normal;
+            font-style: normal;
+        }
+        h1 {
+            font-size: 1.7em;
+        }
+        h2 {
+            font-size: 1.4em;
+            font-weight: lighter;
+        }
+        h4 {
+            font-size: 1.2em;
+            font-weight: lighter;
+        }
+        code {
+            background: var(--color-gray-200);
+            font-family: monospace;
+            padding: 1px 5px;
+        }
+        ul {
+            padding: 8.1.3 20px;
+        }
+        li {
+            margin-left: 20px;
+            margin-bottom: 0.2em;
+            padding: 0;
+        }
+        hr {
+            margin: 20px 0;
+            border: var(--color-gray-400) solid 0.5px;
+        }
+        .releasedate {
+            color: var(--color-gray-600);
+            font-weight: lighter;
+        }
+
+        /* prefers light mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--color-gray-900);
+                color: var(--color-gray-200);
+            }
+
+            h1, h2, h3 {
+                color: var(--color-white);
+            }
+
+            code {
+                background: var(--color-gray-800);
+                color: var(--color-gray-200);
+            }
+
+            .releasedate {
+                color: var(--color-gray-600);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="version">
+        <h1>ONLYOFFICE 9.0.3<span class="releasedate"> - {{DATE}}</span></h1>
+
+        <h2>Fixes</h2>
+
+        <h4>All Editors</h4>
+        <ul>
+            <li>The display of the cursor and text selection is now limited by the size of the object/shape</li>
+            <li>Fixed some icons for Modern themes when the interface scale is higher than 200%</li>
+            <li>Improved appearance of the autoshape Merge/Flip icons for the Modern themes</li>
+            <li>Fixed the application freezes on the first launch during the template preview generation process</li>
+            <li>Fixed the ability to paste code in the Macros window</li>
+            <li>Fixed work of the Open existing file (Open Document) shortcut on the Home page</li>
+            <li>Improved display of icons for Clouds connection on the main page of the application</li>
+            <li>Changed the font for the Urdu Interface language</li>
+            <li>Fixed pausing when connecting to the portal if the debug window is open</li>
+        </ul>
+        <h4>Document Editor</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when editing footer in some <code>DOCX</code> files</li>
+            <li>Fixed errors during Compare/Combine/Text from file operations with files containing images</li>
+            <li>Fixed a crash when restoring a placeholder with a list when deleting Content Control content</li>
+            <li>Fixed significant increasing of the file size due to including CJK fonts when exporting to <code>PDF</code></li>
+            <li>Fixed auto-detection of the document language in the text with the Text Direction > RTL option</li>
+        </ul>
+        <h4>Spreadsheet Editor</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when trying to reference a cell with a formula</li>
+            <li>Fixed appearing the #NAME error in the final file when using a custom function and exporting to <code>PDF</code></li>
+            <li>Fixed a problem with saving custom function to a file</li>
+            <li>Fixed an issue with autofitting row height when changing column width if Wrap Text is applied to a cell</li>
+            <li>Fixed display of the Zoom option value in the bottom toolbar in RTL UI with the Sheet RTL option disabled</li>
+            <li>Fixed the incorrect position of the percent sign in the status bar for Zoom with Chinese (Simplified)</li>
+            <li>Fixed stopping work of the application when exporting a spreadsheet to <code>PDF</code></li>
+        </ul>
+        <h4>Presentation Editor</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when applying some animations from the Emphasis Effects section to an image</li>
+            <li>Fixed the editor crash when deleting slides sequentially from preview panel</li>
+            <li>Fixed stopping work of the editor when copying all content on the slide in some <code>PPTX</code> files</li>
+            <li>Fixed incorrect translations of tools in the Draw menu of the Presenter View window</li>
+            <li>Fixed changing word order in the bidirectional text when opening some <code>PPTX</code> files in the application</li>
+        </ul>
+        <h4>Forms</h4>
+        <ul>
+            <li>Fixed stopping work of the editor after applying the TextArt setting to the Signature field</li>
+            <li>Fixed stopping work of the editor when restoring a file connection after a long period of inactivity</li>
+            <li>Fixed cursor change for Content Control buttons</li>
+            <li>Fixed missing the Clear Fields icons in the form viewing mode for the Modern themes</li>
+        </ul>
+        <h4>PDF Editor</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when performing Cut/Paste operations simultaneously on the thumbnail panel</li>
+            <li>Fixed display of the text after breaking and restoring a session when working with some <code>PDF</code> files</li>
+            <li>Fixed saving form field settings when there are no other changes in the editor</li>
+            <li>Blocked the ability to change the contents of the document when the connection is lost</li>
+            <li>Fixed an error when trying to copy page contents from the thumbnail panel for <code>XPS/DjVu</code> formats</li>
+            <li>Blocked the ability to display of the form field titles in the embedded mode</li>
+            <li>Fixed display of the form field highlight when undoing and redoing actions</li>
+            <li>Fixed blocking the ability to enter text immediately after inserting a Text Comment</li>
+            <li>Fixed an error that occurred in the application when quickly opening several documents one after another</li>
+        </ul>
+        <h4>Diagram</h4>
+        <ul>
+            <li>Fixed display of the slide in the working area when opening some <code>VSTX</code> files</li>
+        </ul>
+        <h4>Convert</h4>
+        <ul>
+            <li>Fixed crash when converting some <code>DOCX</code> files to an image</li>
+            <li>Fixed crash when converting some <code>HWP</code> files to the binary format</li>
+            <li>Fixed endless conversion of some <code>HWP</code> files to the binary format</li>
+            <li>Fixed endless conversion of some <code>DOC</code> files to the binary format</li>
+            <li>Fixed the appearance of an error when opening the result of converting some <code>HWP</code> files to <code>DOCX</code> in third-party editors</li>
+            <li>Fixed crash when converting some <code>DOC</code> files to the binary format</li>
+            <li>Fixed the appearance of an error when opening the result of converting some <code>XLS</code> files to <code>XLSX</code> in third-party editors</li>
+            <li>Fixed crash when converting some <code>DOCX</code> files to the binary format</li>
+            <li>Fixed the difference in display of autoshapes after converting some <code>VSDX</code> files to <code>PNG</code></li>
+        </ul>
+    </div>
+</body>
+</html>

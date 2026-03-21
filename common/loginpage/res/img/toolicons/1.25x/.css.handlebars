@@ -1,0 +1,14 @@
+{{#spritesheet}}
+.pixel-ratio__1_25 {
+    .tool-icon, .menu__icon {
+        background-image: data-uri('{{{escaped_image}}}');
+        background-size: {{scaled width 1.25}}px auto;
+    }
+}
+{{/spritesheet}}
+{{#sprites}}
+.tool-icon.{{name}} {
+    background-position-y: {{scaled offset_y 1.25}}px;
+}
+{{/sprites}}
+

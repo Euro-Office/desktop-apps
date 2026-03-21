@@ -35,8 +35,7 @@
 #include "defines.h"
 #include "utils.h"
 #include <QTimer>
-#include <QDesktopWidget>
-#include <QGraphicsOpacityEffect>
+#include <qtcomp/qdesktopwidget.h>
 #include <QWindow>
 #include <QScreen>
 #include <QJsonObject>
@@ -49,7 +48,14 @@
 #define SKIP_EVENTS_QUEUE(callback) QTimer::singleShot(0, this, callback)
 
 using WinVer = Utils::WinVer;
+using GetSystemMetricsForDpi_t = int (WINAPI*)(int nIndex, UINT dpi);
 
+static auto pGetSystemMetricsForDpi = []() -> GetSystemMetricsForDpi_t
+{
+    if (HMODULE hUser32 = GetModuleHandle(L"user32"))
+        return (GetSystemMetricsForDpi_t)GetProcAddress(hUser32, "GetSystemMetricsForDpi");
+    return nullptr;
+}();
 
 static double GetLogicalDpi(QWidget *wgt)
 {
@@ -66,6 +72,17 @@ static double GetLogicalDpi(QWidget *wgt)
 
 static void GetFrameMetricsForDpi(FRAME &frame, double dpi, bool maximized = false)
 {
+    if (pGetSystemMetricsForDpi) {
+        frame.left = 0;
+        frame.top = pGetSystemMetricsForDpi(SM_CYCAPTION, dpi * 96);
+        if (!maximized) {
+            int cyFrame = pGetSystemMetricsForDpi(SM_CYSIZEFRAME, dpi * 96);
+            int cyBorder = pGetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi * 96);
+            frame.top += (cyFrame + cyBorder);
+        }
+        return;
+    }
+
     WinVer ver = Utils::getWinVersion();
     int row = ver == WinVer::WinXP ? 0 :
               ver <= WinVer::Win7 ? 1 :
@@ -92,7 +109,6 @@ static void GetFrameMetricsForDpi(FRAME &frame, double dpi, bool maximized = fal
         {0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // Win10
         {0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}  // Win11
     };
-    frame.left = left[row][column];
 
     const int top[5][13] = { // Top margin for scales 100-500%
         {0,  0,  0,  0,  0,  1,  1,  1,  2,  2,   2,   2,   2}, // WinXp: for NC width 3px
@@ -101,10 +117,6 @@ static void GetFrameMetricsForDpi(FRAME &frame, double dpi, bool maximized = fal
         {31, 38, 45, 52, 58, 65, 72, 85, 99, 112, 126, 139, 167}, // Win10
         {30, 37, 43, 50, 56, 63, 69, 82, 95, 108, 121, 134, 161}  // Win11
     };
-    frame.top = top[row][column];
-
-    if (!maximized)
-        return;
 
     const int left_ofs[5][13] = { // Left offset for scales 100-500%
         {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // WinXp
@@ -113,7 +125,6 @@ static void GetFrameMetricsForDpi(FRAME &frame, double dpi, bool maximized = fal
         {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // Win10
         {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}  // Win11
     };
-    frame.left -= left_ofs[row][column];
 
     const int top_ofs[5][13] = { // Top offset for scales 100-500%
         {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, // WinXp
@@ -122,7 +133,13 @@ static void GetFrameMetricsForDpi(FRAME &frame, double dpi, bool maximized = fal
         {8,  9,  11, 12, 13, 14, 16, 18, 21, 24, 27, 30, 36}, // Win10
         {7,  8,  9,  10, 11, 12, 13, 15, 17, 19, 21, 23, 28}  // Win11
     };
-    frame.top -= top_ofs[row][column];
+
+    frame.left = left[row][column];
+    frame.top = top[row][column];
+    if (maximized) {
+        frame.left -= left_ofs[row][column];
+        frame.top -= top_ofs[row][column];
+    }
 }
 
 static QColor GetBorderColor(bool isActive, const QColor &bkgColor)
@@ -167,9 +184,18 @@ static QColor GetBorderColor(bool isActive, const QColor &bkgColor)
 
 static bool isTaskbarAutoHideOn()
 {
-    APPBARDATA ABData;
-    ABData.cbSize = sizeof(ABData);
+    APPBARDATA ABData = { sizeof(APPBARDATA) };
     return (SHAppBarMessage(ABM_GETSTATE, &ABData) & ABS_AUTOHIDE) != 0;
+}
+
+static bool hasAppBarOnMonitor(const RECT &rc)
+{
+    HMONITOR hMon = MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST);
+    if (!hMon) return false;
+
+    MONITORINFO mi = { sizeof(MONITORINFO) };
+    GetMonitorInfo(hMon, &mi);
+    return !EqualRect(&mi.rcMonitor, &mi.rcWork);
 }
 
 static bool isThemeActive()
@@ -292,7 +318,7 @@ void CWindowPlatform::adjustGeometry()
     if (isMaximized()) {
         if (Utils::getWinVersion() < WinVer::Win10) {
             QTimer::singleShot(25, this, [=]() {
-                auto rc = QApplication::desktop()->availableGeometry(this);
+                auto rc = QtComp::DesktopWidget::availableGeometry(this);
                 int offset = 0;
                 if (Utils::getWinVersion() == WinVer::WinXP) {
                     if (isTaskbarAutoHideOn())
@@ -334,12 +360,8 @@ bool CWindowPlatform::isSessionInProgress()
 void CWindowPlatform::onWindowActivate(bool is_active)
 {
     for (auto *btn : m_pTopButtons) {
-        QGraphicsOpacityEffect *efct = qobject_cast<QGraphicsOpacityEffect*>(btn->graphicsEffect());
-        if (!efct) {
-            efct = new QGraphicsOpacityEffect(btn);
-            btn->setGraphicsEffect(efct);
-        }
-        efct->setOpacity(is_active ? 1.0 : 0.5);
+        if (btn)
+            btn->setFaded(!is_active);
     }
 }
 
@@ -382,7 +404,7 @@ void CWindowPlatform::changeEvent(QEvent *event)
     }
 }
 
-bool CWindowPlatform::nativeEvent(const QByteArray &eventType, void *message, long *result)
+bool CWindowPlatform::nativeEvent(const QByteArray &eventType, void *message, long_ptr *result)
 {
 #if (QT_VERSION == QT_VERSION_CHECK(5, 11, 1))
     MSG* msg = *reinterpret_cast<MSG**>(message);
@@ -440,8 +462,8 @@ bool CWindowPlatform::nativeEvent(const QByteArray &eventType, void *message, lo
         params->rgrc[0].top -= m_frame.top;
         params->rgrc[0].right += m_frame.left;
         params->rgrc[0].bottom += m_frame.left;
-        if (m_isMaximized && m_isTaskbarAutoHideOn && (Utils::getWinVersion() >= WinVer::Win10))
-            params->rgrc[0].bottom -= 2;
+        if (m_isMaximized && (Utils::getWinVersion() >= WinVer::Win10) && (isTaskbarAutoHideOn() || !hasAppBarOnMonitor(params->rgrc[0])))
+            params->rgrc[0].bottom -= 1 * round(m_dpi);
         return true;
     }
 
@@ -498,6 +520,10 @@ bool CWindowPlatform::nativeEvent(const QByteArray &eventType, void *message, lo
     }
 
     case WM_SETTINGCHANGE: {
+        if (msg->wParam == SPI_SETNONCLIENTMETRICS) {
+            GetFrameMetricsForDpi(m_frame, m_dpi, m_isMaximized);
+            SetWindowPos(m_hWnd, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+        } else
         if (msg->wParam == SPI_SETWINARRANGING) {
             if (Utils::getWinVersion() > Utils::WinVer::Win10 && m_boxTitleBtns)
                 SendMessage((HWND)m_boxTitleBtns->winId(), WM_SETTINGCHANGE, 0, 0);

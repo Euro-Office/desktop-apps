@@ -487,7 +487,9 @@ QDialog::DialogCode PrintDialog::exec()
                 double height = double(pDevmode->dmPaperLength)/10;
                 QPageSize ps(QSizeF(width, height), QPageSize::Millimeter);
                 m_printer->setPageSize(ps);
-                m_printer->setPageOrientation(pDevmode->dmOrientation == DMORIENT_PORTRAIT ? QPageLayout::Portrait : QPageLayout::Landscape);
+                QPageLayout plt = m_printer->pageLayout();
+                plt.setOrientation(pDevmode->dmOrientation == DMORIENT_PORTRAIT ? QPageLayout::Portrait : QPageLayout::Landscape);
+                m_printer->setPageLayout(plt);
                 GlobalUnlock(dlg.hDevMode);
             }
 

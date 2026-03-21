@@ -33,6 +33,7 @@
 #include "windows/cwindowbase.h"
 #include "cascapplicationmanagerwrapper.h"
 #include "components/ctooltip.h"
+#include "components/cpushbutton.h"
 #include "utils.h"
 #include "defines.h"
 #ifdef _WIN32
@@ -118,6 +119,11 @@ QWidget * CWindowBase::handle() const
     return qobject_cast<QWidget *>(const_cast<CWindowBase*>(this));
 }
 
+QWidget * CWindowBase::mainPanel() const
+{
+    return m_pMainPanel;
+}
+
 bool CWindowBase::isCustomWindowStyle()
 {
     return pimpl->is_custom_window_;
@@ -142,9 +148,9 @@ void CWindowBase::applyTheme(const std::wstring& theme)
 
 /** Protected **/
 
-QPushButton* CWindowBase::createToolButton(QWidget * parent, const QString& name)
+CPushButton* CWindowBase::createToolButton(QWidget * parent, const QString& name)
 {
-    QPushButton * btn = new QPushButton(parent);
+    CPushButton * btn = new CPushButton(parent);
     btn->setObjectName(name);
     btn->setProperty("class", "normal");
     btn->setProperty("act", "tool");
@@ -182,7 +188,7 @@ QWidget* CWindowBase::createTopPanel(QWidget *parent)
             [=]{onMinimizeEvent();}, [=]{onMaximizeEvent();}, [=]{onCloseEvent();}};
         m_pTopButtons.clear();
         for (int i = 0; i < 3; i++) {
-            QPushButton *btn = createToolButton(_boxTitleBtns, names[i]);
+            CPushButton *btn = createToolButton(_boxTitleBtns, names[i]);
             QObject::connect(btn, &QPushButton::clicked, btn_methods[i]);
             m_pTopButtons.push_back(btn);
             layoutBtns->addWidget(btn);

@@ -45,6 +45,9 @@
 #import "ASCConstants.h"
 #import "ASCHelper.h"
 #import "ASCCommonViewController.h"
+#import "ASCEditorWindowController.h"
+#import "ASCTitleWindow.h"
+#import "ASCEditorWindow.h"
 
 @interface ASCPresentationReporter() <NSWindowDelegate>
 @property (nonatomic) NSStoryboard * storyboard;
@@ -87,10 +90,26 @@
         _isDisplay = true;
         
         NSString * windowTitle = NSLocalizedString(@"Presenter View", nil);
+        NSString * viewId = [NSString stringWithFormat:@"%d", senderId];
         
-        if (ASCCommonViewController * viewController = (ASCCommonViewController *)[[[NSApplication sharedApplication] mainWindow] contentViewController]) {
-            if (ASCTabView * tabView = [viewController tabViewWithId:senderId]) {
-                windowTitle = [NSString stringWithFormat:@"%@ - %@", windowTitle, tabView.title];
+        for (NSWindow *window in [NSApp windows]) {
+            if ([window isKindOfClass:[ASCTitleWindow class]]) {
+                ASCCommonViewController * controller = (ASCCommonViewController *)window.contentViewController;
+                ASCTabView * tab = [controller.tabsControl tabWithUUID:viewId];
+                if (tab) {
+                    windowTitle = [NSString stringWithFormat:@"%@ - %@", windowTitle, tab.title];
+                    break;
+                }
+
+            } else
+            if ([window isKindOfClass:[ASCEditorWindow class]]) {
+                ASCEditorWindow *editor = (ASCEditorWindow *)window;
+                ASCEditorWindowController *controller = (ASCEditorWindowController *)editor.windowController;
+                if (controller && [controller holdView:viewId]) {
+                    NSCefView * cefView = (NSCefView *)editor.webView;
+                    windowTitle = [NSString stringWithFormat:@"%@ - %@", windowTitle, [cefView.data title:YES]];
+                    break;
+                }
             }
         }
 
@@ -121,6 +140,9 @@
                     }
                 }
             } else {
+                if ([screens count] == 1) {
+                    [_controller.window setLevel: NSFloatingWindowLevel];
+                }
                 [_controller showWindow:nil];
             }
             
@@ -138,7 +160,7 @@
         return;
     }
     
-    [_controller close];
+    [_controller.window performClose:nil];
     _isDisplay = false;
 }
 

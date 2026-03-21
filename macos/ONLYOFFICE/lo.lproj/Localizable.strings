@@ -80,7 +80,7 @@
 "new-document" = "ເອກະສານໃໝ່";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "ແບບຟອມ PDF ໃໝ່";
+"new-pdfform" = "PDF ໃໝ່";
 
 /* No comment provided by engineer. */
 "new-presentation" = "ພີເຊັນເທຊັນໃໝ່";
@@ -198,6 +198,33 @@
 
 /* No comment provided by engineer. */
 "XML Paper Specification" = "ເອກະສານ OpenXPS (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "ສະແດງໜ້າຕ່າງຫຼັກ";
+
+/* No comment provided by engineer. */
+"Close" = "ປິດ";
+
+/* No comment provided by engineer. */
+"Close saved" = "ປິດບັນທຶກແລ້ວ";
+
+/* No comment provided by engineer. */
+"Close all" = "ປິດທັງໝົດ";
+
+/* No comment provided by engineer. */
+"Show in folder" = "ສະແດງໃນໂຟນເດີ";
+
+/* No comment provided by engineer. */
+"Move to start" = "ຍ້າຍໄປເລີ່ມຕົ້ນ";
+
+/* No comment provided by engineer. */
+"Move to end" = "ຍ້າຍໄປຈຸດສິ້ນສຸດ";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "ຖອນປັກໝຸດແຖບ";
+
+/* No comment provided by engineer. */
+"Create new" = "ສ້າງໃໝ່";
 
 /* No comment provided by engineer. */
 "Yes" = "ແມ່ນແລ້ວ";

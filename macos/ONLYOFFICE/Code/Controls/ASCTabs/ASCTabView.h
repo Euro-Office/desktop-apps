@@ -56,9 +56,10 @@
 @property (nonatomic) ASCTabViewType type;
 @property (nonatomic) NSString *uuid;
 @property (nonatomic) NSMutableDictionary *params;
-@property (nonatomic) BOOL changed;
+//@property (nonatomic) BOOL changed;
 @property (nonatomic) BOOL isProcessing;
 @property (nonatomic) BOOL isDragging;
+@property (nonatomic, weak) NSView *webView;
 
 @property (nonatomic, assign) id <ASCTabViewDelegate> delegate;
 @end

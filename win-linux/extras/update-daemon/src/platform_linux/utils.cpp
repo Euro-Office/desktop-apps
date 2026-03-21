@@ -608,12 +608,12 @@ namespace NS_Logger
     void WriteLog(const string &log, bool showMessage)
     {
         if (allow_write_log) {
-            string filpPath(NS_File::appPath() + "/service_log.txt");
+            string filpPath(NS_File::tempPath() + "/oo_service_log.txt");
             std::ofstream file(filpPath.c_str(), std::ios::app);
             if (!file.is_open()) {
                 return;
             }
-            file << log << std::endl;
+            file << log << string("\n") << std::endl;
             file.close();
         }
         if (showMessage)

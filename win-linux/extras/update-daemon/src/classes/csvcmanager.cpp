@@ -95,9 +95,11 @@ using std::vector;
 auto currentArch()->tstring
 {
 #ifdef _WIN32
-# ifdef _WIN64
+# if defined(_M_ARM64)
+    return L"_arm64";
+# elif defined(_M_X64)
     return L"_x64";
-# else
+# elif defined(_M_IX86)
     return L"_x86";
 # endif
 #else
@@ -175,11 +177,15 @@ auto restartService()->void
         return;
     }
 
+    wstring args = NS_Utils::cmdArgsAsString();
+    if (!args.empty())
+        args.insert(0, 1, L' ');
+
     std::list<wstring> batch = {
         L"@chcp 65001>nul",
         L"@echo off",
         wstring(L"NET STOP ") + L"\"" + TEXT(VER_PRODUCTNAME_STR) + L"\"",
-        wstring(L"NET START ") + L"\"" +  TEXT(VER_PRODUCTNAME_STR) + L"\"",
+        wstring(L"SC START ") + L"\"" +  TEXT(VER_PRODUCTNAME_STR) + L"\"" + args,
         L"del /F /Q \"%~dp0~updatesvc.exe\"",
         L"exit"
     };
@@ -209,8 +215,34 @@ auto verToAppVer(const wstring &ver)->wstring
     size_t pos = ver.find(L'.');
     if (pos == std::wstring::npos)
         return ver;
+
+    pos = ver.find(L'.', pos + 1);
+    if (pos == std::wstring::npos)
+        return ver;
+
     pos = ver.find(L'.', pos + 1);
     return (pos == std::wstring::npos) ? ver : ver.substr(0, pos);
+}
+
+auto displayNameReplaceVersion(const wstring &disp_name, const wstring &newVersion)->wstring
+{
+    for (size_t i = disp_name.size(); i-- > 0;) {
+        if (iswdigit(disp_name[i])) {
+            size_t j = i;
+            bool hasDot = false;
+            while (j > 0 && (iswdigit(disp_name[j - 1]) || disp_name[j - 1] == L'.')) {
+                if (disp_name[j - 1] == L'.')
+                    hasDot = true;
+                --j;
+            }
+            if (hasDot) {
+                return disp_name.substr(0, j) + newVersion + disp_name.substr(i + 1);
+            } else {
+                i = j;
+            }
+        }
+    }
+    return disp_name;
 }
 
 auto getCurrentDate()->wstring
@@ -330,14 +362,14 @@ void CSvcManager::init()
                     tstring ext = m_packageData->fileType == _T("iss") ? _T(".exe") : m_packageData->fileType == _T("msi") ? _T(".msi") : ARCHIVE_EXT;
                     m_pDownloader->downloadFile(m_packageData->packageUrl, generateTmpFileName(ext));
                 }
-                NS_Logger::WriteLog(_T("Received MSG_LoadUpdates, URL: ") + params[1]);
+                NS_Logger::WriteLog(_T("Received MSG_LoadUpdates, URL: ") + m_packageData->packageUrl);
                 break;
             }
             case MSG_RequestContentLenght: {
                 __GLOBAL_LOCK
                 if (m_pDownloader)
-                    m_pDownloader->queryContentLenght(params[1]);
-                NS_Logger::WriteLog(_T("Received MSG_RequestContentLenght, URL: ") + params[1]);
+                    m_pDownloader->queryContentLenght(m_packageData->packageUrl);
+                NS_Logger::WriteLog(_T("Received MSG_RequestContentLenght, URL: ") + m_packageData->packageUrl);
                 break;
             }
             case MSG_StopDownload: {
@@ -381,7 +413,7 @@ void CSvcManager::init()
                 break;
 
             case MSG_SetLanguage:
-                Translator::setLanguage(params[1]);
+                Translator::instance().setLanguage(params[1]);
                 break;
 
             default:
@@ -469,6 +501,7 @@ void CSvcManager::onCompleteSlot(const int error, const tstring &filePath)
     if (error == 0) {
         switch (m_downloadMode) {
         case Mode::CHECK_UPDATES: {
+            __GLOBAL_LOCK // isUrlAccessible may take a long time to execute
             tstring out_json;
             list<tstring> lst;
             if (NS_File::readFile(filePath, lst)) {
@@ -482,9 +515,11 @@ void CSvcManager::onCompleteSlot(const int error, const tstring &filePath)
                 tstring curr_svc_version = _T(VER_FILEVERSION_STR);
                 JsonObject package = root.value(_T("package")).toObject();
 #ifdef _WIN32
-# ifdef _WIN64
+# if defined(_M_ARM64)
+                JsonObject win = package.value(_T("win_arm64")).toObject();
+# elif defined(_M_X64)
                 JsonObject win = package.value(_T("win_64")).toObject();
-# else
+# elif defined(_M_IX86)
                 JsonObject win = package.value(_T("win_32")).toObject();
 # endif
 #else
@@ -511,7 +546,10 @@ void CSvcManager::onCompleteSlot(const int error, const tstring &filePath)
                         }
                     }
 #endif
-                    m_packageData->packageUrl = package_type.value(_T("url")).toTString();
+                    tstring url = package_type.value(_T("url")).toTString();
+                    tstring url2 = package_type.value(_T("url2")).toTString();
+                    NS_Logger::WriteLog(_T("Primary package URL: ") + url + _T("\nSecondary package URL: ") + url2);
+                    m_packageData->packageUrl = ((url.empty() || !m_pDownloader->isUrlAccessible(url)) && !url2.empty()) ? url2 : url;
                     tstring hash = package_type.value(_T("md5")).toTString();
                     std::transform(hash.begin(), hash.end(), hash.begin(), ::tolower);
                     m_packageData->hash = hash;
@@ -531,7 +569,10 @@ void CSvcManager::onCompleteSlot(const int error, const tstring &filePath)
                     m_packageData->version = svc_version;
                     m_packageData->fileType = _T("archive");
                     JsonObject package_type = win.value(_T("serviceArchive")).toObject();
-                    m_packageData->packageUrl = package_type.value(_T("url")).toTString();
+                    tstring url = package_type.value(_T("url")).toTString();
+                    tstring url2 = package_type.value(_T("url2")).toTString();
+                    NS_Logger::WriteLog(_T("Primary package URL: ") + url + _T("\nSecondary package URL: ") + url2);
+                    m_packageData->packageUrl = ((url.empty() || !m_pDownloader->isUrlAccessible(url)) && !url2.empty()) ? url2 : url;
                     tstring hash = package_type.value(_T("md5")).toTString();
                     std::transform(hash.begin(), hash.end(), hash.begin(), ::tolower);
                     m_packageData->hash = hash;
@@ -557,6 +598,7 @@ void CSvcManager::onCompleteSlot(const int error, const tstring &filePath)
             } else {
                 // read error
             }
+            __UNLOCK
             m_socket->sendMessage(MSG_LoadCheckFinished, out_json);
             break;
         }
@@ -651,7 +693,11 @@ void CSvcManager::clearTempFiles(const tstring &prefix, const tstring &except)
                 tstring lcFilePath(filePath);
                 std::transform(lcFilePath.begin(), lcFilePath.end(), lcFilePath.begin(), ::tolower);
                 if (lcFilePath.find(prefix) != tstring::npos && filePath != except)
+#ifdef _WIN32
+                    NS_File::removeFile(filePath, true);
+#else
                     NS_File::removeFile(filePath);
+#endif
             }
         }
         tstring updPath = NS_File::parentPath(NS_File::appPath()) + UPDATE_PATH;
@@ -701,8 +747,12 @@ void CSvcManager::startReplacingFiles(const tstring &packageType, const bool res
 #endif
         for (int i = 0; i < sizeof(apps) / sizeof(apps[0]); i++) {
             int retries = 10;
+#ifdef _WIN32
+            tstring app = NS_File::toNativeSeparators(appPath + apps[i]);
+#else
             tstring app(apps[i]);
             app = app.substr(1);
+#endif
             while (NS_File::isProcessRunning(app) && retries-- > 0)
                 sleep(500);
 
@@ -752,6 +802,14 @@ void CSvcManager::startReplacingFiles(const tstring &packageType, const bool res
             if (NS_File::fileExists(tmpPath + files[i]))
                 NS_File::replaceFile(tmpPath + files[i], appPath + files[i]);
         }
+
+        auto licenseFiles = NS_File::findFilesByPattern(tmpPath, L"LICENSE.*");
+        auto eulaFiles = NS_File::findFilesByPattern(tmpPath, L"EULA.*");
+        licenseFiles.insert(licenseFiles.end(), eulaFiles.begin(), eulaFiles.end());
+        for (const auto &file : licenseFiles) {
+            if (!NS_File::fileExists(appPath + file) && NS_File::fileExists(tmpPath + file))
+                NS_File::replaceFile(tmpPath + file, appPath + file);
+        }
     }
 
     // To support a version without updatesvc.exe inside the working folder
@@ -776,8 +834,19 @@ void CSvcManager::startReplacingFiles(const tstring &packageType, const bool res
                 wstring app_key(TEXT(REG_UNINST_KEY));
                 app_key += (packageType == TEXT("iss")) ? L"_is1" : L"";
                 if (RegOpenKeyEx(hKey, app_key.c_str(), 0, KEY_ALL_ACCESS, &hAppKey) == ERROR_SUCCESS) {
-                    wstring disp_name = app_name + L" " + verToAppVer(ver) + L" (" + currentArch().substr(1) + L")";
+                    wstring disp_name;
                     wstring ins_date = getCurrentDate();
+                    {
+                        WCHAR pData[MAX_PATH] = {};
+                        DWORD cbData = sizeof(pData);
+                        DWORD dwType = REG_SZ;
+                        if (RegQueryValueEx(hAppKey, TEXT("DisplayName"), nullptr, &dwType, (LPBYTE)pData, &cbData) == ERROR_SUCCESS && pData[0] != L'\0') {
+                            disp_name = displayNameReplaceVersion(pData, verToAppVer(ver));
+                        } else {
+                            NS_Logger::WriteLog(L"Unable to get DisplayName from registry!");
+                            disp_name = app_name + L" " + verToAppVer(ver) + L" (" + currentArch().substr(1) + L")";
+                        }
+                    }
                     if (RegSetValueEx(hAppKey, TEXT("DisplayName"), 0, REG_SZ, (const BYTE*)disp_name.c_str(), (DWORD)(disp_name.length() + 1) * sizeof(WCHAR)) != ERROR_SUCCESS)
                         NS_Logger::WriteLog(L"Can't update DisplayName in registry!");
                     if (RegSetValueEx(hAppKey, TEXT("DisplayVersion"), 0, REG_SZ, (const BYTE*)ver.c_str(), (DWORD)(ver.length() + 1) * sizeof(WCHAR)) != ERROR_SUCCESS)
@@ -855,8 +924,12 @@ void CSvcManager::startReplacingService(const bool restartAfterUpdate)
 #endif
         for (int i = 0; i < sizeof(apps) / sizeof(apps[0]); i++) {
             int retries = 10;
+#ifdef _WIN32
+            tstring app = NS_File::toNativeSeparators(appPath + apps[i]);
+#else
             tstring app(apps[i]);
             app = app.substr(1);
+#endif
             while (NS_File::isProcessRunning(app) && retries-- > 0)
                 sleep(500);
 

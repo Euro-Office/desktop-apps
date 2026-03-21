@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Editor Title Bar Controller-->
+        <scene sceneID="DZm-iH-LJP">
+            <objects>
+                <viewController storyboardIdentifier="editorTitleBarControllerID" id="eHI-bq-L7s" customClass="ASCEditorTitleBarController" sceneMemberID="viewController">
+                    <visualEffectView key="view" blendingMode="behindWindow" material="underWindowBackground" state="followsWindowActiveState" id="J3Y-s3-V6r">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="38"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </visualEffectView>
+                </viewController>
+                <customObject id="et5-qM-fd4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-248" y="-901"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="xkr-XX-l4i">
+            <objects>
+                <windowController storyboardIdentifier="ASCEditorWindowControllerId" id="ayF-h0-EsM" customClass="ASCEditorWindowController" sceneMemberID="viewController">
+                    <window key="window" title="Editor Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="cAh-Jm-QUj" userLabel="Editor Window" customClass="ASCEditorWindow">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
+                        <rect key="contentRect" x="0.0" y="0.0" width="1024" height="540"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+                        <value key="minSize" type="size" width="518" height="440"/>
+                        <toolbar key="toolbar" implicitIdentifier="ASCEditorWindowToolbar" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" displayMode="labelOnly" sizeMode="regular" id="EdT-rW-oT1">
+                            <allowedToolbarItems/>
+                            <defaultToolbarItems/>
+                        </toolbar>
+                        <connections>
+                            <outlet property="delegate" destination="ayF-h0-EsM" id="wDl-ug-8Gz"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="kgr-7A-vaI" kind="relationship" relationship="window.shadowedContentViewController" id="2zE-XM-ZLo"/>
+                    </connections>
+                </windowController>
+                <customObject id="D11-vY-7dy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-248" y="-323"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="y6S-6a-pjR">
+            <objects>
+                <viewController id="kgr-7A-vaI" sceneMemberID="viewController">
+                    <view key="view" id="yY1-pg-tE2">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="790"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="SAm-XK-qwd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="312" y="-336"/>
+        </scene>
+    </scenes>
+</document>

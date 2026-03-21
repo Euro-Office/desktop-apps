@@ -50,6 +50,8 @@
 # define TStrToQStr(a) QString::fromStdString(a)
 #endif
 
+#define DLG_RESULT_NONE -2
+
 using std::wstring;
 
 enum UpdateMode {
@@ -135,9 +137,9 @@ private:
 private slots:
     void onCheckFinished(bool error, bool updateExist, const QString &version, const QString &changelog);
     void onLoadCheckFinished(const QString &json);
-    void showUpdateMessage(QWidget *parent);
+    void showUpdateMessage(QWidget *parent, bool forceModal = false, int result = DLG_RESULT_NONE);
     void onLoadUpdateFinished(const QString &filePath);
-    void showStartInstallMessage(QWidget *parent);
+    void showStartInstallMessage(QWidget *parent, bool forceModal = false, int result = DLG_RESULT_NONE);
     void onProgressSlot(const int percent);
     void onUnzipProgressSlot(const int percent);
     void onError(const QString &error);

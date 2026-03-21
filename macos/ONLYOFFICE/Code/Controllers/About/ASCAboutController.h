@@ -41,5 +41,5 @@
 #import <Cocoa/Cocoa.h>
 
 @interface ASCAboutController : NSViewController
-
+- (IBAction)onLicenseButtonClick:(id)sender;
 @end

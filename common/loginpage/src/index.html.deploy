@@ -76,48 +76,7 @@
                 <div class="roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
             </div>
         </div>
-        <div id="placeholder">
-            <div class="main-column col-left tool-menu">
-              <div class="tool-quick-menu">
-                <h3 class="createnew" l10n>Create new</h3>
-                <li class="menu-item">
-                  <a action="new:docx">
-                    <svg class="icon" data-iconname="docx" data-precls="img-el">
-                        <use href="#docx-big"></use>
-                    </svg>
-                    <span class="text" l10n>DOCUMENT</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a action="new:xlsx">
-                    <svg class="icon" data-iconname="xlsx" data-precls="img-el">
-                        <use href="#xlsx-big"></use>
-                    </svg>
-                    <span class="text" l10n>SPREADSHEET</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a action="new:pptx">
-                    <svg class="icon" data-iconname="pptx" data-precls="img-el">
-                        <use href="#pptx-big"></use>
-                    </svg>
-                    <span class="text" l10n>PRESENTATION</span>
-                  </a>
-                </li>
-                <li class="menu-item" style="padding-bottom:0;">
-                  <a action="new:form">
-                    <svg class="icon" data-iconname="form" data-precls="img-el">
-                        <use href="#pdf-big"></use>
-                    </svg>
-                    <span class="text" l10n="newForm">MASTER FORM</span>
-                  </a>
-                </li>
-              </div>
-              <li class="menu-item separator"></li>
-            </div>
-            <div class="main-column col-center after-left">
-            </div>
-        </div>
+        <div id="placeholder"></div>
     </div>
 
     <div class="injected-svg">
@@ -128,6 +87,8 @@
     <inline src="../res/img/generated/formats.svg" />
     <inline src="../res/img/generated/common.svg" />
     <inline src="../res/img/generated/templatetype.svg" />
+    <inline src="../res/img/generated/toolicons.svg" />
+    <inline src="../res/img/generated/toolicons20.svg" />
     <inline src="../noconnect/connection_error.svg" />
     </div>
 

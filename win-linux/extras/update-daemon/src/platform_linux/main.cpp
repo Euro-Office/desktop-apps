@@ -44,7 +44,8 @@
 
 #define DECL_VERSION __attribute__((section(".version_info"), unused))
 
-volatile static const char DECL_VERSION version[] = VER_STRING;
+volatile static const char DECL_VERSION version[] = VER_FILEVERSION_STR;
+static const char gSvcVersion[] = "Service version: " VER_FILEVERSION_STR;
 
 void strToNum(const char *str, int &num)
 {
@@ -59,10 +60,12 @@ int main(int argc, char *argv[])
     if (argc > 1) {
         if (strcmp(argv[1], "--run-as-app") == 0) {
             NS_Utils::parseCmdArgs(argc, argv);
-            if (NS_Utils::cmdArgContains("--log"))
+            if (NS_Utils::cmdArgContains("--log")) {
                 NS_Logger::AllowWriteLog();
+                NS_Logger::WriteLog(gSvcVersion);
+            }
             std::locale::global(std::locale(""));
-            Translator lang(NS_Utils::GetAppLanguage(), "/langs/langs.iss");
+            Translator::instance().init(NS_Utils::GetAppLanguage(), "/langs/langs.bin");
             CSocket socket(0, INSTANCE_SVC_PORT);
             if (!socket.isPrimaryInstance())
                 return 0;

@@ -48,6 +48,7 @@ signals:
     void closeRequest();
 
 private:
+    virtual bool event(QEvent *event) final;
     virtual void closeEvent(QCloseEvent*) final;
 };
 

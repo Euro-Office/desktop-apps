@@ -92,7 +92,16 @@
         <file alias="arrow_down_2x.png">res/icons/arrow_down@2x.png</file>
         <file alias="app.ico">res/icons/desktopeditors.ico</file>
         <file>res/icons/splash.svg</file>
-        <file alias="logo.svg">res/icons/logo.svg</file>
+        <file alias="logo_light.svg">res/icons/logo_light.svg</file>
+        <file alias="logo_light.png">res/icons/logo_light.png</file>
+        <file alias="logo_light_1.25x.png">res/icons/logo_light@1.25x.png</file>
+        <file alias="logo_light_1.5x.png">res/icons/logo_light@1.5x.png</file>
+        <file alias="logo_light_1.75x.png">res/icons/logo_light@1.75x.png</file>
+        <file alias="logo_dark.svg">res/icons/logo_dark.svg</file>
+        <file alias="logo_dark.png">res/icons/logo_dark.png</file>
+        <file alias="logo_dark_1.25x.png">res/icons/logo_dark@1.25x.png</file>
+        <file alias="logo_dark_1.5x.png">res/icons/logo_dark@1.5x.png</file>
+        <file alias="logo_dark_1.75x.png">res/icons/logo_dark@1.75x.png</file>
     </qresource>
     <qresource prefix="/tabbar/icons">
         <file alias="de.svg">res/icons/tabbar/tabicon_de_normal.svg</file>
@@ -148,6 +157,7 @@
         <file alias="message.qss">res/styles/message.qss</file>
         <file alias="tabbar.qss">res/styles/tabbar.qss</file>
         <file alias="download.qss">res/styles/download.qss</file>
+        <file alias="openssl.qss">res/styles/openssl.qss</file>
     </qresource>
     <qresource prefix="/styles@1.5x">
         <file alias="styles.qss">res/styles/styles@1.5x.qss</file>
@@ -230,6 +240,7 @@
         <file alias="sv-SE.qm">langs/sv.qm</file>
         <file alias="tr-TR.qm">langs/tr.qm</file>
         <file alias="uk-UA.qm">langs/uk.qm</file>
+        <file alias="ur-PK.qm">langs/ur.qm</file>
         <file alias="vi-VN.qm">langs/vi.qm</file>
         <file alias="zh-CN.qm">langs/zh_CN.qm</file>
         <file alias="zh-TW.qm">langs/zh_TW.qm</file>
@@ -241,5 +252,7 @@
         <file alias="theme-dark.json">res/styles/theme-dark.json</file>
         <file alias="theme-contrast-dark.json">res/styles/theme-contrast-dark.json</file>
         <file alias="theme-gray.json">res/styles/theme-gray.json</file>
+        <file alias="theme-white.json">res/styles/theme-white.json</file>
+        <file alias="theme-night.json">res/styles/theme-night.json</file>
     </qresource>
 </RCC>

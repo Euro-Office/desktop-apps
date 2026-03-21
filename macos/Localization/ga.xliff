@@ -453,7 +453,7 @@ Tá tairiscint speisialta againn duit.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Foirm PDF nua</target>
+        <target>PDF nua</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1402,8 +1402,8 @@ Tiocfaidh deireadh leis an tréimhse trialach i %d laethanta, ina dhiaidh sin n�
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Cóipcheart © 2025 Ascensio System SIA.  Gach ceart ar cosaint.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Cóipcheart © 2026 Ascensio System SIA.  Gach ceart ar cosaint.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

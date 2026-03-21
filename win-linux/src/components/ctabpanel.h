@@ -13,6 +13,7 @@ class CTabPanel : public QWidget
 
 public:
     explicit CTabPanel(QWidget *parent, const QSize& s);
+    explicit CTabPanel(QWidget *parent, const QSize& s, const QColor& c);
     ~CTabPanel();
 
     static CTabPanel * createEditorPanel(QWidget *parent, const QSize& size);

@@ -1,16 +1,19 @@
 
 :root {
     .theme-dark {
-        --background-normal: #333;
+        --background-normal: #404040;
         --background-tabbar: #404040;
         --background-button: #333;
         --background-primary-button: #ddd;
         --background-accent-button: #3483db;
-        --background-scrim: fade(#000, 60%);
         --background-scroll-thumb: #555;
+        --background-action-panel: #333;
+        --background-icon-normal: #333;
+        --background-normal-element-light: #404040;
+        --background-normal-element: var(--background-normal);
 
         --highlight-button-hover: #555;
-        --highlight-button-pressed: #606060;
+        --highlight-button-pressed: #707070;
         --highlight-button-pressed-hover: #808080;
         --highlight-accent-button-hover: #5293e2;
         --highlight-accent-button-pressed: #3475c5;
@@ -20,12 +23,15 @@
         --highlight-text-select: #96c8fd;
         --highlight-scroll-thumb-hover: #606060;
         --highlight-scroll-track-hover: fade(#fff, 3%);
+        --highlight-sidebar-item-pressed: #333;
+        --highlight-toolbar-tab-underline-document: #4A87E7;
 
         --border-tabbar: #2a2a2a;
         --border-divider: #505050;
         --border-regular-control: #666666;
         --border-control-focus: #ccc;
-        --border-error: #f62211;
+        --border-sidebar: #2a2a2a;
+        --border-sidebar-icon: #616161;
 
         --text-normal: fade(#fff, 80%);
         --text-normal-pressed: fade(#fff, 80%);
@@ -34,10 +40,17 @@
         --text-link: #acbfff;
         --text-inverse: #333;
         --text-contrast-background: #fff;
+        --text-negative: var(--text-normal);
 
         --icon-normal: fade(#fff, 80%);
 
         --disabled-element-opacity: .3;
         --theme-inverted-image-filter: invert(1);
+
+        --chb-check-mark-background: var(--text-normal);
+        --chb-background-normal: var(--background-normal);
+        --chb-background-checked: var(--background-normal);
+        --chb-border-normal: var(--border-regular-control);
+        --chb-border-checked: var(--border-regular-control);
     }
 }

@@ -13,7 +13,7 @@
 # define tstring std::string
 #endif
 
-#define _TR(str) Translator::tr(#str)
+#define _TR(str) Translator::instance().tr(_T(#str))
 
 using std::unordered_map;
 
@@ -24,24 +24,25 @@ typedef unordered_map<tstring, LocaleMap> TranslationsMap;
 class Translator
 {
 public:
-#ifdef _WIN32
-    Translator(const tstring &lang, int resourceId);
-#else
-    Translator(const tstring &lang, const char *resourcePath);
-#endif
-    ~Translator();
+    Translator(const Translator&) = delete;
+    Translator& operator=(const Translator&) = delete;
+    static Translator& instance();
 
-    static tstring tr(const char*);
-    static void setLanguage(const tstring &lang);
+#ifdef _WIN32
+    void init(const tstring &lang, int resourceId);
+#else
+    void init(const tstring &lang, const char *resourcePath);
+#endif
+    tstring tr(const tchar*) const;
+    void setLanguage(const tstring &lang);
 
 private:
-    void parseTranslations();
+    Translator();
+    ~Translator();
 
-    static TranslationsMap translMap;
-    tstring        translations,
-                   error_substr;
-    static tstring langName;
-    static bool    is_translations_valid;
+    TranslationsMap translMap;
+    tstring langName;
+    bool    is_translations_valid;
 
     enum TokenType {
         TOKEN_BEGIN_DOCUMENT = 0,

@@ -34,6 +34,7 @@
 #define CPRINTDATA_H
 
 #include "applicationmanager_events.h"
+#include "components/cprintdialog.h"
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <functional>
@@ -50,6 +51,7 @@ public:
     auto init(NSEditorApi::CAscPrintEnd *) -> void;
     auto init(int, NSEditorApi::CAscPrintEnd *) -> void;
     auto printerInfo() const -> QPrinterInfo;
+    auto setAppDataPath(const std::wstring&) -> void;
     auto setPrinterInfo(const QPrinterInfo&) -> void;
     auto setPrinterInfo(const QPrinter&) -> void;
     auto pageSize() const -> QPageSize;
@@ -58,8 +60,11 @@ public:
     auto pageCurrent() const -> int;
     auto pageFrom() const -> int;
     auto pageTo() const -> int;
+    auto pageRanges() const -> QVector<PageRanges>;
     auto printRange() const -> QPrintDialog::PrintRange;
     auto isQuickPrint() const -> bool;
+    auto useSystemDialog() const -> bool;
+    auto colorMode() const -> bool;
     auto viewId() const -> int;
     auto copiesCount() const -> int;
     auto duplexMode() const -> QPrinter::DuplexMode;

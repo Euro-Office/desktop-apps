@@ -429,7 +429,7 @@ We have a special offer for you.</source>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Νέα φόρμα PDF</target>
+        <target>Νέο PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1325,8 +1325,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <source>ONLYOFFICE</source><target state="needs-translation">ONLYOFFICE</target>
       <note>Bundle name</note></trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Πνευματικά δικαιώματα © 2025 Ascensio System SIA. Με την επιφύλαξη παντός δικαιώματος.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Πνευματικά δικαιώματα © 2026 Ascensio System SIA. Με την επιφύλαξη παντός δικαιώματος.</target>
       <note>Copyright (human-readable)</note></trans-unit>
     </body>
   </file>

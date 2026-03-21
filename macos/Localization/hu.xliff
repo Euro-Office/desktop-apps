@@ -453,7 +453,7 @@ Van egy speciális ajánlatunk az Ön számára.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Új PDF űrlap</target>
+        <target>Új PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1351,8 +1351,8 @@ A próbaidőszak %d nap múlva véget ér, ezt követően nem fog tudni dokument
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Szerzői jog © 2025 Ascensio System SIA. Minden jog fenntartva.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Szerzői jog © 2026 Ascensio System SIA. Minden jog fenntartva.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

@@ -32,6 +32,10 @@
 
 #include "components/cpushbutton.h"
 #include <QPainter>
+#include <QSvgRenderer>
+#include <QVariantAnimation>
+#include <QGraphicsOpacityEffect>
+#include <QEvent>
 
 #define ANIMATION_MS 2500
 
@@ -74,9 +78,32 @@ void CPushButton::setStaticIcon(const QString &path)
     setIcon(QIcon(path));
 }
 
+void CPushButton::setFaded(bool faded)
+{
+    m_faded = faded;
+    setOpacity(m_faded ? 0.5 : 1.0);
+}
+
 bool CPushButton::isStarted()
 {
     return m_animation && m_animation->state() == QAbstractAnimation::Running;
+}
+
+bool CPushButton::event(QEvent *ev)
+{
+    switch (ev->type()) {
+    case QEvent::Enter:
+        if (m_faded)
+            setOpacity(1.0);
+        break;
+    case QEvent::Leave:
+        if (m_faded)
+            setOpacity(0.5);
+        break;
+    default:
+        break;
+    }
+    return QPushButton::event(ev);
 }
 
 void CPushButton::releaseSvg()
@@ -109,4 +136,14 @@ void CPushButton::onSvgRepaint(double angle)
         painter.end();
         setIcon(QIcon(pixmap));
     }
+}
+
+void CPushButton::setOpacity(double opacity)
+{
+    QGraphicsOpacityEffect *efct = qobject_cast<QGraphicsOpacityEffect*>(graphicsEffect());
+    if (!efct) {
+        efct = new QGraphicsOpacityEffect(this);
+        setGraphicsEffect(efct);
+    }
+    efct->setOpacity(opacity);
 }

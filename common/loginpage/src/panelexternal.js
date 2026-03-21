@@ -49,18 +49,32 @@
 
     var ViewCustomPanel = function(args) {
         var _lang = utils.Lang;
+        const isSvgIcons = window.devicePixelRatio >= 2 || window.devicePixelRatio === 1;
 
         let _html = `<div class="action-panel style--free ${args.action}">
                       <div class="flexbox">
-                        <iframe name="${args.id}" id="${args.id}" src="${args.url}"></iframe>
+                        <iframe name="${args.id}" id="${args.id}" src="${args.url}" allow="clipboard-read; clipboard-write"></iframe>
                       </div>
                     </div>`;
 
         args.tplPage = _html;
         args.menu = '.main-column.tool-menu';
         args.field = '.main-column.col-center';
-        args.itemindex = 3;
-        args.itemtext = args.itemtext;
+        // args.itemindex = 3;
+        // args.itemtext = args.itemtext;
+        args.tplItem = `
+              <li class="menu-item">
+                <a action="${args.action}">
+                    <div class="icon-box">
+                        <svg class="icon" data-iconname="plugin" data-precls="tool-icon">
+                            <use href="#plugin"></use>
+                        </svg>
+                        ${!isSvgIcons ? '<i class="icon tool-icon plugin"></i>' : ''}
+                    </div>
+                    <span class="text" l10n>${args.itemtext}</span>
+                </a>
+              </li>
+        `;
 
         baseView.prototype.constructor.call(this, args);
     };
@@ -89,26 +103,26 @@
             _panel.$panel.find('iframe').css({'height':'100%','border':'0 none'});
 
             let iframe = _panel.$panel.find('iframe');
-            iframe.load( e => {
-                $(e.target).contents().find("head")
-                    .append($("<style type='text/css'>body{margin-left:287px;}</style>"));
 
-                // var script = e.target.contentWindow.document.createElement("script");
-                // script.type = "text/javascript";
-                // script.innerHTML = `console.log('script loaded: ' + ONLYONET)`;
-                // e.target.contentWindow.document.body.appendChild(script);
+            if (!panel_url.startsWith("onlyoffice://")) {
+                iframe.load( e => {
+                    // var script = e.target.contentWindow.document.createElement("script");
+                    // script.type = "text/javascript";
+                    // script.innerHTML = `console.log('script loaded: ' + ONLYONET)`;
+                    // e.target.contentWindow.document.body.appendChild(script);
 
-                if ( !!e.target.contentWindow.ONLYONET ) {
-                    let _funcKeepPhrase = e.target.contentWindow.ONLYONET.storeSeedPhraseToFile;
-                    e.target.contentWindow.ONLYONET.storeSeedPhraseToFile = function(seedPhrase, password, callback){
-                        let _c = 0;
-                        while ( !!localStorage['seedphrase' + _c] ) { ++_c; }
-                        localStorage.setItem('seedphrase' + _c, seedPhrase);
+                    if ( !!e.target.contentWindow.ONLYONET ) {
+                        let _funcKeepPhrase = e.target.contentWindow.ONLYONET.storeSeedPhraseToFile;
+                        e.target.contentWindow.ONLYONET.storeSeedPhraseToFile = function(seedPhrase, password, callback){
+                            let _c = 0;
+                            while ( !!localStorage['seedphrase' + _c] ) { ++_c; }
+                            localStorage.setItem('seedphrase' + _c, seedPhrase);
 
-                        return _funcKeepPhrase(seedPhrase, password, callback);
-                    };
-                }
-            });
+                            return _funcKeepPhrase(seedPhrase, password, callback);
+                        };
+                    }
+                });
+            }
 
             if ( utils.Lang.id != 'en' )
                 _translatePanel(_panel, 'en', utils.Lang.id);
@@ -118,6 +132,16 @@
             /**/
             if ( panel_id.includes('\{B17BDC61\-') ) {
                 _encrype_workaround(_panel);
+            } else
+            if ( panel_id.includes('F2402876-659F-47FB-A646-67B49F2B5AAA') ||
+                    panel_id.includes('9DC93CDB-B576-4F0C-B55E-FCC9C48DD777') )
+            {
+                const $svgicon = _panel.$menuitem.find('svg.icon');
+                if ( $svgicon.length ) {
+                    $svgicon.data('iconname', 'aichat');
+                    $('use', $svgicon).attr('href', '#aichat');
+                }
+                _panel.$menuitem.find('i.icon').removeClass('plugin').addClass('aichat');
             }
             /**/
         };

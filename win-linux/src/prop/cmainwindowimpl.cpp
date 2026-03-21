@@ -39,7 +39,12 @@
 
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QDir>
 #include <QFile>
+
+#define DEFAULT_LICENSE_NAME    "GNU AGPL v3"
+#define DEFAULT_LICENSE_URL     URL_AGPL
+#define LICENSE_FILE_NAME       "/EULA.txt"
 
 CMainWindowImpl::CMainWindowImpl(const QRect &rect) :
     CMainWindow(rect)
@@ -49,24 +54,80 @@ CMainWindowImpl::CMainWindowImpl(const QRect &rect) :
 
 void CMainWindowImpl::refreshAboutVersion()
 {
-    QString _license = tr("Licensed under") + " &lt;a class=\"link\" onclick=\"window.open('" URL_AGPL "')\" draggable=\"false\" href=\"#\"&gt;GNU AGPL v3&lt;/a&gt;";
-
     QJsonObject _json_obj;
+
+    auto _read_license_name = [](QString& path) -> QString {
+        QFileInfo fi(path);
+        QDir dir = fi.dir();
+        QStringList files = dir.entryList(QStringList() << fi.fileName(),
+                                          QDir::Files, QDir::Name | QDir::IgnoreCase);
+        if (files.isEmpty())
+            return QString();
+
+        path = dir.filePath(files.first());
+        QFile f(path);
+        QString n;
+        if ( f.exists() ) {
+            if ( f.open(QIODevice::ReadOnly | QIODevice::Text )) {
+                QTextStream stream(&f);
+                n = stream.readLine().trimmed();
+                f.close();
+            }
+        }
+
+        return n;
+    };
+
+    QString _lic_path = QCoreApplication::applicationDirPath() + LICENSE_FILE_NAME;
+    QString _lic_name = _read_license_name(_lic_path),
+            _lic_url;
+    if ( _lic_name.isEmpty() ) {
+        _lic_path = QCoreApplication::applicationDirPath() + "/License.txt";
+        if ( (_lic_name = _read_license_name(_lic_path)).isEmpty() ) {
+            _lic_name = DEFAULT_LICENSE_NAME;
+            _lic_url = DEFAULT_LICENSE_URL;
+        }
+    } else {
+        _json_obj["commercial"] = _lic_name != DEFAULT_LICENSE_NAME;
+    }
+
+    if ( _lic_url.isEmpty() ) {
+        _lic_url = QUrl::fromLocalFile(_lic_path).toString();
+    }
+
+    QString _license;
+    if ( !(_lic_name.count() > 15) )
+        _license = tr("Licensed under") + " &lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + _lic_name + "&lt;/a&gt;";
+    else _license = "&lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + _lic_name + "&lt;/a&gt;";
+
+
     _json_obj["version"]    = VER_FILEVERSION_STR;
 #ifdef Q_OS_WIN
-# ifdef Q_OS_WIN64
-    _json_obj["arch"]       = "x64";
-# else
-    _json_obj["arch"]       = "x86";
+# if defined(_M_ARM64)
+    _json_obj["arch"] = "arm64";
+# elif defined(_M_ARM)
+    _json_obj["arch"] = "arm";
+# elif defined(_M_X64)
+    _json_obj["arch"] = "x64";
+# elif defined(_M_IX86)
+    _json_obj["arch"] = "x86";
+# endif
+#else
+# if defined(__aarch64__)
+    _json_obj["arch"] = "arm64";
+# elif defined(__x86_64__)
+    _json_obj["arch"] = "x64";
 # endif
 #endif
     _json_obj["edition"]    = _license;
+
 #if defined(ABOUT_PAGE_APP_NAME)
     _json_obj["appname"]    = ABOUT_PAGE_APP_NAME;
 #else
-    _json_obj["appname"]    = WINDOW_NAME;
+    // _json_obj["appname"]    = WINDOW_NAME;
+    _json_obj["appname"]    = "ONLYOFFICE Desktop Editors";
 #endif
-    _json_obj["rights"]     = "© " ABOUT_COPYRIGHT_STR;
+    _json_obj["rights"]     = ABOUT_COPYRIGHT_STR;
     _json_obj["link"]       = URL_SITE;
 //    _json_obj["changelog"]  = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
 
@@ -92,13 +153,12 @@ void CMainWindowImpl::refreshAboutVersion()
     _json_obj["uitheme"] = QString::fromStdWString(GetCurrentTheme().id());
 #endif
 
-#ifdef Q_OS_WIN
     _json_obj["spellcheckdetect"] = AscAppManager::userSettings(L"spell-check-input-mode") != L"0" ? "auto" : "off";
-#endif
 
     GET_REGISTRY_USER(reg_user);
     _json_obj["editorwindowmode"] = reg_user.value("editorWindowMode",false).toBool();
     _json_obj["usegpu"] = !(AscAppManager::userSettings(L"disable-gpu") == L"1");
+    _json_obj["useai"] = !(AscAppManager::userSettings(L"disable-ai") == L"1");
 
 #ifndef __OS_WIN_XP
     _json_obj["rtl"] = AscAppManager::isRtlEnabled();

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ONLYOFFICE Release Notes</title>
+    <style type="text/css">
+        /* variables */
+        :root {
+            --color-black: #141923;
+            --color-white: #fff;
+            --color-gray-100: #f7fafc;
+            --color-gray-200: #edf2f7;
+            --color-gray-300: #e2e8f0;
+            --color-gray-400: #cbd5e0;
+            --color-gray-500: #a0aec0;
+            --color-gray-600: #718096;
+            --color-gray-700: #4a5568;
+            --color-gray-800: #2d3748;
+            --color-gray-900: #1a202c;
+        }
+        body {
+            background: var(--color-white);
+            color: var(--color-gray-800);
+            font: 12px "Lucida Grande", "Lucida Sans Unicode", Verdana, Lucida, Helvetica, sans-serif;
+        }
+        h1, h2, h3 {
+            color: var(--color-gray-800);
+            font-weight: normal;
+            font-style: normal;
+        }
+        h1 {
+            font-size: 1.7em;
+        }
+        h2 {
+            font-size: 1.4em;
+            font-weight: lighter;
+        }
+        h4 {
+            font-size: 1.2em;
+            font-weight: lighter;
+        }
+        code {
+            background: var(--color-gray-200);
+            font-family: monospace;
+            padding: 1px 5px;
+        }
+        ul {
+            padding: 8.1.3 20px;
+        }
+        li {
+            margin-left: 20px;
+            margin-bottom: 0.2em;
+            padding: 0;
+        }
+        hr {
+            margin: 20px 0;
+            border: var(--color-gray-400) solid 0.5px;
+        }
+        .releasedate {
+            color: var(--color-gray-600);
+            font-weight: lighter;
+        }
+
+        /* prefers light mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--color-gray-900);
+                color: var(--color-gray-200);
+            }
+
+            h1, h2, h3 {
+                color: var(--color-white);
+            }
+
+            code {
+                background: var(--color-gray-800);
+                color: var(--color-gray-200);
+            }
+
+            .releasedate {
+                color: var(--color-gray-600);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="version">
+        <h1>ONLYOFFICE 8.3.3<span class="releasedate"> - {{DATE}}</span></h1>
+
+        <h2>Fixes</h2>
+
+        <h4>Document Editor</h4>
+        <ul>
+            <li>Fixed calculation for an RTL paragraph</li>
+            <li>Fixed the display of the Bullets / Numbering / Multilevel style thumbnails for an RTL paragraph</li>
+            <li>Fixed the display of numbered lists (bullets) for an RTL paragraph</li>
+            <li>Fixed the display of the date for Arabic in the Formats list of the "Date & time" window</li>
+            <li>Replaced Latin commas with Arabic ones when using Arabic format in the "Date & time" window</li>
+            <li>Fixed an issue with calculating position for an empty RTL template</li>
+            <li>Fixed changing the Wrapping Style value when applying Merge shapes / Arrange > Group</li>
+            <li>Enabled standard ligatures for Arabic text writing</li>
+            <li>Fixed the display of Borders and Fill when rendering an RTL paragraph</li>
+            <li>Fixed incorrect work when comparing files at the word level, where a word and a paragraph mark were deleted</li>
+            <li>Fixed adding TextArt for a paragraph with RTL direction</li>
+            <li>Fixed autonumbering for Indian numbers added via Unicode (U+0660 - U+0669)</li>
+            <li>Fixed the ability to select a numbered list deleted in the review mode</li>
+            <li>Fixed the display of words with tabulation according to the main direction of the text</li>
+            <li>Fixed calculation of the non-printing tab stop character position and correct work with the tab stop marker on the horizontal ruler for an RTL paragraph</li>
+            <li>Fixed an issue with the cursor placement in Arabic text for a paragraph with LTR direction</li>
+            <li>Fixed incorrect display of French quotes « » (U+00AB and U+00BB ) for RTL text</li>
+            <li>Fixed calculation of the tab stop position in some edge situations</li>
+            <li>Fixed an issue with calculating the right edge for a paragraph with fill and border</li>
+        </ul>
+        <h4>Spreadsheet Editor</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when entering some formulas with circular references</li>
+            <li>Fixed deleting a sheet when dragging it to another one in the Fast co-editing mode</li>
+            <li>Fixed crash when opening a document created in the previous version of the application</li>
+            <li>Fixed hanging of the editor when calculating some functions that work with an array</li>
+        </ul>
+        <h4>Presentation Editor</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when opening the numbered list panel</li>
+            <li>Fixed an error when saving/opening the <code>PPTX</code> file with animation applied to several Lines objects</li>
+            <li>Fixed an issue with maintaining direction for RTL text when opening some <code>PPT</code> files</li>
+            <li>Fixed generating unique Shape name identifier for the Lines objects</li>
+            <li>Fixed incorrect translations of tools in the Draw menu of the Presenter View window</li>
+        </ul>
+        <h4>PDF Editor</h4>
+        <ul>
+            <li>Fixed an error when opening some <code>PDF</code> files containing fields to fill in</li>
+            <li>Fixed the position of drawing the selection in a text comment for some <code>PDF</code> files</li>
+            <li>Fixed the ability to change the stamp size in <code>PDF</code> files</li>
+        </ul>
+        <h4>Convert</h4>
+        <ul>
+            <li>Fixed stopping work of the editor when converting some <code>PPTX</code> files to image formats</li>
+            <li>Fixed crash when converting some <code>XLSX</code> files to <code>XLSB</code></li>
+            <li>Restored compatibility with third-party editors after converting some <code>XLSX</code> files to <code>XLSB</code> via binary format</li>
+        </ul>
+    </div>
+</body>
+</html>

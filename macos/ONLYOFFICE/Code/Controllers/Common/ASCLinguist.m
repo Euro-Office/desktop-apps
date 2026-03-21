@@ -39,6 +39,7 @@
 
 #import "ASCLinguist.h"
 #import "ASCConstants.h"
+#import <Carbon/Carbon.h>
 
 @implementation ASCLinguist
 
@@ -84,6 +85,54 @@ static BOOL uiLayoutDirectionRTL = NO;
 
 + (BOOL)isUILayoutDirectionRtl {
     return uiLayoutDirectionRTL;
+}
+
++ (NSDictionary *)keyboardLanguages {
+    NSMutableDictionary * outdict = [NSMutableDictionary dictionary];
+    CFArrayRef sourceList = TISCreateInputSourceList(NULL, false);
+    if ( sourceList ) {
+        CFIndex count = CFArrayGetCount(sourceList);
+        for (CFIndex i = 0; i < count; i++) {
+            TISInputSourceRef source = (TISInputSourceRef)CFArrayGetValueAtIndex(sourceList, i);
+
+            // Get only keyboard input sources
+            CFTypeRef type = TISGetInputSourceProperty(source, kTISPropertyInputSourceType);
+            if ( CFEqual(type, kTISTypeKeyboardLayout) || CFEqual(type, kTISTypeKeyboardInputMode) ) {
+                // Get the language codes (ISO 639 format)
+                CFArrayRef languages = TISGetInputSourceProperty(source, kTISPropertyInputSourceLanguages);
+                if ( languages && CFArrayGetCount(languages) > 0 ) {
+                    // Get the first language code (usually the primary one)
+                    CFStringRef firstLang = CFArrayGetValueAtIndex(languages, 0);
+                    NSString *langString = (__bridge NSString *)firstLang;
+
+                    NSString *name = nil;
+                    NSLocale *locale = [NSLocale localeWithLocaleIdentifier:langString];
+                    if (locale) {
+                        name = [locale displayNameForKey:NSLocaleIdentifier value:langString];
+                        if (name) {
+                            name = [name capitalizedString];
+                        }
+                    }
+                    
+                    if (!name) {
+                        CFStringRef localizedName = (CFStringRef)TISGetInputSourceProperty(source, kTISPropertyLocalizedName);
+                        name = (__bridge NSString *)localizedName;
+                    }
+                    outdict[langString] = name;
+//                    NSArray *components = [langString componentsSeparatedByString:@"-"];
+//                    NSString *languageCode = components[0];
+//                    if (components.count > 1) {
+//                        NSString *region = components[1];
+//                        NSLog(@"Language: %@ (ISO code: %@-%@)", name, languageCode, region);
+//                    }
+                }
+            }
+        }
+
+        CFRelease(sourceList);
+    }
+
+    return outdict;
 }
 
 + (NSDictionary *)availableLanguages {
@@ -134,7 +183,8 @@ static BOOL uiLayoutDirectionRTL = NO;
         @"si-LK": @{@"name": @"සිංහල", @"enname": @"Sinhala (Sri Lanka)"},
         @"ar-SA": @{@"name": @"اَلْعَرَبِيَّة", @"enname": @"Arabic"},
         @"sq-AL": @{@"name": @"Shqip", @"enname": @"Albanian"},
-        @"he-IL": @{@"name": @"עברית", @"enname": @"Hebrew"}
+        @"he-IL": @{@"name": @"עברית", @"enname": @"Hebrew"},
+        @"ur-PK": @{@"name": @"اردو", @"enname": @"Urdu"}
     };
 }
 

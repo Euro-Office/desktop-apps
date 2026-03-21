@@ -114,11 +114,31 @@
     NSString * theme = [[NSUserDefaults standardUserDefaults] valueForKey:ASCUserUITheme];
     if ([uiThemeSystem isEqualToString:theme]) {
         return [self isSystemDarkMode];
-    } else return [uiThemeDark isEqualToString:theme] || [uiThemeContrastDark isEqualToString:theme];
+    } else return [uiThemeDark isEqualToString:theme] || [uiThemeContrastDark isEqualToString:theme] || [uiThemeNight isEqualToString:theme];
+}
+
++ (BOOL)isColorDark:(NSColor*)color {
+    if (!color) return YES;
+    
+    NSColor *rgbColor = [color colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+    if (!rgbColor) return YES;
+    
+    CGFloat r, g, b, a;
+    [rgbColor getRed:&r green:&g blue:&b alpha:&a];
+    
+    CGFloat luma = 0.2126f * r + 0.7152f * g + 0.0722f * b;
+    return luma < 0.5;
 }
 
 + (NSString*)defaultThemeId:(BOOL)isdark {
-    return isdark ? uiThemeDark : uiThemeClassicLight;
+    return isdark ? uiThemeNight : uiThemeWhite;
+}
+
++ (NSString*)actualThemeId {
+    NSString * theme = [self currentThemeId];
+    if ([uiThemeSystem isEqualToString:theme]) {
+        return [self defaultThemeId:[self isCurrentThemeDark]];
+    } else return theme;
 }
 
 + (NSColor*)currentThemeColor:(NSString*)name {
@@ -131,19 +151,36 @@
 
     if ([name isEqualToString:tabActiveTextColor]) {
         if ( [theme isEqualToString:uiThemeGray] ) return UIColorFromRGB(0x444);
+        else if ( [theme isEqualToString:uiThemeWhite] ) return UIColorFromRGB(0x444);
         else return NSColor.whiteColor;
     } else if ([name isEqualToString:btnPortalActiveBackgroundColor]) {
-        if ( [theme isEqualToString:uiThemeDark] ) return UIColorFromRGB(0x333333);
-        else if ( [theme isEqualToString:uiThemeContrastDark] ) return UIColorFromRGB(0x1e1e1e);
+        if ( [theme isEqualToString:uiThemeDark] ) return UIColorFromRGB(0x404040);
+        else if ( [theme isEqualToString:uiThemeContrastDark] ) return UIColorFromRGB(0x2a2a2a);
+        else if ( [theme isEqualToString:uiThemeLight] ) return UIColorFromRGB(0xf7f7f7);
+        else if ( [theme isEqualToString:uiThemeClassicLight] ) return UIColorFromRGB(0xf7f7f7);
+        else if ( [theme isEqualToString:uiThemeGray] ) return UIColorFromRGB(0xf7f7f7);
+        else if ( [theme isEqualToString:uiThemeWhite] ) return UIColorFromRGB(0xf3f3f3);
+        else if ( [theme isEqualToString:uiThemeNight] ) return UIColorFromRGB(0x222222);
         else {
             if ( @available(macOS 10.13, *) )
                 return [NSColor colorNamed:@"tab-portal-activeColor"];
             else return kColorRGBA(255, 255, 255, 1.0);
         }
+    } else if ( [name isEqualToString:windowBackgroundColor] ) {
+        if ( [theme isEqualToString:uiThemeDark] ) return UIColorFromRGB(0x282828);
+        else if ( [theme isEqualToString:uiThemeContrastDark] ) return UIColorFromRGB(0x181818);
+        else if ( [theme isEqualToString:uiThemeGray] ) return UIColorFromRGB(0xd9d9d9);
+        else if ( [theme isEqualToString:uiThemeNight] ) return UIColorFromRGB(0x383838);
+        else if ( [theme isEqualToString:uiThemeWhite] ) return UIColorFromRGB(0xeaeaea);
+        else {
+            return UIColorFromRGB(0xe4e4e4);
+        }
     } else {
         if ( [theme isEqualToString:uiThemeDark] ) return UIColorFromRGB(0x2a2a2a);
         else if ( [theme isEqualToString:uiThemeContrastDark] ) return UIColorFromRGB(0x1e1e1e);
+        else if ( [theme isEqualToString:uiThemeNight] ) return UIColorFromRGB(0x222222);
         else if ( [theme isEqualToString:uiThemeGray] ) return UIColorFromRGB(0xf7f7f7);
+        else if ( [theme isEqualToString:uiThemeWhite] ) return UIColorFromRGB(0xf3f3f3);
         else {
             if ([name isEqualToString:tabWordActiveBackgroundColor]) {
                return [NSColor brendDocumentEditor];
@@ -172,6 +209,16 @@
     }
 
     return false;
+}
+
++ (BOOL)isDarkWindowAppearance {
+    BOOL isDarkWindow;
+    if (@available(macOS 10.14, *)) {
+        isDarkWindow = [ASCThemesController isCurrentThemeDark];
+    } else {
+        isDarkWindow = [NSApplication isSystemDarkMode];
+    }
+    return isDarkWindow;
 }
 
 @end

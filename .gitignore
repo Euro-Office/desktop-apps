@@ -1,4 +1,3 @@
-
 win-linux/build
 win-linux/3dparty/WinSparkle/win_32
 win-linux/3dparty/WinSparkle/win_64
@@ -9,15 +8,24 @@ win-linux/extras/online-installer/build
 win-linux/ASCDocumentEditor.build/*
 win-linux/res/gresource.c
 
-win-linux/package/linux/build
-win-linux/package/linux/deb*/build
-win-linux/package/linux/deb*/*.buildinfo
-win-linux/package/linux/deb*/*.changes
-win-linux/package/linux/deb*/*.ddeb
-win-linux/package/linux/deb*/*.deb
-win-linux/package/linux/rpm*/build
-win-linux/package/linux/rpm*/*desktopeditors.spec
-win-linux/package/linux/tar
+package/build
+package/advinst/*-cache
+package/advinst/*.aic
+package/advinst/*.msi
+package/advinst/package.config
+package/inno/*.exe
+package/inno/package.config
+package/zip
+package/deb*/build
+package/deb*/*.buildinfo
+package/deb*/*.changes
+package/deb*/*.ddeb
+package/deb*/*.deb
+package/rpm*/build
+package/rpm*/*desktopeditors.spec
+package/tar
+package/common/changelog/*/changes_???
+package/common/changelog/*/news_???
 
 common/loginpage/res/img/generated/*
 common/loginpage/build/plugins/*
@@ -25,13 +33,11 @@ common/**/node_modules/*
 common/loginpage/deploy/*
 common/loginpage/src/dlglogin.min.js
 common/converter/*
-common/changes/*/changes_???
-common/changes/*/news_???
 */.svn/*
 
 .DS_Store
-Makefile
-Makefile.*
+# Makefile
+# Makefile.*
 *.stash
 *.user
 *.user.*

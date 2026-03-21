@@ -10,12 +10,18 @@ using namespace NSEditorApi;
 
 CTabPanel * CTabPanel::createEditorPanel(QWidget *parent, const QSize& s)
 {
-    CTabPanel * panel = new CTabPanel(parent, s);
+    QColor c = AscAppManager::themes().current().color(CTheme::ColorRole::ecrWindowBackground);
+    CTabPanel * panel = new CTabPanel(parent, s, c);
     panel->initAsEditor();
     return panel;
 }
 
 CTabPanel::CTabPanel(QWidget *parent, const QSize& s)
+    : CTabPanel(parent, s, QColor(244,244,244))
+{
+}
+
+CTabPanel::CTabPanel(QWidget *parent, const QSize& s, const QColor& c)
     : QWidget(parent)
     , m_pViewer(AscAppManager::createViewer(this, s))
 {
@@ -25,7 +31,7 @@ CTabPanel::CTabPanel(QWidget *parent, const QSize& s)
     _layout->addWidget(m_pViewer);
     setLayout(_layout);
     m_pViewer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_pViewer->SetBackgroundCefColor(244, 244, 244);
+    m_pViewer->SetBackgroundCefColor(uchar(c.red()), uchar(c.green()), uchar(c.blue()));
 
     setAttribute(Qt::WA_DontCreateNativeAncestors);
     setAttribute(Qt::WA_NativeWindow);

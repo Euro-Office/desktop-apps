@@ -87,9 +87,15 @@ static int initConnection(const wstring &url, DWORD &dwFileSize, Connection &con
     if (!WinHttpReceiveResponse(conn.hRequest, NULL))
         return DNL_CONN_ERR;
 
-    DWORD dwSize = sizeof(DWORD);
-    if (!WinHttpQueryHeaders(conn.hRequest, WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, NULL, &dwFileSize, &dwSize, WINHTTP_NO_HEADER_INDEX))
+    DWORD dwStatusCode = 0, dwSize = sizeof(DWORD);
+    if (!WinHttpQueryHeaders(conn.hRequest, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, NULL, &dwStatusCode, &dwSize, WINHTTP_NO_HEADER_INDEX))
         return DNL_CONN_ERR;
+
+    if (dwStatusCode >= HTTP_STATUS_BAD_REQUEST)
+        return DNL_CONN_ERR;
+
+    if (!WinHttpQueryHeaders(conn.hRequest, WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, NULL, &dwFileSize, &dwSize, WINHTTP_NO_HEADER_INDEX))
+        dwFileSize = 0;
 
     return DNL_OK;
 }
@@ -187,6 +193,17 @@ CDownloader::~CDownloader()
     if (pimpl->m_future.valid())
         pimpl->m_future.wait();
     delete pimpl, pimpl = nullptr;
+}
+
+bool CDownloader::isUrlAccessible(const wstring &url)
+{
+    if (url.empty())
+        return false;
+
+    DWORD dwFileSize = 0;
+    Connection conn;
+    int hr = initConnection(url, dwFileSize, conn);
+    return hr == DNL_OK;
 }
 
 void CDownloader::queryContentLenght(const wstring &url)

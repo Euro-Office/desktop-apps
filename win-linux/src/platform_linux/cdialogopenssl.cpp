@@ -1,5 +1,7 @@
 #include "cdialogopenssl.h"
 #include "components/cmessage.h"
+#include "cscalingwrapper.h"
+#include "cascapplicationmanagerwrapper.h"
 #include "utils.h"
 #include "components/cfiledialog.h"
 #include <QPushButton>
@@ -97,14 +99,21 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
     : QDialog(parent)
     , m_private(new CSslDialog_Private)
 {
-    setMinimumWidth(300);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    double dpiRatio = CScalingWrapper::parentScalingFactor(topLevelWidget());
+    setMinimumWidth(300 * dpiRatio);
     setWindowTitle(tr("Select certificate"));
+    setProperty("zoom", QString::number(dpiRatio) + "x");
 
     QGridLayout * _main_layout = new QGridLayout(this);
 
+    m_private->_txtCertPath->setFixedHeight(24 * dpiRatio);
     m_private->_txtCertPath->setPlaceholderText(tr("select certificate file..."));
+    m_private->_txtCertPass->setFixedHeight(24 * dpiRatio);
     m_private->_labelCertPass->setText(tr("Certificate password:"));
+    m_private->_txtKeyPath->setFixedHeight(24 * dpiRatio);
     m_private->_txtKeyPath->setPlaceholderText(tr("select key file..."));
+    m_private->_txtKeyPass->setFixedHeight(24 * dpiRatio);
     m_private->_labelKeyPass->setText(tr("Key password:"));
 
     connect(m_private->_btnCertFile, &QToolButton::clicked, this, &CDialogOpenSsl::onBtnCertificateClick);
@@ -118,9 +127,11 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
     _keypass_layout->addWidget(m_private->_labelKeyPass);
     _keypass_layout->addWidget(m_private->_txtKeyPass, 1);
 
-    _main_layout->setColumnStretch(0, 1);
-    _main_layout->setRowStretch(3, 2);
-    _main_layout->setColumnMinimumWidth(1, 20);
+    _main_layout->setContentsMargins(16 * dpiRatio, 24 * dpiRatio, 16 * dpiRatio, 16 * dpiRatio);
+    _main_layout->setSpacing(6 * dpiRatio);
+    _main_layout->setColumnStretch(0, 1 * dpiRatio);
+    _main_layout->setRowStretch(3, 2 * dpiRatio);
+    _main_layout->setColumnMinimumWidth(1, 20 * dpiRatio);
 
     _main_layout->addWidget(m_private->_txtCertPath, 0, 0);
     _main_layout->addWidget(m_private->_btnCertFile, 0, 1);
@@ -128,8 +139,8 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
     _main_layout->addWidget(m_private->_txtKeyPath, 2, 0);
     _main_layout->addWidget(m_private->_btnKeyFile, 2, 1);
     _main_layout->addLayout(_keypass_layout, 3, 0);
-    _main_layout->addWidget(new QWidget, 4, 0);
-    _main_layout->setRowStretch(4, 1);
+    _main_layout->addItem(new QSpacerItem(6, 6, QSizePolicy::Fixed, QSizePolicy::Expanding), 4, 0);
+    // _main_layout->setRowStretch(4, 1 * dpiRatio);
 
     m_private->setKeyDisabled(true);
     m_private->setPassDisabled();
@@ -141,9 +152,9 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
     _btn_ok->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     _ok_layout->addWidget(_btn_ok);
 
-    _btn_ok->setFixedSize(80, 28);
-    m_private->_btnCertFile->setFixedSize(40,28);
-    m_private->_btnKeyFile->setFixedSize(40,28);
+    _btn_ok->setFixedSize(84 * dpiRatio, 24 * dpiRatio);
+    m_private->_btnCertFile->setFixedSize(40 * dpiRatio, 24 * dpiRatio);
+    m_private->_btnKeyFile->setFixedSize(40 * dpiRatio, 24 * dpiRatio);
 
     connect(_btn_ok, &QPushButton::clicked, [=]{
         if ( checkCertificate() ) {
@@ -155,8 +166,8 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
 
     int nX = rect.x();
     int nY = rect.y();
-    int nW = 500;
-    int nH = 170;
+    int nW = 420 * dpiRatio;
+    int nH = 210 * dpiRatio;
 
     if (parent)
     {
@@ -166,6 +177,14 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
     }
 
     this->setGeometry(nX, nY, nW, nH);
+
+    QString css = Utils::readStylesheets(":/styles/openssl.qss");
+    setStyleSheet(css.arg(GetColorQValueByRole(ecrDownloadWidgetBackground),
+                          GetColorQValueByRole(ecrDownloadWidgetBorder),
+                          GetColorQValueByRole(ecrTextNormal),
+                          GetColorQValueByRole(ecrButtonHoverBackground),
+                          GetColorQValueByRole(ecrButtonPressedBackground),
+                          GetColorQValueByRole(ecrBorderControlFocus)));
 
     // Set native dialog from command line arguments
 }

@@ -1,38 +1,21 @@
 #include "translator.h"
 #include <sstream>
+#include <algorithm>
 #ifdef _WIN32
 # include "platform_win/resource.h"
 # include "platform_win/utils.h"
 # include <Windows.h>
+# include <objidl.h>
 # include <codecvt>
-# include <cwctype>
-# define istalnum(c) std::iswalnum(c)
-# define istalpha(c) std::iswalpha(c)
 # define tistringstream std::wistringstream
 #else
 # include "platform_linux/utils.h"
 # include "res/gresource.c"
-# include <cctype>
-# define istalnum(c) std::isalnum(c)
-# define istalpha(c) std::isalpha(c)
+# include <cstdint>
 # define tistringstream std::istringstream
+  typedef uint16_t WORD;
 #endif
 
-
-bool isSeparator(tchar c)
-{
-    return c == _T(' ') || c == _T('\t') || c == _T('\r') || c == _T('\n');
-}
-
-bool isValidStringIdCharacter(tchar c)
-{
-    return istalnum(c) || istalpha(c) || c == _T('_');
-}
-
-bool isValidLocaleCharacter(tchar c)
-{
-    return istalpha(c) || c == _T('_');
-}
 
 tstring getPrimaryLang(const tstring &lang, bool withScript = false)
 {
@@ -54,69 +37,223 @@ tstring getPrimaryLang(const tstring &lang, bool withScript = false)
 }
 
 #ifdef _WIN32
+static IStream* LoadResourceToStream(int resourceId)
+{
+    IStream *pStream = nullptr;
+    HMODULE hInst = GetModuleHandle(nullptr);
+    if (HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resourceId), RT_RCDATA)) {
+        DWORD dataSize = SizeofResource(hInst, hRes);
+        if (dataSize > 0) {
+            if (HGLOBAL hResData = LoadResource(hInst, hRes)) {
+                if (LPVOID pData = LockResource(hResData)) {
+                    if (HGLOBAL hGlobal = GlobalAlloc(GHND, dataSize)) {
+                        if (LPVOID pBuffer = GlobalLock(hGlobal)) {
+                            memcpy(pBuffer, pData, dataSize);
+                            GlobalUnlock(hGlobal);
+                            HRESULT hr = CreateStreamOnHGlobal(hGlobal, TRUE, &pStream);
+                            if (FAILED(hr)) {
+                                GlobalFree(hGlobal);
+                                pStream = nullptr;
+                            }
+                        } else {
+                            GlobalFree(hGlobal);
+                        }
+                    }
+                }
+                FreeResource(hResData);
+            }
+        }
+    }
+    return pStream;
+}
+
 wstring StrToWStr(const string &str)
 {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     return converter.from_bytes(str);
 }
-#endif
-
-TranslationsMap Translator::translMap = TranslationsMap();
-tstring Translator::langName = _T("en");
-bool Translator::is_translations_valid = false;
-
-#ifdef _WIN32
-Translator::Translator(const tstring &lang, int resourceId)
 #else
-Translator::Translator(const tstring &lang, const char *resourcePath)
-#endif
+static GInputStream* LoadResourceToStream(const char *resourcePath)
 {
-    langName = lang;
-    NS_Logger::WriteLog(_T("Current locale: ") + langName);
-
-#ifdef _WIN32
-    HMODULE hInst = GetModuleHandle(NULL);
-    if (HRSRC hRes = FindResource(hInst, MAKEINTRESOURCE(resourceId), RT_RCDATA)) {
-        if (HGLOBAL hResData = LoadResource(hInst, hRes)) {
-            if (LPVOID pData = LockResource(hResData)) {
-                DWORD dataSize = SizeofResource(hInst, hRes);
-                if (dataSize > 0) {
-                    string text((const char*)pData, dataSize);
-                    translations = StrToWStr(text);
-                } else
-                    NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
-            } else
-                NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
-            FreeResource(hResData);
-        } else
-            NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
-    } else
-        NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
-#else
+    GInputStream *pStream = nullptr;
     if (GResource *res = gresource_get_resource()) {
         g_resources_register(res);
         if (GBytes *bytes = g_resource_lookup_data(res, resourcePath, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL)) {
             gsize dataSize = 0;
             const char *pData = (const char*)g_bytes_get_data(bytes, &dataSize);
             if (dataSize > 0) {
-                string text(pData, dataSize);
-                translations = text;
-            } else
-                NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
+                pStream = g_memory_input_stream_new_from_data(pData, dataSize, NULL);
+            }
             g_bytes_unref(bytes);
-        } else
-            NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
+        }
         g_resource_unref(res);
-    } else
-        NS_Logger::WriteLog(ADVANCED_ERROR_MESSAGE);
+    }
+    return pStream;
+}
 #endif
 
-    if (!translations.empty()) {
-        parseTranslations();
-        if (!is_translations_valid)
-            NS_Logger::WriteLog(_T("Cannot parse translations, error in string: ") + error_substr + _T(" <---"));
-    } else
-        NS_Logger::WriteLog(_T("Error: translations is empty."));
+Translator::Translator() :
+    langName(_T("en")),
+    is_translations_valid(false)
+{
+
+}
+
+Translator& Translator::instance()
+{
+    static Translator inst;
+    return inst;
+}
+
+#ifdef _WIN32
+void Translator::init(const tstring &lang, int resourceId)
+#else
+void Translator::init(const tstring &lang, const char *resourcePath)
+#endif
+{
+    langName = lang;
+    std::replace(langName.begin(), langName.end(), '-', '_');
+    NS_Logger::WriteLog(_T("Current locale: ") + langName);
+
+    is_translations_valid = false;
+    const char ISL_MAGIC[] = "ISL";
+#ifdef _WIN32
+    if (IStream *pStream = LoadResourceToStream(resourceId)) {
+        ULONG bytesRead = 0;
+        HRESULT hr = S_OK;
+        char magic[sizeof(ISL_MAGIC)] = { 0 };
+        hr = pStream->Read(magic, sizeof(magic), &bytesRead);
+        if (FAILED(hr) || bytesRead != sizeof(magic) || strncmp(magic, ISL_MAGIC, sizeof(magic) - 1) != 0) {
+            pStream->Release();
+            return;
+        }
+        WORD stringsMapSize = 0;
+        hr = pStream->Read(&stringsMapSize, sizeof(stringsMapSize), &bytesRead);
+        if (FAILED(hr) || bytesRead != sizeof(stringsMapSize)) {
+            pStream->Release();
+            return;
+        }
+        for (WORD i = 0; i < stringsMapSize; i++) {
+            uint8_t stringIdLen = 0;
+            hr = pStream->Read(&stringIdLen, sizeof(stringIdLen), &bytesRead);
+            if (FAILED(hr) || bytesRead != sizeof(stringIdLen)) {
+                pStream->Release();
+                return;
+            }
+            std::string stringId(stringIdLen, '\0');
+            hr = pStream->Read(&stringId[0], stringIdLen, &bytesRead);
+            if (FAILED(hr) || bytesRead != stringIdLen) {
+                pStream->Release();
+                return;
+            }
+            WORD localeMapSize = 0;
+            hr = pStream->Read(&localeMapSize, sizeof(localeMapSize), &bytesRead);
+            if (FAILED(hr) || bytesRead != sizeof(localeMapSize)) {
+                pStream->Release();
+                return;
+            }
+            LocaleMap localeMap;
+            for (WORD j = 0; j < localeMapSize; j++) {
+                uint8_t localeLen = 0;
+                hr = pStream->Read(&localeLen, sizeof(localeLen), &bytesRead);
+                if (FAILED(hr) || bytesRead != sizeof(localeLen)) {
+                    pStream->Release();
+                    return;
+                }
+                std::string localeName(localeLen, '\0');
+                hr = pStream->Read(&localeName[0], localeLen, &bytesRead);
+                if (FAILED(hr) || bytesRead != localeLen) {
+                    pStream->Release();
+                    return;
+                }
+                WORD translationLen = 0;
+                hr = pStream->Read(&translationLen, sizeof(translationLen), &bytesRead);
+                if (FAILED(hr) || bytesRead != sizeof(translationLen)) {
+                    pStream->Release();
+                    return;
+                }
+                std::string translationString(translationLen, '\0');
+                hr = pStream->Read(&translationString[0], translationLen, &bytesRead);
+                if (FAILED(hr) || bytesRead != translationLen) {
+                    pStream->Release();
+                    return;
+                }
+                localeMap[StrToWStr(localeName)] = StrToWStr(translationString);
+            }
+            translMap[StrToWStr(stringId)] = localeMap;
+        }
+        pStream->Release();
+        is_translations_valid = true;
+    }
+#else
+    if (GInputStream *pStream = LoadResourceToStream(resourcePath)) {
+        gsize bytesRead = 0;
+        gboolean hr = true;
+        char magic[sizeof(ISL_MAGIC)] = { 0 };
+        hr = g_input_stream_read_all(pStream, magic, sizeof(magic), &bytesRead, NULL, NULL);
+        if (!hr || bytesRead != sizeof(magic) || strncmp(magic, ISL_MAGIC, sizeof(magic) - 1) != 0) {
+            g_object_unref(pStream);
+            return;
+        }
+        WORD stringsMapSize = 0;
+        hr = g_input_stream_read_all(pStream, &stringsMapSize, sizeof(stringsMapSize), &bytesRead, NULL, NULL);
+        if (!hr || bytesRead != sizeof(stringsMapSize)) {
+            g_object_unref(pStream);
+            return;
+        }
+        for (WORD i = 0; i < stringsMapSize; i++) {
+            uint8_t stringIdLen = 0;
+            hr = g_input_stream_read_all(pStream, &stringIdLen, sizeof(stringIdLen), &bytesRead, NULL, NULL);
+            if (!hr || bytesRead != sizeof(stringIdLen)) {
+                g_object_unref(pStream);
+                return;
+            }
+            std::string stringId(stringIdLen, '\0');
+            hr = g_input_stream_read_all(pStream, &stringId[0], stringIdLen, &bytesRead, NULL, NULL);
+            if (!hr || bytesRead != stringIdLen) {
+                g_object_unref(pStream);
+                return;
+            }
+            WORD localeMapSize = 0;
+            hr = g_input_stream_read_all(pStream, &localeMapSize, sizeof(localeMapSize), &bytesRead, NULL, NULL);
+            if (!hr || bytesRead != sizeof(localeMapSize)) {
+                g_object_unref(pStream);
+                return;
+            }
+            LocaleMap localeMap;
+            for (WORD j = 0; j < localeMapSize; j++) {
+                uint8_t localeLen = 0;
+                hr = g_input_stream_read_all(pStream, &localeLen, sizeof(localeLen), &bytesRead, NULL, NULL);
+                if (!hr || bytesRead != sizeof(localeLen)) {
+                    g_object_unref(pStream);
+                    return;
+                }
+                std::string localeName(localeLen, '\0');
+                hr = g_input_stream_read_all(pStream, &localeName[0], localeLen, &bytesRead, NULL, NULL);
+                if (!hr || bytesRead != localeLen) {
+                    g_object_unref(pStream);
+                    return;
+                }
+                WORD translationLen = 0;
+                hr = g_input_stream_read_all(pStream, &translationLen, sizeof(translationLen), &bytesRead, NULL, NULL);
+                if (!hr || bytesRead != sizeof(translationLen)) {
+                    g_object_unref(pStream);
+                    return;
+                }
+                std::string translationString(translationLen, '\0');
+                hr = g_input_stream_read_all(pStream, &translationString[0], translationLen, &bytesRead, NULL, NULL);
+                if (!hr || bytesRead != translationLen) {
+                    g_object_unref(pStream);
+                    return;
+                }
+                localeMap[localeName] = translationString;
+            }
+            translMap[stringId] = localeMap;
+        }
+        g_object_unref(pStream);
+        is_translations_valid = true;
+    }
+#endif
 }
 
 Translator::~Translator()
@@ -124,185 +261,32 @@ Translator::~Translator()
 
 }
 
-tstring Translator::tr(const char *str)
+tstring Translator::tr(const tchar *str) const
 {
-#ifdef _WIN32
-    tstring translatedStr = StrToWStr(str);
-#else
-    tstring translatedStr = str;
-#endif
     if (is_translations_valid) {
-        for (auto &strIdPair : translMap) {
-            //LocaleMap locMap = strIdPair.second;
-            // for (LocaleMap::const_iterator it = strIdPair.second.begin(); it != strIdPair.second.end(); ++it) {
-                //wcout << L"\n\n" << translatedStr << L"\n" << it->second;
-                if (strIdPair.first == translatedStr) {
-                    if (strIdPair.second.find(langName) != strIdPair.second.end())
-                        return strIdPair.second[langName];
-                    else {
-                        tstring primaryLangAndScript = getPrimaryLang(langName, true);
-                        if (strIdPair.second.find(primaryLangAndScript) != strIdPair.second.end())
-                            return strIdPair.second[primaryLangAndScript];
-                        else {
-                            tstring primaryLang = getPrimaryLang(langName);
-                            if (strIdPair.second.find(primaryLang) != strIdPair.second.end())
-                                return strIdPair.second[primaryLang];
-                        }
+        auto it = translMap.find(str);
+        if (it != translMap.end()) {
+            const LocaleMap &lcmap = it->second;
+            auto lc_it = lcmap.find(langName);
+            if (lc_it == lcmap.end()) {
+                tstring primaryLangAndScript = getPrimaryLang(langName, true);
+                if ((lc_it = lcmap.find(primaryLangAndScript)) == lcmap.end()) {
+                    tstring primaryLang = getPrimaryLang(langName);
+                    if ((lc_it = lcmap.find(primaryLang)) == lcmap.end()) {
+                        lc_it = lcmap.find(_T("en"));
                     }
-                    if (strIdPair.second.find(_T("en")) != strIdPair.second.end())
-                        return strIdPair.second[_T("en")];
-                    break;
                 }
-            // }
+            }
+            if (lc_it != lcmap.end())
+                return lc_it->second;
         }
     }
-    return translatedStr;
+    return str;
 }
 
 void Translator::setLanguage(const tstring &lang)
 {
     langName = lang;
+    std::replace(langName.begin(), langName.end(), '-', '_');
     NS_Logger::WriteLog(_T("Current locale: ") + langName);
-}
-
-void Translator::parseTranslations()
-{
-    int token = TOKEN_BEGIN_DOCUMENT;
-    tstring stringId, currentLocale;
-    size_t pos = 0, len = translations.length();
-    while (pos < len) {
-        size_t incr = 1;
-        tchar ch = translations.at(pos);
-
-        switch (token) {
-        case TOKEN_BEGIN_DOCUMENT:
-        case TOKEN_END_VALUE:
-            if (!isSeparator(ch)) {
-                if (ch == _T(';')) {
-                    // string is comment
-                    size_t end = translations.find_first_of(_T('\n'), pos);
-                    incr = (end == tstring::npos) ? len - pos : end - pos + 1;
-                } else {
-                    size_t end;
-                    for (end = pos; end < len; end++) {
-                        tchar c = translations.at(end);
-                        if (!isValidLocaleCharacter(c))
-                            break;
-                    }
-                    size_t locale_len = end - pos;
-                    if (locale_len < 12 && locale_len != 0 && locale_len != 1 && locale_len != 4 && locale_len != 9) {
-                        token = TOKEN_BEGIN_LOCALE;
-                        continue;
-                    } else {
-                        // TOKEN_ERROR
-                        error_substr = translations.substr(0, pos + 1);
-                        return;
-                    }
-                }
-            }
-            break;
-
-        case TOKEN_BEGIN_STRING_ID:
-            if (!isSeparator(ch)) {
-                size_t end;
-                tchar c;
-                for (end = pos; end < len; end++) {
-                    c = translations.at(end);
-                    if (!isValidStringIdCharacter(c))
-                        break;
-                }
-                c = translations.at(end);
-                if (end < len && !isSeparator(c) && c != _T('=')) {
-                    // TOKEN_ERROR
-                    error_substr = translations.substr(0, end + 1);
-                    return;
-                }
-                stringId = translations.substr(pos, end - pos);
-                if (!stringId.empty() && translMap.find(stringId) == translMap.end())
-                    translMap[stringId] = LocaleMap();
-
-                token = TOKEN_END_STRING_ID;
-                incr = end - pos;
-            }
-            break;
-
-        case TOKEN_END_STRING_ID:
-            if (!isSeparator(ch)) {
-                if (ch == _T('=')) {
-                    token = TOKEN_BEGIN_VALUE;
-                } else {
-                    // TOKEN_ERROR
-                    error_substr = translations.substr(0, pos + 1);
-                    return;
-                }
-            }
-            break;
-
-        case TOKEN_BEGIN_LOCALE: {
-            size_t end;
-            for (end = pos; end < len; end++) {
-                tchar c = translations.at(end);
-                if (!isValidLocaleCharacter(c))
-                    break;
-            }
-            size_t locale_len = end - pos;
-            currentLocale = translations.substr(pos, locale_len);
-            if (pos + locale_len == len) {
-                error_substr = translations.substr(0, pos + locale_len);
-                return;
-            }
-            token = TOKEN_END_LOCALE;
-            incr = locale_len;
-            break;
-        }
-
-        case TOKEN_END_LOCALE:
-            if (!isSeparator(ch)) {
-                if (ch == _T('.')) {
-                    token = TOKEN_BEGIN_STRING_ID;
-                } else {
-                    // TOKEN_ERROR
-                    error_substr = translations.substr(0, pos + 1);
-                    return;
-                }
-            }
-            break;
-
-        case TOKEN_BEGIN_VALUE: {
-            size_t end = translations.find_first_of(_T('\n'), pos);
-            tstring val;
-            if (end == tstring::npos) {
-                val = translations.substr(pos);
-                incr = len - pos;
-            } else {
-                val = translations.substr(pos, end - pos);
-                incr = end - pos;
-            }
-
-            if (!val.empty() && val.back() == _T('\r'))
-                val.pop_back();
-
-            size_t p = val.find(_T("\\n"));
-            while (p != std::string::npos) {
-                val.replace(p, 2, _T("\\"));
-                val[p] = _T('\n');
-                p = val.find(_T("\\n"), p + 1);
-            }
-            if (!currentLocale.empty() && translMap.find(stringId) != translMap.end())
-                translMap[stringId][currentLocale] = val;
-
-            token = TOKEN_END_VALUE;
-            break;
-        }
-
-        default:
-            break;
-        }
-        pos += incr;
-        if (pos == len)
-            token = TOKEN_END_DOCUMENT;
-    }
-
-    if (token == TOKEN_END_DOCUMENT)
-        is_translations_valid = true;
 }

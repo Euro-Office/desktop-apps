@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>История изменений ONLYOFFICE</title>
+    <style type="text/css">
+        /* variables */
+        :root {
+            --color-black: #141923;
+            --color-white: #fff;
+            --color-gray-100: #f7fafc;
+            --color-gray-200: #edf2f7;
+            --color-gray-300: #e2e8f0;
+            --color-gray-400: #cbd5e0;
+            --color-gray-500: #a0aec0;
+            --color-gray-600: #718096;
+            --color-gray-700: #4a5568;
+            --color-gray-800: #2d3748;
+            --color-gray-900: #1a202c;
+        }
+        body {
+            background: var(--color-white);
+            color: var(--color-gray-800);
+            font: 12px "Lucida Grande", "Lucida Sans Unicode", Verdana, Lucida, Helvetica, sans-serif;
+        }
+        h1, h2, h3 {
+            color: var(--color-gray-800);
+            font-weight: normal;
+            font-style: normal;
+        }
+        h1 {
+            font-size: 1.7em;
+        }
+        h2 {
+            font-size: 1.4em;
+            font-weight: lighter;
+        }
+        h4 {
+            font-size: 1.2em;
+            font-weight: lighter;
+        }
+        code {
+            background: var(--color-gray-200);
+            font-family: monospace;
+            padding: 1px 5px;
+        }
+        ul {
+            padding: 8.1.3 20px;
+        }
+        li {
+            margin-left: 20px;
+            margin-bottom: 0.2em;
+            padding: 0;
+        }
+        hr {
+            margin: 20px 0;
+            border: var(--color-gray-400) solid 0.5px;
+        }
+        .releasedate {
+            color: var(--color-gray-600);
+            font-weight: lighter;
+        }
+
+        /* prefers light mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--color-gray-900);
+                color: var(--color-gray-200);
+            }
+
+            h1, h2, h3 {
+                color: var(--color-white);
+            }
+
+            code {
+                background: var(--color-gray-800);
+                color: var(--color-gray-200);
+            }
+
+            .releasedate {
+                color: var(--color-gray-600);
+            }
+        }
+     </style>
+</head>
+<body>
+    <div class="version">
+        <h1>ONLYOFFICE 9.0.4<span class="releasedate"> - {{DATE}}</span></h1>
+
+        <h2>New features</h2>
+
+        <h4>All Editors</h4>
+        <ul>
+            <li>Added support for woff2 fonts</li>
+            <li>Added the Suggest a Feature item to the editors File menu</li>
+            <li>Added AI, Photo Editor, OCR, Typograf, Doc2md, LanguageTool, DeepL, Thesaurus and Zotero plugins to the distribution with ONLYOFFICE branding</li>
+            <li>Added creation of a marker file blocking when opening documents in other applications</li>
+        </ul>
+
+        <h4>Document Editor</h4>
+        <ul>
+            <li>Improved usability when working with allowed areas</li>
+        </ul>
+
+        <h2>Fixes</h2>
+
+        <h4>All Editors</h4>
+        <ul>
+            <li>Fixed display of the scroll bar for the Modern Dark theme</li>
+            <li>Fixed display of the table creation matrix in the Insert -> Table menu for the Modern Light / Dark themes</li>
+            <li>Fixed display of the error window when the connection is broken after 2 minutes of waiting</li>
+            <li>Fixed incorrect undo after composite input of text into an autoshape in the Fast Co-editing mode</li>
+            <li>Fixed display of translations on the Home and About pages when changing the interface language without restarting the application</li>
+            <li>Fixed collapsing the toolbar in the More menu after pinning a document to the main window at 300% scale for Modern themes</li>
+            <li>Fixed display of preview for the "Invoice children's style" template in Templates > Documents in Arabic interface</li>
+            <li>Fixed the appearance of scroll when calling the context menu near the window borders for the "Recent files" list</li>
+            <li>Fixed menu for creating new files for the Dark theme</li>
+        </ul>
+
+        <h4>Document Editor</h4>
+        <ul>
+            <li>Fixed the sequence of recording table settings to the file</li>
+            <li>Forbidden execution of the Javascript code for a custom property in a document</li>
+            <li>Fixed re-applying text formatting in an autoshape using hotkeys</li>
+            <li>Fixed an error when reading a color with the "automatic" value or writing it to a file</li>
+            <li>Disabled the ability to delete text outside the allowed area for filling in</li>
+            <li>Fixed deletion of characters when opening the <code>TXT</code> file for editing</li>
+            <li>Fixed display of the password request window to remove file protection in MS Word</li>
+            <li>Fixed recalculating the position of an autoshape with the "Resize shape to fit text" flag when changing text formatting</li>
+            <li>Fixed crash when autocorrecting in a graphical formula (equation)</li>
+            <li>Fixed display of the Abstract Numbering Definition Identifier numbering in the <code>DOCX</code> file</li>
+            <li>Removed an incorrect item in the Paste options menu for the "Chart Editor" window</li>
+            <li>Fixed display of some hieroglyphs with bold settings on macOS</li>
+        </ul>
+
+        <h4>Spreadsheet Editor</h4>
+        <ul>
+            <li>Fixed positioning of RTL text and graphics when saving the <code>XLSX</code> file to an image</li>
+            <li>Fixed hanging of the editor when copying rows / columns in some browsers</li>
+            <li>Fixed formatting change for several cells with mixed text format</li>
+            <li>Fixed the size of the pasted image of the copied area when scale is higher than 100%</li>
+            <li>Fixed display of scroll bars when uploading a new version of the <code>XLSX</code> file after connection break</li>
+            <li>Fixed crash when copying / pasting a cell with conditional formatting in the <code>XLSX</code> file</li>
+            <li>Fixed calculation of number of pages when saving the <code>ODS</code> file to <code>PNG</code> / <code>JPG</code></li>
+            <li>Fixed display of percent sign (%) in combination with a number</li>
+            <li>Fixed an error when opening the saved <code>ODS</code> file in MS Excel</li>
+            <li>Fixed the position when pasting a copied cell range as a Picture (Paste options) for an RTL file</li>
+            <li>Fixed display of text in the Formula bar in RTL languages</li>
+            <li>Fixed crash when when opening a sheet with charts in the <code>XLSX</code> file where multiple gradient points are used</li>
+            <li>Fixed crash when when resizing a line chart with a lot of data in the <code>XLSX</code> file</li>
+            <li>Fixed printing the selection (Print range > Selection) to the <code>PDF</code> file</li>
+            <li>Fixed crash on memory when reading pivot tables in the <code>XLSX</code> file</li>
+        </ul>
+
+        <h4>Presentation Editor</h4>
+        <ul>
+            <li>Fixed an error when clicking in the working area after deleting all slides in the <code>ODP</code> file</li>
+            <li>Fixed translation of the "Transitions" tab in Danish</li>
+        </ul>
+
+        <h4>Forms</h4>
+        <ul>
+            <li>Fixed display of field names in Adobe Acrobat with the same name specified in Cyrillic</li>
+            <li>Fixed display of text for the field with the Password format</li>
+            <li>Fixed input of text in the form field if the page is rotated</li>
+            <li>Fixed locking of the Format list when the Multiline option is enabled for the Text field</li>
+        </ul>
+
+        <h4>PDF Editor</h4>
+        <ul>
+            <li>Fixed opening of the context menu after connection break</li>
+            <li>Fixed adding comments to stamps</li>
+            <li>Fixed applying the AutoFit option if the Scroll Long Text is not enabled</li>
+        </ul>
+
+        <h4>Convert</h4>
+        <ul>
+            <li>Fixed crash when converting some <code>PPTX</code> files to <code>JPG</code> / <code>PNG</code> / <code>PDF</code></li>
+            <li>Fixed crash when converting the <code>XLSM</code> file to <code>XLSB</code> via x2t</li>
+            <li>Fixed crash when converting the <code>PPTX</code> file to <code>PNG</code> via x2t</li>
+            <li>Fixed crash when converting the <code>XLSM</code> file to <code>PNG</code> via x2t</li>
+            <li>Fixed display of the “x” symbol after converting the <code>DOC</code> file to <code>DOCX</code></li>
+            <li>Fixed crash when converting the <code>DOCX</code> file to <code>JPG</code> / <code>PNG</code> / <code>PDF</code> via x2t</li>
+            <li>Fixed crash when converting the <code>ODT</code> file to <code>DOCT</code> via x2t</li>
+            <li>Fixed crash when converting the <code>ODS</code> file to <code>JPG</code> / <code>PNG</code> / <code>PDF</code> via x2t</li>
+            <li>Fixed crash when converting the <code>ODS</code> file to <code>XLST</code> via x2t</li>
+            <li>Fixed crash when converting a binary file containing an <code>SVG</code> image to <code>XLSX</code> via x2t</li>
+            <li>Fixed crash when converting the <code>KEY</code> file to <code>PPTT</code> via x2t</li>
+        </ul>
+    </div>
+</body>
+</html>

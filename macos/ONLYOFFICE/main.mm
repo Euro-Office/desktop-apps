@@ -51,6 +51,7 @@
 #import "NSDictionary+Extensions.h"
 #import "ASCEditorJSVariables.h"
 #import "ASCSharedSettings.h"
+#import "ASCEventsController.h"
 #import "ASCThemesController.h"
 
 CAscApplicationManager * createASCApplicationManager() {
@@ -113,6 +114,9 @@ int main(int argc, const char * argv[]) {
 
     // setup doc sign
     [ASCDocSignController shared];
+    
+    // Create CEF event listener
+    [ASCEventsController sharedInstance];
 
     //[worker Start:argc :argv];
     [worker Start:argc argv:argv];

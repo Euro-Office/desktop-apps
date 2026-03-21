@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)init;
 + (NSDictionary *)availableLanguages;
++ (NSDictionary *)keyboardLanguages;
 + (NSString *)appLanguageCode;
 + (void)setAppLanguageCode:(NSString *)code;
 + (BOOL)isUILayoutDirectionRtl;

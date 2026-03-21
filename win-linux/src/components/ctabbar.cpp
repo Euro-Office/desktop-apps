@@ -291,7 +291,6 @@ void Tab::resizeEvent(QResizeEvent *event)
 
 void Tab::paintEvent(QPaintEvent *ev)
 {
-    QFrame::paintEvent(ev);
     if (!tabcolor.isEmpty() && tabcolor != "none" && property("selected").toBool()) {
 //        if (tabBar && tabBar->property("active").toBool())
         {
@@ -299,11 +298,16 @@ void Tab::paintEvent(QPaintEvent *ev)
             int left = AscAppManager::isRtlEnabled() ? frameWidth() : 0;
             p.fillRect(rect().adjusted(left, 0, left ? 0 : -frameWidth(), 0), QBrush(QColor(tabcolor)));
         }
+    } else {
+        QFrame::paintEvent(ev);
     }
 }
 
 bool Tab::eventFilter(QObject *obj, QEvent *ev)
 {
+    if (!isEnabled())
+        return true;
+
     switch (ev->type()) {
     case QEvent::HoverEnter:
         setProperty("hovered", true);
@@ -1139,6 +1143,9 @@ void CTabBar::resizeEvent(QResizeEvent *event)
 
 void CTabBar::wheelEvent(QWheelEvent *event)
 {
+    if (!isEnabled())
+        return;
+
     QFrame::wheelEvent(event);
     if (!d->animationInProgress && d->tabArea->underMouse()) {
 #ifdef DONT_USE_SIMPLE_WHEEL_SCROLL
@@ -1159,6 +1166,9 @@ void CTabBar::wheelEvent(QWheelEvent *event)
 
 bool CTabBar::eventFilter(QObject *watched, QEvent *event)
 {
+    if (!isEnabled())
+        return true;
+
     if (watched == d->tabArea) {
         switch (event->type()) {
         case QEvent::MouseMove: {

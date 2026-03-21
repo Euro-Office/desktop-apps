@@ -86,7 +86,7 @@
 "new-document" = "Document nou";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Formular PDF nou";
+"new-pdfform" = "PDF nou";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Prezentare nouă";
@@ -201,6 +201,33 @@
 
 /* No comment provided by engineer. */
 "XML Paper Specification" = "Document OpenXPS (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Afișare fereastră principală";
+
+/* No comment provided by engineer. */
+"Close" = "Închidere";
+
+/* No comment provided by engineer. */
+"Close saved" = "Închideți salvat";
+
+/* No comment provided by engineer. */
+"Close all" = "Închide tot";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Afișare în folder";
+
+/* No comment provided by engineer. */
+"Move to start" = "Mută ​​la început";
+
+/* No comment provided by engineer. */
+"Move to end" = "Mută ​​la sfârșit";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Anulează fixarea filei";
+
+/* No comment provided by engineer. */
+"Create new" = "Creare document nou";
 
 /* No comment provided by engineer. */
 "Yes" = "Da";

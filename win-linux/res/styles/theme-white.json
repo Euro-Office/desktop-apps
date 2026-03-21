@@ -1,0 +1,70 @@
+{
+    "id": "theme-white",
+    "type": "light",
+    "values": {
+        "brand-word": "#f3f3f3",
+        "brand-slide": "#f3f3f3",
+        "brand-cell": "#f3f3f3",
+        "brand-pdf": "#f3f3f3",
+        "brand-draw": "#f3f3f3",
+
+        "window-background": "#eaeaea",
+        "window-border": "#d9d9d9",
+
+        "border-control-focus": "#4a87e7",
+
+        "text-normal": "#444",
+        "text-pretty": "#fff",
+        "text-inverse": "#fff",
+
+        "tool-button-background": "#eaeaea",
+        "tool-button-hover-background": "#cecece",
+        "tool-button-pressed-background": "#b7b7b7",
+        "tool-button-active-background1": "#fff",
+        "tool-button-active-background": "#f3f3f3",
+
+        "download-widget-background": "#fff",
+        "download-widget-border": "#d9d9d9",
+        "download-item-hover-background": "#e0e0e0",
+
+        "download-ghost-button-text": "#3a83db",
+        "download-ghost-button-text-hover": "#444",
+        "download-ghost-button-text-pressed": "#a5a5a5",
+        "download-ghost-button-text-pressed-item-hover": "#868686",
+
+        "download-label-text": "#444",
+        "download-label-text-info": "#a5a5a5",
+        "download-label-text-info-item-hover": "#868686",
+
+        "download-progressbar-chunk": "#3a83db",
+        "download-progressbar-background": "#e6e6e6",
+        "download-progressbar-background-item-hover": "#cacaca",
+
+        "download-scrollbar-handle": "#cacaca",
+
+        "menu-background": "#fff",
+        "menu-border": "#c0c0c0",
+        "menu-item-hover-background": "#e0e0e0",
+
+        "menu-text": "#444",
+        "menu-text-item-hover": "#444",
+        "menu-text-item-disabled": "#c9c9c9",
+
+        "menu-separator": "#dfdfdf",
+
+        "tooltip-text": "#313131",
+        "tooltip-border": "#d9d9d9",
+        "tooltip-background": "#fff",
+
+        "tab-active-background": "#f1f1f1",
+        "tab-simple-active-background": "#fff",
+        "tab-simple-active-text": "#444",
+        "tab-default-active-background": "#fff",
+        "tab-default-active-text": "#444",
+        "tab-divider": "#d9d9d9",
+
+        "button-normal-opacity": "rgba(49,49,49,255)",
+        "logo-type": "dark",
+        "tab-editor-theme-type": "light"
+    }
+}

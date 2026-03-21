@@ -11,6 +11,8 @@
         "window-background": "#d9d9d9",
         "window-border": "#cbcbcb",
 
+        "border-control-focus": "#4a87e7",
+
         "text-normal": "#444",
         "text-pretty": "#fff",
         "text-inverse": "#fff",
@@ -18,7 +20,8 @@
         "tool-button-background": "#d9d9d9",
         "tool-button-hover-background": "#e6e6e6",
         "tool-button-pressed-background": "#b7b7b7",
-        "tool-button-active-background": "#fff",
+        "tool-button-active-background1": "#fff",
+        "tool-button-active-background": "#f7f7f7",
 
         "download-widget-background": "#fff",
         "download-widget-border": "#cbcbcb",

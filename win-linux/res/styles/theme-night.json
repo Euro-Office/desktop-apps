@@ -1,0 +1,68 @@
+{
+    "id": "theme-night",
+    "type": "dark",
+    "values": {
+        "brand-word": "#222222",
+        "brand-slide": "#222222",
+        "brand-cell": "#222222",
+        "brand-pdf": "#222222",
+        "brand-draw": "#222222",
+
+        "window-background": "#383838",
+        "window-border": "#616161",
+
+        "border-control-focus": "#4a87e7",
+
+        "text-normal": "#d9d9d9",
+        "text-pretty": "#d9d9d9",
+        "text-inverse": "#444",
+
+        "tool-button-background": "#404040",
+        "tool-button-hover-background": "#555",
+        "tool-button-pressed-background": "#606060",
+        "tool-button-active-background": "#222",
+
+        "download-widget-background": "#333",
+        "download-widget-border": "#666666",
+        "download-item-hover-background": "#555",
+
+        "download-ghost-button-text": "#96c8fd",
+        "download-ghost-button-text-hover": "#d6d6d6",
+        "download-ghost-button-text-pressed": "#858585",
+        "download-ghost-button-text-pressed-item-hover": "#999999",
+
+        "download-label-text": "#d6d6d6",
+        "download-label-text-info": "#858585",
+        "download-label-text-info-item-hover": "#999999",
+
+        "download-progressbar-chunk": "#96c8fd",
+        "download-progressbar-background": "#858585",
+        "download-progressbar-background-item-hover": "#999999",
+
+        "download-scrollbar-handle": "#999999",
+
+        "menu-background": "#333",
+        "menu-border": "#666666",
+        "menu-item-hover-background": "#555",
+
+        "menu-text": "#d6d6d6",
+        "menu-text-item-hover": "#ddd",
+        "menu-text-item-disabled": "#757575",
+
+        "menu-separator": "#505050",
+
+        "tooltip-text": "#d2d2d2",
+        "tooltip-border": "#666666",
+        "tooltip-background": "#333",
+
+        "tab-active-background": "#333",
+        "tab-simple-active-background": "#333",
+        "tab-simple-active-text": "#fff",
+        "tab-default-active-background": "#333",
+        "tab-default-active-text": "#fff",
+        "tab-divider": "#505050",
+
+        "button-normal-opacity": "rgba(255,255,255,200)",
+        "logo-type": "light"
+    }
+}

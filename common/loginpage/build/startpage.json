@@ -55,7 +55,7 @@
         },
         "less": {
             "files": [{
-                "src": "../src/styles.less",
+                "src": "../src/css/styles.less",
                 "dest": "../deploy/styles.css"
             },{
                 "src": "../src/css/rtl.less",
@@ -72,6 +72,9 @@
                     ,"../src/model.js"
                     ,"../src/menu.js"
                     ,"../src/base.js"
+                    ,"../src/dnd-file-zone.js"
+                    ,"../src/document-creation-grid.js"
+                    ,"../src/dialogbase.js"
                     ,"../deploy/noconnect.js"
                     ,"../src/paneltemplates.js"
                     ,"../src/panelrecent.js"
@@ -83,6 +86,9 @@
                     ,"../src/panelexternal.js"
                     ,"../src/dialogconnect.min.js"
                     ,"../src/panels.js"
+                    ,"../src/dialogabout.js"
+                    ,"../src/dialogproviders.js"
+                    ,"../src/dialogpreview.js"
                 ],
                 "dest": "../deploy/build.js"
             }

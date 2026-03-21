@@ -349,7 +349,6 @@ void CDownloadWidget::downloadProcess(void * info)
                         Utils::openUrl(QUrl::fromLocalFile(path).toString());
                     } else {
                         AscAppManager::handleInputCmd({path.toStdWString()});
-                        Utils::addToRecent(path.toStdWString());
                     }
                 });
 

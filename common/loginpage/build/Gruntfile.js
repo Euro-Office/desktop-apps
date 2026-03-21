@@ -256,7 +256,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('prebuild-svg-sprites', function() {
         require('./sprites/sprites')(grunt, '../');
-        grunt.task.run('svg_sprite');
+        grunt.task.run('svg_sprite', 'sprite');
     });
 
     doRegisterInitializeAppTask('startpage', 'Desktop start page', 'startpage.json');

@@ -271,12 +271,8 @@ void CWindowPlatform::onMaximizeEvent()
 void CWindowPlatform::onWindowActivate(bool is_active)
 {
     for (auto *btn : m_pTopButtons) {
-        QGraphicsOpacityEffect *efct = qobject_cast<QGraphicsOpacityEffect*>(btn->graphicsEffect());
-        if (!efct) {
-            efct = new QGraphicsOpacityEffect(btn);
-            btn->setGraphicsEffect(efct);
-        }
-        efct->setOpacity(is_active ? 1.0 : 0.6);
+        if (btn)
+            btn->setFaded(!is_active);
     }
 }
 
@@ -307,10 +303,10 @@ bool CWindowPlatform::event(QEvent * event)
         }
     } else
     if (event->type() == QEvent::MouseMove) {
-        if (!property("blocked").toBool()) {
+        // if (!property("blocked").toBool()) {
             QMouseEvent *me = static_cast<QMouseEvent*>(event);
             CX11Decoration::dispatchMouseMove(me);
-        }
+        // }
     } else
     if (event->type() == QEvent::WindowActivate) {
         onWindowActivate(true);
@@ -389,9 +385,10 @@ bool CWindowPlatform::nativeEvent(const QByteArray &ev_type, void *msg, long *re
 #ifdef DONT_USE_GTK_MAINWINDOW
 void CWindowPlatform::paintEvent(QPaintEvent *event)
 {
-    CWindowBase::paintEvent(event);
-    if (!QX11Info::isCompositingManagerRunning())
+    if (!QX11Info::isCompositingManagerRunning()) {
+        CWindowBase::paintEvent(event);
         return;
+    }
 
     QPainter pnt(this);
     pnt.setRenderHint(QPainter::Antialiasing);

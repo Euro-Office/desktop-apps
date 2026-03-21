@@ -115,7 +115,12 @@ void CSVGPushButton::updateIcon()
         painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
         QSvgRenderer r(m_svglayout);
         if ( m_svgnode.isEmpty() ) r.render(&painter);
-        else r.render(&painter, m_svgnode, r.boundsOnElement(m_svgnode));
+        else {
+            QRectF bounds = r.boundsOnElement(m_svgnode);
+            double kx = pixmap.width() / r.viewBoxF().width();
+            double ky = pixmap.height() / r.viewBoxF().height();
+            r.render(&painter, m_svgnode, QRectF(bounds.x() * kx, bounds.y() * ky, bounds.width() * kx, bounds.height() * ky));
+        }
 
         if ( m_usestateopacity ) {
             painter.setCompositionMode(QPainter::CompositionMode_SourceIn);

@@ -55,6 +55,7 @@ namespace CEditorTools
     };
 
     void print(const sPrintConf&);
+    void onDocumentPrint(QWidget *parent, CCefView *pView, const QString &documentName, int currentPage, int pagesCount);
     void getlocalfile(void * data);
     QString getlocalfile(const std::wstring& path, int parentid = -1);
     QString getlocaltemplate(const std::wstring& editor, int parentid);

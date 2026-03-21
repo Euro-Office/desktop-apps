@@ -122,6 +122,10 @@
         return _clouds;
     };
 
+    sdk.setRecentFilePinned = function(id, value) {
+        this.command('recent:pinned', JSON.stringify({id:id, pinned:value}));
+    }
+
     sdk.encrypt = {
         ENCRYPT_MODE_NONE: 0,
         ENCRYPT_MODE_SIMPLE: 1,

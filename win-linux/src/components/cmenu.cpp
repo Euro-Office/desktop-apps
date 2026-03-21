@@ -36,6 +36,8 @@
 #include <QPainter>
 #include <QLayout>
 #include <QAction>
+#include <qtcomp/qnativeevent.h>
+
 #ifdef __linux__
 # include <QX11Info>
 #endif
@@ -93,7 +95,7 @@ protected:
             QSize icon_size(m_icon_size);
             if (m_icon_size.isEmpty()) {
                 QStyleOption opt;
-                opt.init(this);
+                QtComp::Widget::initStyleOption(&opt, this);
                 int icSize = style()->pixelMetric(QStyle::PM_SmallIconSize, &opt, this);
                 icon_size.setWidth(icSize);
                 icon_size.setHeight(icSize);
@@ -171,7 +173,7 @@ public:
         item->installEventFilter(this);
         item->setAlignment((AscAppManager::isRtlEnabled() ? Qt::AlignRight : Qt::AlignLeft)  | Qt::AlignAbsolute);
 #ifdef _WIN32
-        if (m_dpiRatio == 1.0 && AscAppManager::themes().current().isDark()) {
+        if (m_dpiRatio == 1.0 && AscAppManager::themes().current().isDark() && !AscAppManager::isRtlEnabled()) {
             QFont fnt = item->font();
             fnt.setStretch(70);
             item->setFont(fnt);

@@ -409,7 +409,7 @@ Chúng tôi có ưu đãi đặc biệt dành cho bạn.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Mẫu PDF mới</target>
+        <target>PDF mới</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1290,8 +1290,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Bản quyền © 2025 Ascensio System SIA. Đã đăng ký Bản quyền.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Bản quyền © 2026 Ascensio System SIA. Đã đăng ký Bản quyền.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1307,8 +1307,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Bản quyền © 2025 Ascensio System SIA. Đã đăng ký Bản quyền.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Bản quyền © 2026 Ascensio System SIA. Đã đăng ký Bản quyền.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1324,8 +1324,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Bản quyền © 2025 Ascensio System SIA. Đã đăng ký Bản quyền.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Bản quyền © 2026 Ascensio System SIA. Đã đăng ký Bản quyền.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

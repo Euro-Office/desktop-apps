@@ -86,6 +86,23 @@ CDownloader::~CDownloader()
     delete pimpl, pimpl = nullptr;
 }
 
+bool CDownloader::isUrlAccessible(const string &url)
+{
+    if (url.empty())
+        return false;
+
+    CURLcode res = CURLE_FAILED_INIT;
+    if (CURL *curl = curl_easy_init()) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
+    return res == CURLE_OK;
+}
+
 void CDownloader::queryContentLenght(const string &url)
 {
     if (url.empty() || pimpl->m_lock)
@@ -93,14 +110,18 @@ void CDownloader::queryContentLenght(const string &url)
 
     pimpl->m_lock = true;
     pimpl->m_future = std::async(std::launch::async, [=]() {
-        double fileSize = 0;
+        curl_off_t fileSize = 0;
         CURLcode res = CURLE_FAILED_INIT;
         if (CURL *curl = curl_easy_init()) {
             curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
             curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
+            curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+            curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
             res = curl_easy_perform(curl);
-            if (res == CURLE_OK)
-                curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fileSize);
+            if (res == CURLE_OK) {
+                curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &fileSize);
+                if (fileSize < 0) fileSize = 0;
+            }
             curl_easy_cleanup(curl);
         }
         int error = (res == CURLE_OK) ? 0 :
@@ -137,6 +158,7 @@ void CDownloader::start()
             if (CURL *curl = curl_easy_init()) {
                 pimpl->m_prev_percent = -1;
                 curl_easy_setopt(curl, CURLOPT_URL, pimpl->m_url.c_str());
+                curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
                 curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
                 curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
                 curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);

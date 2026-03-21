@@ -201,6 +201,7 @@ utils.defines.FileFormat = {
     FILE_PRESENTATION_POTM: FILE_PRESENTATION + 0x0008,
     FILE_PRESENTATION_ODP_FLAT: FILE_PRESENTATION + 0x0009,
     FILE_PRESENTATION_OTP:  FILE_PRESENTATION + 0x000a,
+    FILE_PRESENTATION_ODG:  FILE_PRESENTATION + 0x000c,
     FILE_PRESENTATION_KEY:  FILE_PRESENTATION + 0x000d,
 
     FILE_SPREADSHEET:       FILE_SPREADSHEET,
@@ -241,7 +242,7 @@ utils.defines.links = {
 utils.formatToEditor = function(f) {
     if ( f > FILE_PRESENTATION && f < FILE_SPREADSHEET ) return 'slide'; else
     if ( f > FILE_SPREADSHEET && f < FILE_CROSSPLATFORM ) return 'cell'; else
-    if ( f > FILE_CROSSPLATFORM ) return 'pdf'; 
+    if ( f > FILE_CROSSPLATFORM || f === utils.defines.FileFormat.FILE_DOCUMENT_OFORM_PDF ) return 'pdf'; 
     else return 'word';
 }
 
@@ -293,6 +294,7 @@ utils.parseFileFormat = function(format) {
     case utils.defines.FileFormat.FILE_PRESENTATION_POTM:   return 'potm';
     case utils.defines.FileFormat.FILE_PRESENTATION_ODP_FLAT: return 'fodp';
     case utils.defines.FileFormat.FILE_PRESENTATION_KEY:    return 'key';
+    case utils.defines.FileFormat.FILE_PRESENTATION_ODG:    return 'odg';
 
     case utils.defines.FileFormat.FILE_CROSSPLATFORM_PDFA:
     case utils.defines.FileFormat.FILE_CROSSPLATFORM_PDF:   return 'pdf';
@@ -307,6 +309,61 @@ utils.parseFileFormat = function(format) {
     case utils.defines.FileFormat.FILE_DRAW_VSDX:           return 'vsdx';
 
     default: return 'neutral';
+    }
+
+    return '';
+};
+
+utils.fileExtensionToFileFormat = function(extension) {
+    switch (extension[0] != '.' ? extension : extension.substring(1)) {
+    case 'doc':     return utils.defines.FileFormat.FILE_DOCUMENT_DOC;
+    case 'docx':    return utils.defines.FileFormat.FILE_DOCUMENT_DOCX;
+    case 'odt':     return utils.defines.FileFormat.FILE_DOCUMENT_ODT;
+    case 'rtf':     return utils.defines.FileFormat.FILE_DOCUMENT_RTF;
+    case 'txt':     return utils.defines.FileFormat.FILE_DOCUMENT_TXT;
+    case 'html':    return utils.defines.FileFormat.FILE_DOCUMENT_HTML;
+    case 'mht':     return utils.defines.FileFormat.FILE_DOCUMENT_MHT;
+    case 'epub':    return utils.defines.FileFormat.FILE_DOCUMENT_EPUB;
+    case 'fb2':     return utils.defines.FileFormat.FILE_DOCUMENT_FB2;
+    case 'docm':    return utils.defines.FileFormat.FILE_DOCUMENT_DOCM;
+    case 'dotx':    return utils.defines.FileFormat.FILE_DOCUMENT_DOTX;
+    case 'ott':     return utils.defines.FileFormat.FILE_DOCUMENT_OTT;
+    case 'oform':   return utils.defines.FileFormat.FILE_DOCUMENT_OFORM;
+    case 'docxf':   return utils.defines.FileFormat.FILE_DOCUMENT_DOCXF;
+    case 'pdf':     return utils.defines.FileFormat.FILE_DOCUMENT_OFORM_PDF;
+    case 'fodt':    return utils.defines.FileFormat.FILE_DOCUMENT_ODT_FLAT;
+    case 'dotm':    return utils.defines.FileFormat.FILE_DOCUMENT_DOTM;
+    case 'dotm':    return utils.defines.FileFormat.FILE_DOCUMENT_DOTM;
+    case 'xml':     return utils.defines.FileFormat.FILE_DOCUMENT_XML;
+
+    case 'xls':     return utils.defines.FileFormat.FILE_SPREADSHEET_XLS;
+    case 'xltx':    return utils.defines.FileFormat.FILE_SPREADSHEET_XLTX;
+    case 'xlsx':    return utils.defines.FileFormat.FILE_SPREADSHEET_XLSX;
+    case 'xlsb':    return utils.defines.FileFormat.FILE_SPREADSHEET_XLSB;
+    case 'ods':     return utils.defines.FileFormat.FILE_SPREADSHEET_ODS;
+    case 'csv':     return utils.defines.FileFormat.FILE_SPREADSHEET_CSV;
+    case 'ots':     return utils.defines.FileFormat.FILE_SPREADSHEET_OTS;
+    case 'xltm':    return utils.defines.FileFormat.FILE_SPREADSHEET_XLTM;
+    case 'xlsm':    return utils.defines.FileFormat.FILE_SPREADSHEET_XLSM;
+    case 'fods':    return utils.defines.FileFormat.FILE_SPREADSHEET_ODS_FLAT;
+
+    case 'ppt':     return utils.defines.FileFormat.FILE_PRESENTATION_PPT;
+    case 'potx':    return utils.defines.FileFormat.FILE_PRESENTATION_POTX;
+    case 'pptx':    return utils.defines.FileFormat.FILE_PRESENTATION_PPTX;
+    case 'odp':     return utils.defines.FileFormat.FILE_PRESENTATION_ODP;
+    case 'ppsx':    return utils.defines.FileFormat.FILE_PRESENTATION_PPSX;
+    case 'otp':     return utils.defines.FileFormat.FILE_PRESENTATION_OTP;
+    case 'pptm':    return utils.defines.FileFormat.FILE_PRESENTATION_PPTM;
+    case 'ppsm':    return utils.defines.FileFormat.FILE_PRESENTATION_PPSM;
+    case 'potm':    return utils.defines.FileFormat.FILE_PRESENTATION_POTM;
+    case 'fodp':    return utils.defines.FileFormat.FILE_PRESENTATION_ODP_FLAT;
+
+    // case utils.defines.FileFormat.FILE_CROSSPLATFORM_PDFA:
+    case 'pdf':     return utils.defines.FileFormat.FILE_CROSSPLATFORM_PDF;
+    case 'djvu':    return utils.defines.FileFormat.FILE_CROSSPLATFORM_DJVU;
+    case 'xps':     return utils.defines.FileFormat.FILE_CROSSPLATFORM_XPS;
+
+    default: return utils.defines.FileFormat.FILE_UNKNOWN;
     }
 
     return '';
@@ -328,6 +385,20 @@ utils.fn.extend = function(dest, src) {
     return dest;
 };
 
+utils.fn.pinnedFolders = function(path, action) {
+    const key = 'pinnedFolders';
+    let pinned = JSON.parse(localStorage.getItem(key) || '[]');
+
+    if (action === 'check') return pinned.includes(path);
+
+    const i = pinned.indexOf(path);
+    if (action === 'toggle') {
+        i === -1 ? pinned.push(path) : pinned.splice(i, 1);
+    }
+
+    localStorage.setItem(key, JSON.stringify(pinned));
+};
+
 utils.fn.parseRecent = function(arr, out = 'files') {
     var _files_arr = [], _dirs_arr = [];
 
@@ -344,13 +415,15 @@ utils.fn.parseRecent = function(arr, out = 'files') {
 
             _files_arr.push({
                 fileid: _f_.id,
+                pinid: !_f_.pin ? _f_.id : -_f_.id,
                 type: _f_.type,
                 format: utils.parseFileFormat(_f_.type),
                 name: name,
                 descr: path,
                 date: _f_.modifyed,
-                path: fn,
+                path: $('<div>').html(fn).text(),
                 cloud: _f_.cloud,
+                pinned: _f_.pin,
             });
 
             _dirs_arr.indexOf(path) < 0 && _dirs_arr.push(path);
@@ -358,6 +431,13 @@ utils.fn.parseRecent = function(arr, out = 'files') {
     }
 
     if (out == 'files') return _files_arr;
+
+    const pinned = JSON.parse(localStorage.getItem('pinnedFolders') || '[]');
+    for (const pinnedPath of pinned) {
+        if (!_dirs_arr.includes(pinnedPath)) {
+            _dirs_arr.push(pinnedPath);
+        }
+    }
 
     var out_dirs_arr = [];
     for (let _d_ of _dirs_arr) {
@@ -369,11 +449,17 @@ utils.fn.parseRecent = function(arr, out = 'files') {
         } else
             parent = _d_.slice(0, _d_.length - name.length - 1);
 
+        let pinned = utils.fn.pinnedFolders(_d_, 'check');
+        let id = _d_.hashCode();
+
         out_dirs_arr.push({
                 type: 'folder',
                 full: _d_,
                 name: name,
-                descr: parent
+                descr: parent,
+                pinid: !pinned ? id : -id,
+                pinned: pinned,
+                uid: `folder-${id}`
         });
     }
 
@@ -385,6 +471,8 @@ utils.fn.decodeHtml = function(str) {
 }
 
 utils.fn.getToolMenuItemOrder = function(item) {
+    return { item: $('.menu-item a[action=settings]').parent(), after: false };
+
     let $item = $(item);
 
     let _action = $item.find('[action]').attr('action'),
@@ -430,6 +518,23 @@ utils.fn.needUseSvg = function () {
     return !(window.devicePixelRatio < 2) || window.devicePixelRatio == 1;
 }
 
+utils.fn.sortProviders = function(list) {
+    return (list || []).slice().sort((a, b) => {
+
+        if (a.provider === 'onlyoffice' && b.provider !== 'onlyoffice') return -1;
+        if (b.provider === 'onlyoffice' && a.provider !== 'onlyoffice') return 1;
+
+        const aNoOrder = (a.order === undefined || a.order === null || a.order === '');
+        const bNoOrder = (b.order === undefined || b.order === null || b.order === '');
+
+        if (aNoOrder && !bNoOrder) return 1;
+        if (!aNoOrder && bNoOrder) return -1;
+        if (aNoOrder && bNoOrder) return 0;
+
+        return Number(a.order) - Number(b.order);
+    });
+};
+
 function getUrlParams() {
     var e,
     a = /\+/g,  
@@ -447,3 +552,4 @@ function getUrlParams() {
 utils.inParams = getUrlParams();
 utils.brandCheck = opts => false;
 utils.isWinXp = utils.inParams.osver == 'winxp' || /windows nt 5/i.test(navigator.appVersion);
+utils.isMacOS = /mac os/i.test(navigator.userAgent);

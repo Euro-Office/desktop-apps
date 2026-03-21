@@ -92,7 +92,7 @@
 "new-document" = "Novi dokument";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Novi PDF formular";
+"new-pdfform" = "Novi PDF";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Nova prezentacija";
@@ -216,6 +216,33 @@
 
 /* No comment provided by engineer. */
 "XML Paper Specification" = "OpenXPS dokument (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Prikaži glavni prozor";
+
+/* No comment provided by engineer. */
+"Close" = "Zatvori";
+
+/* No comment provided by engineer. */
+"Close saved" = "Zatvori sačuvano";
+
+/* No comment provided by engineer. */
+"Close all" = "Zatvori sve";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Prikaži u folderu";
+
+/* No comment provided by engineer. */
+"Move to start" = "Premesti na početak";
+
+/* No comment provided by engineer. */
+"Move to end" = "Premesti na kraj";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Otkači karticu";
+
+/* No comment provided by engineer. */
+"Create new" = "Kreiraj novo";
 
 /* No comment provided by engineer. */
 "Yes" = "Da";

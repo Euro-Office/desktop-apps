@@ -503,7 +503,7 @@ Ne kemi një ofertë speciale për ju.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target state="translated">Format PDF i ri</target>
+        <target state="translated">PDF i ri</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1401,8 +1401,8 @@ Periudha e provës do të përfundojë për %d ditë, pas kësaj ju nuk do të m
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Të drejtat e autorit © 2025 Ascensio System SIA. Të gjitha të drejtat e rezervuara.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Të drejtat e autorit © 2026 Ascensio System SIA. Të gjitha të drejtat e rezervuara.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1418,8 +1418,8 @@ Periudha e provës do të përfundojë për %d ditë, pas kësaj ju nuk do të m
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Të drejtat e autorit © 2025 Ascensio System SIA. Të gjitha të drejtat e rezervuara.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Të drejtat e autorit © 2026 Ascensio System SIA. Të gjitha të drejtat e rezervuara.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1435,8 +1435,8 @@ Periudha e provës do të përfundojë për %d ditë, pas kësaj ju nuk do të m
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Të drejtat e autorit © 2025 Ascensio System SIA. Të gjitha të drejtat e rezervuara.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Të drejtat e autorit © 2026 Ascensio System SIA. Të gjitha të drejtat e rezervuara.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

@@ -40,8 +40,8 @@
     const THEME_TYPE_DARK = 'dark';
     const THEME_TYPE_SYSTEM = 'system';
 
-    const THEME_ID_DEFAULT_LIGHT = 'theme-classic-light';
-    const THEME_ID_DEFAULT_DARK = 'theme-dark';
+    const THEME_ID_DEFAULT_LIGHT = 'theme-white';
+    const THEME_ID_DEFAULT_DARK = 'theme-night';
 
     const themes_map = {
         'theme-system': {
@@ -67,6 +67,14 @@
         'theme-gray': {
             text: utils.Lang.settOptThemeGray,
             type: 'light',
+        },
+        'theme-white': {
+            text: utils.Lang.settOptThemeWhite,
+            type: 'light',
+        },
+        'theme-night': {
+            text: utils.Lang.settOptThemeNight,
+            type: 'dark',
         },
     }
 
@@ -127,7 +135,7 @@
 
     uitheme.relevant_theme_id = function () {
         if ( this.is_theme_system() )
-            return this.is_system_theme_dark() ? 'theme-dark' : 'theme-classic-light';
+            return this.get_default_theme_for_type(this.is_system_theme_dark() ? THEME_TYPE_DARK : THEME_TYPE_LIGHT);
         return this.id;
     }
 
@@ -263,6 +271,12 @@
                                                 <label for="sett-gpu-mode" class='sett__caption' l10n>${_lang.settGpuUseMode} *</label>
                                             </section>
                                         </div>
+                                        <div class='settings-field' style='display:none;'>
+                                            <section class='switch-labeled hbox' id='sett-box-use-ai'>
+                                                <input type="checkbox" class="checkbox" id="sett-use-ai">
+                                                <label for="sett-use-ai" class='sett__caption' l10n>${_lang.settUseAI} *</label>
+                                            </section>
+                                        </div>
                                         <!-- temporary elements section -->
                                         <div class='settings-field' style='display:none;'>
                                             <section class='switch-labeled hbox' id='sett-box-preview-mode'>
@@ -290,7 +304,8 @@
         args.itemcls = 'bottom';
         args.menu = '.main-column.tool-menu';
         args.field = '.main-column.col-center';
-        args.itemtext = _lang.actSettings;
+        // args.itemtext = _lang.actSettings;
+        args.tplItem = 'nomenuitem';
 
         baseView.prototype.constructor.call(this, args);
     };
@@ -311,7 +326,8 @@
             $optsSpellcheckMode,
             $optsLaunchMode,
             $optsAutoupdateMode;
-        let $chGpu;
+        let $chGpu,
+            $chUseAI;
         let appSettings;
 
         function _set_user_name(name) {
@@ -326,6 +342,9 @@
 
             const theme_id = uitheme.relevant_theme_id();
             if ( !$("body").hasClass(theme_id) ) {
+                if ( !type && themes_map[theme_id] )
+                    type = themes_map[theme_id].type;
+
                 const _type = (type == 'dark' || /theme-(?:[a-z]+-)?dark(?:-[a-z]*)?/.test(theme_id)) ? 'theme-type-dark' : 'theme-type-light';
                 const _cls = document.body.className.replace(/theme-[\w-]+/gi,'').trim();
                 document.body.className = `${_cls?_cls+' ':''}${theme_id} ${_type}`;
@@ -450,6 +469,15 @@
                     if ( appSettings.usegpu != _new_settings.usegpu ) {
                         _new_settings.restart = true;
                         appSettings.usegpu = _new_settings.usegpu;
+                    }
+                }
+
+                if ( $chUseAI ) {
+                    _new_settings.useai = $chUseAI.prop("checked");
+
+                    if ( appSettings.useai != _new_settings.useai ) {
+                        _new_settings.restart = true;
+                        appSettings.useai = _new_settings.useai;
                     }
                 }
 
@@ -620,7 +648,7 @@
                                 }
                             }
                         }
-                        _apply_theme(!!appSettings.uitheme ? appSettings.uitheme : 'theme-classic-light');
+                        _apply_theme(!!appSettings.uitheme ? appSettings.uitheme : THEME_ID_DEFAULT_LIGHT);
 
                         if ( appSettings.editorwindowmode !== undefined ) {
                             ($optsLaunchMode = ($('#opts-launch-mode', $panel).show().find('select')))
@@ -665,6 +693,14 @@
                         if ( appSettings.usegpu !== undefined ) {
                             $chGpu = $('#sett-box-gpu-mode', $panel).parent().show().find('#sett-gpu-mode');
                             $chGpu.prop('checked', !!appSettings.usegpu)
+                                .on('change', e => {
+                                    $btnApply.isdisabled() && $btnApply.disable(false);
+                                });
+                        }
+
+                        if ( appSettings.useai !== undefined ) {
+                            $chUseAI = $('#sett-box-use-ai', $panel).parent().show().find('#sett-use-ai');
+                            $chUseAI.prop('checked', !!appSettings.useai)
                                 .on('change', e => {
                                     $btnApply.isdisabled() && $btnApply.disable(false);
                                 });
@@ -899,6 +935,12 @@
                 $(window).on('resize', on_window_resize.bind(this));
                 CommonEvents.on('panel:show', on_panel_show.bind(this));
                 CommonEvents.on('lang:changed', _on_lang_changed.bind(this));
+
+                const badge_new_feat = '<span class="new-feat-badge">NEW</span>';
+                $panel.find('#sett-box-use-ai label').after(badge_new_feat);
+                if (utils.isMacOS) {
+                    $panel.find('#opts-launch-mode label').after(badge_new_feat);
+                }
 
                 return this;
             },

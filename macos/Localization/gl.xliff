@@ -478,7 +478,7 @@ Temos unha oferta especial para ti.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Novo formulario PDF</target>
+        <target>Novo PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1376,8 +1376,8 @@ Finalizará en %d días, despois disto non poderás crear e editar documentos.</
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Copyright © 2025 Ascensio System SIA. Todos os dereitos reservados.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Copyright © 2026 Ascensio System SIA. Todos os dereitos reservados.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

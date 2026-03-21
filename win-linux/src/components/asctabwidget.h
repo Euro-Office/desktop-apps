@@ -177,6 +177,9 @@ public:
     QString     urlByView(int id);
     bool        modifiedByIndex(int);
     bool        isLocalByIndex(int);
+    bool        slideshowHoldView(int id) const;
+    bool        slideshowHoldViewByTitle(const QString&, AscEditorType) const;
+    bool        slideshowHoldViewByUrl(const QString&) const;
     int         modifiedCount();
     bool        closedByIndex(int);
     void        editorCloseRequest(int);

@@ -44,6 +44,7 @@
 #import "NSImage+Extensions.h"
 #import "ASCButtonCell.h"
 #import "NSApplication+Extensions.h"
+#import "ASCThemesController.h"
 
 @interface ASCTabViewCell()
 @property (nonatomic) NSImageView * animatedImageView;
@@ -66,7 +67,7 @@
         return _loaderLayer;
     }
 
-    NSImage * loaderImage = [NSApplication isSystemDarkMode]
+    NSImage * loaderImage = [ASCThemesController isDarkWindowAppearance]
         ? [NSImage imageNamed:@"tab-loader-light"]
         : [NSImage imageNamed:@"tab-loader-dark"];
 
@@ -203,7 +204,7 @@
 //        (self.isHover) ? NSLog(@"Hover %@ TRUE", [self className]) : NSLog(@"Hover %@ FALSE", [self className]);
     }
 
-    self.isLight = [color isLight] || ([NSApplication isSystemDarkMode] ? false : [color alphaComponent] < 0.5);
+    self.isLight = [color isLight] || ([ASCThemesController isDarkWindowAppearance] ? false : [color alphaComponent] < 0.5);
 
     // Rectangle Drawing
     NSRect rectangleRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, cellFrame.size.width, cellFrame.size.height);

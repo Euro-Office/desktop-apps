@@ -50,6 +50,7 @@ public:
     CDownloader();
     ~CDownloader();
 
+    bool isUrlAccessible(const wstring &url);
     void queryContentLenght(const wstring &url);
     void downloadFile(const wstring &url, const wstring &filePath);
     void start();

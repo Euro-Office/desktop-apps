@@ -77,7 +77,7 @@
 "new-document" = "Нов документ";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Нов PDF формуляр";
+"new-pdfform" = "Нов PDF";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Нова презентация";
@@ -192,6 +192,33 @@
 
 /* No comment provided by engineer. */
 "XML Paper Specification" = "OpenXPS Документ (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Показване на главния прозорец";
+
+/* No comment provided by engineer. */
+"Close" = "Затвори";
+
+/* No comment provided by engineer. */
+"Close saved" = "Затвори запазеното";
+
+/* No comment provided by engineer. */
+"Close all" = "Затвори всички";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Покажи в папка";
+
+/* No comment provided by engineer. */
+"Move to start" = "Премести в началото";
+
+/* No comment provided by engineer. */
+"Move to end" = "Премести до края";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Откачване на раздела";
+
+/* No comment provided by engineer. */
+"Create new" = "Създай нов";
 
 /* No comment provided by engineer. */
 "Yes" = "Да";

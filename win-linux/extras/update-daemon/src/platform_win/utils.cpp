@@ -153,6 +153,17 @@ namespace NS_Utils
         return L"";
     }
 
+    wstring cmdArgsAsString()
+    {
+        if (cmd_args.empty())
+            return L"";
+        wstring args = cmd_args[0];
+        for (size_t i = 1; i < cmd_args.size(); ++i) {
+            args += L" " + cmd_args[i];
+        }
+        return args;
+    }
+
     wstring GetLastErrorAsString()
     {
         DWORD errID = ::GetLastError();
@@ -252,6 +263,30 @@ namespace NS_File
         }
         FindClose(hFind);
         return true;
+    }
+
+    std::vector<wstring> findFilesByPattern(const wstring &path, const wstring &pattern)
+    {
+        std::vector<wstring> result;
+        wstring searchPath = toNativeSeparators(path) + L"\\" + pattern;
+        if (searchPath.size() > MAX_PATH - 1) {
+            return result;
+        }
+
+        WIN32_FIND_DATAW ffd;
+        HANDLE hFind = FindFirstFile(searchPath.c_str(), &ffd);
+        if (hFind == INVALID_HANDLE_VALUE)
+            return result;
+
+        do {
+            if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                result.push_back(L"/" + wstring(ffd.cFileName));
+            }
+
+        } while (FindNextFile(hFind, &ffd) != 0);
+
+        FindClose(hFind);
+        return result;
     }
 
     bool readFile(const wstring &filePath, list<wstring> &linesList)
@@ -393,8 +428,9 @@ namespace NS_File
         return false;
     }
 
-    bool isProcessRunning(const wstring &fileName)
+    bool isProcessRunning(const wstring &filePath)
     {
+        wstring fileName = filePath.substr(filePath.find_last_of(L"\\/") + 1);
         HANDLE snapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
         if (snapShot == INVALID_HANDLE_VALUE)
             return false;
@@ -408,8 +444,19 @@ namespace NS_File
 
         do {
             if (lstrcmpi(entry.szExeFile, fileName.c_str()) == 0) {
-                CloseHandle(snapShot);
-                return true;
+                HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, entry.th32ProcessID);
+                if (hProcess) {
+                    WCHAR processPath[MAX_PATH];
+                    DWORD pathSize = MAX_PATH;
+                    if (QueryFullProcessImageNameW(hProcess, 0, processPath, &pathSize)) {
+                        if (lstrcmpi(processPath, filePath.c_str()) == 0) {
+                            CloseHandle(hProcess);
+                            CloseHandle(snapShot);
+                            return true;
+                        }
+                    }
+                    CloseHandle(hProcess);
+                }
             }
         } while (Process32Next(snapShot, &entry));
 
@@ -501,9 +548,50 @@ namespace NS_File
         return SUCCEEDED(hr);
     }
 
-    bool removeFile(const wstring &filePath)
+    bool removeFile(const wstring &filePath, bool safeMode)
     {
-        return DeleteFile(filePath.c_str()) != 0;
+        if (!safeMode)
+            return DeleteFileW(filePath.c_str()) != 0;
+
+        HANDLE hFile = CreateFileW(filePath.c_str(), DELETE | SYNCHRONIZE, 
+                                   FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                                   NULL, OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT, NULL);
+
+        if (hFile == INVALID_HANDLE_VALUE) {
+            DWORD error = GetLastError();
+            if (error == ERROR_FILE_NOT_FOUND) {
+                return true;
+            }
+            if (error == ERROR_SHARING_VIOLATION || error == ERROR_LOCK_VIOLATION) {
+                // File is locked, skipping deletion
+                return false;
+            }
+            return false;
+        }
+
+        // Get attributes via handle to avoid TOCTOU
+        FILE_ATTRIBUTE_TAG_INFO tagInfo;
+        if (!GetFileInformationByHandleEx(hFile, FileAttributeTagInfo, &tagInfo, sizeof(tagInfo))) {
+            CloseHandle(hFile);
+            return false;
+        }
+
+        if (tagInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            CloseHandle(hFile);
+            return false;
+        }
+
+        if (tagInfo.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+            CloseHandle(hFile);
+            // Refusing to delete reparse point
+            return false;
+        }        
+
+        FILE_DISPOSITION_INFO fdi = { TRUE };
+        BOOL result = SetFileInformationByHandle(hFile, FileDispositionInfo, &fdi, sizeof(fdi));
+        CloseHandle(hFile);
+
+        return result != FALSE;
     }
 
     bool removeDirRecursively(const wstring &dir)
@@ -576,7 +664,7 @@ namespace NS_File
     wstring tempPath()
     {
         if (NS_Utils::isRunAsApp()) {
-            WCHAR buff[MAX_PATH + 1] = {0};
+            WCHAR buff[MAX_PATH + 2] = {0};
             DWORD res = ::GetTempPath(MAX_PATH + 1, buff);
             if (res != 0) {
                 buff[res - 1] = '\0';
@@ -681,28 +769,36 @@ namespace NS_File
 
     bool verifyEmbeddedSignature(const wstring &fileName)
     {
-        WINTRUST_FILE_INFO fileInfo;
-        ZeroMemory(&fileInfo, sizeof(fileInfo));
-        fileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO);
-        fileInfo.pcwszFilePath = fileName.c_str();
-        fileInfo.hFile = NULL;
-        fileInfo.pgKnownSubject = NULL;
+        WINTRUST_FILE_INFO wfi;
+        ZeroMemory(&wfi, sizeof(wfi));
+        wfi.cbStruct = sizeof(WINTRUST_FILE_INFO);
+        wfi.pcwszFilePath = fileName.c_str();
+        wfi.hFile = NULL;
+        wfi.pgKnownSubject = NULL;
 
-        GUID guidAction = WINTRUST_ACTION_GENERIC_VERIFY_V2;
-        WINTRUST_DATA winTrustData;
-        ZeroMemory(&winTrustData, sizeof(winTrustData));
-        winTrustData.cbStruct = sizeof(WINTRUST_DATA);
-        winTrustData.pPolicyCallbackData = NULL;
-        winTrustData.pSIPClientData = NULL;
-        winTrustData.dwUIChoice = WTD_UI_NONE;
-        winTrustData.fdwRevocationChecks = WTD_REVOKE_NONE;
-        winTrustData.dwUnionChoice = WTD_CHOICE_FILE;
-        winTrustData.dwStateAction = WTD_STATEACTION_VERIFY;
-        winTrustData.hWVTStateData = NULL;
-        winTrustData.pwszURLReference = NULL;
-        winTrustData.dwUIContext = 0;
-        winTrustData.pFile = &fileInfo;
-        return WinVerifyTrust(NULL, &guidAction, &winTrustData) == ERROR_SUCCESS;
+        WINTRUST_DATA wtd;
+        ZeroMemory(&wtd, sizeof(wtd));
+        wtd.cbStruct = sizeof(WINTRUST_DATA);
+        wtd.pPolicyCallbackData = NULL;
+        wtd.pSIPClientData = NULL;
+        wtd.dwUIChoice = WTD_UI_NONE;
+        wtd.fdwRevocationChecks = WTD_REVOKE_NONE;
+        wtd.dwUnionChoice = WTD_CHOICE_FILE;
+        wtd.dwStateAction = WTD_STATEACTION_VERIFY;
+        wtd.hWVTStateData = NULL;
+        wtd.pwszURLReference = NULL;
+        wtd.dwUIContext = 0;
+        wtd.pFile = &wfi;
+
+        GUID action = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+        LONG res = WinVerifyTrust(NULL, &action, &wtd);
+
+        if (wtd.hWVTStateData) {
+            wtd.dwStateAction = WTD_STATEACTION_CLOSE;
+            WinVerifyTrust(NULL, &action, &wtd);
+        }
+
+        return (res == ERROR_SUCCESS);
     }
 }
 
@@ -718,12 +814,12 @@ namespace NS_Logger
     void WriteLog(const wstring &log, bool showMessage)
     {
         if (allow_write_log) {
-            wstring filpPath(NS_File::appPath() + L"/service_log.txt");
+            wstring filpPath(NS_File::tempPath() + L"/oo_service_log.txt");
             std::wofstream file(filpPath.c_str(), std::ios::app);
             if (!file.is_open()) {
                 return;
             }
-            file << log << std::endl;
+            file << log << wstring(L"\n") << std::endl;
             file.close();
         }
         if (showMessage)

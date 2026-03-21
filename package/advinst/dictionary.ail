@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DICTIONARY type="multilanguage" ignore="en">
+  <!-- Dialog table -->
+  <ENTRY id="Dialog.FileAssociationsDlg">
+    <STRING lang="en" value="[ProductName] [Setup]"/>
+    <STRING lang="ar" value="[Setup] [ProductName]"/>
+    <STRING lang="be" value="[ProductName] [Setup]"/>
+    <STRING lang="bg" value="[ProductName] [Setup]"/>
+    <STRING lang="ca" value="[Setup] de [ProductName]"/>
+    <STRING lang="cs" value="[Setup] [ProductName]"/>
+    <STRING lang="da" value="[ProductName] [Setup]"/>
+    <STRING lang="de" value="[ProductName] [Setup]"/>
+    <STRING lang="el" value="[Setup] [ProductName]"/>
+    <STRING lang="en_GB" value="[ProductName] [Setup]"/>
+    <STRING lang="es" value="[Setup] de [ProductName]"/>
+    <STRING lang="fi" value="Tuotteen [ProductName] [Setup]"/>
+    <STRING lang="fr" value="[Setup] [ProductName]"/>
+    <STRING lang="gl" value="[ProductName] [Setup]"/>
+    <STRING lang="he" value="[ProductName] [Setup]"/>
+    <STRING lang="hu" value="[ProductName] [Setup]"/>
+    <STRING lang="id" value="[ProductName] [Setup]"/>
+    <STRING lang="it" value="[Setup] [ProductName]"/>
+    <STRING lang="ja" value="[ProductName] [Setup]"/>
+    <STRING lang="ko" value="[ProductName] 설치"/>
+    <STRING lang="lv" value="[ProductName] [Setup]"/>
+    <STRING lang="nb" value="[Setup] av [ProductName]"/>
+    <STRING lang="nl" value="[ProductName] [Setup]"/>
+    <STRING lang="pl" value="[ProductName] [Setup]"/>
+    <STRING lang="pt" value="[Setup] do [ProductName]"/>
+    <STRING lang="pt_BR" value="[Setup] do [ProductName]"/>
+    <STRING lang="ro" value="[ProductName] [Setup]"/>
+    <STRING lang="ru" value="[ProductName] [Setup]"/>
+    <STRING lang="sk" value="[ProductName] [Setup]"/>
+    <STRING lang="sl" value="[Setup] [ProductName]"/>
+    <STRING lang="sq" value="[Setup] të [ProductName]"/>
+    <STRING lang="sr_SP_Cyrillic" value="[ProductName] [Setup]"/>
+    <STRING lang="sr_SP_Latin" value="[ProductName] [Setup]"/>
+    <STRING lang="sv" value="[ProductName] [Setup]"/>
+    <STRING lang="tr" value="[ProductName] [Setup]"/>
+    <STRING lang="uk" value="[ProductName] [Setup]"/>
+    <STRING lang="ur" value="[ProductName] [Setup]"/>
+    <STRING lang="vi" value="[ProductName] [Setup]"/>
+    <STRING lang="zh" value="[ProductName] [Setup]"/>
+    <STRING lang="zh_TW" value="[ProductName] [Setup]"/>
+  </ENTRY>
+  <ENTRY id="Dialog.ShortcutsDlg">
+    <STRING lang="en" value="[ProductName] [Setup]"/>
+    <STRING lang="cs" value="[Setup] [ProductName]"/>
+    <STRING lang="el" value="[Setup] [ProductName]"/>
+    <STRING lang="fi" value="Tuotteen [ProductName] [Setup]"/>
+    <STRING lang="nb" value="[Setup] av [ProductName]"/>
+    <STRING lang="pt" value="[Setup] do [ProductName]"/>
+    <STRING lang="pt_BR" value="[Setup] do [ProductName]"/>
+    <STRING lang="sl" value="[Setup] [ProductName]"/>
+  </ENTRY>
+  <!-- Property table -->
+  <ENTRY id="Property.ARPCOMMENTS">
+    <STRING lang="en" value="Free desktop office suite for document editing and collaboration"/>
+    <STRING lang="ar" value="حزمة برامج مكتبية مجانية لتحرير المستندات والتعاون لإنجازها مع رفقائك"/>
+    <STRING lang="be" value="Бясплатны настольны офісны пакет для рэдагавання дакументаў і сумеснай працы"/>
+    <STRING lang="bg" value="Безплатен офис пакет за редактиране и съвместна работа по документи"/>
+    <STRING lang="ca" value="Suite d&apos;oficina gratuïta per a l&apos;edició de documents i col·laboració"/>
+    <STRING lang="cs" value="Volně dostupný desktopový balíček pro úpravu dokumentů a spolupráci"/>
+    <STRING lang="da" value="Gratis skrivebord office-pakke til dokumentredigering og samarbejde"/>
+    <STRING lang="de" value="Kostenlose Desktop-Office-Suite für Dokumentenbearbeitung und Zusammenarbeit"/>
+    <STRING lang="el" value="Δωρεάν σουίτα γραφείου για επεξεργασία και συνεργασία εγγράφων"/>
+    <STRING lang="en_GB" value="Free desktop office suite for document editing and collaboration"/>
+    <STRING lang="es" value="Paquete desktop de oficina gratuito para edición de documentos y colaboración"/>
+    <STRING lang="fi" value="Ilmainen työpöytä-liittymä dokumenttien muokkaamiseen ja jakamiseen"/>
+    <STRING lang="fr" value="Suite bureautique d&apos;applications de bureau gratuite pour l&apos;édition de documents et la collaboration"/>
+    <STRING lang="gl" value="Suite ofimática de escritorio gratuíta para a edición e colaboración de documentos"/>
+    <STRING lang="he" value="חבילת תוכנות משרדיות חינמית לשולחן העבודה לעריכת מסמכים ושיתוף פעולה"/>
+    <STRING lang="hu" value="Ingyenes asztali office-programcsomag dokumentumszerkesztéshez és csoportmunkához"/>
+    <STRING lang="id" value="Gratis kumpulan desktop office untuk mengedit dokumen dan berkolaborasi"/>
+    <STRING lang="it" value="Suite gratuita per l&apos;ufficio desktop per la modifica e la collaborazione in tempo reale di documenti"/>
+    <STRING lang="ja" value="ドキュメント編集と共同編集用の無料デスクトップオフィススイート"/>
+    <STRING lang="ko" value="문서 편집 및 공동 작업을 위한 무료 데스크탑 오피스 스위트"/>
+    <STRING lang="lv" value="Bezmaksas biroja komplekts dokumentu rediģēšanai un sadarbībai"/>
+    <STRING lang="nb" value="Gratis office-pakke til PC for dokumentredigering og samarbeid med andre"/>
+    <STRING lang="nl" value="Gratis desktop office suite voor documentbewerking en samenwerking"/>
+    <STRING lang="pl" value="Bezpłatny pakiet biurowy do edycji dokumentów i kolaboracji"/>
+    <STRING lang="pt" value="Suite do Office para desktop gratuita para edição de documentos e colaboração"/>
+    <STRING lang="pt_BR" value="Pacote office para desktop gratuito para edição e colaboração em documentos"/>
+    <STRING lang="ro" value="Suitã de birou gratuitã pentru editarea și colaborarea pe documente"/>
+    <STRING lang="ru" value="Бесплатный десктопный офисный пакет для редактирования документов и совместной работы"/>
+    <STRING lang="sk" value="Bezplatná balík kancelárskych programov na úpravu dokumentov a spoluprácu"/>
+    <STRING lang="sl" value="Brezplačen paket za namizje za urejanje dokumentov in sodelovanje z drugimi"/>
+    <STRING lang="sq" value="Pako falas për zyrën në desktop për redaktimin dhe bashkëpunimin në dokumente"/>
+    <STRING lang="sr_SP_Cyrillic" value="Бесплатни десктоп офис пакет за уређивање докумената и сарадњу"/>
+    <STRING lang="sr_SP_Latin" value="Besplatni desktop ofis paket za uređivanje dokumenata i saradnju"/>
+    <STRING lang="sv" value="Gratis stationär kontorssvit för dokumentredigering och samarbete"/>
+    <STRING lang="tr" value="Belge düzenleme ve işbirliği için ücretsiz masaüstü ofis program paketi"/>
+    <STRING lang="uk" value="Безкоштовний пакет настільних офісних програм для редагування документів та спільної роботи"/>
+    <STRING lang="ur" value="دستاویز میں ترمیم اور تعاون کے لیے مفت ڈیسک ٹاپ آفس سویٹ"/>
+    <STRING lang="vi" value="Bộ công cụ văn phòng dành cho máy tính miễn phí để chỉnh sửa tài liệu và cùng làm việc"/>
+    <STRING lang="zh" value="用于文档编辑和协作的免费桌面办公套件"/>
+    <STRING lang="zh_TW" value="使用於檔案編輯和協作的免費桌面辦公套件"/>
+  </ENTRY>
+  <ENTRY id="Property.EMPTY_LANG_DIR">
+    <STRING lang="en" value="en-US"/>
+    <STRING lang="ar" value="ar-SA"/>
+    <STRING lang="be" value="default"/>
+    <STRING lang="bg" value="bg-BG"/>
+    <STRING lang="ca" value="ca-ES"/>
+    <STRING lang="cs" value="cs-CZ"/>
+    <STRING lang="da" value="da-DK"/>
+    <STRING lang="de" value="de-DE"/>
+    <STRING lang="el" value="el-GR"/>
+    <STRING lang="en_GB" value="en-GB"/>
+    <STRING lang="es" value="es-ES"/>
+    <STRING lang="fi" value="fi-FI"/>
+    <STRING lang="fr" value="fr-FR"/>
+    <STRING lang="gl" value="gl-ES"/>
+    <STRING lang="he" value="he-IL"/>
+    <STRING lang="hu" value="hu-HU"/>
+    <STRING lang="id" value="id-ID"/>
+    <STRING lang="it" value="it-IT"/>
+    <STRING lang="ja" value="ja-JP"/>
+    <STRING lang="ko" value="ko-KR"/>
+    <STRING lang="lv" value="lv-LV"/>
+    <STRING lang="nb" value="nb-NO"/>
+    <STRING lang="nl" value="nl-NL"/>
+    <STRING lang="pl" value="pl-PL"/>
+    <STRING lang="pt" value="pt-PT"/>
+    <STRING lang="pt_BR" value="pt-BR"/>
+    <STRING lang="ro" value="ro-RO"/>
+    <STRING lang="ru" value="ru-RU"/>
+    <STRING lang="sk" value="sk-SK"/>
+    <STRING lang="sl" value="sl-SI"/>
+    <STRING lang="sq" value="sq-AL"/>
+    <STRING lang="sr_SP_Cyrillic" value="sr-Cyrl-RS"/>
+    <STRING lang="sr_SP_Latin" value="sr-Latn-RS"/>
+    <STRING lang="sv" value="sv-SE"/>
+    <STRING lang="tr" value="tr-TR"/>
+    <STRING lang="uk" value="uk-UA"/>
+    <STRING lang="ur" value="ur-PK"/>
+    <STRING lang="vi" value="vi-VN"/>
+    <STRING lang="zh" value="zh-CN"/>
+    <STRING lang="zh_TW" value="zh-TW"/>
+  </ENTRY>
+  <ENTRY id="Property.LOCALE">
+    <STRING lang="en" value="en-US"/>
+    <STRING lang="ar" value="ar-SA"/>
+    <STRING lang="be" value="be-BY"/>
+    <STRING lang="bg" value="bg-BG"/>
+    <STRING lang="ca" value="ca-ES"/>
+    <STRING lang="cs" value="cs-CZ"/>
+    <STRING lang="da" value="da-DK"/>
+    <STRING lang="de" value="de-DE"/>
+    <STRING lang="el" value="el-GR"/>
+    <STRING lang="en_GB" value="en-GB"/>
+    <STRING lang="es" value="es-ES"/>
+    <STRING lang="fi" value="fi-FI"/>
+    <STRING lang="fr" value="fr-FR"/>
+    <STRING lang="gl" value="gl-ES"/>
+    <STRING lang="he" value="he-IL"/>
+    <STRING lang="hu" value="hu-HU"/>
+    <STRING lang="id" value="id-ID"/>
+    <STRING lang="it" value="it-IT"/>
+    <STRING lang="ja" value="ja-JP"/>
+    <STRING lang="ko" value="ko-KR"/>
+    <STRING lang="lv" value="lv-LV"/>
+    <STRING lang="nb" value="no-NO"/>
+    <STRING lang="nl" value="nl-NL"/>
+    <STRING lang="pl" value="pl-PL"/>
+    <STRING lang="pt" value="pt-PT"/>
+    <STRING lang="pt_BR" value="pt-BR"/>
+    <STRING lang="ro" value="ro-RO"/>
+    <STRING lang="ru" value="ru-RU"/>
+    <STRING lang="sk" value="sk-SK"/>
+    <STRING lang="sl" value="sl-SI"/>
+    <STRING lang="sq" value="sq-AL"/>
+    <STRING lang="sr_SP_Cyrillic" value="sr-Cyrl-RS"/>
+    <STRING lang="sr_SP_Latin" value="sr-Latn-RS"/>
+    <STRING lang="sv" value="sv-SE"/>
+    <STRING lang="tr" value="tr-TR"/>
+    <STRING lang="uk" value="uk-UA"/>
+    <STRING lang="ur" value="ur-PK"/>
+    <STRING lang="vi" value="vi-VN"/>
+    <STRING lang="zh" value="zh-CN"/>
+    <STRING lang="zh_TW" value="zh-TW"/>
+  </ENTRY>
+  <ENTRY id="Property.MismatchInstalledArch_ErrorText">
+    <STRING lang="en" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ar" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="be" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="bg" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ca" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="cs" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="da" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="de" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="el" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="en_GB" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="es" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="fi" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="fr" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="gl" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="he" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="hu" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="id" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="it" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ja" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ko" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="lv" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="nb" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="nl" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pl" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pt" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pt_BR" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ro" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ru" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sk" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sl" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sq" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sr_SP_Cyrillic" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sr_SP_Latin" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sv" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="tr" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="uk" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ur" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="vi" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="zh" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="zh_TW" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+  </ENTRY>
+  <ENTRY id="Property.MismatchInstalledEdition_ErrorText">
+    <STRING lang="en" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ar" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="be" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="bg" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ca" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="cs" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="da" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="de" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="el" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="en_GB" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="es" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="fi" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="fr" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="gl" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="he" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="hu" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="id" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="it" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ja" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ko" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="lv" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="nb" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="nl" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pl" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pt" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pt_BR" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ro" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ru" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sk" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sl" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sq" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sr_SP_Cyrillic" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sr_SP_Latin" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sv" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="tr" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="uk" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ur" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="vi" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="zh" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="zh_TW" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+  </ENTRY>
+  <ENTRY id="Property.MismatchInstalledType_ErrorText">
+    <STRING lang="en" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ar" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="be" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="bg" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ca" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="cs" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="da" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="de" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="el" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="en_GB" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="es" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="fi" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="fr" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="gl" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="he" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="hu" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="id" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="it" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ja" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ko" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="lv" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="nb" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="nl" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pl" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pt" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="pt_BR" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ro" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ru" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sk" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sl" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sq" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sr_SP_Cyrillic" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sr_SP_Latin" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="sv" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="tr" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="uk" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="ur" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="vi" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="zh" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="zh_TW" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+  </ENTRY>
+  <ENTRY id="Property.NewDocument">
+    <STRING lang="en" value="New document"/>
+    <STRING lang="ar" value="مستند جديد"/>
+    <STRING lang="be" value="Новы дакумент"/>
+    <STRING lang="bg" value="Нов документ"/>
+    <STRING lang="ca" value="Nou document"/>
+    <STRING lang="cs" value="Nový dokument"/>
+    <STRING lang="da" value="Nyt dokument"/>
+    <STRING lang="de" value="Neues Dokument"/>
+    <STRING lang="el" value="Νέο έγγραφο"/>
+    <STRING lang="en_GB" value="New document"/>
+    <STRING lang="es" value="Nuevo Documento"/>
+    <STRING lang="fi" value="Uusi asiakirja"/>
+    <STRING lang="fr" value="Nouveau document"/>
+    <STRING lang="gl" value="Novo documento"/>
+    <STRING lang="he" value="מסמך חדש"/>
+    <STRING lang="hu" value="Új dokumentum"/>
+    <STRING lang="id" value="Dokumen baru"/>
+    <STRING lang="it" value="Nuovo documento"/>
+    <STRING lang="ja" value="新しいドキュメント"/>
+    <STRING lang="ko" value="신규 문서"/>
+    <STRING lang="lv" value="Jauns dokuments"/>
+    <STRING lang="nb" value="Nytt dokument"/>
+    <STRING lang="nl" value="Nieuw Document"/>
+    <STRING lang="pl" value="Nowy dokument"/>
+    <STRING lang="pt" value="Novo documento"/>
+    <STRING lang="pt_BR" value="Novo Documento"/>
+    <STRING lang="ro" value="Document nou"/>
+    <STRING lang="ru" value="Новый документ"/>
+    <STRING lang="sk" value="Nový dokument"/>
+    <STRING lang="sl" value="Nov dokument"/>
+    <STRING lang="sq" value="Dokument i ri"/>
+    <STRING lang="sr_SP_Cyrillic" value="Нови документ"/>
+    <STRING lang="sr_SP_Latin" value="Novi dokument"/>
+    <STRING lang="sv" value="Nytt dokument"/>
+    <STRING lang="tr" value="Yeni Belge"/>
+    <STRING lang="uk" value="Новий документ"/>
+    <STRING lang="ur" value="نئی دستاویز"/>
+    <STRING lang="vi" value="Tài liệu mới"/>
+    <STRING lang="zh" value="新建文档"/>
+    <STRING lang="zh_TW" value="新文件"/>
+  </ENTRY>
+  <ENTRY id="Property.NewForm">
+    <STRING lang="en" value="New PDF"/>
+    <STRING lang="ar" value="PDF جديد"/>
+    <STRING lang="be" value="Новы PDF"/>
+    <STRING lang="bg" value="Нов PDF формуляр"/>
+    <STRING lang="ca" value="Nou PDF"/>
+    <STRING lang="cs" value="Nový PDF"/>
+    <STRING lang="da" value="Ny PDF"/>
+    <STRING lang="de" value="Neues PDF"/>
+    <STRING lang="el" value="Νέο PDF"/>
+    <STRING lang="en_GB" value="New PDF"/>
+    <STRING lang="es" value="Nuevo PDF"/>
+    <STRING lang="fi" value="Uusi PDF"/>
+    <STRING lang="fr" value="Nouveau PDF"/>
+    <STRING lang="gl" value="Novo PDF"/>
+    <STRING lang="he" value="PDF חדש"/>
+    <STRING lang="hu" value="Új PDF"/>
+    <STRING lang="id" value="PDF baru"/>
+    <STRING lang="it" value="Nuovo PDF"/>
+    <STRING lang="ja" value="新しいPDF"/>
+    <STRING lang="ko" value="새로운 PDF"/>
+    <STRING lang="lv" value="Jauns PDF"/>
+    <STRING lang="nb" value="Ny PDF"/>
+    <STRING lang="nl" value="Nieuw PDF"/>
+    <STRING lang="pl" value="Nowy PDF"/>
+    <STRING lang="pt" value="Novo PDF"/>
+    <STRING lang="pt_BR" value="Novo PDF"/>
+    <STRING lang="ro" value="PDF nou"/>
+    <STRING lang="ru" value="Новый PDF"/>
+    <STRING lang="sk" value="Nový PDF"/>
+    <STRING lang="sl" value="Novi PDF"/>
+    <STRING lang="sq" value="PDF i ri"/>
+    <STRING lang="sr_SP_Cyrillic" value="Нови PDF"/>
+    <STRING lang="sr_SP_Latin" value="Novi PDF"/>
+    <STRING lang="sv" value="Nytt PDF"/>
+    <STRING lang="tr" value="Yeni PDF"/>
+    <STRING lang="uk" value="Нова PDF"/>
+    <STRING lang="ur" value="نیا پی ڈی ایف"/>
+    <STRING lang="vi" value="PDF mới"/>
+    <STRING lang="zh" value="新建 PDF"/>
+    <STRING lang="zh_TW" value="新的 PDF"/>
+  </ENTRY>
+  <ENTRY id="Property.NewPresentation">
+    <STRING lang="en" value="New presentation"/>
+    <STRING lang="ar" value="عرض تقديمي جديد"/>
+    <STRING lang="be" value="Новая прэзентацыя"/>
+    <STRING lang="bg" value="Нова презентация"/>
+    <STRING lang="ca" value="Nova presentació"/>
+    <STRING lang="cs" value="Nová prezentace"/>
+    <STRING lang="da" value="Ny præsentation"/>
+    <STRING lang="de" value="Neue Präsentation"/>
+    <STRING lang="el" value="Νέα παρουσίαση"/>
+    <STRING lang="en_GB" value="New presentation"/>
+    <STRING lang="es" value="Nueva Presentación"/>
+    <STRING lang="fi" value="Uusi esitys"/>
+    <STRING lang="fr" value="Nouvelle présentation"/>
+    <STRING lang="gl" value="Nova presentación"/>
+    <STRING lang="he" value="מצגת חדשה"/>
+    <STRING lang="hu" value="Új bemutató"/>
+    <STRING lang="id" value="Presentasi Baru"/>
+    <STRING lang="it" value="Nuova presentazione"/>
+    <STRING lang="ja" value="新しいプレゼンテーション"/>
+    <STRING lang="ko" value="새 프리젠 테이션"/>
+    <STRING lang="lv" value="Jauna prezentācija"/>
+    <STRING lang="nb" value="Ny presentasjon"/>
+    <STRING lang="nl" value="Nieuwe presentatie"/>
+    <STRING lang="pl" value="Nowa prezentacja"/>
+    <STRING lang="pt" value="Nova Apresentação"/>
+    <STRING lang="pt_BR" value="Nova apresentação"/>
+    <STRING lang="ro" value="Prezentare nouă"/>
+    <STRING lang="ru" value="Новая презентация"/>
+    <STRING lang="sk" value="Nová prezentácia"/>
+    <STRING lang="sl" value="Nova predstavitev"/>
+    <STRING lang="sq" value="Prezantim i ri"/>
+    <STRING lang="sr_SP_Cyrillic" value="Нова презентација"/>
+    <STRING lang="sr_SP_Latin" value="Nova prezentacija"/>
+    <STRING lang="sv" value="Ny presentation"/>
+    <STRING lang="tr" value="Yeni Sunum"/>
+    <STRING lang="uk" value="Нова презентація"/>
+    <STRING lang="ur" value="نئی پیشکش"/>
+    <STRING lang="vi" value="Bản trình chiếu mới"/>
+    <STRING lang="zh" value="新建幻灯片"/>
+    <STRING lang="zh_TW" value="新簡報"/>
+  </ENTRY>
+  <ENTRY id="Property.NewSpreadsheet">
+    <STRING lang="en" value="New spreadsheet"/>
+    <STRING lang="ar" value="جدول بياني جديد"/>
+    <STRING lang="be" value="Новая электронная табліца"/>
+    <STRING lang="bg" value="Нова електронна таблица"/>
+    <STRING lang="ca" value="Nou full de càlcul"/>
+    <STRING lang="cs" value="Nový sešit"/>
+    <STRING lang="da" value="Nyt regneark"/>
+    <STRING lang="de" value="Neue Tabelle"/>
+    <STRING lang="el" value="Νέο λογιστικό φύλλο"/>
+    <STRING lang="en_GB" value="New spreadsheet"/>
+    <STRING lang="es" value="Nueva Hoja de Cálculo"/>
+    <STRING lang="fi" value="Uusi laskentataulukko"/>
+    <STRING lang="fr" value="Nouvelle feuille de calcul"/>
+    <STRING lang="gl" value="Nova folla de cálculo"/>
+    <STRING lang="he" value="גיליון אלקטרוני חדש"/>
+    <STRING lang="hu" value="Új táblázat"/>
+    <STRING lang="id" value="Lembar kerja baru"/>
+    <STRING lang="it" value="Nuovo foglio elettronico"/>
+    <STRING lang="ja" value="新しいスプレッドシート"/>
+    <STRING lang="ko" value="새로운 스프레드 시트"/>
+    <STRING lang="lv" value="Jauna izklājlapa"/>
+    <STRING lang="nb" value="Nytt regneark"/>
+    <STRING lang="nl" value="Nieuw werkblad"/>
+    <STRING lang="pl" value="Nowy arkusz kalkulacyjny"/>
+    <STRING lang="pt" value="Nova folha de cálculo"/>
+    <STRING lang="pt_BR" value="Nova planilha"/>
+    <STRING lang="ro" value="Foaie de calcul nouă"/>
+    <STRING lang="ru" value="Новая таблица"/>
+    <STRING lang="sk" value="Nová tabuľka"/>
+    <STRING lang="sl" value="Nova razpredelnica"/>
+    <STRING lang="sq" value="Fletëllogaritëse e re"/>
+    <STRING lang="sr_SP_Cyrillic" value="Нова прорачунска табела"/>
+    <STRING lang="sr_SP_Latin" value="Nova proračunska tabela"/>
+    <STRING lang="sv" value="Nytt kalkylblad"/>
+    <STRING lang="tr" value="Yeni Hesap Tablosu"/>
+    <STRING lang="uk" value="Нова таблиця"/>
+    <STRING lang="ur" value="نئی اسپریڈشیٹ"/>
+    <STRING lang="vi" value="Bảng tính mới"/>
+    <STRING lang="zh" value="新建表格"/>
+    <STRING lang="zh_TW" value="新試算表"/>
+  </ENTRY>
+  <ENTRY id="Property.ServiceDescription">
+    <STRING lang="en" value="Update service for [|AppName]"/>
+    <STRING lang="ar" value="خدمة التحديث لـ [|AppName]"/>
+    <STRING lang="be" value="Update service for [|AppName]"/>
+    <STRING lang="bg" value="Update service for [|AppName]"/>
+    <STRING lang="ca" value="Update service for [|AppName]"/>
+    <STRING lang="cs" value="Služba aktualizace [|AppName]"/>
+    <STRING lang="da" value="Update service for [|AppName]"/>
+    <STRING lang="de" value="Update service for [|AppName]"/>
+    <STRING lang="el" value="Υπηρεσία για ενημέρωση [|AppName]"/>
+    <STRING lang="en_GB" value="Update service for [|AppName]"/>
+    <STRING lang="es" value="Update service for [|AppName]"/>
+    <STRING lang="fi" value="Palvelu päivitystä varten [|AppName]"/>
+    <STRING lang="fr" value="Service de mise à jour [|AppName]"/>
+    <STRING lang="gl" value="Update service for [|AppName]"/>
+    <STRING lang="he" value="שירות עדכון עבור [|AppName]"/>
+    <STRING lang="hu" value="Update service for [|AppName]"/>
+    <STRING lang="id" value="Update service for [|AppName]"/>
+    <STRING lang="it" value="Servizio per l&apos;aggiornamento [|AppName]"/>
+    <STRING lang="ja" value="アップデートサービス[|AppName]"/>
+    <STRING lang="ko" value="[|AppName] 업데이트 서비스"/>
+    <STRING lang="lv" value="Pakalpojums atjauninājumam [|AppName]"/>
+    <STRING lang="nb" value="Update service for [|AppName]"/>
+    <STRING lang="nl" value="Dienst voor update [|AppName]"/>
+    <STRING lang="pl" value="Usługa do aktualizacji [|AppName]"/>
+    <STRING lang="pt" value="Update service for [|AppName]"/>
+    <STRING lang="pt_BR" value="Serviço para atualização [|AppName]"/>
+    <STRING lang="ro" value="Serviciu de actualizare [|AppName]"/>
+    <STRING lang="ru" value="Сервис обновлений [|AppName]"/>
+    <STRING lang="sk" value="Služba aktualizácie [|AppName]"/>
+    <STRING lang="sl" value="Storitev za posodobitev [|AppName]"/>
+    <STRING lang="sq" value="Shërbimi i përditësimit për [|AppName]"/>
+    <STRING lang="sr_SP_Cyrillic" value="Ажурирај услугу за [|AppName]"/>
+    <STRING lang="sr_SP_Latin" value="Ažuriraj uslugu za [|AppName]"/>
+    <STRING lang="sv" value="Update service for [|AppName]"/>
+    <STRING lang="tr" value="[|AppName] için hizmet güncellemesi"/>
+    <STRING lang="uk" value="Сервіс для оновлення [|AppName]"/>
+    <STRING lang="ur" value="[|AppName] کے لیے سروس اپ ڈیٹ کریں"/>
+    <STRING lang="vi" value="Dịch vụ cập nhật [|AppName]"/>
+    <STRING lang="zh" value="Update service for [|AppName]"/>
+    <STRING lang="zh_TW" value="Update service for [|AppName]"/>
+  </ENTRY>
+  <ENTRY id="ButtonText_DeselectAll">
+    <STRING lang="en" value="Deselect All"/>
+    <STRING lang="ar" value="Deselect All"/>
+    <STRING lang="be" value="Deselect All"/>
+    <STRING lang="bg" value="Deselect All"/>
+    <STRING lang="ca" value="Deselect All"/>
+    <STRING lang="cs" value="Zrušit výběr všech"/>
+    <STRING lang="da" value="Deselect All"/>
+    <STRING lang="de" value="Alle abwählen"/>
+    <STRING lang="el" value="Deselect All"/>
+    <STRING lang="en_GB" value="Deselect All"/>
+    <STRING lang="es" value="Desmarcar todo"/>
+    <STRING lang="fi" value="Deselect All"/>
+    <STRING lang="fr" value="Désélectionner tout"/>
+    <STRING lang="gl" value="Deselect All"/>
+    <STRING lang="he" value="Deselect All"/>
+    <STRING lang="hu" value="Deselect All"/>
+    <STRING lang="id" value="Deselect All"/>
+    <STRING lang="it" value="Deselect All"/>
+    <STRING lang="ja" value="選択を解除"/>
+    <STRING lang="ko" value="Deselect All"/>
+    <STRING lang="lv" value="Deselect All"/>
+    <STRING lang="nb" value="Deselect All"/>
+    <STRING lang="nl" value="Deselect All"/>
+    <STRING lang="pl" value="Deselect All"/>
+    <STRING lang="pt" value="Desselecionar tudo"/>
+    <STRING lang="pt_BR" value="Desmarcar Todos"/>
+    <STRING lang="ro" value="Deselect All"/>
+    <STRING lang="ru" value="Снять выделение"/>
+    <STRING lang="sk" value="Deselect All"/>
+    <STRING lang="sl" value="Počistite vse"/>
+    <STRING lang="sq" value="Deselect All"/>
+    <STRING lang="sr_SP_Cyrillic" value="Deselect All"/>
+    <STRING lang="sr_SP_Latin" value="Deselect All"/>
+    <STRING lang="sv" value="Deselect All"/>
+    <STRING lang="tr" value="Deselect All"/>
+    <STRING lang="uk" value="Deselect All"/>
+    <STRING lang="ur" value="Deselect All"/>
+    <STRING lang="vi" value="Deselect All"/>
+    <STRING lang="zh" value="Deselect All"/>
+    <STRING lang="zh_TW" value="Deselect All"/>
+  </ENTRY>
+  <ENTRY id="ButtonText_SelectAll">
+    <STRING lang="en" value="Select All"/>
+    <STRING lang="ar" value="Select All"/>
+    <STRING lang="be" value="Select All"/>
+    <STRING lang="bg" value="Select All"/>
+    <STRING lang="ca" value="Select All"/>
+    <STRING lang="cs" value="Vybrat vše"/>
+    <STRING lang="da" value="Select All"/>
+    <STRING lang="de" value="Alle auswählen"/>
+    <STRING lang="el" value="Select All"/>
+    <STRING lang="en_GB" value="Select All"/>
+    <STRING lang="es" value="Seleccionar todo"/>
+    <STRING lang="fi" value="Select All"/>
+    <STRING lang="fr" value="Tout sélectionner"/>
+    <STRING lang="gl" value="Select All"/>
+    <STRING lang="he" value="Select All"/>
+    <STRING lang="hu" value="Select All"/>
+    <STRING lang="id" value="Select All"/>
+    <STRING lang="it" value="Select All"/>
+    <STRING lang="ja" value="すべて選択"/>
+    <STRING lang="ko" value="Select All"/>
+    <STRING lang="lv" value="Select All"/>
+    <STRING lang="nb" value="Select All"/>
+    <STRING lang="nl" value="Select All"/>
+    <STRING lang="pl" value="Select All"/>
+    <STRING lang="pt" value="Selecionar tudo"/>
+    <STRING lang="pt_BR" value="Selecionar Tudo"/>
+    <STRING lang="ro" value="Select All"/>
+    <STRING lang="ru" value="Выбрать все"/>
+    <STRING lang="sk" value="Select All"/>
+    <STRING lang="sl" value="Izberite vse"/>
+    <STRING lang="sq" value="Select All"/>
+    <STRING lang="sr_SP_Cyrillic" value="Select All"/>
+    <STRING lang="sr_SP_Latin" value="Select All"/>
+    <STRING lang="sv" value="Select All"/>
+    <STRING lang="tr" value="Select All"/>
+    <STRING lang="uk" value="Select All"/>
+    <STRING lang="ur" value="Select All"/>
+    <STRING lang="vi" value="Select All"/>
+    <STRING lang="zh" value="Select All"/>
+    <STRING lang="zh_TW" value="Select All"/>
+  </ENTRY>
+</DICTIONARY>

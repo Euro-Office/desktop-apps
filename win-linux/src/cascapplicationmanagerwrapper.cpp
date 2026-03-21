@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QDir>
 #include <QDateTime>
-#include <QDesktopWidget>
+#include <qtcomp/qdesktopwidget.h>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -28,6 +28,9 @@
 #include "cfilechecker.h"
 #include "OfficeFileFormats.h"
 #include "cproviders.h"
+#ifndef __OS_WIN_XP
+# include "components/cnotification.h"
+#endif
 
 #ifdef _WIN32
 # include <io.h>
@@ -37,6 +40,7 @@
 #else
 # include <unistd.h>
 # include "platform_linux/singleapplication.h"
+# include "platform_linux/xcbutils.h"
 # ifdef DOCUMENTSCORE_OPENSSL_SUPPORT
 #  include "platform_linux/cdialogcertificateinfo.h"
 # endif
@@ -54,6 +58,19 @@ using namespace std::placeholders;
 
 bool CAscApplicationManagerWrapper::m_rtlEnabled = false;
 
+std::wstring get_file_name_from_open_deeplink(const std::wstring& link)
+{
+    size_t pos1 = link.find(L"|n|");
+    if ( pos1 != std::wstring::npos ) {
+        size_t pos2 = link.find(L"|", pos1 += 3);
+
+        if ( pos2 != std::wstring::npos )
+            return link.substr(pos1, pos2 - pos1);
+    }
+
+    return L"";
+}
+
 CAscApplicationManagerWrapper::CAscApplicationManagerWrapper(CAscApplicationManagerWrapper const&)
 {
 
@@ -67,12 +84,23 @@ CAscApplicationManagerWrapper::CAscApplicationManagerWrapper(CAscApplicationMana
     , m_private(ptrprivate)
 {
     qRegisterMetaType<sWinTag>("sWinTag");
+#if defined(_WIN32) && !defined(QT_VERSION_6)
+    qRegisterMetaType<std::vector<std::wstring>>("std::vector<std::wstring>");
+#endif
     m_private->init();
     CAscApplicationManager::SetEventListener(this);
 
     QObject::connect(this, &CAscApplicationManagerWrapper::coreEvent, this, &CAscApplicationManagerWrapper::onCoreEvent);
     QObject::connect(CExistanceController::getInstance(), &CExistanceController::checked, this, &CAscApplicationManagerWrapper::onFileChecked);
     QObject::connect(&commonEvents(), &CEventDriver::onEditorClosed, this, &CAscApplicationManagerWrapper::onEditorWidgetClosed);
+#ifndef _CAN_SCALE_IMMEDIATELY
+    QObject::connect(this, &CAscApplicationManagerWrapper::aboutToQuit, this, [=]() {
+        if (!m_private->uiscaling.empty()) {
+            setUserSettings(L"system-scale", m_private->uiscaling != L"0" ? L"0" : L"1");
+            setUserSettings(L"force-scale", m_private->uiscaling == L"0" ? L"default" : m_private->uiscaling);
+        }
+    });
+#endif
 
     std::function<void(sWinTag)> callback_ = [&](sWinTag t){
         QMetaObject::invokeMethod(this, "onQueueCloseWindow", Qt::QueuedConnection, Q_ARG(sWinTag, t));
@@ -84,12 +112,6 @@ CAscApplicationManagerWrapper::CAscApplicationManagerWrapper(CAscApplicationMana
 
 CAscApplicationManagerWrapper::~CAscApplicationManagerWrapper()
 {
-#ifndef _CAN_SCALE_IMMEDIATELY
-    if (!m_private->uiscaling.empty()) {
-        setUserSettings(L"system-scale", m_private->uiscaling != L"0" ? L"0" : L"1");
-        setUserSettings(L"force-scale", m_private->uiscaling == L"0" ? L"default" : m_private->uiscaling);
-    }
-#endif
     delete m_queueToClose, m_queueToClose = nullptr;
 
     if ( m_pMainWindow ) {
@@ -305,8 +327,9 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
             return true;
         } else
         if ( cmd.find(L"app:onready") != std::wstring::npos ) {
+            GET_REGISTRY_SYSTEM(reg_system)
             GET_REGISTRY_USER(reg_user)
-            if (reg_user.value("lockPortals", false).toBool()
+            if (reg_system.value("lockPortals", false).toBool() || reg_user.value("lockPortals", false).toBool()
 #ifdef Q_OS_WIN
                     || Utils::getWinVersion() <= Utils::WinVer::WinVista
 #endif
@@ -330,6 +353,7 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
 #ifdef _UPDMODULE
         if ( !(cmd.find(L"updates:action") == std::wstring::npos) ) {   // params: check, download, install, abort
             if (m_pUpdateManager) {
+                CNotification::instance().clear();
                 const QString params = QString::fromStdWString(pData->get_Param());
                 if (params == "check") {
                     m_pUpdateManager->checkUpdates(true);
@@ -480,6 +504,15 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
             if ( it != m_receivers.cend() ) {
                 std::wstring param = L"{\"quickaccesschanged\":" + pData->get_Param() + L"}";
                 QMetaObject::invokeMethod(it->second, "onWebTitleChanged", Qt::QueuedConnection, Q_ARG(int, sid), Q_ARG(std::wstring, param));
+            }
+        } else
+        if ( !(cmd.find(L"recent:pinned") == std::wstring::npos) ) {
+            QJsonParseError jerror;
+            QJsonDocument jdoc = QJsonDocument::fromJson(QString::fromStdWString(pData->get_Param()).toUtf8(), &jerror);
+
+            if( jerror.error == QJsonParseError::NoError ) {
+                QJsonObject objRoot = jdoc.object();
+                SetRecentPin(objRoot["id"].toInt(), objRoot["pinned"].toBool(false));
             }
         }
 
@@ -838,6 +871,8 @@ CMainWindow * CAscApplicationManagerWrapper::prepareMainWindow(const QRect& r)
     QPointer<QCefView> _startPanel = AscAppManager::createViewer(nullptr, CWindowBase::expectedContentSize(_start_rect));
     _startPanel->Create(&_app, cvwtSimple);
     _startPanel->setObjectName("startPanel");
+	QColor c = m_themes->current().color(CTheme::ColorRole::ecrWindowBackground);
+    _startPanel->SetBackgroundCefColor(uchar(c.red()), uchar(c.green()), uchar(c.blue()));
     //_startPanel->resize(_start_rect.width(), _start_rect.height());
 
     CMainWindow * _window = static_cast<CMainWindow*>(new CMainWindowImpl(_start_rect));
@@ -902,7 +937,9 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
         open_scheme.push_back(app_scheme);
     }
     std::wstring app_action = app_scheme + L"//action";
+    std::wstring app_action_open = app_scheme + L"//open";
     std::wstring app_action_plugin = app_scheme + L"//action|install-plugin";
+    std::wstring app_command = app_scheme + L"//command/";
     std::vector<std::wstring> vec_window_actions;
 
     for (const auto& arg: vargs) {
@@ -953,19 +990,33 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
             }
 
             continue;
+        } else
+        if ( arg.rfind(app_action_open, 0) == 0 ) {
+            std::wstring deep_link = arg;
+            Utils::replaceAll(deep_link, L"%7C", L"|");
+            open_opts.wurl = deep_link;
+            open_opts.name = QString::fromStdWString(get_file_name_from_open_deeplink(deep_link));
+        } else
+        if ( arg.rfind(app_command, 0) == 0 ) {
+            vec_window_actions.push_back(arg);
+            continue;
         } else {
             open_opts.wurl = arg;
         }
 
         if (open_opts.srctype == AscEditorType::etUndefined) {
             QString str_url = QString::fromStdWString(open_opts.wurl);
-#ifdef _WIN32
             if ( CFileInspector::isLocalFile(str_url) ) {
+#ifdef _WIN32
                 str_url = Utils::replaceBackslash(str_url);
                 open_opts.wurl = str_url.toStdWString();
-            }
+#else
+                str_url = str_url.startsWith(QLatin1String("file://"), Qt::CaseInsensitive) ?
+                    QUrl(str_url).toLocalFile() :
+                    QDir::cleanPath(QDir::current().absoluteFilePath(str_url));
+                open_opts.wurl = str_url.toStdWString();
 #endif
-
+            }
             if ( _app.m_private->bringEditorToFront(str_url) ) {
                 continue;
             } else
@@ -988,7 +1039,6 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
                     if ( _c_pos != std::wstring::npos )
                         open_opts.name = QString::fromStdWString(open_opts.wurl.substr(++_c_pos));
 
-                    Utils::addToRecent(open_opts.wurl);
 //                    open_opts.srctype = etLocalFile;
                 } else
                 if ( _error == EBADF && !open_in_new_window ) {
@@ -1024,7 +1074,7 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
                 _app.m_pMainWindow = _app.prepareMainWindow(_start_rect);
                 _app.m_pMainWindow->show(reg_user.value("maximized", WindowHelper::defaultWindowMaximizeState()).toBool());
             } else
-            if (!_app.m_pMainWindow->isVisible())
+            if (!_app.m_pMainWindow->isVisible() && !_app.m_pMainWindow->isSlideshowMode())
                 _app.m_pMainWindow->show(_app.m_pMainWindow->windowState().testFlag(Qt::WindowMaximized));
 
             open_opts.panel_size = _app.m_pMainWindow->contentSize();
@@ -1032,9 +1082,11 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
             if (CTabPanel * panel = CEditorTools::createEditorPanel(open_opts, _app.m_pMainWindow)) {
                 _app.mainWindow()->attachEditor(panel);
 
-                QTimer::singleShot(100, &_app, [&]{
-                    _app.mainWindow()->bringToTop();
-                });
+                if (!_app.m_pMainWindow->isSlideshowMode()) {
+                    QTimer::singleShot(100, &_app, [&]{
+                        _app.mainWindow()->bringToTop();
+                    });
+                }
             }
         }
     }
@@ -1065,6 +1117,7 @@ void CAscApplicationManagerWrapper::handleDeeplinkActions(const std::vector<std:
     std::wstring app_scheme = GetExternalSchemeName();
     if ( !app_scheme.empty() ) {
         const std::wstring app_action_panel = app_scheme + L"//action|panel|";
+        const std::wstring app_command = app_scheme + L"//command/";
 
         for (const auto& a: actions) {
             if ( a.rfind(app_action_panel, 0) == 0 ) {
@@ -1072,6 +1125,11 @@ void CAscApplicationManagerWrapper::handleDeeplinkActions(const std::vector<std:
 
                 gotoMainWindow();
                 m_pMainWindow->handleWindowAction(_action);
+            } else
+            if ( a.rfind(app_command, 0) == 0 ) {
+                std::wstring _arg_cmd = a.substr(app_command.length());
+                if (!_arg_cmd.empty())
+                    CallCommand(_arg_cmd);
             }
         }
     }
@@ -1079,6 +1137,14 @@ void CAscApplicationManagerWrapper::handleDeeplinkActions(const std::vector<std:
 
 void CAscApplicationManagerWrapper::onDocumentReady(int uid)
 {
+#ifndef __OS_WIN_XP
+    static bool runOnce = false;
+    if (!runOnce) {
+        runOnce = true;
+        m_private->m_notificationSupported = CNotification::instance().init();
+    }
+#endif
+
 #ifdef _UPDMODULE
     if (!m_pUpdateManager) {
         m_pUpdateManager = new CUpdateManager(this);
@@ -1096,8 +1162,24 @@ void CAscApplicationManagerWrapper::onDocumentReady(int uid)
     Association::instance().chekForAssociations(uid);
 #endif
 
-    if (uid > -1 && printData().printerCapabilitiesReady())
-        AscAppManager::sendCommandTo(GetViewById(uid), L"printer:config", printData().getPrinterCapabilitiesJson().toStdWString());
+    if (uid > -1) {
+        if (printData().printerCapabilitiesReady())
+            AscAppManager::sendCommandTo(GetViewById(uid), L"printer:config", printData().getPrinterCapabilitiesJson().toStdWString());
+
+        CAscTabData *data = nullptr;
+        if (CEditorWindow *editor = editorWindowFromViewId(uid)) {
+            data = editor->mainView()->data();
+        } else
+            if (mainWindow() && mainWindow()->holdView(uid)) {
+                int indx = mainWindow()->tabWidget()->tabIndexByView(uid);
+                if (indx > -1)
+                    data = mainWindow()->tabWidget()->panel(indx)->data();
+            }
+
+        if (data && data->isLocal() && !data->url().empty()) {
+            Utils::addToRecent(data->url());
+        }
+    }
 
     static bool check_printers = false;
     if (!check_printers) {
@@ -1105,9 +1187,17 @@ void CAscApplicationManagerWrapper::onDocumentReady(int uid)
 
         printData().queryPrinterCapabilitiesAsync([=](const QString &json) {
             // qDebug().noquote() << json;
-            for (int _uid : GetViewsId()) {
-                if (_uid > -1)
-                    AscAppManager::sendCommandTo(GetViewById(_uid), L"printer:config", json.toStdWString());
+            if (mainWindow()) {
+                CAscTabWidget *tabs = mainWindow()->tabWidget();
+                for (int i = 0; i < tabs->count(); i++) {
+                    if (tabs->panel(i)->isReady())
+                        AscAppManager::sendCommandTo(tabs->panel(i)->cef(), L"printer:config", json.toStdWString());
+                }
+            }
+            foreach (auto ptr, m_vecEditors) {
+                CEditorWindow *e = reinterpret_cast<CEditorWindow*>(ptr);
+                if (e->mainView()->isReady())
+                    AscAppManager::sendCommandTo(e->mainView()->cef(), L"printer:config", json.toStdWString());
             }
         });
     }
@@ -1203,20 +1293,18 @@ void CAscApplicationManagerWrapper::initializeApp()
         AscAppManager::setUserSettings(L"system-scale", L"1");
     }
 
-    if ( !InputArgs::contains(L"--single-window-app") ) {
-        SingleApplication * app = static_cast<SingleApplication *>(QCoreApplication::instance());
-        connect(app, &SingleApplication::receivedMessage, [](const QString &args) {
-            std::vector<std::wstring> vec_inargs;
-            foreach (auto arg, args.split(";")) {
-                if ( !arg.isEmpty() )
-                    vec_inargs.push_back(arg.toStdWString());
-            }
-            if ( !vec_inargs.empty() )
-                handleInputCmd(vec_inargs);
-            else
-                gotoMainWindow();
-        });
-    }
+    SingleApplication * app = static_cast<SingleApplication *>(QCoreApplication::instance());
+    connect(app, &SingleApplication::receivedMessage, [](const QString &args) {
+        std::vector<std::wstring> vec_inargs;
+        foreach (auto arg, args.split(";")) {
+            if ( !arg.isEmpty() )
+                vec_inargs.push_back(arg.toStdWString());
+        }
+        if ( !vec_inargs.empty() )
+            handleInputCmd(vec_inargs);
+        else
+            gotoMainWindow();
+    });
 
     /* prevent drawing of focus rectangle on a button */
 //    QApplication::setStyle(new CStyleTweaks);
@@ -1322,15 +1410,23 @@ void CAscApplicationManagerWrapper::initializeApp()
     EditorJSVariables::setVariable("rtl", _is_rtl ? "yes" : "no");
 
     EditorJSVariables::setVariable("lang", CLangater::getCurrentLangCode());
+
+    std::vector<std::pair<std::string, std::string>> layouts = _app.GetKeyboardLayoutList();
+    QJsonObject kbLangs;
+    for (const auto &lut : layouts) {
+        kbLangs.insert(QString::fromStdString(lut.first), QString::fromStdString(lut.second));
+    }
+    QJsonObject _ls_ = {{"langs", kbLangs}};
+    EditorJSVariables::applyVariable("keyboard", _ls_);
     EditorJSVariables::applyVariable("theme", {
                                         {"type", _app.m_themes->current().stype()},
                                         {"id", QString::fromStdWString(_app.m_themes->current().id())},
                                         {"addlocal", "on"}
-#ifndef Q_OS_LINUX
+// #ifndef Q_OS_LINUX
                                         ,{"system", _app.m_themes->isSystemSchemeDark() ? "dark" : "light"}
-#else
-                                        ,{"system", "disabled"}
-#endif
+// #else
+//                                         ,{"system", "disabled"}
+// #endif
                                      });
 
     AscAppManager::getInstance().m_oSettings.macroses_support = reg_system.value("macrosDisabled", true).toBool();
@@ -1407,8 +1503,11 @@ void CAscApplicationManagerWrapper::gotoMainWindow(size_t src)
         _app.m_pMainWindow->show(reg_user.value("maximized", WindowHelper::defaultWindowMaximizeState()).toBool());
     }
 
-    if ( !_app.m_pMainWindow->isVisible() )
+    if ( !_app.m_pMainWindow->isVisible() ) {
+        if (_app.m_pMainWindow->isSlideshowMode())
+            _app.m_pMainWindow->onFullScreen(-1, false);
         _app.m_pMainWindow->show(mainWindow()->isMaximized());
+    }
 
 //    _app.m_pMainWindow->bringToTop();
     QTimer::singleShot(0, &_app, [](){
@@ -1563,6 +1662,30 @@ ParentHandle CAscApplicationManagerWrapper::windowHandleFromId(int id)
 }
 
 namespace Drop {
+    auto isMainWindowCoveredByAnotherWindow(QWidget *mainWindow, QWidget *ignoringWindow, const QPoint &pt) -> bool
+    {
+#ifdef _WIN32
+        HWND hwnd = GetWindow((HWND)ignoringWindow->winId(), GW_HWNDNEXT);
+        while (hwnd) {
+            if (!IsWindowVisible(hwnd)) {
+                hwnd = GetWindow(hwnd, GW_HWNDNEXT);
+                continue;
+            }
+
+            RECT rc;
+            GetWindowRect(hwnd, &rc);
+            if (!PtInRect(&rc, {pt.x(), pt.y()})) {
+                hwnd = GetWindow(hwnd, GW_HWNDNEXT);
+                continue;
+            }
+            return hwnd != (HWND)mainWindow->winId();
+        }
+        return false;
+#else
+        return XcbUtils::isWindowCoveredAt(mainWindow->winId(), ignoringWindow->winId(), pt.x(), pt.y());
+#endif
+    }
+
     const int drop_timeout = 300;
     auto callback_to_attach(const CEditorWindow * editor) -> void {
         if ( editor ) {
@@ -1585,12 +1708,15 @@ namespace Drop {
                 QObject::connect(drop_timer, &QTimer::timeout, []{
                     CMainWindow * main_window = CAscApplicationManagerWrapper::mainWindow();
                     QPoint current_cursor = QCursor::pos();
-                    if ( main_window->canPinTabAtPoint(current_cursor) ) {
+                    if ( drop_handle && main_window->canPinTabAtPoint(current_cursor)
+                            && !isMainWindowCoveredByAnotherWindow(main_window, (QWidget*)drop_handle, current_cursor) ) {
                         if ( current_cursor == last_cursor_pos ) {
                             drop_timer->stop();
 
-                            if ( WindowHelper::isLeftButtonPressed() )
+                            if ( WindowHelper::isLeftButtonPressed() ) {
                                 callback_to_attach(CAscApplicationManagerWrapper::editorWindowFromHandle(drop_handle) );
+                                drop_handle = 0;
+                            }
                         } else {
                             last_cursor_pos = current_cursor;
                         }
@@ -1600,7 +1726,8 @@ namespace Drop {
                 });
             }
 
-            if ( main_window->canPinTabAtPoint(pt) ) {
+            if ( main_window->canPinTabAtPoint(pt)
+                    && !isMainWindowCoveredByAnotherWindow(main_window, (QWidget*)drop_handle, pt) ) {
                 if ( !drop_timer->isActive() )
                     drop_timer->start(drop_timeout);
 
@@ -1735,7 +1862,7 @@ QString CAscApplicationManagerWrapper::getWindowStylesheets(CScalingFactor facto
 {
     APP_CAST(_app);
 
-    QString _out = Utils::readStylesheets(&_app.m_mapStyles[CScalingFactor::SCALING_FACTOR_1]);
+    QString _out = Utils::readStylesheets(_app.m_mapStyles[CScalingFactor::SCALING_FACTOR_1]);
     _out = _out.arg(GetColorQValueByRole(ecrWindowBackground),
                     GetColorQValueByRole(ecrTextNormal),
                     GetColorQValueByRole(ecrButtonHoverBackground),
@@ -1755,7 +1882,7 @@ QString CAscApplicationManagerWrapper::getWindowStylesheets(CScalingFactor facto
                     GetColorQValueByRole(ecrMenuSeparator));
 //    _out.append(Utils::readStylesheets(":/themes/theme-contrast-dark.qss"));
     if ( factor != CScalingFactor::SCALING_FACTOR_1 )
-        _out.append(Utils::readStylesheets(&_app.m_mapStyles[factor]));
+        _out.append(Utils::readStylesheets(_app.m_mapStyles[factor]));
 
     return _out;
 }
@@ -1826,6 +1953,12 @@ bool CAscApplicationManagerWrapper::isRtlEnabled()
     return m_rtlEnabled;
 }
 
+bool CAscApplicationManagerWrapper::notificationSupported()
+{
+    APP_CAST(_app);
+    return _app.m_private->m_notificationSupported;
+}
+
 bool CAscApplicationManagerWrapper::applySettings(const wstring& wstrjson)
 {
     QJsonParseError jerror;
@@ -1850,6 +1983,9 @@ bool CAscApplicationManagerWrapper::applySettings(const wstring& wstrjson)
                 _lang_id = l;
 
                 _reg_user.setValue("locale", _lang_id);
+
+                QJsonObject _json_obj{{"lang", _lang_id}};
+                AscAppManager::getInstance().UpdatePlugins(Utils::stringifyJson(_json_obj).toStdWString());
                 if (!direction_changed)
                     CLangater::reloadTranslations(_lang_id);
 #ifdef _UPDMODULE
@@ -1910,6 +2046,10 @@ bool CAscApplicationManagerWrapper::applySettings(const wstring& wstrjson)
         if ( objRoot.contains("usegpu") ) {
             bool use_gpu = objRoot["usegpu"].toBool(true);
             setUserSettings(L"disable-gpu", use_gpu ? L"0" : L"1");
+        }
+
+        if ( objRoot.contains("useai") ) {
+            setUserSettings(L"disable-ai", objRoot["useai"].toBool(true) ? L"0" : L"1");
         }
 
 #ifdef _UPDMODULE
@@ -1993,11 +2133,11 @@ void CAscApplicationManagerWrapper::applyTheme(const wstring& theme, bool force)
         EditorJSVariables::applyVariable("theme", {
                                             {"type", _app.m_themes->current().stype()},
                                             {"id", QString::fromStdWString(_app.m_themes->current().id())}
-#ifndef Q_OS_LINUX
+// #ifndef Q_OS_LINUX
                                             ,{"system", _app.m_themes->isSystemSchemeDark() ? "dark" : "light"}
-#else
-                                            ,{"system", "disabled"}
-#endif
+// #else
+//                                             ,{"system", "disabled"}
+// #endif
                                          });
 
         // TODO: remove
@@ -2015,6 +2155,9 @@ void CAscApplicationManagerWrapper::applyTheme(const wstring& theme, bool force)
             _editor->applyTheme(theme);
         }
 
+        // QJsonObject _json_obj{{"theme", _app.m_themes->current().json()}};
+        QJsonObject _json_obj{{"theme", QString::fromStdWString(actual_id)}};       // for bug 78050. send only theme id
+        AscAppManager::getInstance().UpdatePlugins(Utils::stringifyJson(_json_obj).toStdWString());
         AscAppManager::sendCommandTo(SEND_TO_ALL_START_PAGE, L"uitheme:changed", theme);
     }
 }
@@ -2253,6 +2396,7 @@ QString CAscApplicationManagerWrapper::newFileName(int format)
     switch ( format ) {
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOTX:
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX:        return tr("Document%1.docx").arg(++docx_count);
+    case AVS_OFFICESTUDIO_FILE_DOCUMENT_OFORM_PDF:
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF: {
         QString docname = tr("Document%1.docx").arg(++pdf_count);
         return docname.replace("docx", "pdf");

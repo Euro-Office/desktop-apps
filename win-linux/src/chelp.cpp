@@ -56,7 +56,6 @@ void CHelp::out()
         "    --new=[doc|cell|slide] creates new document/spreadsheet/presentation\n"
         "    --review=path/to/file to open document in review mode in separate window\n"
         "    --view=path/to/file to open document in view mode in separate window\n"
-        "    --single-window-app document will be opened in independent process\n"
         "    --force-use-tab document will be opend in new tab instead of new separate window\n"
         "    --geometry=default reset window geometry\n"
         "    --xdg-desktop-portal use portals instead of gtk file chooser (the flag is saved for subsequent sessions)\n"

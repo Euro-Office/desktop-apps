@@ -563,12 +563,24 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>vsdx.locked</string>
+				<string>vsdx</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>file-vsdx</string>
 			<key>CFBundleTypeName</key>
 			<string>Microsoft Visio File (.vsdx)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>vstx</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file-vsdx</string>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Visio Template File (.vstx)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -593,6 +605,30 @@
 			<string>file-hwp</string>
 			<key>CFBundleTypeName</key>
 			<string>Hangul Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>odg</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>file-odg</string>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Drawing Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>hml</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string></string>
+			<key>CFBundleTypeName</key>
+			<string>HWPML Document</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -644,7 +680,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2025 Ascensio System SIA. All rights reserved.</string>
+	<string>Copyright © 2026 Ascensio System SIA. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSMicrophoneUsageDescription</key>

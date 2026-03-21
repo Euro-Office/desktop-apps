@@ -55,12 +55,12 @@
 }
 
 + (NSArray *)images {
-    return @[@"jpg", @"jpeg", @"png", @"gif", @"bmp", @"tif", @"tiff", @"ico", @"svg"];
+    return @[@"jpg", @"jpeg", @"png", @"gif", @"bmp", @"tif", @"tiff", @"heif", @"heic", @"ico", @"svg"];
 }
 
 + (NSArray *)videos {
     return @[@"webm", @"mkv", @"flv", @"ogg", @"avi", @"mov", @"wmv", @"mp4", @"m4v", @"mpg", @"mp2", @"mpeg",
-             @"mpe", @"mpv", @"m2v", @"m4v", @"3gp", @"3g2", @"f4v", @"m2ts", @"mts"];
+             @"mpe", @"mpv", @"m2v", @"m4v", @"3gp", @"3g2", @"f4v", @"m2ts", @"mts", @"ts"];
 }
 
 + (NSArray *)audios {
@@ -70,15 +70,15 @@
 + (NSArray *)documents {
     return @[@"docx", @"doc", @"odt", @"ott", @"rtf", @"docm", @"dot", @"dotx", @"dotm", @"docxf", @"fodt", @"wps", @"wpt",
              @"xml", @"pdf", @"epub", @"djv", @"djvu", @"txt", @"html", @"htm", @"mht", @"mhtml", @"xps", @"doctx",
-             @"fb2", @"oform", @"sxw", @"stw", @"md", @"pages", @"hwp", @"hwpx"];
+             @"fb2", @"oform", @"sxw", @"stw", @"md", @"pages", @"hwp", @"hwpx", @"md", @"hml"];
 }
 
 + (NSArray *)spreadsheets {
-    return @[@"xls", @"xlsx", @"xlsm", @"xlsb", @"csv", @"ods", @"xltx", @"ots", @"xltm", @"xml", @"fods", @"et", @"ett", @"sxc",@"numbers"];
+    return @[@"xls", @"xlsx", @"xlsm", @"xlsb", @"csv", @"tsv", @"ods", @"xltx", @"ots", @"xltm", @"xml", @"fods", @"et", @"ett", @"sxc",@"numbers"];
 }
 
 + (NSArray *)presentations {
-    return @[@"ppt", @"pptx", @"pptm", @"ppsx", @"odp", @"potx", @"otp", @"pps", @"ppsm", @"potm", @"fodp", @"dps", @"dpt", @"sxi",@"key"];
+    return @[@"ppt", @"pptx", @"pptm", @"ppsx", @"odg", @"odp", @"potx", @"otp", @"pps", @"ppsm", @"potm", @"fodp", @"dps", @"dpt", @"sxi",@"key"];
 }
 
 + (NSArray *)draws {
@@ -90,7 +90,7 @@
 }
 
 + (NSArray *)plugins {
-    return @[@"plugin"];
+    return @[@"plugin", @"zip"];
 }
 
 + (NSArray *)csvtxt {
@@ -150,6 +150,10 @@
              @(AVS_OFFICESTUDIO_FILE_DOCUMENT_EPUB): @{
                      @"description" : NSLocalizedString(@"Mobipocket e-book", nil),
                      @"extension"   : @"epub"
+                     },
+             @(AVS_OFFICESTUDIO_FILE_DOCUMENT_MD): @{
+                     @"description" : NSLocalizedString(@"Markdown File", nil),
+                     @"extension"   : @"md"
                      },
              @(AVS_OFFICESTUDIO_FILE_DOCUMENT_DOTX): @{
                      @"description" : NSLocalizedString(@"Document template", nil),

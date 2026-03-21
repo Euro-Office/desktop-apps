@@ -92,7 +92,7 @@
 "new-document" = "Новый документ";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Новая PDF-форма";
+"new-pdfform" = "Новый PDF";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Новая презентация";
@@ -235,3 +235,29 @@
 /* No comment provided by engineer. */
 "Your subscription is about to expire\n(%d days left).\n\nWe have a special offer for you." = "Скоро истечет срок действия подписки\n(осталось дней: %d).\n\nДля Вас доступно специальное предложение.";
 
+/* No comment provided by engineer. */
+"Show main window" = "Показать главное окно";
+
+/* No comment provided by engineer. */
+"Close" = "Закрыть";
+
+/* No comment provided by engineer. */
+"Close saved" = "Закрыть сохраненные";
+
+/* No comment provided by engineer. */
+"Close all" = "Закрыть все";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Показать в папке";
+
+/* No comment provided by engineer. */
+"Move to start" = "Переместить в начало";
+
+/* No comment provided by engineer. */
+"Move to end" = "Переместить в конец";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Открепить вкладку";
+
+/* No comment provided by engineer. */
+"Create new" = "Создать новый";

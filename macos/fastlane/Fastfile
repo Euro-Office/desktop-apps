@@ -29,9 +29,10 @@ platform :mac do
     app_name = "ONLYOFFICE"
     app = "#{build}/#{app_name}.app"
     git_suffix = options[:git_suffix]
+    edition = options[:edition]
 
     desc 'Cleanup'
-    sh("rm -rf ../#{build}")
+    sh("rm -rf ../#{build} && rm -rf ../Vendor/ONLYOFFICE")
 
     desc 'Get the version from plist'
     version_number = get_info_plist_value(
@@ -46,6 +47,15 @@ platform :mac do
       path: "ONLYOFFICE/Resources/#{scheme}/Info.plist",
       key: "ASCBundleBuildNumber"
     )
+    package_name = app_name
+    if edition && !edition.empty? then package_name += "-#{edition}" end
+    package_name += "-#{git_suffix}-#{version_number}-#{app_build_number}"
+
+    if edition != "Enterprise"
+      sh("mkdir -p ../Vendor/ONLYOFFICE/license && cp -fv ../../package/common/license/opensource/LICENSE.html ../Vendor/ONLYOFFICE/license/LICENSE.html")
+    else
+      sh("mkdir -p ../Vendor/ONLYOFFICE/license && cp -fv ../../package/common/license/commercial/LICENSE.html ../Vendor/ONLYOFFICE/license/EULA.html")
+    end
 
     desc 'Build for developer id and notarize'
     gym(
@@ -62,7 +72,7 @@ platform :mac do
     notarize(
       package: app,
       print_log: true,
-      verbose: true
+      # verbose: true
     )
 
     desc 'Prepare zip for delta update'
@@ -70,7 +80,7 @@ platform :mac do
 
     desc 'Create DMG image'
     sh("npm install appdmg")
-    sh("npx appdmg resources/appdmg.json ../#{build}/#{scheme}-#{version_number}-#{app_build_number}.dmg")
+    sh("npx appdmg resources/appdmg.json ../#{build}/#{package_name}.dmg")
 
     if options[:skip_git_bump]
       next

@@ -42,10 +42,10 @@
 #include "version.h"
 #include "clangater.h"
 #include "clogger.h"
+#include "components/cnotification.h"
 #include "cascapplicationmanagerwrapper.h"
 #include <QCryptographicHash>
 #ifdef _WIN32
-# include "platform_win/updatedialog.h"
 # define DAEMON_NAME L"/updatesvc.exe"
 # define GetPid() GetCurrentProcessId()
 #else
@@ -55,11 +55,11 @@
 # include <spawn.h>
 # include <fcntl.h>
 # include <elf.h>
-# include "components/cmessage.h"
-# include "platform_linux/updatedialog.h"
 # define DAEMON_NAME "/updatesvc"
 # define GetPid() getpid()
 #endif
+
+#include <qtcomp/qdatetime.h>
 
 #define modeToEnum(mod) ((mod == "silent") ? UpdateMode::SILENT : (mod == "ask") ? UpdateMode::ASK : UpdateMode::DISABLE)
 #define packageToStr() QString(IsPackage(ISS) ? "iss" : IsPackage(MSI) ? "msi" : IsPackage(Portable) ? "portable" : "other")
@@ -70,6 +70,7 @@
 #define CHECK_ON_STARTUP_MS 9000
 #define CMD_ARGUMENT_UPDATES_INTERVAL L"--updates-interval"
 #define SERVICE_NAME APP_TITLE " Update Service"
+#define LINK_TEXT QString("<a href=\"%1\">%2</a>").arg(QString(RELEASE_NOTES), QObject::tr("Release notes"))
 #define __GLOBAL_LOCK if (m_lock) {CLogger::log("Blocked in: " + FUNCTION_INFO); return;} m_lock = true; \
                           CLogger::log("Locking and further execution:" + FUNCTION_INFO);
 #define __UNLOCK m_lock = false; CLogger::log("Unlocked in:" + FUNCTION_INFO);
@@ -77,17 +78,18 @@
 using std::vector;
 
 const char *SVC_TXT_ERR_UNPACKING   = QT_TRANSLATE_NOOP("CUpdateManager", "An error occurred while unpacking the archive"),
-           *SVC_TXT_ERR_DNL_OUT_MEM = QT_TRANSLATE_NOOP("CUpdateManager", "Update download failed: out of memory!"),
-           *SVC_TXT_ERR_DNL_CONN    = QT_TRANSLATE_NOOP("CUpdateManager", "Update download failed: server connection error!"),
-           *SVC_TXT_ERR_DNL_URL     = QT_TRANSLATE_NOOP("CUpdateManager", "Update download failed: wrong URL!"),
-           *SVC_TXT_ERR_DNL_CREAT   = QT_TRANSLATE_NOOP("CUpdateManager", "Update download failed: unable to create file!"),
-           *SVC_TXT_ERR_DNL_INET    = QT_TRANSLATE_NOOP("CUpdateManager", "Update download failed: network error!"),
+           *SVC_TXT_ERR_DNL_OUT_MEM = QT_TRANSLATE_NOOP("CUpdateManager", "Update failed: out of memory!"),
+           *SVC_TXT_ERR_DNL_CONN    = QT_TRANSLATE_NOOP("CUpdateManager", "Update failed: server connection error!"),
+           *SVC_TXT_ERR_DNL_URL     = QT_TRANSLATE_NOOP("CUpdateManager", "Update failed: wrong URL!"),
+           *SVC_TXT_ERR_DNL_CREAT   = QT_TRANSLATE_NOOP("CUpdateManager", "Update failed: unable to create file!"),
+           *SVC_TXT_ERR_DNL_INET    = QT_TRANSLATE_NOOP("CUpdateManager", "Update failed: network error!"),
            *SVC_TXT_ERR_OTHER       = QT_TRANSLATE_NOOP("CUpdateManager", "A service error has occurred!"),
 
            *TXT_LAST_CHECK      = QT_TRANSLATE_NOOP("CUpdateManager", "Last check performed %1"),
            *TXT_UPDATED         = QT_TRANSLATE_NOOP("CUpdateManager", "Current version is up to date"),
            *TXT_CHECKING_UPD    = QT_TRANSLATE_NOOP("CUpdateManager", "Checking for updates..."),
            *TXT_AVAILABLE_UPD   = QT_TRANSLATE_NOOP("CUpdateManager", "Update is available (version %1)"),
+           *TXT_AVAILABLE_SVC   = QT_TRANSLATE_NOOP("CUpdateManager", "Service update is available (version %1)"),
            *TXT_DOWNLOADING_UPD = QT_TRANSLATE_NOOP("CUpdateManager", "Downloading new version %1 (%2%)"),
            *TXT_PREPARING_UPD   = QT_TRANSLATE_NOOP("CUpdateManager", "Preparing update..."),
            *TXT_UNZIP_UPD       = QT_TRANSLATE_NOOP("CUpdateManager", "Preparing update (%1%)"),
@@ -161,9 +163,11 @@ void CUpdateManager::DialogSchedule::addToSchedule(const QString &method, const 
 auto currentArch()->QString
 {
 #ifdef _WIN32
-# ifdef _WIN64
+# if defined(_M_ARM64)
+    return "_arm64";
+# elif defined(_M_X64)
     return "_x64";
-# else
+# elif defined(_M_IX86)
     return "_x86";
 # endif
 #else
@@ -173,7 +177,7 @@ auto currentArch()->QString
 
 auto formattedTime(time_t timestamp)->QString
 {
-    return (timestamp != 0) ? QLocale::system().toString(QDateTime::fromTime_t(timestamp), QLocale::ShortFormat) :
+    return (timestamp != 0) ? QLocale::system().toString(QtComp::DateTime::fromTimestamp(timestamp), QLocale::ShortFormat) :
                QString("--.--.---- --:--");
 }
 
@@ -820,7 +824,7 @@ void CUpdateManager::onLoadCheckFinished(const QString &json)
                 m_packageData->isInstallable = root.value("isInstallable").toBool();
 
                 clearTempFiles(m_packageData->isInstallable && isSavedPackageValid() ? m_savedPackageData->fileName : "");
-                if (m_packageData->packageUrl.empty() || !m_socket->sendMessage(MSG_RequestContentLenght, WStrToTStr(m_packageData->packageUrl))) {
+                if (m_packageData->packageUrl.empty() || !m_socket->sendMessage(MSG_RequestContentLenght)) {
                     m_packageData->fileSize = "--";
                     onCheckFinished(false, true, m_packageData->version, "");
                 }
@@ -846,7 +850,7 @@ void CUpdateManager::onCheckFinished(bool error, bool updateExist, const QString
 //                return;
 //            } else
             if (!m_packageData->isInstallable) {
-                refreshStartPage({"lastcheck", {TXT_AVAILABLE_UPD, version}, BTN_TXT_CHECK, "check", "false"});
+                refreshStartPage({"lastcheck", {m_packageData->object == "svc" ? TXT_AVAILABLE_SVC : TXT_AVAILABLE_UPD, version}, BTN_TXT_CHECK, "check", "false"});
                 m_dialogSchedule->addToSchedule("showUpdateMessage");
                 return;
             }
@@ -861,7 +865,7 @@ void CUpdateManager::onCheckFinished(bool error, bool updateExist, const QString
                     __UNLOCK
                     loadUpdates();
                 } else {
-                    refreshStartPage({"lastcheck", {TXT_AVAILABLE_UPD, version}, BTN_TXT_DOWNLOAD, "download", "false"});
+                    refreshStartPage({"lastcheck", {m_packageData->object == "svc" ? TXT_AVAILABLE_SVC : TXT_AVAILABLE_UPD, version}, BTN_TXT_DOWNLOAD, "download", "false"});
                     m_dialogSchedule->addToSchedule("showUpdateMessage");
                 }
                 break;
@@ -878,27 +882,44 @@ void CUpdateManager::onCheckFinished(bool error, bool updateExist, const QString
     }
 }
 
-void CUpdateManager::showUpdateMessage(QWidget *parent) {
-    QString name = (m_packageData->object == "app") ? QString(WINDOW_NAME) : QString(SERVICE_NAME);
-    QString curr_version = (m_packageData->object == "app") ? QString(VER_FILEVERSION_STR) :
-                               getFileVersion(QStrToTStr(qApp->applicationDirPath()) + DAEMON_NAME);
-    QString text = m_packageData->isInstallable ? tr("Would you like to download update now?") :
-                       tr("The current version does not support installing this update directly. "
-                          "To install updates, you can download the required package from the official website.");
-    int result = WinDlg::showDialog(parent, tr("Update is available"),
-                        QString("%1\n%2: %3\n%4: %5\n%6 (%7 MB)").arg(name, tr("Current version"),
-                        curr_version, tr("New version"), m_packageData->version,
-                        text, m_packageData->fileSize),
-                        WinDlg::DlgBtns::mbSkipRemindDownload);
-    __UNLOCK
+void CUpdateManager::showUpdateMessage(QWidget *parent, bool forceModal, int result) {
+    if (result == DLG_RESULT_NONE) {
+        QString name = (m_packageData->object == "app") ? QString(WINDOW_NAME) : QString(SERVICE_NAME);
+        QString curr_version = (m_packageData->object == "app") ? QString(VER_FILEVERSION_STR) :
+                                   getFileVersion(QStrToTStr(qApp->applicationDirPath()) + DAEMON_NAME);
+        QString text = m_packageData->isInstallable ? tr("Would you like to download update now?") :
+                           tr("The current version does not support installing this update directly. "
+                              "To install updates, you can download the required package from the official website.");
+        QString title = tr("Update is available");
+        if (!forceModal && AscAppManager::notificationSupported()) {
+            if (CNotification::instance().show(title,
+                        QString("%1\n%2: %3\n%4: %5").arg(name, tr("Current version"),
+                        curr_version, tr("New version"), m_packageData->version),
+                        MsgBtns::mbSkipRemindDownload, [=](int res) {
+                            QMetaObject::invokeMethod(this, "showUpdateMessage", Qt::QueuedConnection, Q_ARG(QWidget*, parent), Q_ARG(bool, res == NOTIF_FAILED), Q_ARG(int, res));
+                        })) {
+                __UNLOCK
+                return;
+            }
+        }
+
+        QString content = QString("%1\n%2: %3\n%4: %5\n%6 (%7 MB)")
+                              .arg(name, tr("Current version"), curr_version, tr("New version"), m_packageData->version, text, m_packageData->fileSize);
+        CMessageOpts opts;
+        opts.contentText = QString("%1\n").arg(content);
+        if (!QString(RELEASE_NOTES).isEmpty())
+            opts.linkText =  LINK_TEXT;
+        result = CMessage::showMessage(parent, title, MsgType::MSG_BRAND, MsgBtns::mbSkipRemindDownload, opts);
+        __UNLOCK
+    }
     switch (result) {
-    case WinDlg::DLG_RESULT_DOWNLOAD:
+    case MsgRes::MODAL_RESULT_DOWNLOAD:
         if (m_packageData->isInstallable)
             loadUpdates();
         else
             Utils::openUrl(DOWNLOAD_PAGE);
         break;
-    case WinDlg::DLG_RESULT_SKIP: {
+    case MsgRes::MODAL_RESULT_SKIPVER: {
         skipVersion();
         refreshStartPage({"success", {TXT_UPDATED}, BTN_TXT_CHECK, "check", "false"});
         m_pLastCheckMsgTimer->start();
@@ -909,25 +930,43 @@ void CUpdateManager::showUpdateMessage(QWidget *parent) {
     }
 }
 
-void CUpdateManager::showStartInstallMessage(QWidget *parent)
+void CUpdateManager::showStartInstallMessage(QWidget *parent, bool forceModal, int result)
 {
-    QString name = (m_packageData->object == "app") ? QString(WINDOW_NAME) : QString(SERVICE_NAME);
-    QString curr_version = (m_packageData->object == "app") ? QString(VER_FILEVERSION_STR) :
-                               getFileVersion(QStrToTStr(qApp->applicationDirPath()) + DAEMON_NAME);
-    int result = WinDlg::showDialog(parent, tr("Update is ready to install"),
-                        QString("%1\n%2: %3\n%4: %5\n%6").arg(name, tr("Current version"),
-                        curr_version, tr("New version"), m_packageData->version,
-                        tr("To finish updating, restart the app")),
-                        WinDlg::DlgBtns::mbInslaterRestart);
-    __UNLOCK
+    if (result == DLG_RESULT_NONE) {
+        QString name = (m_packageData->object == "app") ? QString(WINDOW_NAME) : QString(SERVICE_NAME);
+        QString curr_version = (m_packageData->object == "app") ? QString(VER_FILEVERSION_STR) :
+                                   getFileVersion(QStrToTStr(qApp->applicationDirPath()) + DAEMON_NAME);
+        QString title = tr("Update is ready to install");
+        if (!forceModal && AscAppManager::notificationSupported()) {
+            if (CNotification::instance().show(title,
+                        QString("%1\n%2: %3\n%4: %5").arg(name, tr("Current version"),
+                        curr_version, tr("New version"), m_packageData->version),
+                        MsgBtns::mbInslaterRestart, [=](int res) {
+                            QMetaObject::invokeMethod(this, "showStartInstallMessage", Qt::QueuedConnection, Q_ARG(QWidget*, parent), Q_ARG(bool, res == NOTIF_FAILED), Q_ARG(int, res));
+                        })) {
+                __UNLOCK
+                return;
+            }
+        }
+
+        QString content = QString("%1\n%2: %3\n%4: %5\n%6")
+                              .arg(name, tr("Current version"), curr_version, tr("New version"), m_packageData->version,
+                                   tr("To finish updating, restart the app"));
+        CMessageOpts opts;
+        opts.contentText = QString("%1\n").arg(content);
+        if (!QString(RELEASE_NOTES).isEmpty())
+            opts.linkText =  LINK_TEXT;
+        result = CMessage::showMessage(parent, title, MsgType::MSG_BRAND, MsgBtns::mbInslaterRestart, opts);
+         __UNLOCK
+    }
     switch (result) {
-    case WinDlg::DLG_RESULT_RESTART: {
+    case MsgRes::MODAL_RESULT_RESTART: {
         m_startUpdateOnClose = true;
         m_restartAfterUpdate = true;
         AscAppManager::closeAppWindows();
         break;
     }
-    case WinDlg::DLG_RESULT_INSLATER: {
+    case MsgRes::MODAL_RESULT_INSLATER: {
 #ifdef _WIN32
         m_startUpdateOnClose = (m_packageData->fileType == "archive");
 #else

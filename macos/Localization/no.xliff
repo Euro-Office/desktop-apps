@@ -453,7 +453,7 @@ Vi har et spesialtilbud til deg.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Nytt PDF-skjema</target>
+        <target>Ny PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1351,8 +1351,8 @@ Prøveperioden avsluttes om %d dager, etter det vil du ikke kunne opprette og re
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Copyright © 2025 Ascensio System SIA. Alle rettigheter reserveres.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Copyright © 2026 Ascensio System SIA. Alle rettigheter reserveres.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

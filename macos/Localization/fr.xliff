@@ -503,7 +503,7 @@ Nous vous proposons une offre spéciale.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Nouveau formulaire PDF</target>
+        <target>Nouveau PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1401,8 +1401,8 @@ La période d'essai se termine dans %d jours, après quoi vous ne serez plus en 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Copyright © 2025 Ascensio System SIA. Tous droits réservés.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Copyright © 2026 Ascensio System SIA. Tous droits réservés.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1418,8 +1418,8 @@ La période d'essai se termine dans %d jours, après quoi vous ne serez plus en 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Copyright © 2025 Ascensio System SIA. Tous droits réservés.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Copyright © 2026 Ascensio System SIA. Tous droits réservés.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1435,8 +1435,8 @@ La période d'essai se termine dans %d jours, après quoi vous ne serez plus en 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Copyright © 2025 Ascensio System SIA. Tous droits réservés.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Copyright © 2026 Ascensio System SIA. Tous droits réservés.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

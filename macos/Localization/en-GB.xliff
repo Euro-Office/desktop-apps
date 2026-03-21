@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="Acknowledgments" xml:space="preserve">
         <source>Acknowledgments</source>
-        <target>Acknowledgments</target>
+        <target>Acknowledgements</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Before signing the document, it must be saved." xml:space="preserve">
@@ -224,7 +224,7 @@
       </trans-unit>
       <trans-unit id="License Agreement" xml:space="preserve">
         <source>License Agreement</source>
-        <target>License Agreement</target>
+        <target>Licence Agreement</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="MHT File" xml:space="preserve">
@@ -503,7 +503,7 @@ We have a special offer for you.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>New PDF form</target>
+        <target>New PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -520,12 +520,12 @@ We have a special offer for you.</target>
       </trans-unit>
       <trans-unit id="/%d days are left until the license expiration.:dict/days:dict/one:dict/:string" xml:space="preserve">
         <source>%d day are left until the license expiration.</source>
-        <target>%d day are left until the license expiration.</target>
+        <target>%d day are left until the licence expiration.</target>
         <note/>
       </trans-unit>
       <trans-unit id="/%d days are left until the license expiration.:dict/days:dict/other:dict/:string" xml:space="preserve">
         <source>%d days are left until the license expiration.</source>
-        <target>%d days are left until the license expiration.</target>
+        <target>%d days are left until the licence expiration.</target>
         <note/>
       </trans-unit>
       <trans-unit id="/You are using a trial version of the application.&#10;The trial period will end in %d days, after that you will not be able to create and edit documents.:dict/NSStringLocalizedFormatKey:dict/:string" xml:space="preserve">
@@ -571,7 +571,7 @@ The trial period will end in %d days, after that you will not be able to create 
     <body>
       <trans-unit id="1UK-8n-QPP.title" xml:space="preserve">
         <source>Customize Toolbar…</source>
-        <target>Customize Toolbar…</target>
+        <target>Customise Toolbar…</target>
         <note>Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP";</note>
       </trans-unit>
       <trans-unit id="1Xt-HY-uBw.title" xml:space="preserve">
@@ -621,7 +621,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="4et-TX-a4m.title" xml:space="preserve">
         <source>License Agreement</source>
-        <target>License Agreement</target>
+        <target>Licence Agreement</target>
         <note>Class = "NSMenuItem"; title = "License Agreement"; ObjectID = "4et-TX-a4m";</note>
       </trans-unit>
       <trans-unit id="4sb-4s-VLi.title" xml:space="preserve">
@@ -651,7 +651,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="8Ga-Cu-VGe.title" xml:space="preserve">
         <source>License agreement</source>
-        <target>License agreement</target>
+        <target>Licence agreement</target>
         <note>Class = "NSButtonCell"; title = "License agreement"; ObjectID = "8Ga-Cu-VGe";</note>
       </trans-unit>
       <trans-unit id="8mr-sm-Yjd.title" xml:space="preserve">
@@ -711,7 +711,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="CJU-dx-a9l.title" xml:space="preserve">
         <source>Acknowledgments</source>
-        <target>Acknowledgments</target>
+        <target>Acknowledgements</target>
         <note>Class = "NSMenuItem"; title = "Acknowledgments"; ObjectID = "CJU-dx-a9l";</note>
       </trans-unit>
       <trans-unit id="DOj-j9-dza.title" xml:space="preserve">
@@ -866,7 +866,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="OY7-WF-poV.title" xml:space="preserve">
         <source>Minimize</source>
-        <target>Minimize</target>
+        <target>Minimise</target>
         <note>Class = "NSMenuItem"; title = "Minimize"; ObjectID = "OY7-WF-poV";</note>
       </trans-unit>
       <trans-unit id="OaQ-X3-Vso.title" xml:space="preserve">
@@ -951,12 +951,12 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="UEZ-Bs-lqG.title" xml:space="preserve">
         <source>Capitalize</source>
-        <target>Capitalize</target>
+        <target>Capitalise</target>
         <note>Class = "NSMenuItem"; title = "Capitalize"; ObjectID = "UEZ-Bs-lqG";</note>
       </trans-unit>
       <trans-unit id="VIY-Ag-zcb.title" xml:space="preserve">
         <source>Center</source>
-        <target>Center</target>
+        <target>Centre</target>
         <note>Class = "NSMenuItem"; title = "Center"; ObjectID = "VIY-Ag-zcb";</note>
       </trans-unit>
       <trans-unit id="Vdr-fp-XzO.title" xml:space="preserve">
@@ -1046,7 +1046,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="bgn-CT-cEk.title" xml:space="preserve">
         <source>Show Colors</source>
-        <target>Show Colors</target>
+        <target>Show Colours</target>
         <note>Class = "NSMenuItem"; title = "Show Colors"; ObjectID = "bgn-CT-cEk";</note>
       </trans-unit>
       <trans-unit id="bib-Uj-vzu.title" xml:space="preserve">
@@ -1401,8 +1401,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Copyright © 2025 Ascensio System SIA. All rights reserved.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Copyright © 2026 Ascensio System SIA. All rights reserved.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1418,8 +1418,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Copyright © 2025 Ascensio System SIA. All rights reserved.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Copyright © 2026 Ascensio System SIA. All rights reserved.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1435,8 +1435,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Copyright © 2025 Ascensio System SIA. All rights reserved.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Copyright © 2026 Ascensio System SIA. All rights reserved.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

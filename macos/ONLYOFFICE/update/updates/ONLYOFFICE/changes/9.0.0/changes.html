@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ONLYOFFICE Release Notes</title>
+    <style type="text/css">
+        /* variables */
+        :root {
+            --color-black: #141923;
+            --color-white: #fff;
+            --color-gray-100: #f7fafc;
+            --color-gray-200: #edf2f7;
+            --color-gray-300: #e2e8f0;
+            --color-gray-400: #cbd5e0;
+            --color-gray-500: #a0aec0;
+            --color-gray-600: #718096;
+            --color-gray-700: #4a5568;
+            --color-gray-800: #2d3748;
+            --color-gray-900: #1a202c;
+        }
+        body {
+            background: var(--color-white);
+            color: var(--color-gray-800);
+            font: 12px "Lucida Grande", "Lucida Sans Unicode", Verdana, Lucida, Helvetica, sans-serif;
+        }
+        h1, h2, h3 {
+            color: var(--color-gray-800);
+            font-weight: normal;
+            font-style: normal;
+        }
+        h1 {
+            font-size: 1.7em;
+        }
+        h2 {
+            font-size: 1.4em;
+            font-weight: lighter;
+        }
+        h4 {
+            font-size: 1.2em;
+            font-weight: lighter;
+        }
+        code {
+            background: var(--color-gray-200);
+            font-family: monospace;
+            padding: 1px 5px;
+        }
+        ul {
+            padding: 8.1.0 20px;
+        }
+        li {
+            margin-left: 20px;
+            margin-bottom: 0.2em;
+            padding: 0;
+        }
+        hr {
+            margin: 20px 0;
+            border: var(--color-gray-400) solid 0.5px;
+        }
+        .releasedate {
+            color: var(--color-gray-600);
+            font-weight: lighter;
+        }
+
+        /* prefers light mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--color-gray-900);
+                color: var(--color-gray-200);
+            }
+
+            h1, h2, h3 {
+                color: var(--color-white);
+            }
+
+            code {
+                background: var(--color-gray-800);
+                color: var(--color-gray-200);
+            }
+
+            .releasedate {
+                color: var(--color-gray-600);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="version">
+        <h1>ONLYOFFICE 9.0.0<span class="releasedate"> - {{DATE}}</span></h1>
+
+        <h2>New Features</h2>
+
+        <h4>All Editors</h4>
+        <ul>
+            <li>Redesigned interface of the main application window</li>
+            <li>Merged local and cloud template lists into a unified view</li>
+            <li>The list of templates is now processed on the client side, not on the server</li>
+            <li>The installed system languages are now displayed at the top of the text/document/dictionary list</li>
+            <li>Added a contrast-reducing effect for control buttons in inactive windows</li>
+            <li>Added the option to select a printer in the print preview menu</li>
+            <li>The <code>Print using the system dialog</code> option has been added to the print preview menu</li>
+            <li>Added new interface themes: Modern Light and Modern Dark</li>
+            <li>Added saving of the last selected languages in spellcheck lists</li>
+            <li>Added Arabic spellcheck dictionary used in sixteen dialects</li>
+            <li>Added AI-powered macro generation from descriptions and VBA-to-JavaScript conversion</li>
+            <li>Added the interface translation into Urdu (ur-PK, Urdu (Pakistan))</li>
+            <li>Added support for TextArt text settings inside chart labels</li>
+            <li>Added support for drawing the Up/Down Bars chart elements</li>
+        </ul>
+        <h4>Document Editor</h4>
+        <ul>
+            <li>Added correct display of previews for paragraph numbers for RTL</li>
+            <li>Improved positioning and settings of TextArt for RTL</li>
+            <li>Improved drawing of borders and fill for paragraphs with RTL direction</li>
+            <li>Enabled accurate cursor navigation with arrow keys based on the paragraph's text direction</li>
+            <li>Added the ability to display numbers using Hindi digits</li>
+            <li>Added a setting in the File menu for selecting the preferred font size: Western/Chinese for the Chinese interface language (Chinese (Simplified))</li>
+            <li>Added a Borders button to the Home toolbar to quickly set paragraph settings</li>
+            <li>Added support for the <code>MD</code> format for reading</li>
+        </ul>
+        <h4>Spreadsheet Editor</h4>
+        <ul>
+            <li>Added support for displaying bidirectional text</li>
+            <li>Added the ability to select external data from another spreadsheet</li>
+        </ul>
+        <h4>Presentation Editor</h4>
+        <ul>
+            <li>Added the ability to set the paragraph direction (Text Direction > RTL) on the toolbar and in the advanced settings</li>
+            <li>Added the ability to view animations with text</li>
+            <li>Added the "Preserve" option to the Slide Master context menu</li>
+        </ul>
+        <h4>Forms</h4>
+        <ul>
+            <li>Changed the appearance of the Signature and Image fields: the placeholder and signature icon are now always displayed</li>
+            <li>Improved user experience when filling in the Signature and Image fields</li>
+            <li>Added a new "type": "signature" for the Signature field, used in the process of filling out forms</li>
+        </ul>
+        <h4>PDF Editor</h4>
+        <ul>
+            <li>Added the ability to set RTL direction for text</li>
+            <li>The Edit Text option is available in the Community Edition build</li>
+            <li>Implemented a <code>PDF</code> form editor</li>
+            <li>Added copying pages between <code>PDF</code> files</li>
+        </ul>
+        <h4>Diagrams</h4>
+        <ul>
+            <li>Release of the first version of the Diagram Viewer with the ability to open <code>VSDX</code></li>
+        </ul>
+
+    </div>
+</body>
+</html>

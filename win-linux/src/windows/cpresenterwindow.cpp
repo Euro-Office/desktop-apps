@@ -37,6 +37,7 @@
 #include "utils.h"
 #include <QGridLayout>
 #include <clangater.h>
+#include <qtcomp/qnativeevent.h>
 
 using namespace std::placeholders;
 
@@ -87,7 +88,8 @@ bool CPresenterWindow::holdView(int id) const
 
 void CPresenterWindow::closeEvent(QCloseEvent *e)
 {
-    onCloseEvent();
+    if (isEnabled())
+        onCloseEvent();
     e->ignore();
 }
 
@@ -112,7 +114,7 @@ QWidget * CPresenterWindow::createMainPanel(QWidget * parent, const QString& tit
 
     QGridLayout * mainGridLayout = new QGridLayout(mainPanel);
     mainGridLayout->setSpacing(0);
-    mainGridLayout->setMargin(0);
+    QtComp::Widget::setLayoutMargin(mainGridLayout, 0);
     mainPanel->setLayout(mainGridLayout);
 
     m_boxTitleBtns = createTopPanel(mainPanel);

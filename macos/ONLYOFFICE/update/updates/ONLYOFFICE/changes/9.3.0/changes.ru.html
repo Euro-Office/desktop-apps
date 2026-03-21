@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>История изменений ONLYOFFICE</title>
+    <style type="text/css">
+        /* variables */
+        :root {
+            --color-black: #141923;
+            --color-white: #fff;
+            --color-gray-100: #f7fafc;
+            --color-gray-200: #edf2f7;
+            --color-gray-300: #e2e8f0;
+            --color-gray-400: #cbd5e0;
+            --color-gray-500: #a0aec0;
+            --color-gray-600: #718096;
+            --color-gray-700: #4a5568;
+            --color-gray-800: #2d3748;
+            --color-gray-900: #1a202c;
+        }
+        body {
+            background: var(--color-white);
+            color: var(--color-gray-800);
+            font: 12px "Lucida Grande", "Lucida Sans Unicode", Verdana, Lucida, Helvetica, sans-serif;
+        }
+        h1, h2, h3 {
+            color: var(--color-gray-800);
+            font-weight: normal;
+            font-style: normal;
+        }
+        h1 {
+            font-size: 1.7em;
+        }
+        h2 {
+            font-size: 1.4em;
+            font-weight: lighter;
+        }
+        h4 {
+            font-size: 1.2em;
+            font-weight: lighter;
+        }
+        code {
+            background: var(--color-gray-200);
+            font-family: monospace;
+            padding: 1px 5px;
+        }
+        ul {
+            padding: 8.1.3 20px;
+        }
+        li {
+            margin-left: 20px;
+            margin-bottom: 0.2em;
+            padding: 0;
+        }
+        hr {
+            margin: 20px 0;
+            border: var(--color-gray-400) solid 0.5px;
+        }
+        .releasedate {
+            color: var(--color-gray-600);
+            font-weight: lighter;
+        }
+
+        /* prefers light mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: var(--color-gray-900);
+                color: var(--color-gray-200);
+            }
+
+            h1, h2, h3 {
+                color: var(--color-white);
+            }
+
+            code {
+                background: var(--color-gray-800);
+                color: var(--color-gray-200);
+            }
+
+            .releasedate {
+                color: var(--color-gray-600);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="version">
+        <h1>ONLYOFFICE 9.3.0<span class="releasedate"> - {{DATE}}</span></h1>
+
+        <h2>New features</h2>
+
+        <h4>All Editors</h4>
+        <ul>
+            <li>Added the <code>Use AI functions</code> option to the application settings</li>
+            <li>Added <code>Box</code> and <code>Dropbox</code> cloud providers</li>
+            <li>Added the <code>Pin</code> option to the Recent files and Recent folders lists on the start page</li>
+            <li>Added the ability to work with files in separate windows</li>
+            <li>Added the Open File option to the application settings to open a file in a separate window</li>
+            <li>Implemented the ability to add hyperlinks to images, shapes, or groups</li>
+            <li>Implemented all settings for texture fills for images</li>
+            <li>Updated macro recording in documents, spreadsheets, and presentations</li>
+        </ul>
+
+        <h4>Document Editor</h4>
+        <ul>
+            <li>Added Multiple pages view</li>
+            <li>Added the <code>Zoom to 100%</code> and <code>Multiple pages</code> buttons to the View tab</li>
+            <li>Changed the appearance of comments. Now a user's color is used and the beginning and end of the comment are displayed</li>
+            <li>Implemented the ability to select words/paragraphs by double/triple-clicking the mouse</li>
+            <li>Added saving to the <code>MD</code> format</li>
+            <li>Moved header and footer settings to a separate <code>Header & Footer</code> tab</li>
+        </ul>
+
+        <h4>Spreadsheet Editor</h4>
+        <ul>
+            <li>Added support for new functions: <code>REGEXTEST</code>, <code>REGEXREPLACE</code>, <code>REGEXEXTRACT</code></li>
+            <li>Improved work of the <code>COUNTIF</code> function</li>
+            <li>Added support for dynamic arrays</li>
+            <li>Added Solver for solving linear problems (Simplex LP)</li>
+            <li>Changed the color of the resolved comment indicator</li>
+            <li>Added the ability to select multiple separators when splitting text into columns/pasting from the clipboard</li>
+            <li>Added the Format button, which combines various functions for working with sheets/rows/columns</li>
+            <li>Added support for <code>TSV</code> files for reading</li>
+            <li>Added options for pasting from the clipboard for the Paste button on the top toolbar</li>
+        </ul>
+
+        <h4>Presentation Editor</h4>
+        <ul>
+            <li>Added support for GIF animations playback in the slideshow demonstration mode</li>
+        </ul>
+
+        <h4>Forms</h4>
+        <ul>
+            <li>Added the signature settings window with the ability to draw and add text to signatures</li>
+            <li>Added the ability to stretch fixed forms to fit the table cell size using the context menu</li>
+            <li>Added the Protection tab, which duplicates the Protect functionality in the <code>File</code> menu</li>
+            <li>Added saving to the <code>MD</code> format</li>
+        </ul>
+
+        <h4>PDF Editor</h4>
+        <ul>
+            <li>Added version history</li>
+            <li>Added Multiple pages view</li>
+            <li>Added the <code>Zoom to 100%</code> and <code>Multiple pages</code> buttons to the View tab</li>
+            <li>Implemented a password prompt when enabling the Edit PDF mode if the file is protected from editing</li>
+            <li>Added support for Link annotations with the ability to add them both to an area and to text on a page</li>
+            <li>Added the ability to continue editing <code>PDF</code> using embedded fonts</li>
+            <li>Added the ability to redact text using the auxiliary pop-up toolbar</li>
+            <li>Added parameters for printing pages</li>
+        </ul>
+
+        <h4>Diagram</h4>
+        <ul>
+            <li>Added print preview</li>
+        </ul>
+
+        <h2>Fixes</h2>
+
+        <h4>Security</h4>
+        <ul>
+            <li>Fixed several vulnerabilities with out-of-bounds read in <code>XLS</code> processing/conversion (via <code>FilePass</code>, <code>HLink</code>, <code>rgXTI</code>, <code>itabLast</code>, <code>Formula</code> record <code>cce</code>, <code>ShapePropsStream</code>, and <code>CRN.colLast</code> records/fields) leading to information leak and <code>ASLR</code> bypass</li>
+            <li>Fixed vulnerabilities with untrusted pointer dereference in <code>XLS</code> processing/conversion (via <code>pictFmla.cbBufInCtlStm</code> and other vectors) leading to information leak and <code>ASLR</code> bypass</li>
+            <li>Fixed a DOM-based XSS vulnerability when executing a macro using dynamic import() (CVE-2021-43446, CVE-2023-50883, CVE-2024-44085)</li>
+        </ul>
+
+    </div>
+</body>
+</html>

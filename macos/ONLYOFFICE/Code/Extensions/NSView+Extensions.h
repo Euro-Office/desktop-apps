@@ -59,5 +59,7 @@
 - (instancetype)duplicate;
 - (void)shake;
 - (NSImage *)imageRepresentation;
+- (NSImage *)windowScreenshot;
+- (nullable NSView *)subviewOfClassName:(NSString * _Nonnull)className;
 
 @end

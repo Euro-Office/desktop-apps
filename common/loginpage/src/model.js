@@ -96,20 +96,63 @@ function Collection(attributes) {
     this.events.changed = new ModelEvent(this);
     this.events.erased = new ModelEvent(this);
     this.events.inserted = new ModelEvent(this);
+    this.events.reset = new ModelEvent(this);
     this.events.click = new ModelEvent(this);
     this.events.contextmenu = new ModelEvent(this);
 };
 
-Collection.prototype.add = function(item) {    
-    item.events.changed.attach(this.on_item_changed);
+Collection.prototype.add = function(item, suppressevent) {
+    const _add_model = (m, se) => {
+        m.events.changed.attach(this.on_item_changed);
 
-    this.items.push(item);
-    this.events.inserted.notify(item);
+        this.items.push(m);
 
-    $('#' + item.uid).off('click contextmenu');
-    $('#' + item.uid).on('click', item, this.on_item_click);
-    $('#' + item.uid).on('contextmenu', item, this.on_item_ctxmenu);
+        // if ( !(suppressevent === true) )
+        //     this.events.inserted.notify(m);
+
+        // $('#' + m.uid).off('click contextmenu')
+        //                 .on('click', m, this.on_item_click)
+        //                 .on('contextmenu', m, this.on_item_ctxmenu);
+    }
+
+    if ( item instanceof Array ) {
+        const items = item;
+        items.forEach(i => {
+            _add_model(i, true);
+        });
+
+        // if ( !(suppressevent === true) )
+        this.events.inserted.notify(items);
+
+        items.forEach(i => {
+            $('#' + i.uid).off('click contextmenu')
+                            .on('click', i, this.on_item_click)
+                            .on('contextmenu', i, this.on_item_ctxmenu);
+        });
+    } else {
+        _add_model(item)
+
+        // if ( !(suppressevent === true) )
+        this.events.inserted.notify(item);
+
+        $('#' + item.uid).off('click contextmenu')
+                        .on('click', item, this.on_item_click)
+                        .on('contextmenu', item, this.on_item_ctxmenu);
+    }
 };
+
+Collection.prototype.set = function(items) {
+    if ( items instanceof Array ) {
+        this.empty(true);
+
+        items.forEach(i => {
+            this.add(i, true);
+        });
+
+        // this.items = items;
+        this.events.reset.notify(items);
+    }
+}
 
 Collection.prototype.find = function(key, val) {
     return this.items.find(function(elem, i, arr){
@@ -117,7 +160,7 @@ Collection.prototype.find = function(key, val) {
     });
 };
 
-Collection.prototype.empty = function() {
+Collection.prototype.empty = function(suppressevent) {
     this.items.forEach(function(model, i, a) {
         $('#'+model.uid).off();
     });
@@ -126,7 +169,8 @@ Collection.prototype.empty = function() {
 
     if (!!this.list) this.view.find(this.list).empty();
     
-    this.events.erased.notify();
+    if ( !(suppressevent === true) )
+        this.events.erased.notify();
 };
 
 Collection.prototype.size = function() {
@@ -158,6 +202,16 @@ Model.prototype.set = function(key, value, opts) {
 
     if ( !opts || opts.silent !== true )
         this.events.changed.notify(args);
+};
+
+Model.prototype.setMany = function(args, opts) {
+    for (const [key, value] of Object.entries(args)) {
+        this[key] = value;
+    }
+
+    if (!opts || opts.silent !== true) {
+        this.events.changed.notify(args);
+    }
 };
 
 Model.prototype.get = function(key) {

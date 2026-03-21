@@ -1,35 +1,35 @@
-<svg viewBox="0 0 20 20">
-    <svg id="svg-btn-print" fill="#fff" width="20px" height="20px">
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <g id="svg-btn-print" fill="#fff">
         <path fill-rule="evenodd" d="M6 4h8v2H6V4ZM5 6V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h2a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2v2a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-2H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h2Zm0 7v-2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h2V7H3v6h2Zm0-5H4v1h1V8Zm9 3H6v5h8v-5Zm-7 1h6v1H7v-1Zm6 2H7v1h6v-1Z" clip-rule="evenodd"/>
-    </svg>
-    <svg id="svg-btn-quickprint" width="20" height="20">
+    </g>
+    <g id="svg-btn-quickprint">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4H14V6H6V4ZM5 6V4C5 3.44772 5.44772 3 6 3H14C14.5523 3 15 3.44772 15 4V6H17C17.5523 6 18 6.44772 18 7V10.6713C18.6254 11.4442 19 12.4284 19 13.5C19 15.9853 16.9853 18 14.5 18C13.4284 18 12.4442 17.6254 11.6713 17H6C5.44772 17 5 16.5523 5 16V14H3C2.44772 14 2 13.5523 2 13V7C2 6.44772 2.44772 6 3 6H5ZM17 7V9.75777C16.285 9.27914 15.4251 9 14.5 9C13.4284 9 12.4442 9.3746 11.6713 10H6C5.44772 10 5 10.4477 5 11V13H3V7H6H14H17ZM6 11H10.7578C10.2791 11.715 10 12.5749 10 13.5C10 14.4251 10.2791 15.285 10.7578 16H6V11ZM4 8H5V9H4V8ZM14.5 17C16.433 17 18 15.433 18 13.5C18 11.567 16.433 10 14.5 10C12.567 10 11 11.567 11 13.5C11 15.433 12.567 17 14.5 17ZM16.5482 11.5033L17.3423 12.3852L14.2957 16.474L13.9611 16.1024L13.9576 16.1056L11.9502 13.8762L12.6933 13.2071L14.2159 14.5038L16.5482 11.5033Z" />
-    </svg>
-    <svg id="svg-btn-save" width="20px" height="20px" fill="#fff">
+    </g>
+    <g id="svg-btn-save" fill="#fff">
         <path fill-rule="evenodd" d="M14 15h1V6.414L12.586 4H12v3H6V4H4v11h1v-5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v5Zm-1 1h2a1 1 0 0 0 1-1V6.414a1 1 0 0 0-.293-.707l-2.414-2.414A1 1 0 0 0 12.586 3H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h9Zm0-1v-5H6v5h7ZM10 4h1v2h-1V4Z" clip-rule="evenodd"/>
-    </svg>
-    <svg id="svg-btn-coauth" width="20px" height="20px">
+    </g>
+    <g id="svg-btn-coauth">
         <rect x="6" y="10" width="3" height="1" fill="#fff"/>
         <rect x="6" y="12" width="2" height="1" fill="#fff"/>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M16 12.9996C16 11.3427 14.6569 9.99957 13 9.99957C11.3431 9.99957 10 11.3427 10 12.9996C10 14.3058 10.8348 15.417 12 15.8289V16.8736C10.2748 16.4295 9 14.8634 9 12.9996C9 10.7904 10.7909 8.99957 13 8.99957C15.2091 8.99957 17 10.7904 17 12.9996C17 14.1945 16.476 15.2671 15.6453 16H17V17H14L14 16.8736V15.8289L14 14H15V15.2357C15.6137 14.6864 16 13.8881 16 12.9996Z" fill="#fff"/>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M8 15H4V4H6V7H12V4H12.5858L15 6.41421V8H16V6L13 3H4C3.44772 3 3 3.44772 3 4V15C3 15.5523 3.44772 16 4 16H8V15ZM10 4H11V6H10V4Z" fill="#fff"/>
-    </svg>
-    <svg id="svg-btn-sync" width="20px" height="20px">
+    </g>
+    <g id="svg-btn-sync">
         <rect x="6" y="10" width="3" height="1" fill="#fff"/>
         <rect x="6" y="12" width="3" height="1" fill="#fff"/>
         <rect x="10" y="10" width="9" height="7" rx="1" fill="#FFD114"/>
         <rect x="12" y="12" width="5" height="1" fill="#444"/>
         <rect x="12" y="14" width="5" height="1" fill="#444"/>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M4 15H9V16H4C3.44772 16 3 15.5523 3 15V4C3 3.44772 3.44772 3 4 3H13L16 6V9H15V6.41421L12.5858 4H12V7H6V4H4V15ZM10 4H11V6H10V4Z" fill="#fff"/>
-    </svg>
-    <svg id="svg-btn-undo" fill="#fff" width="20px" height="20px">
+    </g>
+    <g id="svg-btn-undo" fill="#fff">
         <path d="M11.355,7.625c-1.965,0-3.864,0.777-5.151,2.033L4,7.625V14h6.407l-2.091-2.219 c0.845-1.277,2.313-2.215,3.99-2.215c2.461,0,5.405,1.78,5.694,4.119C17.601,10.291,14.966,7.625,11.355,7.625z"/>
-    </svg>
-    <svg id="svg-btn-redo" fill="#fff" width="20px" height="20px">
+    </g>
+    <g id="svg-btn-redo" fill="#fff">
         <path d="M10.645,7.625c1.965,0,3.863,0.777,5.15,2.033L18,7.625V14h-6.406l2.09-2.219 c-0.845-1.277-2.313-2.215-3.989-2.215c-2.461,0-5.405,1.78-5.694,4.119C4.399,10.291,7.034,7.625,10.645,7.625z"/>
-    </svg>
-    <svg id="svg-btn-home" width="20" height="20" fill="none">
+    </g>
+    <g id="svg-btn-home" fill="none">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M7 11H7.5H11.5H12V11.5V16H11V12H8V16H7V11.5V11Z" fill="#fff"/>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M9.49889 2.35547L9.81419 2.61165L17.8142 9.11165L17.1836 9.88776L15.9998 8.92596L15.9989 15.5L15.9988 15.9999H15.4989H12V14.9999H14.999L15 8.11356L9.49889 3.64394L3.99996 8.11182L3.99895 14.9999H6.99999V15.9999H3.49888H2.99881L2.99888 15.4998L2.99984 8.92442L1.81419 9.88776L1.18359 9.11165L9.18359 2.61165L9.49889 2.35547Z" fill="black"/>
-    </svg>
+    </g>
 </svg>

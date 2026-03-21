@@ -1,0 +1,132 @@
+/*
+@download-widget-background: %1;
+@download-widget-border: %2;
+
+@text-normal: %3;
+@tool-button-hover-background: %4;
+@tool-button-pressed-background: %5;
+
+@border-control-focus: %6;
+*/
+
+QDialog {background: %1;}
+QDialog[rtl-font=true] QAbstractButton,
+QDialog[rtl-font=true] QLineEdit,
+QDialog[rtl-font=true] QLabel {font-family: "Segoe UI", "Traditional Arabic", "Noto Sans";}
+
+QAbstractButton,
+QLineEdit,
+QLabel {font-family: "Arial", "Helvetica", "Helvetica Neue", sans-serif;}
+
+QAbstractButton,
+QLineEdit,
+QLabel {color: %3; background: transparent;}
+
+QAbstractButton {font-weight: bold; padding: 0px; margin: 0px;}
+QPushButton::menu-indicator {width: 0px; height: 0px;}
+QAbstractButton:hover {background: %4;}
+QAbstractButton:pressed {background: %5;}
+
+/* 1.0x */
+QAbstractButton,
+QLineEdit {border: 1px solid %2; border-radius: 3px; height: 14px; font-size: 11px; icon-size: 12px;}
+QAbstractButton:focus,
+QLineEdit:focus {border-color: %6; border-width: 2px;}
+QLineEdit {padding-left: 3px; padding-right: 3px;}
+QLabel {font-size: 11px; max-height: 14px; min-height: 14px;}
+
+/* 1.25x */
+QDialog[zoom="1.25x"] QAbstractButton,
+QDialog[zoom="1.25x"] QLineEdit {border-width: 1px; border-radius: 4px; height: 18px; font-size: 14px; icon-size: 15px;}
+QDialog[zoom="1.25x"] QAbstractButton:focus,
+QDialog[zoom="1.25x"] QLineEdit:focus {border-width: 3px;}
+QDialog[zoom="1.25x"] QLineEdit {padding-left: 4px; padding-right: 4px;}
+QDialog[zoom="1.25x"] QLabel {font-size: 14px; max-height: 18px; min-height: 18px;}
+
+/* 1.5x */
+QDialog[zoom="1.5x"] QAbstractButton,
+QDialog[zoom="1.5x"] QLineEdit {border-width: 2px; border-radius: 5px; height: 21px; font-size: 17px; icon-size: 18px;}
+QDialog[zoom="1.5x"] QAbstractButton:focus,
+QDialog[zoom="1.5x"] QLineEdit:focus {border-width: 3px;}
+QDialog[zoom="1.5x"] QLineEdit {padding-left: 5px; padding-right: 5px;}
+QDialog[zoom="1.5x"] QLabel {font-size: 17px; max-height: 21px; min-height: 21px;}
+
+/* 1.75x */
+QDialog[zoom="1.75x"] QAbstractButton,
+QDialog[zoom="1.75x"] QLineEdit {border-width: 2px; border-radius: 5px; height: 25px; font-size: 19px; icon-size: 21px;}
+QDialog[zoom="1.75x"] QAbstractButton:focus,
+QDialog[zoom="1.75x"] QLineEdit:focus {border-width: 4px;}
+QDialog[zoom="1.75x"] QLineEdit {padding-left: 5px; padding-right: 5px;}
+QDialog[zoom="1.75x"] QLabel {font-size: 19px; max-height: 25px; min-height: 25px;}
+
+/* 2.0x */
+QDialog[zoom="2x"] QAbstractButton,
+QDialog[zoom="2x"] QLineEdit {border-width: 2px; border-radius: 8px; height: 28px; font-size: 22px; icon-size: 24px;}
+QDialog[zoom="2x"] QAbstractButton:focus,
+QDialog[zoom="2x"] QLineEdit:focus {border-width: 4px;}
+QDialog[zoom="2x"] QLineEdit {padding-left: 6px; padding-right: 6px;}
+QDialog[zoom="2x"] QLabel {font-size: 22px; max-height: 28px; min-height: 28px;}
+
+/* 2.25x */
+QDialog[zoom="2.25x"] QAbstractButton,
+QDialog[zoom="2.25x"] QLineEdit {border-width: 2px; border-radius: 7px; height: 32px; font-size: 25px; icon-size: 27px;}
+QDialog[zoom="2.25x"] QAbstractButton:focus,
+QDialog[zoom="2.25x"] QLineEdit:focus {border-width: 5px;}
+QDialog[zoom="2.25x"] QLineEdit {padding-left: 7px; padding-right: 7px;}
+QDialog[zoom="2.25x"] QLabel {font-size: 25px; max-height: 32px; min-height: 32px;}
+
+/* 2.5x */
+QDialog[zoom="2.5x"] QAbstractButton,
+QDialog[zoom="2.5x"] QLineEdit {border-width: 3px; border-radius: 8px; height: 35px; font-size: 28px; icon-size: 30px;}
+QDialog[zoom="2.5x"] QAbstractButton:focus,
+QDialog[zoom="2.5x"] QLineEdit:focus {border-width: 5px;}
+QDialog[zoom="2.5x"] QLineEdit {padding-left: 8px; padding-right: 8px;}
+QDialog[zoom="2.5x"] QLabel {font-size: 28px; max-height: 35px; min-height: 35px;}
+
+/* 2.75x */
+QDialog[zoom="2.75x"] QAbstractButton,
+QDialog[zoom="2.75x"] QLineEdit {border-width: 3px; border-radius: 8px; height: 39px; font-size: 30px; icon-size: 33px;}
+QDialog[zoom="2.75x"] QAbstractButton:focus,
+QDialog[zoom="2.75x"] QLineEdit:focus {border-width: 6px;}
+QDialog[zoom="2.75x"] QLineEdit {padding-left: 8px; padding-right: 8px;}
+QDialog[zoom="2.75x"] QLabel {font-size: 30px; max-height: 39px; min-height: 39px;}
+
+/* 3.0x */
+QDialog[zoom="3x"] QAbstractButton,
+QDialog[zoom="3x"] QLineEdit {border-width: 3px; border-radius: 9px; height: 42px; font-size: 33px; icon-size: 36px;}
+QDialog[zoom="3x"] QAbstractButton:focus,
+QDialog[zoom="3x"] QLineEdit:focus {border-width: 6px;}
+QDialog[zoom="3x"] QLineEdit {padding-left: 9px; padding-right: 9px;}
+QDialog[zoom="3x"] QLabel {font-size: 33px; max-height: 42px; min-height: 42px;}
+
+/* 3.5x */
+QDialog[zoom="3.5x"] QAbstractButton,
+QDialog[zoom="3.5x"] QLineEdit {border-width: 4px; border-radius: 11px; height: 49px; font-size: 39px; icon-size: 42px;}
+QDialog[zoom="3.5x"] QAbstractButton:focus,
+QDialog[zoom="3.5x"] QLineEdit:focus {border-width: 7px;}
+QDialog[zoom="3.5x"] QLineEdit {padding-left: 11px; padding-right: 11px;}
+QDialog[zoom="3.5x"] QLabel {font-size: 39px; max-height: 49px; min-height: 49px;}
+
+/* 4.0x */
+QDialog[zoom="4x"] QAbstractButton,
+QDialog[zoom="4x"] QLineEdit {border-width: 4px; border-radius: 12px; height: 56px; font-size: 44px; icon-size: 48px;}
+QDialog[zoom="4x"] QAbstractButton:focus,
+QDialog[zoom="4x"] QLineEdit:focus {border-width: 8px;}
+QDialog[zoom="4x"] QLineEdit {padding-left: 12px; padding-right: 12px;}
+QDialog[zoom="4x"] QLabel {font-size: 44px; max-height: 56px; min-height: 56px;}
+
+/* 4.5x */
+QDialog[zoom="4.5x"] QAbstractButton,
+QDialog[zoom="4.5x"] QLineEdit {border-width: 5px; border-radius: 14px; height: 63px; font-size: 50px; icon-size: 54px;}
+QDialog[zoom="4.5x"] QAbstractButton:focus,
+QDialog[zoom="4.5x"] QLineEdit:focus {border-width: 9px;}
+QDialog[zoom="4.5x"] QLineEdit {padding-left: 14px; padding-right: 14px;}
+QDialog[zoom="4.5x"] QLabel {font-size: 50px; max-height: 63px; min-height: 63px;}
+
+/* 5.0x */
+QDialog[zoom="5x"] QAbstractButton,
+QDialog[zoom="5x"] QLineEdit {border-width: 5px; border-radius: 15px; height: 70px; font-size: 55px; icon-size: 60px;}
+QDialog[zoom="5x"] QAbstractButton:focus,
+QDialog[zoom="5x"] QLineEdit:focus {border-width: 10px;}
+QDialog[zoom="5x"] QLineEdit {padding-left: 15px; padding-right: 15px;}
+QDialog[zoom="5x"] QLabel {font-size: 55px; max-height: 70px; min-height: 70px;}

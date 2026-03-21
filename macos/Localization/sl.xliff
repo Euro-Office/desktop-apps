@@ -453,7 +453,7 @@ Za vas imamo posebno ponudbo.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Novi PDF obrazec</target>
+        <target>Novi PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1385,8 +1385,8 @@ Preizkusno obdobje bo poteklo v %d dneh. Po izteku tega obdobja ne boste mogli u
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">Avtorske pravice © 2025 Ascensio System SIA. Vse pravice pridržane.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">Avtorske pravice © 2026 Ascensio System SIA. Vse pravice pridržane.</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

@@ -33,6 +33,8 @@
 #include "windows/ceditorwindow.h"
 #include "windows/ceditorwindow_p.h"
 #include "iconfactory.h"
+#include "defines.h"
+#include "utils.h"
 #include <QApplication>
 #include <clangater.h>
 
@@ -137,6 +139,7 @@ int CEditorWindow::closeWindow()
         default:
             panel->data()->close();
             panel->cef()->Apply(new CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_SAVE));
+            Utils::processMoreEvents(100);
 
             _reply = MODAL_RESULT_NO;
             break;
@@ -146,6 +149,10 @@ int CEditorWindow::closeWindow()
     if ( _reply == MODAL_RESULT_YES ) {
         panel->data()->close();
         d_ptr.get()->onDocumentSave(panel->cef()->GetId());
+
+        AscEditorType editorType = panel->data()->contentType();
+        QString baseKey = "EditorsGeometry/" + QString::number(int(editorType)) + "/";
+        CWindowBase::saveWindowState(baseKey);
     }
 
     return _reply;
@@ -166,6 +173,11 @@ bool CEditorWindow::holdView(const std::wstring& portal) const
 {
     auto url = qobject_cast<CTabPanel*>(m_pMainView)->data()->url();
     return Utils::normalizeAppProtocolUrl(url).find(Utils::normalizeAppProtocolUrl(portal)) != std::wstring::npos;
+}
+
+bool CEditorWindow::isSlideshowMode() const
+{
+    return d_ptr->isSlideshowMode();
 }
 
 void CEditorWindow::undock(bool maximized)
@@ -202,7 +214,7 @@ QWidget * CEditorWindow::createMainPanel(QWidget * parent, const QString& title)
 
     QGridLayout * mainGridLayout = new QGridLayout(mainPanel);
     mainGridLayout->setSpacing(0);
-    mainGridLayout->setMargin(0);
+    QtComp::Widget::setLayoutMargin(mainGridLayout, 0);
     mainPanel->setLayout(mainGridLayout);
 
     if (isCustomWindowStyle()) {
@@ -412,12 +424,17 @@ void CEditorWindow::captureMouse()
 //        if ( cursor.x > _g.right() - dpiCorr(150) )
 //            _window_offset_x = _g.right() - dpiCorr(150);
 //        else _window_offset_x = cursor.x - _g.x();
-        SetWindowPos((HWND)winId(), NULL, cursor.x - CAPTURED_WINDOW_OFFSET_X, cursor.y - CAPTURED_WINDOW_OFFSET_Y,
+        int x = cursor.x;
+        x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
+        SetWindowPos((HWND)winId(), NULL, x, cursor.y - CAPTURED_WINDOW_OFFSET_Y,
                         0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
         PostMessage((HWND)winId(), WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(cursor.x, cursor.y));
     }
 #else
-    QMouseEvent _event(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QPoint cursor = QCursor::pos();
+    int x = cursor.x();
+    x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
+    QMouseEvent _event(QEvent::MouseButtonRelease, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
     PROCESSEVENTS();
     move(QCursor::pos() - QPoint(CAPTURED_WINDOW_OFFSET_X, CAPTURED_WINDOW_OFFSET_Y));
@@ -447,9 +464,6 @@ void CEditorWindow::onCloseEvent()
 {
     if ( m_pMainView ) {
         if ( closeWindow() == MODAL_RESULT_YES ) {
-            AscEditorType editorType = d_ptr->panel()->data()->contentType();
-            QString baseKey = (editorType == AscEditorType::etUndefined) ? "" : "EditorsGeometry/" + QString::number(int(editorType)) + "/";
-            saveWindowState(baseKey);
             hide();
         }
     }
@@ -538,7 +552,8 @@ void CEditorWindow::onClickButtonHome()
 
 void CEditorWindow::closeEvent(QCloseEvent * e)
 {
-    AscAppManager::getInstance().closeQueue().enter(sWinTag{CLOSE_QUEUE_WIN_TYPE_EDITOR, size_t(this)});
+    if (isEnabled())
+        AscAppManager::getInstance().closeQueue().enter(sWinTag{CLOSE_QUEUE_WIN_TYPE_EDITOR, size_t(this)});
     e->ignore();
 }
 

@@ -65,6 +65,8 @@ public:
     int editorsCount(const std::wstring& portal);
     bool canPinTabAtPoint(const QPoint& pt);
     bool holdView(int id) const;
+    bool slideshowHoldView(int id) const;
+    bool isSlideshowMode() const;
     virtual void applyTheme(const std::wstring&) final;
     virtual void focus() final;
     void close();
@@ -95,6 +97,7 @@ public:
     void toggleButtonMain(bool, bool delay = false);
     bool holdUid(int) const;
     bool holdUrl(const QString&, AscEditorType) const;
+    bool slideshowHoldUrl(const QString&, AscEditorType) const;
     int  startPanelId();
     int  tabCloseRequest(int index = -1);
 #ifdef __linux

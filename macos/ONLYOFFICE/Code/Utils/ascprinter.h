@@ -443,8 +443,6 @@ public:
 	virtual void BitBlt(unsigned char* pBGRA, const int& nRasterX, const int& nRasterY, const int& nRasterW, const int& nRasterH,
 						const double& x, const double& y, const double& w, const double& h, const double& dAngle)
 	{
-
-
 		CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
 		CGDataProviderRef pDataProvider = CGDataProviderCreateWithData(NULL, pBGRA, 4 * nRasterW * nRasterH, releasePixels);
 
@@ -452,25 +450,43 @@ public:
 											kCGImageAlphaPremultipliedLast, pDataProvider,
 											NULL, false, kCGRenderingIntentAbsoluteColorimetric);
 
-		// здесь никаких поворотов - разруливаем все раньше
-		CGFloat fX = (CGFloat)((x + m_oInfo.m_nMarginLeft) * m_oInfo.m_nPaperWidthOrigin / m_oInfo.m_nPaperWidth);
-		CGFloat fY = (CGFloat)((y + m_oInfo.m_nMarginTop) * m_oInfo.m_nPaperHeightOrigin / m_oInfo.m_nPaperHeight);
-		CGFloat fW = (CGFloat)(nRasterW * m_oInfo.m_nPaperWidthOrigin / m_oInfo.m_nPaperWidth);
-		CGFloat fH = (CGFloat)(nRasterH * m_oInfo.m_nPaperHeightOrigin / m_oInfo.m_nPaperHeight);
-		fY = (m_oInfo.m_nPaperHeightOrigin - fY - fH);
+		// calculate scale coeffs that properly scale page content on a choosen paper
+		// this coeffs DO NOT scale the content itself
+		const CGFloat scaleX = (CGFloat)m_oInfo.m_nPaperWidthOrigin / m_oInfo.m_nPaperWidth;
+		const CGFloat scaleY = (CGFloat)m_oInfo.m_nPaperHeightOrigin / m_oInfo.m_nPaperHeight;
+
+		// calculate scaled width and height of a page content
+		CGFloat contentWidth = nRasterW * scaleX;
+		CGFloat contentHeight = nRasterH * scaleY;
+
+		// IGNORE margins, calculate offset for x and y manually
+//		CGFloat fX = (x + m_oInfo.m_nMarginLeft) * scaleX;
+//		CGFloat fY = (y + m_oInfo.m_nMarginTop) * scaleY;
+//		fY = (m_oInfo.m_nPaperHeightOrigin - fY - fH);
+
+		// calculate offset of content on a page to center the content
+		auto calcOffset = [](CGFloat paperSize, CGFloat contentSize) {
+			return (paperSize - contentSize) / 2;
+		};
+
+		CGFloat offsetX = calcOffset(m_oInfo.m_nPaperWidthOrigin, contentWidth);
+		CGFloat offsetY = calcOffset(m_oInfo.m_nPaperHeightOrigin, contentHeight);
 
 		CGContextRef _context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 		CGContextSaveGState(_context);
 
+		// if printing to a preview panel (or an actual printer) and `dAngle` is PI/2
 		if (m_oInfo.m_bIsPrintingOnScreen && fabs(dAngle - M_PI_2) <= 1e-5)
 		{
-			// if printing to a preview panel (or an actual printer) and `dAngle` is PI/2,
-			// then rotate image by 90 degrees and translate it to fit in rect
-			CGAffineTransform transform = CGAffineTransformMake(0, -1, 1, 0, fX, fH + fY);
+			// rotate image by 90 degrees and move it up by `contentWidth` to fit original position
+			CGAffineTransform transform = CGAffineTransformMake(0, -1, 1, 0, 0, contentWidth);
 			CGContextConcatCTM(_context, transform);
+			// recalculate offsets, since page content is now rotated
+			offsetX = -calcOffset(m_oInfo.m_nPaperHeightOrigin, contentWidth);
+			offsetY = calcOffset(m_oInfo.m_nPaperWidthOrigin, contentHeight);
 		}
 
-		CGRect _rect = NSMakeRect(fX, fY, fW, fH);
+		CGRect _rect = NSMakeRect(offsetX, offsetY, contentWidth, contentHeight);
 		CGContextDrawImage(_context, _rect, pCgImage);
 		CGImageRelease(pCgImage);
 

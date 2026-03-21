@@ -53,8 +53,13 @@
         args.field = '.main-column.col-center';
         // args.itemindex = 3;
         args.itemtext = _lang.actAbout;
+        args.tplItem = 'nomenuitem';
 
         baseView.prototype.constructor.call(this, args);
+    };
+
+    const version = function(commercial) {
+        return commercial === true ? utils.Lang.strVersionCommercial : utils.Lang.strVersionCommunity;
     };
 
     ViewAbout.prototype = Object.create(baseView.prototype);
@@ -63,26 +68,26 @@
         var _opts = args.opts;
         !!_opts.active && (_opts.edition = !!_opts.edition ? _opts.edition + ' ' + _opts.active : _opts.active);
         _opts.edition = !!_opts.edition ? `<div id="idx-ver-edition" class="about-field">${_opts.edition}</div>` : '';
+        const strVersion = version(args.opts.commercial);
 
         let _ext_ver = '';
-        if ( !!_opts.arch ) _ext_ver += `${_opts.arch == 'x64' ? 'x64' : 'x86'}`;
+        if ( !!_opts.arch ) _ext_ver += _opts.arch;
         if ( !!_opts.pkg ) _ext_ver += ` ${_opts.pkg}`;
         if ( !!_ext_ver ) _opts.version += ` (${_ext_ver.trim()})`;
 
         var _lang = utils.Lang;
         const _updates_status = `<section id="idx-update-cnt">
-                                        <div class="status-field hbox">
-                                            <svg class="icon" id="idx-update-status-icon">
-                                                <use href=""></use>
-                                            </svg>
-                                            <label id="idx-update-status-text"></label>
-                                        </div>
-                                        <div class="status-field">
-                                            <button id="idx-update-btnaction" class="btn btn--landing"></button>
-                                        </div>
-                                    </section>`;
+                                    <div class="status-field hbox">
+                                        <svg class="icon" id="idx-update-status-icon">
+                                            <use href=""></use>
+                                        </svg>
+                                        <label id="idx-update-status-text"></label>
+                                    </div>
+                                    <div class="status-field">
+                                        <button id="idx-update-btnaction" class="btn btn--landing btn-update-action"></button>
+                                    </div>
+                                </section>`;
         let _html = `<div class="flexbox">
-                        <h3 class='table-caption' l10n>${_lang.actAbout}</h3>
                         <div class="box-ver">
                             <section class="hbox">
                                 <div id="idx-about-cut-logo" class="${_opts.logocls}">
@@ -93,17 +98,19 @@
                                 </div>
                                 <div class="vbox">
                                     <p id="idx-about-appname">${_opts.appname}</p>
-                                    <p id="idx-about-version"><span l10n>${_lang.strVersion}</span> ${_opts.version}</p>
+                                    <p id="idx-about-version"><span l10n>${strVersion}</span> ${_opts.version}</p>
                                 </div>
                             </section><p></p>
-                            <div class="ver-version hidden" l10n>${_opts.appname} ${_lang.strVersion} ${_opts.version}</div>
+                            <div class="separator"></div>
                             ${_updates_status}
-                            <div id='id-features-available' l10n>${_lang.aboutProFeaturesAvailable}</div>
-                            ${_opts.edition}
-                            <a class="ver-checkupdate link hidden" draggable='false' data-state='check' href="#" l10n>${_lang.checkUpdates}</a>
-                            <div class="about-field"><a class="ver-changelog link" draggable='false' target="popup" href=${_opts.changelog} l10n>${_lang.aboutChangelog}</a></div>
-                            <div class="ver-copyright about-field">${_opts.rights}</div>
-                            <a class="ver-site link" target="popup" href="${_opts.link}">${_opts.site}</a>
+                            <div class="box-copyright">
+                                <div id='id-features-available' l10n>${_lang.aboutProFeaturesAvailable}</div>
+                                ${_opts.edition}
+                                <a class="ver-checkupdate link hidden" draggable='false' data-state='check' href="#" l10n>${_lang.checkUpdates}</a>
+                                <div class="about-field"><a class="ver-changelog link" draggable='false' target="popup" href=${_opts.changelog} l10n>${_lang.aboutChangelog}</a></div>
+                                <a class="ver-site link about-field" target="popup" href="${_opts.link}">${_opts.site}</a>
+                                <div class="ver-copyright about-field">${_opts.rights}</div> 
+                            </div>                    
                         </div>`+
                         // '<div class="box-license flex-fill">'+
                         //   '<iframe id="framelicense" src="license.htm"></iframe>'+
@@ -121,10 +128,11 @@
 
     utils.fn.extend(ControllerAbout.prototype, (function() {
         let features = undefined;
+        let action = null;
 
         let _on_features_avalable = function (params) {
             if ( !!this.view ) {
-                let _label = $('#id-features-available', this.view.$panel);
+                let _label = $('#id-features-available', this.view.$body);
                 if ( _label )
                     if ( !!params )
                         _label.show();
@@ -150,12 +158,13 @@
 
                 if (!this.view) {
                     this.view = new ViewAbout(args);
-                    this.view.render();
-                    this.view.$menuitem.removeClass('extra');
-                    this.view.$panel.append(this.view.paneltemplate(args));
+                    this.view.args = args;
+                    this.view.$menuitem && this.view.$menuitem.removeClass('extra');
+                    this.view.$body = $(this.view.paneltemplate(args));
+                    this.view.$dialog = new AboutDialog();
                 } else {
                     if ( !!args.opts && !!args.opts.edition ) {
-                        $('#idx-ver-edition').html(args.opts.edition);
+                        $('#idx-ver-edition', this.view.$body).html(args.opts.edition);
                     }
                 }
 
@@ -168,7 +177,7 @@
                 // });
                 // $label[this.updates===true?'show':'hide']();
                 if ( args.opts ) {
-                    this.view.$panel.find('.ver-changelog')[!!args.opts.changelog?'show':'hide']();
+                    this.view.$body.find('.ver-changelog')[!!args.opts.changelog?'show':'hide']();
                 }
 
                 if ( !!features && features.length )
@@ -179,12 +188,11 @@
 
                 if ( this.view ) {
                     // this.view.$panel.find('.ver-checkupdate')[this.updates?'show':'hide']();
-                    this.view.$panel.find('#idx-update-cnt')[this.updates?'show':'hide']();
+                    this.view.$body.find('#idx-update-cnt')[this.updates?'show':'hide']();
 
                     if ( this.updates ) {
-                        const $btn = $('#idx-update-btnaction')
-                        $btn.click(e => {
-                            sdk.execCommand('updates:action', $btn.data('action'));
+                        $('body').on('click', '.btn-update-action', e=>{
+                            sdk.execCommand('updates:action', action);
                         });
                     }
                 }
@@ -233,11 +241,11 @@
 
         const on_updates_info = function(info) {
                 if ( info.text ) {
-                    $('#idx-update-status-text', this.view.$panel).text(info.text);
+                    $('#idx-update-status-text', this.view.$body).text(info.text);
                 }
 
                 if ( info.icon ) {
-                    const $icon = $('#idx-update-status-icon', this.view.$panel);
+                    const $icon = $('#idx-update-status-icon', this.view.$body);
 
                     let icon_id;
                     switch (info.icon) {
@@ -252,10 +260,10 @@
                 }
 
                 if ( info.button ) {
-                    const $button = $('#idx-update-btnaction', this.view.$panel);
+                    const $button = $('#idx-update-btnaction', this.view.$body);
                     if ( info.button.text ) {
                         $button.text(info.button.text);
-                        $button.data("action", info.button.action);
+                        action = info.button.action;
                     }
 
                     if ( info.button.lock ) {
@@ -272,6 +280,13 @@
                 }
         }
 
+        const onPanelShow = function(panel) {
+            if (panel === this.action) {
+                this.view.$dialog.show();
+                this.view.$dialog.setBody(this.view.$body);
+            }
+        }
+
         return {
             init: function() {
                 baseController.prototype.init.apply(this, arguments);
@@ -285,6 +300,14 @@
 
                     sdk.on('onfeaturesavailable', _on_features_avalable.bind(this));
                 } else sdk.GetLocalFeatures = e => false;
+
+                CommonEvents.on('panel:show', onPanelShow.bind(this));
+                CommonEvents.on('lang:changed', () => {
+                    if (this.view) {
+                        this.view.$dialog.titleText = utils.Lang.actAbout;
+                        $('#idx-about-version span', this.view.$body).text(version(this.view.args.opts.commercial));
+                    }
+                });
 
                 return this;
             },

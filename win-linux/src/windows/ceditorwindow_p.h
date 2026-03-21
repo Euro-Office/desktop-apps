@@ -38,8 +38,8 @@
 #include "components/cmessage.h"
 #include "ceditortools.h"
 #include "components/cfullscrwidget.h"
-#include "components/cprintdialog.h"
 #include "components/cmenu.h"
+#include "defines.h"
 #include "Network/FileTransporter/include/FileTransporter.h"
 #include <QDir>
 #include <QUuid>
@@ -47,15 +47,9 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QGridLayout>
-#include <QPrintEngine>
 #include <QAction>
 
-#ifdef __linux__
-# include "platform_linux/gtkprintdialog.h"
-#else
-# include "platform_win/printdialog.h"
-#endif
-
+#include <qtcomp/qnativeevent.h>
 #define DEFAULT_BTNS_COUNT 6
 #define ICON_SPACER_WIDTH 9
 #define ICON_SIZE QSize(20,20)
@@ -111,7 +105,6 @@ class CEditorWindowPrivate : public CCefEventsGate
     CEditorWindow * window = nullptr;
     QLabel * iconuser = nullptr;
     bool isPrinting = false,
-         layoutIsSet = false,
         isFullScreen = false;
     int layoutType = LayoutNone;
     CFullScrWidget * fs_parent = nullptr;
@@ -146,7 +139,7 @@ public:
         leftboxbuttons = new QWidget;
         leftboxbuttons->setLayout(new QHBoxLayout);
         leftboxbuttons->layout()->setSpacing(0);
-        leftboxbuttons->layout()->setMargin(0);
+        QtComp::Widget::setLayoutMargin(leftboxbuttons->layout(), 0);
 
         CSVGPushButton * btnHome = new CSVGPushButton;
         btnHome->setProperty("class", "normal");
@@ -417,7 +410,7 @@ public:
 
     void onEditorActionRequest(int, const QString& json) override
     {
-        if ( json.contains(QRegExp("action\\\":\\\"file:close")) ) {
+        if ( json.contains(QRegularExpression("action\\\":\\\"file:close")) ) {
             window->closeWindow();
         }
     }
@@ -495,31 +488,30 @@ public:
         switch (panel()->data()->contentType()) {
         case AscEditorType::etDocument:
             background = GetColorValueByRole(ecrTabWordActive);
-            border = background;
+            // border = background;
             break;
         case AscEditorType::etPresentation:
             background = GetColorValueByRole(ecrTabSlideActive);
-            border = background;
+            // border = background;
             break;
         case AscEditorType::etSpreadsheet:
             background = GetColorValueByRole(ecrTabCellActive);
-            border = background;
+            // border = background;
             break;
         case AscEditorType::etDocumentMasterForm:
         case AscEditorType::etPdf:
             background = GetColorValueByRole(ecrTabViewerActive);
-            border = background;
+            // border = background;
             break;
         case AscEditorType::etDraw:
             background = GetColorValueByRole(ecrTabDrawActive);
-            border = background;
+            // border = background;
             break;
         default:
             background = GetColorValueByRole(ecrWindowBackground);
-            border = GetColorValueByRole(ecrWindowBorder);
+            // border = GetColorValueByRole(ecrWindowBorder);
         }
-        if (GetCurrentTheme().id() == L"theme-gray")
-            border = GetColorValueByRole(ecrWindowBorder);
+        border = GetColorValueByRole(ecrWindowBorder);
 
         window->setWindowColors(QColor(QString::fromStdWString(background)), QColor(QString::fromStdWString(border)), window->isActiveWindow());
     }
@@ -620,124 +612,12 @@ public:
 
     void onDocumentPrint(int currentpage, uint pagescount) override
     {
-#ifdef __OS_WIN_XP
-        if (QPrinterInfo::availablePrinterNames().size() == 0) {
-            CMessage::info(window->handle(), tr("There are no printers available"));
-            return;
-        }
-#endif
         if ( isPrinting ) return;
         isPrinting = true;
 
-        QWidget *parent = window->handle();
-#ifdef Q_OS_LINUX
-        WindowHelper::CParentDisable oDisabler(parent);
-#endif
-        if ( !(pagescount < 1) ) {
-            CAscMenuEvent * pEvent;
-            QAscPrinterContext * pContext = new QAscPrinterContext(AscAppManager::printData().printerInfo());
-            QString documentName = m_panel->data()->title(true);
-
-            QPrinter * printer = pContext->getPrinter();
-            printer->setFromTo(1, pagescount);
-            printer->printEngine()->setProperty(QPrintEngine::PPK_DocumentName, documentName);
-            printer->setDuplex(AscAppManager::printData().duplexMode());
-            if ( printer->supportsMultipleCopies() ) {
-                printer->setCopyCount(AscAppManager::printData().copiesCount());
-            }
-
-            if ( !AscAppManager::printData().isQuickPrint() ) {
-                printer->setPageOrientation(AscAppManager::printData().pageOrientation());
-                printer->setPageSize(AscAppManager::printData().pageSize());
-            }
-
-#ifdef _WIN32
-            printer->setOutputFileName("");
-            PrintDialog * dialog =  new PrintDialog(printer, window->handle());
-#else
-            QFileInfo info(documentName);
-            QString pdfName = Utils::lastPath(LOCAL_PATH_SAVE) + "/" + info.baseName() + ".pdf";
-            QString outputName = AscAppManager::printData().isQuickPrint() ? Utils::uniqFileName(pdfName) : pdfName;
-            if ( AscAppManager::printData().printerInfo().printerName().isEmpty() ) {
-                printer->setOutputFileName(outputName);
-            } else {
-                printer->printEngine()->setProperty(QPrintEngine::PPK_OutputFileName, outputName);
-            }
-
-# ifdef FILEDIALOG_DONT_USE_NATIVEDIALOGS
-            CPrintDialog * dialog =  new CPrintDialog(printer, parent);
-# else
-            GtkPrintDialog * dialog = new GtkPrintDialog(printer, parent);
-# endif
-#endif // _WIN32
-
-            dialog->setWindowTitle(CEditorWindow::tr("Print Document"));
-            dialog->setEnabledOptions(QPrintDialog::PrintPageRange | QPrintDialog::PrintToFile);
-            if (!(currentpage < 0)) {
-                currentpage++;
-                dialog->setEnabledOptions(dialog->enabledOptions() | QPrintDialog::PrintCurrentPage);
-                dialog->setOptions(dialog->options() | QPrintDialog::PrintCurrentPage);
-            }
-
-            dialog->setPrintRange(AscAppManager::printData().printRange());
-            if ( dialog->printRange() == QPrintDialog::PageRange )
-                dialog->setFromTo(AscAppManager::printData().pageFrom(), AscAppManager::printData().pageTo());
-
-            int modal_res = QDialog::Accepted;
-            if ( AscAppManager::printData().isQuickPrint() ) {
-                dialog->accept();
-            } else modal_res = dialog->exec();
-
-            if ( modal_res == QDialog::Accepted ) {
-                if ( !AscAppManager::printData().isQuickPrint() )
-                    AscAppManager::printData().setPrinterInfo(*printer);
-
-                QVector<PageRanges> page_ranges;
-
-#ifdef Q_OS_LINUX
-                if ( printer->outputFormat() == QPrinter::PdfFormat ) {
-                    if ( !AscAppManager::printData().isQuickPrint() ) {
-                        info.setFile(printer->outputFileName());
-                        Utils::keepLastPath(LOCAL_PATH_SAVE, info.absolutePath());
-                    }
-                } else {
-                    if ( AscAppManager::printData().isQuickPrint() && !printer->outputFileName().isEmpty() ) {
-                        info.setFile(printer->outputFileName());
-                        if ( info.suffix() == "pdf" )
-                            printer->setOutputFileName("");
-                    }
-                }
-#endif
-
-                switch(dialog->printRange()) {
-                case QPrintDialog::AllPages:
-                    page_ranges.append(PageRanges(1, pagescount));
-                    break;
-                case QPrintDialog::PageRange:
-                    page_ranges = dialog->getPageRanges();
-                    break;
-                case QPrintDialog::Selection:
-                    page_ranges.append(PageRanges(-1, -1));
-                    break;
-                case QPrintDialog::CurrentPage:
-                    page_ranges.append(PageRanges(currentpage, currentpage));
-                    break;
-                }
-
-                CEditorTools::print({m_panel->cef(), pContext, &page_ranges, parent});
-            }
-
-            pContext->Release();
-
-            pEvent = new CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_PRINT_END);
-            m_panel->cef()->Apply(pEvent);
-    //        RELEASEOBJECT(pEvent)
-
-#ifndef _WIN32
-            RELEASEOBJECT(dialog)
-#endif
-        } else
-            CMessage::warning(parent, tr("There are no pages set to print."));
+        CCefView *pView = m_panel->cef();
+        QString documentName = m_panel->data()->title(true);
+        CEditorTools::onDocumentPrint(window->handle(), pView, documentName, currentpage, pagescount);
 
         isPrinting = false;
     }
@@ -784,6 +664,11 @@ public:
             if (layoutType != LayoutNone)
                 centerTitle(f);
         }
+    }
+
+    bool isSlideshowMode() const
+    {
+        return fs_parent != nullptr;
     }
 
     void onFullScreen(bool apply)
@@ -1056,7 +941,7 @@ public:
         boxtitlelabel->setObjectName("boxtitlelabel");
         boxtitlelabel->setLayout(new QHBoxLayout(boxtitlelabel));
         boxtitlelabel->layout()->setSpacing(0);
-        boxtitlelabel->layout()->setMargin(0);
+        QtComp::Widget::setLayoutMargin(boxtitlelabel->layout(), 0);
         boxtitlelabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         boxtitlelabel->layout()->addWidget(window->m_labelTitle);
         if ( m_panel->data()->hasFeature(L"crypted\":true") && !iconcrypted ) {

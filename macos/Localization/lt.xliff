@@ -358,7 +358,7 @@ Mes jums turime specialų pasiūlymą.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Nauja PDF forma</target>
+        <target>Naujas PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="/%d days are left until the license expiration.:dict/NSStringLocalizedFormatKey:dict/:string">
@@ -1078,8 +1078,8 @@ Bandomasis laikotarpis baigsis po %d dienų. Po šio laikotarpio jūs negalėsit
         <target>ONLYOFFICE</target>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target>Autorių teisės 2025 Ascensio Sistemos SIA. Visos teisės saugomos.</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target>Autorių teisės 2026 Ascensio Sistemos SIA. Visos teisės saugomos.</target>
       </trans-unit>
     </body>
   </file>

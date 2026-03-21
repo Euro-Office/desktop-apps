@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-  <mime-type type="text/oform">
-    <comment>Onlyoffice oform type</comment>
-    <glob pattern="*.oform"/>
-  </mime-type>
-</mime-info>
-

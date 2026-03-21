@@ -36,6 +36,7 @@
 #include <Windows.h>
 #ifndef __OS_WIN_XP
 # include "jumplist.h"
+# include "shellassoc.h"
 # include <shlobj_core.h>
 #endif
 
@@ -62,18 +63,46 @@ int main(int argc, char *argv[])
     QStringList _cmdArgs(QCoreApplication::arguments().mid(1));
 #ifndef __OS_WIN_XP
     if (_cmdArgs.contains("--create-jump-list")) {
-        QStringList defaultTitles = {
-            "New document",
-            "New spreadsheet",
-            "New presentation",
-            "New PDF form"
-        };
-        CreateJumpList(_cmdArgs.size() > MIN_TASK_NUM ? _cmdArgs.mid(1) : defaultTitles);
+        CreateJumpList();
         return 0;
     } else
     if (_cmdArgs.contains("--remove-jump-list")) {
         ClearHistory();
         DeleteJumpList();
+        return 0;
+    } else
+    if (_cmdArgs.contains("--assoc")) {
+        if (_cmdArgs.size() > 1) {
+            std::wstring assocLine = _cmdArgs.at(1).toStdWString();
+            size_t len = assocLine.length();
+            if (len == 0)
+                return 0;
+
+            std::vector<AssocPair> assocList;
+            wchar_t *buf = &assocLine[0];
+            if (buf[len - 1] == ';')
+                buf[len - 1] = '\0';
+
+            size_t last_sep_pos = 0;
+            wchar_t *it = buf;
+            while (1) {
+                while (*it != '\0' && *it != ';')
+                    it++;
+                wchar_t tmp = *it;
+                *it = '\0';
+                wchar_t *pair = buf + last_sep_pos;
+                if (wchar_t *colon = wcschr(pair, L':')) {
+                    *colon = L'\0';
+                    assocList.push_back({pair, colon + 1});
+                }
+                if (tmp == '\0')
+                    break;
+                last_sep_pos = it - buf + 1;
+                it++;
+            }
+            if (!assocList.empty())
+                SetUserFileAssoc(assocList);
+        }
         return 0;
     }
 #endif

@@ -47,6 +47,7 @@ TRANSLATIONS = ./langs/en.ts \
                 ./langs/sv.ts \
                 ./langs/tr.ts \
                 ./langs/uk.ts \
+                ./langs/ur.ts \
                 ./langs/vi.ts \
                 ./langs/be.ts \
                 ./langs/zh_TW.ts \
@@ -63,11 +64,16 @@ CORE_3DPARTY_PATH = $$PWD/../../core/Common/3dParty
 CONFIG += core_no_dst
 include($$CORE_ROOT_DIR/Common/base.pri)
 
+core_windows {
+    DEFINES -= WIN32_LEAN_AND_MEAN
+}
+
 INCLUDEPATH += \
     $$BASEEDITORS_PATH/lib/include \
     $$BASEEDITORS_PATH/lib/qt_wrapper/include \
     $$CORE_ROOT_DIR/DesktopEditor \
-    $$CORE_ROOT_DIR/Common
+    $$CORE_ROOT_DIR/Common \
+    $$PWD/src
 
 HEADERS += \
     $$PWD/src/windows/cmainwindow.h \
@@ -191,7 +197,7 @@ ADD_DEPENDENCY(PdfFile, DjVuFile, XpsFile, UnicodeConverter, hunspell, ooxmlsign
 include($$CORE_ROOT_DIR/../desktop-sdk/ChromiumBasedEditors/videoplayerlib/videoplayerlib_deps.pri)
 
 core_linux {
-    QT += network x11extras
+    QT += network x11extras dbus
 
     QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
     QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/converter\'"
@@ -202,26 +208,26 @@ core_linux {
     HEADERS +=  $$PWD/src/windows/platform_linux/cx11decoration.h \
                 #$$PWD/src/windows/platform_linux/gtk_addon.h \
                 $$PWD/src/windows/platform_linux/cwindowplatform.h \
+                $$PWD/src/components/cnotification.h \
                 $$PWD/src/platform_linux/cdialogopenssl.h \
                 $$PWD/src/platform_linux/cdialogcertificateinfo.h \
                 $$PWD/src/platform_linux/singleapplication.h \
                 $$PWD/src/platform_linux/xdgdesktopportal.h \
                 $$PWD/src/platform_linux/gtkfilechooser.h \
                 $$PWD/src/platform_linux/gtkprintdialog.h \
-                $$PWD/src/platform_linux/gtkmessage.h \
                 $$PWD/src/platform_linux/gtkutils.h \
                 $$PWD/src/platform_linux/xcbutils.h \
                 $$PWD/extras/update-daemon/src/classes/csocket.h
 
     SOURCES +=  $$PWD/src/windows/platform_linux/cx11decoration.cpp \
                 $$PWD/src/windows/platform_linux/cwindowplatform.cpp \
+                $$PWD/src/components/cnotification.cpp \
                 $$PWD/src/platform_linux/cdialogopenssl.cpp \
                 $$PWD/src/platform_linux/cdialogcertificateinfo.cpp \
                 $$PWD/src/platform_linux/singleapplication.cpp \
                 $$PWD/src/platform_linux/xdgdesktopportal.cpp \
                 $$PWD/src/platform_linux/gtkfilechooser.cpp \
                 $$PWD/src/platform_linux/gtkprintdialog.cpp \
-                $$PWD/src/platform_linux/gtkmessage.cpp \
                 $$PWD/src/platform_linux/gtkutils.cpp \
                 $$PWD/src/platform_linux/xcbutils.cpp \
                 $$PWD/extras/update-daemon/src/classes/csocket.cpp
@@ -233,14 +239,9 @@ core_linux {
         SOURCES += $$PWD/src/windows/platform_linux/gtkmainwindow.cpp
     }
 
-    updmodule {
-        HEADERS += $$PWD/src/platform_linux/updatedialog.h
-        SOURCES += $$PWD/src/platform_linux/updatedialog.cpp
-    }
-
     CONFIG += link_pkgconfig
-    PKGCONFIG += glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb
-    LIBS += -lX11 -lX11-xcb -lcups
+    PKGCONFIG += glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xcb-shape libnotify
+    LIBS += -lX11 -lcups
 
     cef_version_107 {
         LIBS += $$PWD/../../build_tools/tools/linux/sysroot/ubuntu14/libdbus-1.so.3
@@ -248,8 +249,7 @@ core_linux {
         PKGCONFIG += dbus-1
     }
 
-    LIBS += $$CORE_3DPARTY_PATH/icu/$$PLATFORM_BUILD/build/libicuuc.so.58
-    LIBS += $$CORE_3DPARTY_PATH/icu/$$PLATFORM_BUILD/build/libicudata.so.58
+    include($$CORE_3DPARTY_PATH/icu/icu.pri)
 
     DEFINES += DOCUMENTSCORE_OPENSSL_SUPPORT
 }
@@ -268,24 +268,20 @@ core_windows {
                $$PWD/src/platform_win/association.h \
                $$PWD/src/platform_win/filechooser.h \
                $$PWD/src/platform_win/printdialog.h \
-               $$PWD/src/platform_win/message.h \
                $$PWD/src/platform_win/resource.h
 
     SOURCES += $$PWD/src/windows/platform_win/cwindowplatform.cpp \
                $$PWD/src/platform_win/singleapplication.cpp \
                $$PWD/src/platform_win/association.cpp \
                $$PWD/src/platform_win/filechooser.cpp \
-               $$PWD/src/platform_win/printdialog.cpp \
-               $$PWD/src/platform_win/message.cpp
+               $$PWD/src/platform_win/printdialog.cpp
 
     OTHER_FILES += $$PWD/res/manifest/DesktopEditors.exe.manifest
 
     updmodule:!build_xp {
         INCLUDEPATH += $$PWD/extras/update-daemon/src/classes
-        HEADERS += $$PWD/src/platform_win/updatedialog.h \
-                   $$PWD/extras/update-daemon/src/classes/csocket.h
-        SOURCES += $$PWD/src/platform_win/updatedialog.cpp \
-                   $$PWD/extras/update-daemon/src/classes/csocket.cpp
+        HEADERS += $$PWD/extras/update-daemon/src/classes/csocket.h
+        SOURCES += $$PWD/extras/update-daemon/src/classes/csocket.cpp
     }
 
     LIBS += -lwininet \
@@ -320,6 +316,11 @@ core_windows {
 
     build_xp {
         DEFINES += __OS_WIN_XP
+    } else {
+        HEADERS += $$PWD/src/platform_win/wintoastlib.h \
+                   $$PWD/src/components/cnotification.h
+        SOURCES += $$PWD/src/platform_win/wintoastlib.cpp \
+                   $$PWD/src/components/cnotification.cpp
     }
 }
 

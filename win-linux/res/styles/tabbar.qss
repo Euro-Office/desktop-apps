@@ -41,37 +41,29 @@ Tab[selected=false][hovered=true],
 CTabBar[active=false] Tab[selected=true][hovered=true] {background: %3;}
 
 /* dark, contrast-dark */
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#leftButton,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#leftButton {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#leftButton {
     image: url(:/tabbar/icons/scrolltab_ln_light.svg);
 }
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#leftButton:disabled,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#leftButton:disabled {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#leftButton:disabled {
     image: url(:/tabbar/icons/scrolltab_ld_light.svg);
 }
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#leftButton:hover,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#leftButton:hover {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#leftButton:hover {
     image: url(:/tabbar/icons/scrolltab_lh_light.svg);
 }
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#leftButton:pressed,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#leftButton:pressed {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#leftButton:pressed {
     image: url(:/tabbar/icons/scrolltab_lp_light.svg);
 }
 
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#rightButton,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#rightButton {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#rightButton {
     image: url(:/tabbar/icons/scrolltab_rn_light.svg);
 }
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#rightButton:disabled,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#rightButton:disabled {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#rightButton:disabled {
     image: url(:/tabbar/icons/scrolltab_rd_light.svg);
 }
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#rightButton:hover,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#rightButton:hover {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#rightButton:hover {
     image: url(:/tabbar/icons/scrolltab_rh_light.svg);
 }
-#mainPanel[uitheme=theme-dark] CTabBar #tabScroll>#rightButton:pressed,
-#mainPanel[uitheme=theme-contrast-dark] CTabBar #tabScroll>#rightButton:pressed {
+#mainPanel[uithemetype=dark] CTabBar #tabScroll>#rightButton:pressed {
     image: url(:/tabbar/icons/scrolltab_rp_light.svg);
 }
 

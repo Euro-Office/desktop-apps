@@ -33,12 +33,7 @@
 #ifndef JUMPLIST_H
 #define JUMPLIST_H
 
-#include <QStringList>
-
-#define MIN_TASK_NUM 3
-#define MAX_TASK_NUM 4
-
-void CreateJumpList(const QStringList &list);
+void CreateJumpList();
 void DeleteJumpList();
 void ClearHistory();
 

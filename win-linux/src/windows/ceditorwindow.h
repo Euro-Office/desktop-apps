@@ -65,6 +65,7 @@ public:
     bool closed() const;
     bool modified() const;
     bool holdView(const std::wstring& portal) const;
+    bool isSlideshowMode() const;
     void undock(bool maximized = false);
     virtual bool holdView(int id) const final;
     virtual void applyTheme(const std::wstring&) final;

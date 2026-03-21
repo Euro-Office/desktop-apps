@@ -55,6 +55,14 @@
 - (void)tabs:(ASCTabsControl *)control didSelectTab:(ASCTabView *)tab;
 - (void)tabs:(ASCTabsControl *)control didUpdateTab:(ASCTabView *)tab;
 - (void)tabs:(ASCTabsControl *)control didReorderTab:(ASCTabView *)tab from:(NSInteger)oldIndex to:(NSInteger)newIndex;
+- (BOOL)tabs:(ASCTabsControl *)control didDetachTab:(ASCTabView *)tab atScreenPoint:(NSPoint)screenPoint withEvent:(NSEvent *)event;
+- (void)tabs:(ASCTabsControl *)control willShowContextMenuForTab:(ASCTabView *)tab withMenu:(NSMenu *)menu;
+- (void)tabs:(ASCTabsControl *)control didRequestCloseTab:(ASCTabView *)tab;
+- (void)tabs:(ASCTabsControl *)control didRequestCloseSavedTabs:(ASCTabView *)tab;
+- (void)tabs:(ASCTabsControl *)control didRequestCloseAllTabs:(ASCTabView *)tab;
+- (void)tabs:(ASCTabsControl *)control didRequestShowInFolderForTab:(ASCTabView *)tab;
+- (void)tabs:(ASCTabsControl *)control didRequestDetachTab:(ASCTabView *)tab;
+- (void)tabs:(ASCTabsControl *)control didRequestCreateNewForTab:(ASCTabView *)tab;
 @end
 
 @interface ASCTabsControl : NSControl
@@ -63,11 +71,15 @@
 @property (nonatomic) CGFloat maxTabWidth;
 @property (nonatomic, assign) id <ASCTabsControlDelegate> delegate;
 @property (readonly) ASCTabsMulticastDelegate* multicastDelegate;
+@property (nonatomic) BOOL tabPinAllowed;
 
 - (void)addTab:(ASCTabView *)tab;
 - (void)addTab:(ASCTabView *)tab selected:(BOOL)selected;
-- (void)removeTab:(ASCTabView *)tab;
-- (void)removeTab:(ASCTabView *)tab selected:(BOOL)selected;
+- (void)insertTab:(ASCTabView *)tab atIndex:(NSUInteger)index;
+- (void)insertTab:(ASCTabView *)tab atIndex:(NSUInteger)index selected:(BOOL)selected;
+
+- (void)removeTab:(ASCTabView *)tab animated:(BOOL)animated;
+- (void)removeTab:(ASCTabView *)tab selected:(BOOL)selected animated:(BOOL)animated;
 - (void)removeAllTabs;
 - (void)selectTab:(ASCTabView *)tab;
 - (void)updateTab:(ASCTabView *)tab;

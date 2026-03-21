@@ -1,6 +1,7 @@
 #include "components/canimatedicon.h"
 #include <QPainter>
 #include <QVariant>
+#include <qtcomp/qnativeevent.h>
 
 #define RELEASE_OBJECT(obj) if (obj) delete obj, obj = nullptr;
 
@@ -44,8 +45,8 @@ void CAnimatedIcon::startSvg(const QString& source, const QString& eid)
     if ( m_svg->load(source) ) {
 //        setFixedSize( m_svg->defaultSize() );
 
-        if ( !m_static && pixmap() ) {
-            m_static = new QPixmap(*pixmap());
+        if ( !m_static ) {
+            m_static = QtComp::Widget::copyPixmap(this);
         }
 
         if ( m_svg->animated() ) {

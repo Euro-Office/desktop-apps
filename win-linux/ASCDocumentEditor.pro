@@ -35,7 +35,7 @@ core_windows {
     OTHER_FILES += $$PWD/version.rc
 }
 
-updmodule:core_linux {
+core_linux {
     GLIB_RESOURCE_FILES += $$PWD/res/gresource.xml
 
     glib_resources.name = gresource

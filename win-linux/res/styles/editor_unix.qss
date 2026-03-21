@@ -63,6 +63,40 @@
 #mainPanel[uitheme=theme-gray][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true][kde=true]:hover {image: url(:/maximize_kde_hover.svg);}
 #mainPanel[uitheme=theme-gray][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true][kde=true]:pressed {image: url(:/maximize_kde_pressed.svg);}
 
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize[unix=true] {image: url(:/minimize_unix_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize[unix=true]:hover {image: url(:/minimize_unix_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize[unix=true]:pressed {image: url(:/minimize_unix_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize[unix=true][kde=true] {image: url(:/minimize_kde_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize[unix=true][kde=true]:hover {image: url(:/minimize_kde_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize[unix=true][kde=true]:pressed {image: url(:/minimize_kde_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=true] {image: url(:/close_unix_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=true]:hover {image: url(:/close_unix_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=true]:pressed {image: url(:/close_unix_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=true][kde=true] {image: url(:/close_kde_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=true][kde=true]:hover {image: url(:/close_kde_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=true][kde=true]:pressed {image: url(:/close_kde_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[unix=true] {image: url(:/restore_unix_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[unix=true]:hover {image: url(:/restore_unix_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[unix=true]:pressed {image: url(:/restore_unix_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[unix=true][kde=true] {image: url(:/restore_kde_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[unix=true][kde=true]:hover {image: url(:/restore_kde_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[unix=true][kde=true]:pressed {image: url(:/restore_kde_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true] {image: url(:/maximize_unix_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true]:hover {image: url(:/maximize_unix_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true]:pressed {image: url(:/maximize_unix_pressed.svg);}
+
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true][kde=true] {image: url(:/maximize_kde_normal.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true][kde=true]:hover {image: url(:/maximize_kde_hover.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min][unix=true][kde=true]:pressed {image: url(:/maximize_kde_pressed.svg);}
+
+
 /* 1.0x */
 #toolButtonMinimize[kde=true],
 #toolButtonClose[kde=true],

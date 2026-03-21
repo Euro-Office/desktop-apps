@@ -48,9 +48,19 @@ build_xp {
     DESTDIR = $$DESTDIR/xp
     DEFINES += __OS_WIN_XP
 } else {
-    HEADERS += $$PWD/src/jumplist.h
-    SOURCES += $$PWD/src/jumplist.cpp
+    HEADERS += \
+        $$PWD/src/jumplist.h \
+        $$PWD/src/shellassoc.h
+
+    SOURCES += \
+        $$PWD/src/jumplist.cpp \
+        $$PWD/src/shellassoc.cpp
+
     LIBS += -lshlwapi \
+            -lshell32 \
+            -ladvapi32 \
+            -lcrypt32 \
+            -lRpcrt4 \
             -lole32
 }
 

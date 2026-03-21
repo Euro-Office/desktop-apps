@@ -23,3 +23,12 @@
 }
 
 @scaled-one-px: var(--scaled-one-px, 1px);
+
+.rtl-font {
+    &[applang^=ar], &[applang^=ur] {
+        --font-family-base-custom: system-ui, -apple-system, "Geeza Pro", "Segoe UI", "Traditional Arabic", "Noto Sans";
+    }
+}
+
+@font-family-sans-serif:  Arial, Helvetica, "Helvetica Neue", sans-serif;
+@font-family-base: var(--font-family-base-custom, var(--font-family-base)), @font-family-sans-serif;

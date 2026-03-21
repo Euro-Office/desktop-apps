@@ -41,7 +41,7 @@
 #import "NSCefView.h"
 #import "NSString+Extensions.h"
 #import "mac_application.h"
-#import "mac_cefview.h"
+#import "mac_cefviewmedia.h"
 
 @interface NSCefView () {
     CCefViewWrapper* m_pCefView;
@@ -56,17 +56,25 @@
     self = [super initWithFrame:frame];
     if (self) {
         CALayer *viewLayer = [CALayer layer];
-        [viewLayer setBackgroundColor:CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0)]; //RGB plus Alpha Channel
+        
+        CGColorRef backColor = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0); //RGB plus Alpha Channel
+        [viewLayer setBackgroundColor:backColor];
+        CGColorRelease(backColor);
+        
         [self setWantsLayer:YES]; // view's backing store is using a Core Animation Layer
         [self setLayer:viewLayer];
-        
-        m_pCefView = new CCefViewWrapper(self);
+
+        m_pCefView = new CCefViewMedia(self);
     }
     return self;
 }
 
 - (void)dealloc {
     [self internalClean];
+}
+
+- (CCefView *)cef {
+    return m_pCefView ? m_pCefView->GetCefView() : nullptr;
 }
 
 - (void)internalClean {
@@ -104,6 +112,19 @@
 - (void)setExternalCloud:(NSString *)provider {
     if (m_pCefView) {
         m_pCefView->GetCefView()->SetExternalCloud([provider stdwstring]);
+    }
+}
+
+- (void)setBackgroundColor:(NSColor *)color {
+    CGFloat red, green, blue, alpha;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    
+    CGColorRef backColor = CGColorCreateGenericRGB(red, green, blue, 1.0); //RGB plus Alpha Channel
+    [self.layer setBackgroundColor:backColor];
+    CGColorRelease(backColor);
+    
+    if (m_pCefView) {
+        return m_pCefView->SetBackgroundCefColor(255 * red, 255 * green, 255 * blue);
     }
 }
 
@@ -252,5 +273,27 @@
     return nil;
 }
 
+- (void)setParentWidgetInfoWithJson:(NSString *)jsonString {
+    CCefView * cef = [self cef];
+    if (cef) {
+        cef->SetParentWidgetInfo([jsonString stdwstring]);
+    }
+}
+
+- (void)sendCommand:(NSString *)command withParam:(NSString *)param {
+    CCefView * cef = [self cef];
+    if (cef) {
+        NSEditorApi::CAscExecCommandJS * pCommand = new NSEditorApi::CAscExecCommandJS;
+        pCommand->put_Command([command stdwstring]);
+        pCommand->put_Param([param stdwstring]);
+        
+        NSEditorApi::CAscMenuEvent * pEvent = new NSEditorApi::CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_EXECUTE_COMMAND_JS);
+        pEvent->m_pData = pCommand;
+        if (cef->GetType() == cvwtEditor ) {
+            pCommand->put_FrameName(L"frameEditor");
+        }
+        cef->Apply(pEvent);
+    }
+}
 
 @end

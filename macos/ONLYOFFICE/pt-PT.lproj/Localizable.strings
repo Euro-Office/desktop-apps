@@ -80,7 +80,7 @@
 "new-document" = "Novo documento";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Novo formulário PDF";
+"new-pdfform" = "Novo PDF";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Nova apresentação";
@@ -195,6 +195,33 @@
 
 /* No comment provided by engineer. */
 "XML Paper Specification" = "Documento OpenXPS (*.xps)";
+
+/* No comment provided by engineer. */
+"Show main window" = "Mostrar janela principal";
+
+/* No comment provided by engineer. */
+"Close" = "Fechar";
+
+/* No comment provided by engineer. */
+"Close saved" = "Fechar guardado";
+
+/* No comment provided by engineer. */
+"Close all" = "Fechar tudo";
+
+/* No comment provided by engineer. */
+"Show in folder" = "Mostrar na pasta";
+
+/* No comment provided by engineer. */
+"Move to start" = "Comece";
+
+/* No comment provided by engineer. */
+"Move to end" = "Mover para o fim";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Desafixar guia";
+
+/* No comment provided by engineer. */
+"Create new" = "Criar novo";
 
 /* No comment provided by engineer. */
 "Yes" = "Sim";

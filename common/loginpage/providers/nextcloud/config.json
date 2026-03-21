@@ -6,6 +6,7 @@
     },
     "editorPage" : "/apps/onlyoffice/",
     "cryptoSupport" : "true",
+    "order": 2,
     "icons": {
         "themeLight":{
             "connectionsList": "./assets/listicon.svg",

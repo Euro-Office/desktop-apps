@@ -503,7 +503,7 @@ We have a special offer for you.</source>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>新しいPDFフォーム</target>
+        <target>新しいPDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
@@ -1401,8 +1401,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">著作権 © 2025 Ascensio System SIA. 無断転載を禁じます。</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">著作権 © 2026 Ascensio System SIA. 無断転載を禁じます。</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1418,8 +1418,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">著作権 © 2025 Ascensio System SIA. 無断転載を禁じます。</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">著作権 © 2026 Ascensio System SIA. 無断転載を禁じます。</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>
@@ -1435,8 +1435,8 @@ The trial period will end in %d days, after that you will not be able to create 
         <note>Bundle name</note>
       </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
-        <source>Copyright © 2025 Ascensio System SIA. All rights reserved.</source>
-        <target state="translated">著作権 © 2025 Ascensio System SIA. 無断転載を禁じます。</target>
+        <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
+        <target state="translated">著作権 © 2026 Ascensio System SIA. 無断転載を禁じます。</target>
         <note>Copyright (human-readable)</note>
       </trans-unit>
     </body>

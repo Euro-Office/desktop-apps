@@ -39,6 +39,7 @@
 //
 
 #import "ASCTitleWindow.h"
+#import "ASCTitleWindowController.h"
 #import "ASCConstants.h"
 
 @interface ASCTitleWindow()
@@ -95,6 +96,13 @@
         self.titlebarAppearsTransparent = true;
         self.titleVisibility = NSWindowTitleHidden;
         self.toolbar = customToolbar;
+    }
+}
+
+- (void) performClose:(id)sender {
+    ASCTitleWindowController *windowController = (ASCTitleWindowController *)self.windowController;
+    if (!windowController || [windowController shouldPerformClose]) {
+        [super performClose:sender];
     }
 }
 

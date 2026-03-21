@@ -36,6 +36,16 @@ QPushButton#toolButtonClose:pressed {background-color: #d75050;}
 #mainPanel[uitheme=theme-gray][window=pretty] QPushButton#toolButtonMaximize[class=min] {image: url(:/maximize.svg);}
 #mainPanel[uitheme=theme-gray] #iconuser {background: rgba(68,68,68,80%);}
 
+#mainPanel[uitheme=theme-white] #labelTitle {color: #444;}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton[act=tool][unix=false][hovered=true],
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton[act=tool][unix=false]:hover {background-color: rgba(0,0,0,20%);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMinimize {image: url(:/minimize.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose {image: url(:/close.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonClose[unix=false]:hover {image: url(:/close_light.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize {image: url(:/restore.svg);}
+#mainPanel[uitheme=theme-white][window=pretty] QPushButton#toolButtonMaximize[class=min] {image: url(:/maximize.svg);}
+#mainPanel[uitheme=theme-white] #iconuser {background: rgba(68,68,68,80%);}
+
 /* 1.25x */
 #mainPanel[zoom="1.25x"] #toolButtonMinimize,
 #mainPanel[zoom="1.25x"] #toolButtonClose,
