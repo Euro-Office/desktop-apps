@@ -735,7 +735,11 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
             primaryText = primaryText.mid(0, delim);
         }
     }
+#ifdef DONT_USE_GTK_MAINWINDOW
     Window parent_xid = (parent) ? (Window)parent->winId() : 0L;
+#else
+    Window parent_xid = (parent) ? parent->property("gtk_window_xid").value<unsigned long>() : 0L;
+#endif
 
     const char* img_name = NULL;
     switch (msgType) {

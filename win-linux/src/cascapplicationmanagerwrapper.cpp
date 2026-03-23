@@ -1682,7 +1682,14 @@ namespace Drop {
         }
         return false;
 #else
-        return XcbUtils::isWindowCoveredAt(mainWindow->winId(), ignoringWindow->winId(), pt.x(), pt.y());
+# ifdef DONT_USE_GTK_MAINWINDOW
+        xcb_window_t mainWindow_xid = mainWindow->winId();
+        xcb_window_t ignoringWindow_xid = ignoringWindow->winId();
+# else
+        xcb_window_t mainWindow_xid = mainWindow->property("gtk_window_xid").value<unsigned long>();
+        xcb_window_t ignoringWindow_xid = ignoringWindow->property("gtk_window_xid").value<unsigned long>();
+# endif
+        return XcbUtils::isWindowCoveredAt(mainWindow_xid, ignoringWindow_xid, pt.x(), pt.y());
 #endif
     }
 
