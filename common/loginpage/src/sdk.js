@@ -71,6 +71,10 @@
         window.AscDesktopEditor.execCommand.apply(this, arguments);
     };
 
+    !sdk.oncloudchanged && (sdk.oncloudchanged = (m, a) => {
+        // console.log('cloud changed', model, 'added'/'removed');
+    });
+
     sdk.externalClouds = function() {
         let _clouds = sdk.GetExternalClouds();
         if ( _clouds ) {
