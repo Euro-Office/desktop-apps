@@ -1,8 +1,7 @@
 #include "gtkmainwindow.h"
 #include "platform_linux/xcbutils.h"
+#include "utils.h"
 #include <QTimer>
-#include <QX11Info>
-#include <xcb/xcb.h>
 #pragma push_macro("signals")
 #undef signals
 #include <gtk/gtk.h>
@@ -10,7 +9,11 @@
 #include <cairo.h>
 #pragma pop_macro("signals")
 
-#define WINDOW_CORNER_RADIUS 6
+#define WINDOW_CORNER_RADIUS_DEFAULT   0
+#define WINDOW_CORNER_RADIUS_GNOME     8
+#define WINDOW_CORNER_RADIUS_KDE       6
+#define WINDOW_CORNER_RADIUS_CINNAMON  3
+#define WINDOW_CORNER_RADIUS_XFCE      4
 
 
 class GtkMainWindowPrivate
@@ -20,7 +23,6 @@ public:
     ~GtkMainWindowPrivate();
 
     void init();
-    void processEvents();
 
     QWidget *underlay = nullptr;
     GtkWidget *wnd = nullptr;
@@ -37,12 +39,24 @@ public:
          is_support_round_corners = true;
 
 private:
+    enum Corner {
+        CornerLTop = 1,
+        CornerRTop = 2,
+        CornerLBottom = 4,
+        CornerRBottom = 8,
+        CornerAll  = CornerLTop | CornerRTop | CornerLBottom | CornerRBottom
+    };
+
+    int cornersPlacementAndRadius(int &radius);
     static gboolean on_event(GtkWidget *wgt, GdkEvent *ev, gpointer data);
     static void on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer data);
-    static void set_rounded_corners(GtkWidget *wgt, double rad);
+    static void set_rounded_corners(GtkWidget *wgt, int crn, double rad);
     static void on_size_allocate(GtkWidget *wgt, GdkRectangle *alloc, gpointer data);
     static void on_size_allocate_top(GtkWidget *wgt, GdkRectangle*, gpointer data);
     static gboolean on_processing_done(gpointer data);
+
+    int radius = 0,
+        corners = CornerAll;
 };
 
 GtkMainWindowPrivate::GtkMainWindowPrivate()
@@ -81,14 +95,10 @@ void GtkMainWindowPrivate::init()
     if (GdkVisual *vis = gdk_screen_get_rgba_visual(scr))
         gtk_widget_set_visual(wnd, vis);
 
-    GtkCssProvider *provider = gtk_css_provider_new();
-    gtk_css_provider_load_from_data(provider, "decoration {border-radius: 6px 6px 0px 0px;}", -1, NULL);
-    GtkStyleContext *context = gtk_widget_get_style_context(wnd);
-    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    g_object_unref(provider);
 
     if (is_custom_style) {
-        if (QX11Info::isCompositingManagerRunning()) {
+        if (gdk_screen_is_composited(scr)) {
+            corners = cornersPlacementAndRadius(radius);
             GtkWidget *header = gtk_header_bar_new();
             gtk_window_set_titlebar(GTK_WINDOW(wnd), header);
             gtk_widget_destroy(header);
@@ -99,6 +109,16 @@ void GtkMainWindowPrivate::init()
     } else {
         is_support_round_corners = false;
     }
+
+    char style[256];
+    snprintf(style, sizeof(style), "decoration {border-radius: %dpx %dpx %dpx %dpx;}", radius, radius,
+             corners == CornerAll ? radius : 0, corners == CornerAll ? radius : 0);
+    GtkCssProvider *provider = gtk_css_provider_new();
+    gtk_css_provider_load_from_data(provider, style, -1, NULL);
+    GtkStyleContext *context = gtk_widget_get_style_context(wnd);
+    gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_object_unref(provider);
+
     gtk_widget_realize(wnd);
 
     socket = gtk_socket_new();
@@ -120,13 +140,38 @@ void GtkMainWindowPrivate::init()
     g_signal_connect(G_OBJECT(wnd), "event-after", G_CALLBACK(on_event_after), this);        
 }
 
-void GtkMainWindowPrivate::processEvents()
+int GtkMainWindowPrivate::cornersPlacementAndRadius(int &radius)
 {
-    int event_loop_guard = 256;
-    bool is_event_processed = false;
-    g_idle_add(on_processing_done, &is_event_processed);
-    while (!is_event_processed && gtk_events_pending() && event_loop_guard-- > 0)
-        gtk_main_iteration_do(FALSE);
+    if (!is_support_round_corners) {
+        radius = WINDOW_CORNER_RADIUS_DEFAULT;
+        return CornerAll;
+    }
+    switch (WindowHelper::getEnvInfo()) {
+    case WindowHelper::DesktopEnv::GNOME:
+        radius = WINDOW_CORNER_RADIUS_GNOME;
+        break;
+
+    case WindowHelper::DesktopEnv::KDE:
+        radius = WINDOW_CORNER_RADIUS_KDE;
+        return CornerLTop | CornerRTop;
+
+    case WindowHelper::DesktopEnv::UNITY:
+        radius = WINDOW_CORNER_RADIUS_DEFAULT;
+        break;
+
+    case WindowHelper::DesktopEnv::CINNAMON:
+        radius = WINDOW_CORNER_RADIUS_CINNAMON;
+        return CornerLTop | CornerRTop;
+
+    case WindowHelper::DesktopEnv::XFCE:
+        radius = WINDOW_CORNER_RADIUS_XFCE;
+        return CornerLTop | CornerRTop;
+
+    default:
+        radius = WINDOW_CORNER_RADIUS_DEFAULT;
+        break;
+    }
+    return CornerAll;
 }
 
 gboolean GtkMainWindowPrivate::on_event(GtkWidget *wgt, GdkEvent *ev, gpointer data)
@@ -180,7 +225,7 @@ void GtkMainWindowPrivate::on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer
     }
 }
 
-void GtkMainWindowPrivate::set_rounded_corners(GtkWidget *wgt, double rad)
+void GtkMainWindowPrivate::set_rounded_corners(GtkWidget *wgt, int crn, double rad)
 {
     if (GdkWindow *gdk_window = gtk_widget_get_window(wgt)) {
         int w = gtk_widget_get_allocated_width(wgt);
@@ -190,13 +235,14 @@ void GtkMainWindowPrivate::set_rounded_corners(GtkWidget *wgt, double rad)
         cairo_t *cr = cairo_create(sfc);
         cairo_set_source_rgba(cr, 1, 1, 1, 1);
         cairo_move_to(cr, rad, 0);
-        // cairo_arc(cr, w - rad, rad, rad, -G_PI_2, 0);
-        // cairo_arc(cr, w - rad, h - rad, rad, 0, G_PI_2);
-        // cairo_arc(cr, rad, h - rad, rad, G_PI_2, G_PI);
-        // cairo_arc(cr, rad, rad, rad, G_PI, -G_PI_2);
         cairo_arc(cr, w - rad, rad, rad, -G_PI_2, 0);
-        cairo_line_to(cr, w, h);
-        cairo_line_to(cr, 0, h);
+        if (crn == CornerAll) {
+            cairo_arc(cr, w - rad, h - rad, rad, 0, G_PI_2);
+            cairo_arc(cr, rad, h - rad, rad, G_PI_2, G_PI);
+        } else {
+            cairo_line_to(cr, w, h);
+            cairo_line_to(cr, 0, h);
+        }
         cairo_line_to(cr, 0, rad);
         cairo_arc(cr, rad, rad, rad, G_PI, -G_PI_2);
         cairo_close_path(cr);
@@ -220,7 +266,7 @@ void GtkMainWindowPrivate::on_size_allocate(GtkWidget *wgt, GdkRectangle *alloc,
     gint f = gtk_widget_get_scale_factor(wgt);
     pimpl->underlay->resize(f*alloc->width, f*alloc->height);
     if (pimpl->is_support_round_corners)
-        set_rounded_corners(wgt, pimpl->is_maximized ? 0 : 1.18 * WINDOW_CORNER_RADIUS);
+        set_rounded_corners(wgt, pimpl->corners, pimpl->is_maximized ? 0 : 1.18 * pimpl->radius);
     pimpl->underlay->update();
 }
 
@@ -320,11 +366,8 @@ void GtkMainWindow::setWindowState(Qt::WindowStates ws)
 
 void GtkMainWindow::show()
 {
-    gtk_widget_show_all(pimpl->wnd);
-    pimpl->processEvents();
     pimpl->underlay->show();
-    pimpl->processEvents();
-    gdk_window_process_all_updates();
+    gtk_widget_show_all(pimpl->wnd);
 
     GdkWindow *gdk_wnd = gtk_widget_get_window(pimpl->wnd);
     Window *qt_underlay_xid = (Window*)g_malloc(sizeof(Window));
@@ -333,8 +376,6 @@ void GtkMainWindow::show()
 
     Window xid = GDK_WINDOW_XID(gdk_wnd);
     pimpl->underlay->setProperty("gtk_window_xid", QVariant::fromValue(xid));
-    gtk_window_present(GTK_WINDOW(pimpl->wnd));
-    gdk_window_process_all_updates();
 }
 
 void GtkMainWindow::showMinimized()

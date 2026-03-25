@@ -165,17 +165,16 @@ CAscTabWidget::CAscTabWidget(QWidget *parent, CTabBar *_pBar)
                 m_isTabPinAllowed = false;
 
                 QTimer::singleShot(0, this, [=]() {
-                    if (widget(index)) {
-                        widget(index)->deleteLater();
+                    if ( QWidget *w = widget(index) ) {
+                        removeWidget(w);
+                        delete w;
                     }
                 });
             }
         }
     });
     auto turnOffAltHints = [=](int old_index, int index) {
-        QTimer::singleShot(0, this, [=]() {
-            setCurrentIndex(index);
-        });
+        QStackedWidget::setCurrentIndex(index);
         if (old_index > -1 && panel(old_index))
             AscAppManager::sendCommandTo(panel(old_index)->cef(), L"althints:show", L"false");
     };

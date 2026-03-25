@@ -431,19 +431,20 @@ void CEditorWindow::captureMouse()
         PostMessage((HWND)winId(), WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(cursor.x, cursor.y));
     }
 #else
-    QPoint cursor = QCursor::pos();
-    int x = cursor.x();
-    x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
-    QMouseEvent _event(QEvent::MouseButtonRelease, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
-    PROCESSEVENTS();
-    move(QCursor::pos() - QPoint(CAPTURED_WINDOW_OFFSET_X, CAPTURED_WINDOW_OFFSET_Y));
-    Q_ASSERT(m_boxTitleBtns != nullptr);
-    QPoint pt_in_title = (m_boxTitleBtns->geometry().topLeft() + QPoint(CAPTURED_WINDOW_OFFSET_X, CAPTURED_WINDOW_OFFSET_Y));
-    QMouseEvent press_event = {QEvent::MouseButtonPress, pt_in_title, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
-    CX11Decoration::dispatchMouseDown(&press_event);
-    QMouseEvent move_event = {QEvent::MouseMove, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
-    CX11Decoration::dispatchMouseMove(&move_event);
+    // QMouseEvent _event(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    // QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
+    QTimer::singleShot(50, this, [=]() {
+        const QPoint cursor = QCursor::pos();
+        int x = cursor.x();
+        x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
+        move(QPoint(x, cursor.y() - CAPTURED_WINDOW_OFFSET_Y));
+        Q_ASSERT(m_boxTitleBtns != nullptr);
+        QPoint pt_in_title = (m_boxTitleBtns->geometry().topLeft() + QPoint(CAPTURED_WINDOW_OFFSET_X, CAPTURED_WINDOW_OFFSET_Y));
+        QMouseEvent press_event = {QEvent::MouseButtonPress, pt_in_title, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
+        CX11Decoration::dispatchMouseDown(&press_event);
+        QMouseEvent move_event = {QEvent::MouseMove, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
+        CX11Decoration::dispatchMouseMove(&move_event);
+    });
 #endif
 }
 
