@@ -304,10 +304,11 @@
         const _on_add_cloud_templates = function(data) {
             let items = [];
             data.forEach(i => {
-                const info = i['attributes'];
-                if ( !info['form_exts']['data'].length ) return;
-
-                const file_ext = info['form_exts']['data'][0]['attributes']['ext'],
+                const info = i;
+                if (!info.form_exts.length) return;
+                
+                const oform_file = info.file_oform && info.file_oform.length ? info.file_oform[0] : null;
+                const file_ext = info.form_exts[0].ext,
                     id = i.id;
                 if (!this.templates.items.some(t => t.uid === id)) {
 
@@ -316,11 +317,11 @@
                         name: info['name_form'],
                         fullName: [info['name_form'], file_ext].join('.'),
                         descr: info['template_desc'],
-                        preview: info.card_prewiew ? info.card_prewiew.data.attributes.url : undefined,
-                        path: info.file_oform ? info.file_oform.data[0].attributes.url : undefined,
+                        preview: info.card_prewiew ? info.card_prewiew.url : undefined,
+                        path: oform_file ? oform_file.url : undefined,
                         type: utils.fileExtensionToFileFormat(file_ext),
-                        icon: info.template_image ? info.template_image.data.attributes.formats.thumbnail.url : undefined,
-                        size: info.file_oform ? info.file_oform.data[0].attributes.size : undefined,
+                        icon: info.template_image ? info.template_image.formats.thumbnail.url : undefined,
+                        size: oform_file ? oform_file.size : undefined,
                         isCloud: true,
                     });
 
@@ -377,7 +378,7 @@
             isCloudTmplsLoading = true;
 
             const _domain = localStorage.templatesdomain ? localStorage.templatesdomain : 'https://templates.onlyoffice.com'; // https://oforms.teamlab.info
-            const _url = `${_domain}/dashboard/api/oforms?populate=*&locale=${locale}&pagination[page]=${page_num}`;
+            const _url = `${_domain}/dashboard/api/oforms?populate=*&locale=${locale}&pagination[page]=${page_num}&pagination[pageSize]=150`;
             fetch(_url)
                 .then(r => r.json())
                 .then(d => {
