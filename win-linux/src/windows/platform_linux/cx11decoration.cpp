@@ -534,11 +534,7 @@ void CX11Decoration::turnOn()
 void CX11Decoration::turnOff()
 {
 //    switchDecoration(false);
-#ifdef DONT_USE_GTK_MAINWINDOW
     m_window->setWindowFlags(Qt::FramelessWindowHint);
-#else
-    m_window->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint);
-#endif
     m_decoration = false;
 }
 

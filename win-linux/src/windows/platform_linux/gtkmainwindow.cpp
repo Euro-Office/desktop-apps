@@ -1,7 +1,12 @@
 #include "gtkmainwindow.h"
 #include "platform_linux/xcbutils.h"
 #include "utils.h"
+#include <QWindow>
+#include <QScreen>
 #include <QTimer>
+#include <QX11Info>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #pragma push_macro("signals")
 #undef signals
 #include <gtk/gtk.h>
@@ -16,6 +21,30 @@
 #define WINDOW_CORNER_RADIUS_XFCE      4
 
 
+static QMargins GetFrameBounds(GtkWidget *wnd)
+{
+    QMargins frame;
+    if (GdkWindow *gdk_wnd = gtk_widget_get_window(wnd)) {
+        Display *xdsp = GDK_WINDOW_XDISPLAY(gdk_wnd);
+        Window xwnd = GDK_WINDOW_XID(gdk_wnd);
+        Atom prop = gdk_x11_get_xatom_by_name("_GTK_FRAME_EXTENTS");
+        if (xdsp && xwnd != None && prop != None) {
+            Atom type = 0;
+            int format = 0;
+            unsigned long nitems = 0, bytes_after = 0;
+            unsigned char *data = nullptr;
+            if (XGetWindowProperty(xdsp, xwnd, prop, 0, 4, False, XA_CARDINAL, &type, &format, &nitems, &bytes_after, &data) == Success && data) {
+                if (nitems == 4) {
+                    long *ext = (long*)data;
+                    frame = QMargins(ext[0], ext[2], ext[1], ext[3]);
+                }
+                XFree(data);
+            }
+        }
+    }
+    return frame;
+}
+
 class GtkMainWindowPrivate
 {
 public:
@@ -23,17 +52,20 @@ public:
     ~GtkMainWindowPrivate();
 
     void init();
+    double logicalDpi();
 
     QWidget *underlay = nullptr;
     GtkWidget *wnd = nullptr;
-    GtkWidget *socket = nullptr;
-    GdkWindow *plug = nullptr;
+    GtkWidget *content = nullptr;
     guint state = 0;
     FnCloseEvent close_event;
     FnEvent event;
-    QPoint pos, normalPos;
-    QSize size, normalSize;
+    QPoint normalPos;
+    QSize min_size, max_size, normalSize;
+    QMargins frame;
+    int x = 0, y = 0, width = 0, height = 0;
     bool is_maximized = false,
+         is_fullscreen = false,
          is_custom_style = false,
          is_focused = false,
          is_support_round_corners = true;
@@ -50,16 +82,16 @@ private:
     int cornersPlacementAndRadius(int &radius);
     static gboolean on_event(GtkWidget *wgt, GdkEvent *ev, gpointer data);
     static void on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer data);
-    static void set_rounded_corners(GtkWidget *wgt, int crn, double rad);
-    static void on_size_allocate(GtkWidget *wgt, GdkRectangle *alloc, gpointer data);
-    static void on_size_allocate_top(GtkWidget *wgt, GdkRectangle*, gpointer data);
-    static gboolean on_processing_done(gpointer data);
+    static void set_content_rounded_corners(GtkWidget *wgt, int crn, double rad);
+    static void on_content_size_allocate(GtkWidget *wgt, GdkRectangle *alloc, gpointer data);
 
     int radius = 0,
         corners = CornerAll;
 };
 
-GtkMainWindowPrivate::GtkMainWindowPrivate()
+GtkMainWindowPrivate::GtkMainWindowPrivate() :
+    min_size(0, 0),
+    max_size(G_MAXSHORT, G_MAXSHORT)
 {}
 
 GtkMainWindowPrivate::~GtkMainWindowPrivate()
@@ -72,29 +104,15 @@ GtkMainWindowPrivate::~GtkMainWindowPrivate()
     wnd = nullptr;
 }
 
-void on_plug_added(GtkSocket *socket, gpointer data)
-{
-    GtkMainWindowPrivate *pimpl = (GtkMainWindowPrivate*)data;
-    pimpl->plug = gtk_socket_get_plug_window(socket);
-}
-
-void on_plug_removed(GtkSocket*, gpointer data)
-{
-    GtkMainWindowPrivate *pimpl = (GtkMainWindowPrivate*)data;
-    pimpl->plug = nullptr;
-}
-
 void GtkMainWindowPrivate::init()
 {
     wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_type_hint(GTK_WINDOW(wnd), GdkWindowTypeHint::GDK_WINDOW_TYPE_HINT_NORMAL);
-//    gtk_window_set_title(GTK_WINDOW(wnd), "GtkMainWindow");
-//    gtk_window_set_position(GTK_WINDOW(wnd), GtkWindowPosition::GTK_WIN_POS_CENTER);
+
     gtk_widget_set_app_paintable(wnd, TRUE);
     GdkScreen *scr = gtk_widget_get_screen(wnd);
     if (GdkVisual *vis = gdk_screen_get_rgba_visual(scr))
         gtk_widget_set_visual(wnd, vis);
-
 
     if (is_custom_style) {
         if (gdk_screen_is_composited(scr)) {
@@ -121,23 +139,32 @@ void GtkMainWindowPrivate::init()
 
     gtk_widget_realize(wnd);
 
-    socket = gtk_socket_new();
-    g_signal_connect(G_OBJECT(socket), "plug-added", G_CALLBACK(on_plug_added), this);
-    g_signal_connect(G_OBJECT(socket), "plug-removed", G_CALLBACK(on_plug_removed), this);
-    /* Call the show according to the GtkSocket documentation */
-//    gtk_widget_show(socket);
-//    gtk_widget_set_name(socket, "socket");
-    gtk_container_add(GTK_CONTAINER(wnd), socket);
-    /* The following call is only necessary if one of
-    the ancestors of the socket is not yet visible
-    (according to the GtkSocket documentation) */
-    gtk_widget_realize(socket);
+    if (WindowHelper::getEnvInfo() == WindowHelper::DesktopEnv::XFCE)
+        frame = GetFrameBounds(wnd);
 
-    gtk_socket_add_id(GTK_SOCKET(socket), (Window)underlay->winId());
-    g_signal_connect(G_OBJECT(socket), "size-allocate", G_CALLBACK(on_size_allocate), this);
-    g_signal_connect(G_OBJECT(wnd), "size-allocate", G_CALLBACK(on_size_allocate_top), this);
+    content = gtk_drawing_area_new();
+    gtk_container_add(GTK_CONTAINER(wnd), content);
+    gtk_widget_realize(content);
+
+    GdkWindow *gdk_wnd_init = gtk_widget_get_window(wnd);
+    GdkWindow *gdk_content = gtk_widget_get_window(content);
+    Display *dpy = GDK_WINDOW_XDISPLAY(gdk_wnd_init);
+    Window content_xid = GDK_WINDOW_XID(gdk_content);
+    Window qt_xid = (Window)underlay->winId();
+
+    XReparentWindow(dpy, qt_xid, content_xid, 0, 0);
+    XSync(dpy, False);
+
+    g_signal_connect(G_OBJECT(content), "size-allocate", G_CALLBACK(on_content_size_allocate), this);
     g_signal_connect(G_OBJECT(wnd), "event", G_CALLBACK(on_event), this);
     g_signal_connect(G_OBJECT(wnd), "event-after", G_CALLBACK(on_event_after), this);        
+}
+
+double GtkMainWindowPrivate::logicalDpi()
+{
+    if (!underlay) return 1.0;
+    QScreen *scr = underlay->windowHandle()->screen();
+    return scr ? scr->logicalDotsPerInch()/96 : 1.0;
 }
 
 int GtkMainWindowPrivate::cornersPlacementAndRadius(int &radius)
@@ -183,6 +210,7 @@ gboolean GtkMainWindowPrivate::on_event(GtkWidget *wgt, GdkEvent *ev, gpointer d
         (pimpl->close_event)(&qtcev);
         return !qtcev.isAccepted();
     }
+
     default:
         break;
     }
@@ -194,38 +222,81 @@ void GtkMainWindowPrivate::on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer
     GtkMainWindowPrivate *pimpl = (GtkMainWindowPrivate*)data;
     switch (ev->type) {
     case GDK_CONFIGURE: {
-        gint x = 0, y = 0;
-        gint f = gtk_widget_get_scale_factor(wgt);
+        gint x, y, w, h;
+        gtk_window_get_size(GTK_WINDOW(pimpl->wnd), &w, &h);
         gtk_window_get_position(GTK_WINDOW(pimpl->wnd), &x, &y);
-        pimpl->pos = QPoint(f*x, f*y);
-        if (!pimpl->is_maximized) {
-            pimpl->normalPos = pimpl->pos;
+
+        if (pimpl->x != x || pimpl->y != y) {
+            pimpl->x = x;
+            pimpl->y = y;
+
+            double dpi = pimpl->logicalDpi();
+            x *= dpi; y *= dpi;
+
+            XcbUtils::sendConfigureNotify(pimpl->underlay->winId(), x, y, pimpl->underlay->width(), pimpl->underlay->height());
         }
-        XcbUtils::sendConfigureNotify(pimpl->underlay->winId(), f*x, f*y, pimpl->underlay->width(), pimpl->underlay->height());
+
+        if (pimpl->width != w || pimpl->height != h) {
+            pimpl->width = w;
+            pimpl->height = h;
+
+            double dpi = pimpl->logicalDpi();
+            w *= dpi; h *= dpi;
+            if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
+                w -= pimpl->frame.left() + pimpl->frame.right();
+                h -= pimpl->frame.top() + pimpl->frame.bottom();
+            }
+
+            pimpl->underlay->resize(w, h);
+            // pimpl->underlay->update();
+        }
         break;
     }
+
     case GDK_FOCUS_CHANGE: {
         if ((pimpl->is_focused = ev->focus_change.in) == 1)
             XcbUtils::sendNativeFocusTo(pimpl->underlay->winId(), 1);
         break;
     }
+
     case GDK_WINDOW_STATE: {
-        guint state = guint(ev->window_state.new_window_state) & (GDK_WINDOW_STATE_ICONIFIED | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN);
-        if (pimpl->state != state) {
-            pimpl->state = state;
-            pimpl->is_maximized = state & GDK_WINDOW_STATE_MAXIMIZED;
+        const guint mask = (GDK_WINDOW_STATE_ICONIFIED | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN);
+        if (ev->window_state.changed_mask & mask) {
+            pimpl->state = ev->window_state.new_window_state & mask;
+
+            // if ((pimpl->state & GDK_WINDOW_STATE_MAXIMIZED && !pimpl->is_fullscreen)
+            //         || (pimpl->state & GDK_WINDOW_STATE_FULLSCREEN && !pimpl->is_maximized)) {
+            //     gint x, y, w, h;
+            //     gtk_window_get_size(GTK_WINDOW(pimpl->wnd), &w, &h);
+            //     gtk_window_get_position(GTK_WINDOW(pimpl->wnd), &x, &y);
+
+            //     double dpi = pimpl->logicalDpi();
+            //     x *= dpi; y *= dpi;
+            //     w *= dpi; h *= dpi;
+            //     if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
+            //         w -= pimpl->frame.left() + pimpl->frame.right();
+            //         h -= pimpl->frame.top() + pimpl->frame.bottom();
+            //     }
+
+            //     pimpl->normalPos = QPoint(x, y);
+            //     pimpl->normalSize = QSize(w, h);
+            // }
+
+            pimpl->is_maximized = pimpl->state & GDK_WINDOW_STATE_MAXIMIZED;
+            pimpl->is_fullscreen = pimpl->state & GDK_WINDOW_STATE_FULLSCREEN;
+
             QEvent ev(QEvent::WindowStateChange);
             (pimpl->event)(&ev);
-            //qApp->postEvent(pimpl->cw, new QEvent(QEvent::WindowStateChange));
         }
         break;
     }
+
     default:
         break;
     }
 }
 
-void GtkMainWindowPrivate::set_rounded_corners(GtkWidget *wgt, int crn, double rad)
+void GtkMainWindowPrivate::set_content_rounded_corners(GtkWidget *wgt, int crn, double rad)
 {
     if (GdkWindow *gdk_window = gtk_widget_get_window(wgt)) {
         int w = gtk_widget_get_allocated_width(wgt);
@@ -260,33 +331,11 @@ void GtkMainWindowPrivate::set_rounded_corners(GtkWidget *wgt, int crn, double r
     }
 }
 
-void GtkMainWindowPrivate::on_size_allocate(GtkWidget *wgt, GdkRectangle *alloc, gpointer data)
+void GtkMainWindowPrivate::on_content_size_allocate(GtkWidget *wgt, GdkRectangle*, gpointer data)
 {
     GtkMainWindowPrivate *pimpl = (GtkMainWindowPrivate*)data;
-    gint f = gtk_widget_get_scale_factor(wgt);
-    pimpl->underlay->resize(f*alloc->width, f*alloc->height);
     if (pimpl->is_support_round_corners)
-        set_rounded_corners(wgt, pimpl->corners, pimpl->is_maximized ? 0 : 1.18 * pimpl->radius);
-    pimpl->underlay->update();
-}
-
-void GtkMainWindowPrivate::on_size_allocate_top(GtkWidget *wgt, GdkRectangle*, gpointer data)
-{
-    GtkMainWindowPrivate *pimpl = (GtkMainWindowPrivate*)data;
-    gint w = 0, h = 0;
-    gint f = gtk_widget_get_scale_factor(wgt);
-    gtk_window_get_size(GTK_WINDOW(pimpl->wnd), &w, &h);
-    pimpl->size = QSize(f*w, f*h);
-    if (!pimpl->is_maximized) {
-        pimpl->normalSize = pimpl->size;
-    }
-}
-
-gboolean GtkMainWindowPrivate::on_processing_done(gpointer data)
-{
-    bool *is_event_processed = (bool*)data;
-    *is_event_processed = true;
-    return FALSE;
+        set_content_rounded_corners(wgt, pimpl->corners, pimpl->is_maximized ? 0 : 1.18 * pimpl->radius);
 }
 
 
@@ -307,17 +356,17 @@ GtkMainWindow::~GtkMainWindow()
 
 void GtkMainWindow::move(const QPoint &pos)
 {
-    gint f = gtk_widget_get_scale_factor(pimpl->wnd);
-    gtk_window_move(GTK_WINDOW(pimpl->wnd), pos.x()/f, pos.y()/f);
-    gdk_window_process_all_updates();
+    double dpi = pimpl->logicalDpi();
+    gtk_window_move(GTK_WINDOW(pimpl->wnd), pos.x()/dpi, pos.y()/dpi);
+    gdk_display_flush(gdk_display_get_default());
 }
 
 void GtkMainWindow::setGeometry(const QRect &rc)
 {
-    gint f = gtk_widget_get_scale_factor(pimpl->wnd);
-    gtk_window_resize(GTK_WINDOW(pimpl->wnd), rc.width()/f, rc.height()/f);
-    gtk_window_move(GTK_WINDOW(pimpl->wnd), rc.x()/f, rc.y()/f);
-    gdk_window_process_all_updates();
+    double dpi = pimpl->logicalDpi();
+    gtk_window_resize(GTK_WINDOW(pimpl->wnd), rc.width()/dpi, rc.height()/dpi);
+    gtk_window_move(GTK_WINDOW(pimpl->wnd), rc.x()/dpi, rc.y()/dpi);
+    gdk_display_flush(gdk_display_get_default());
 }
 
 void GtkMainWindow::setWindowIcon(const QIcon &icon)
@@ -354,6 +403,12 @@ void GtkMainWindow::setFocus()
 
 void GtkMainWindow::setWindowState(Qt::WindowStates ws)
 {
+    if (!ws.testFlag(Qt::WindowMaximized))
+        gtk_window_unmaximize(GTK_WINDOW(pimpl->wnd));
+    if (!ws.testFlag(Qt::WindowFullScreen))
+        gtk_window_unfullscreen(GTK_WINDOW(pimpl->wnd));
+    if (!ws.testFlag(Qt::WindowMinimized))
+        gtk_window_deiconify(GTK_WINDOW(pimpl->wnd));
     if (ws.testFlag(Qt::WindowMaximized))
         gtk_window_maximize(GTK_WINDOW(pimpl->wnd));
     if (ws.testFlag(Qt::WindowMinimized))
@@ -367,6 +422,7 @@ void GtkMainWindow::setWindowState(Qt::WindowStates ws)
 void GtkMainWindow::show()
 {
     pimpl->underlay->show();
+    gtk_widget_show_now(pimpl->wnd);
     gtk_widget_show_all(pimpl->wnd);
 
     GdkWindow *gdk_wnd = gtk_widget_get_window(pimpl->wnd);
@@ -376,6 +432,7 @@ void GtkMainWindow::show()
 
     Window xid = GDK_WINDOW_XID(gdk_wnd);
     pimpl->underlay->setProperty("gtk_window_xid", QVariant::fromValue(xid));
+    gtk_window_present(GTK_WINDOW(pimpl->wnd));
 }
 
 void GtkMainWindow::showMinimized()
@@ -385,14 +442,15 @@ void GtkMainWindow::showMinimized()
 
 void GtkMainWindow::showMaximized()
 {
+    gtk_window_deiconify(GTK_WINDOW(pimpl->wnd));
     gtk_window_maximize(GTK_WINDOW(pimpl->wnd));
 }
 
 void GtkMainWindow::showNormal()
 {
-    if (gtk_window_is_maximized(GTK_WINDOW(pimpl->wnd)))
-        gtk_window_unmaximize(GTK_WINDOW(pimpl->wnd));
-    // gtk_window_present(GTK_WINDOW(pimpl->wnd));
+    gtk_window_unmaximize(GTK_WINDOW(pimpl->wnd));
+    gtk_window_unfullscreen(GTK_WINDOW(pimpl->wnd));
+    gtk_window_deiconify(GTK_WINDOW(pimpl->wnd));
 }
 
 void GtkMainWindow::activateWindow()
@@ -402,9 +460,16 @@ void GtkMainWindow::activateWindow()
 
 void GtkMainWindow::setMinimumSize(int w, int h)
 {
-    gint f = gtk_widget_get_scale_factor(pimpl->wnd);
-    gtk_widget_set_size_request(pimpl->wnd, w/f, h/f);
-    gdk_window_process_all_updates();
+    double dpi = pimpl->logicalDpi();
+    pimpl->min_size = QSize(w/dpi, h/dpi);
+
+    GdkGeometry hints = {};
+    hints.min_width = w/dpi;
+    hints.min_height = h/dpi;
+    hints.max_width = pimpl->max_size.width();
+    hints.max_height = pimpl->max_size.height();
+    gtk_window_set_geometry_hints(GTK_WINDOW(pimpl->wnd), GTK_WIDGET(pimpl->wnd), &hints, GdkWindowHints(GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE));
+
 }
 
 void GtkMainWindow::hide() const
@@ -414,7 +479,7 @@ void GtkMainWindow::hide() const
 
 bool GtkMainWindow::isMaximized()
 {
-    return gtk_window_is_maximized(GTK_WINDOW(pimpl->wnd));
+    return pimpl->state & GDK_WINDOW_STATE_MAXIMIZED;
 }
 
 bool GtkMainWindow::isMinimized()
@@ -459,31 +524,48 @@ QString GtkMainWindow::windowTitle() const
 
 QSize GtkMainWindow::size() const
 {
-    return pimpl->size;
+    int w = 0, h = 0;
+    gtk_window_get_size(GTK_WINDOW(pimpl->wnd), &w, &h);
+    double dpi = pimpl->logicalDpi();
+    w *= dpi; h *= dpi;
+    if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
+        w -= pimpl->frame.left() + pimpl->frame.right();
+        h -= pimpl->frame.top() + pimpl->frame.bottom();
+    }
+    return QSize(w, h);
+}
+
+QPoint GtkMainWindow::pos() const
+{
+    int x, y;
+    gtk_window_get_position(GTK_WINDOW(pimpl->wnd), &x, &y);
+    double dpi = pimpl->logicalDpi();
+    x *= dpi; y *= dpi;
+    return QPoint(x, y);
 }
 
 QRect GtkMainWindow::geometry() const
 {
-    return QRect(pimpl->pos, pimpl->size);
+    return QRect(pos(), size());
 }
 
 QRect GtkMainWindow::normalGeometry() const
 {
-    return QRect(pimpl->normalPos, pimpl->normalSize);
+    if (pimpl->is_maximized || pimpl->is_fullscreen) {
+        return QRect(pimpl->normalPos, pimpl->normalSize);
+    } else {
+        return geometry();
+    }
 }
 
 Qt::WindowStates GtkMainWindow::windowState() const
 {
     Qt::WindowStates ws;
-    if (pimpl->state == 0)
-        ws.setFlag(Qt::WindowNoState);
     if (pimpl->state & GDK_WINDOW_STATE_MAXIMIZED)
-        ws.setFlag(Qt::WindowMaximized);
+        ws |= Qt::WindowMaximized;
     if (pimpl->state & GDK_WINDOW_STATE_ICONIFIED)
-        ws.setFlag(Qt::WindowMinimized);
+        ws |= Qt::WindowMinimized;
     if (pimpl->state & GDK_WINDOW_STATE_FULLSCREEN)
-        ws.setFlag(Qt::WindowFullScreen);
-    //    if (pimpl->state & GDK_WINDOW_STATE_FOCUSED)
-    //        ws.setFlag(Qt::WindowActive);
+        ws |= Qt::WindowFullScreen;
     return ws;
 }

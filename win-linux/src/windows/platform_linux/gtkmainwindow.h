@@ -43,6 +43,7 @@ public:
     // QPoint mapToGlobal(const QPoint &pt) const;
     // QPoint mapFromGlobal(const QPoint &pt) const;
     QSize size() const;
+    QPoint pos() const;
     QRect geometry() const;
     QRect normalGeometry() const;
     Qt::WindowStates windowState() const;
