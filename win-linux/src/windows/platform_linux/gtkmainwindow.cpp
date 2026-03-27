@@ -348,8 +348,8 @@ void GtkMainWindow::move(const QPoint &pos)
     }
     gint dpi = gtk_widget_get_scale_factor(pimpl->wnd);
     gtk_window_move(GTK_WINDOW(pimpl->wnd), x/dpi, y/dpi);
-    gdk_window_process_all_updates();
     gdk_flush();
+    gdk_window_process_all_updates();
 }
 
 void GtkMainWindow::setGeometry(const QRect &rc)
@@ -365,8 +365,8 @@ void GtkMainWindow::setGeometry(const QRect &rc)
     gint dpi = gtk_widget_get_scale_factor(pimpl->wnd);
     gtk_window_resize(GTK_WINDOW(pimpl->wnd), w/dpi, h/dpi);
     gtk_window_move(GTK_WINDOW(pimpl->wnd), x/dpi, y/dpi);
-    gdk_window_process_all_updates();
     gdk_flush();
+    gdk_window_process_all_updates();
 }
 
 void GtkMainWindow::setWindowIcon(const QIcon &icon)
@@ -432,8 +432,8 @@ void GtkMainWindow::show()
     gtk_widget_show_now(pimpl->wnd);
     pimpl->underlay->show();
     gtk_window_present(GTK_WINDOW(pimpl->wnd));
-    gdk_window_process_all_updates();
     gdk_flush();
+    gdk_window_process_all_updates();
 }
 
 void GtkMainWindow::showMinimized()
