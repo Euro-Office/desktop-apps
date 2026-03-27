@@ -57,7 +57,7 @@ public:
     QPoint normalPos;
     QSize min_size, max_size, normalSize;
     QMargins frame;
-    int x = G_MININT, y = G_MININT, width = 0, height = 0;
+    int /*x = G_MININT, y = G_MININT,*/ width = 0, height = 0;
     bool is_maximized = false,
          is_fullscreen = false,
          is_custom_style = false,
@@ -210,23 +210,21 @@ void GtkMainWindowPrivate::on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer
     GtkMainWindowPrivate *pimpl = (GtkMainWindowPrivate*)data;
     switch (ev->type) {
     case GDK_CONFIGURE: {
-        gint x, y, w, h;
+        gint /*x, y,*/ w, h;
         gtk_window_get_size(GTK_WINDOW(pimpl->wnd), &w, &h);
-        gtk_window_get_position(GTK_WINDOW(pimpl->wnd), &x, &y);
+        // gtk_window_get_position(GTK_WINDOW(pimpl->wnd), &x, &y);
 
-        if (pimpl->x != x || pimpl->y != y) {
-            pimpl->x = x;
-            pimpl->y = y;
+        // if (pimpl->x != x || pimpl->y != y) {
+        //     pimpl->x = x;
+        //     pimpl->y = y;
 
-            gint dpi = gtk_widget_get_scale_factor(pimpl->wnd);
-            x *= dpi; y *= dpi;
-            if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
-                x += pimpl->frame.left();
-                y += pimpl->frame.top();
-            }
-
-            XcbUtils::sendConfigureNotify(pimpl->underlay->winId(), x, y, pimpl->underlay->width(), pimpl->underlay->height());
-        }
+        //     gint dpi = gtk_widget_get_scale_factor(pimpl->wnd);
+        //     x *= dpi; y *= dpi;
+        //     if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
+        //         x += pimpl->frame.left();
+        //         y += pimpl->frame.top();
+        //     }
+        // }
 
         if (pimpl->width != w || pimpl->height != h) {
             pimpl->width = w;
@@ -513,15 +511,15 @@ QString GtkMainWindow::windowTitle() const
     return gtk_window_get_title(GTK_WINDOW(pimpl->wnd));
 }
 
-// QPoint GtkMainWindow::mapToGlobal(const QPoint &pt) const
-// {
-//     return (pt + geometry().topLeft());
-// }
+QPoint GtkMainWindow::mapToGlobal(const QPoint &pt) const
+{
+    return (pt + pos());
+}
 
-// QPoint GtkMainWindow::mapFromGlobal(const QPoint &pt) const
-// {
-//     return (pt - geometry().topLeft());
-// }
+QPoint GtkMainWindow::mapFromGlobal(const QPoint &pt) const
+{
+    return (pt - pos());
+}
 
 QSize GtkMainWindow::size() const
 {

@@ -69,6 +69,8 @@ public:
     bool isVisible() const;
     bool isHidden() const;
     QString windowTitle() const;
+    QPoint mapToGlobal(const QPoint &pt) const;
+    QPoint mapFromGlobal(const QPoint &pt) const;
     QSize size() const;
     QRect geometry() const;
     QRect normalGeometry() const;

@@ -241,6 +241,16 @@ QString CWindowPlatform::windowTitle() const
     return m_gtk_wnd->windowTitle();
 }
 
+QPoint CWindowPlatform::mapToGlobal(const QPoint &pt) const
+{
+    return m_gtk_wnd->mapToGlobal(pt);
+}
+
+QPoint CWindowPlatform::mapFromGlobal(const QPoint &pt) const
+{
+    return m_gtk_wnd->mapFromGlobal(pt);
+}
+
 QSize CWindowPlatform::size() const
 {
     return m_gtk_wnd->size();
