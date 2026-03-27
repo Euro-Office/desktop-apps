@@ -232,6 +232,10 @@ void GtkMainWindowPrivate::on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer
 
             double dpi = pimpl->logicalDpi();
             x *= dpi; y *= dpi;
+            if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
+                x += pimpl->frame.left();
+                y += pimpl->frame.top();
+            }
 
             XcbUtils::sendConfigureNotify(pimpl->underlay->winId(), x, y, pimpl->underlay->width(), pimpl->underlay->height());
         }
@@ -541,6 +545,10 @@ QPoint GtkMainWindow::pos() const
     gtk_window_get_position(GTK_WINDOW(pimpl->wnd), &x, &y);
     double dpi = pimpl->logicalDpi();
     x *= dpi; y *= dpi;
+    if (!pimpl->is_maximized && !pimpl->is_fullscreen) {
+        x += pimpl->frame.left();
+        y += pimpl->frame.top();
+    }
     return QPoint(x, y);
 }
 
