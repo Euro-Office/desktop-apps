@@ -45,10 +45,8 @@ static QMargins GetFrameBounds(GtkWidget *wnd)
 class GtkMainWindowPrivate
 {
 public:
-    GtkMainWindowPrivate();
+    GtkMainWindowPrivate(QWidget *underlay, bool isCustomStyle, const FnEvent &qev, const FnCloseEvent &qcev);
     ~GtkMainWindowPrivate();
-
-    void init();
 
     QWidget *underlay = nullptr;
     GtkWidget *wnd = nullptr;
@@ -59,7 +57,7 @@ public:
     QPoint normalPos;
     QSize min_size, max_size, normalSize;
     QMargins frame;
-    int x = 0, y = 0, width = 0, height = 0;
+    int x = G_MININT, y = G_MININT, width = 0, height = 0;
     bool is_maximized = false,
          is_fullscreen = false,
          is_custom_style = false,
@@ -85,23 +83,15 @@ private:
         corners = CornerAll;
 };
 
-GtkMainWindowPrivate::GtkMainWindowPrivate() :
+GtkMainWindowPrivate::GtkMainWindowPrivate(QWidget *underlay, bool isCustomStyle, const FnEvent &qev, const FnCloseEvent &qcev) :
     min_size(0, 0),
     max_size(G_MAXSHORT, G_MAXSHORT)
-{}
-
-GtkMainWindowPrivate::~GtkMainWindowPrivate()
 {
-    GdkWindow *gdk_wnd = gtk_widget_get_window(wnd);
-    gpointer q_underlay_xid = g_object_get_data(G_OBJECT(gdk_wnd), "qt_underlay_xid");
-    if (q_underlay_xid)
-        g_free(q_underlay_xid);
-    gtk_widget_destroy(GTK_WIDGET(wnd));
-    wnd = nullptr;
-}
+    is_custom_style = isCustomStyle;
+    event = qev;
+    close_event = qcev;
+    this->underlay = underlay;
 
-void GtkMainWindowPrivate::init()
-{
     wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_type_hint(GTK_WINDOW(wnd), GdkWindowTypeHint::GDK_WINDOW_TYPE_HINT_NORMAL);
 
@@ -151,7 +141,17 @@ void GtkMainWindowPrivate::init()
 
     g_signal_connect(G_OBJECT(socket), "size-allocate", G_CALLBACK(on_content_size_allocate), this);
     g_signal_connect(G_OBJECT(wnd), "event", G_CALLBACK(on_event), this);
-    g_signal_connect(G_OBJECT(wnd), "event-after", G_CALLBACK(on_event_after), this);        
+    g_signal_connect(G_OBJECT(wnd), "event-after", G_CALLBACK(on_event_after), this);
+}
+
+GtkMainWindowPrivate::~GtkMainWindowPrivate()
+{
+    GdkWindow *gdk_wnd = gtk_widget_get_window(wnd);
+    gpointer q_underlay_xid = g_object_get_data(G_OBJECT(gdk_wnd), "qt_underlay_xid");
+    if (q_underlay_xid)
+        g_free(q_underlay_xid);
+    gtk_widget_destroy(GTK_WIDGET(wnd));
+    wnd = nullptr;
 }
 
 int GtkMainWindowPrivate::cornersPlacementAndRadius(int &radius)
@@ -331,14 +331,8 @@ void GtkMainWindowPrivate::on_content_size_allocate(GtkWidget *wgt, GdkRectangle
 
 
 GtkMainWindow::GtkMainWindow(QWidget *underlay, bool isCustomStyle, const FnEvent &qev, const FnCloseEvent &qcev) :
-    pimpl(new GtkMainWindowPrivate)
-{
-    pimpl->is_custom_style = isCustomStyle;
-    pimpl->event = qev;
-    pimpl->close_event = qcev;
-    pimpl->underlay = underlay;
-    pimpl->init();
-}
+    pimpl(new GtkMainWindowPrivate(underlay, isCustomStyle, qev, qcev))
+{}
 
 GtkMainWindow::~GtkMainWindow()
 {

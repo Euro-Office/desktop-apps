@@ -433,7 +433,7 @@ void CEditorWindow::captureMouse()
 #else
     // QMouseEvent _event(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     // QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
-    Utils::processMoreEvents(60);
+    QTimer::singleShot(60, this, [=]() {
     const QPoint cursor = QCursor::pos();
     int x = cursor.x();
     x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
@@ -444,6 +444,7 @@ void CEditorWindow::captureMouse()
     CX11Decoration::dispatchMouseDown(&press_event);
     QMouseEvent move_event = {QEvent::MouseMove, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
     CX11Decoration::dispatchMouseMove(&move_event);
+    });
 #endif
 }
 
