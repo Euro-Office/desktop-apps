@@ -1910,9 +1910,10 @@ bool CAscApplicationManagerWrapper::event(QEvent *event)
             }
 
             if ( _editor ) {
-//                _editor->setParent(nullptr);
+                _editor->hide();
+                _editor->setParent(nullptr);
                 e->accept();
-//                SKIP_EVENTS_QUEUE([=]{
+                SKIP_EVENTS_QUEUE(([=]{
                     if ( _main_window ) {
                         QJsonObject json_opts{{"widgetType","window"}, {"captionHeight",TOOLBTN_HEIGHT}};
                         _editor->cef()->SetParentWidgetInfo(Utils::stringifyJson(json_opts).toStdWString());
@@ -1928,7 +1929,7 @@ bool CAscApplicationManagerWrapper::event(QEvent *event)
                             sendCommandTo(_editor->cef(), L"window:features",
                                     Utils::stringifyJson(QJsonObject{{"skiptoparea", TOOLBTN_HEIGHT},{"singlewindow",true}}).toStdWString());
                     }
-//                });
+                }));
             }
         }
 

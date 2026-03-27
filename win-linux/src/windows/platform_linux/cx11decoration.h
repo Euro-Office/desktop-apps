@@ -53,6 +53,7 @@ public:
     void dispatchMouseMove(QMouseEvent *);
     void dispatchMouseUp(QMouseEvent *);
     void setCursorPos(int x, int y);
+    static void releaseCapture();
 
     void turnOn();
     void turnOff();

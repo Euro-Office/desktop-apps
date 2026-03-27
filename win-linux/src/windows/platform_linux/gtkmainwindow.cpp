@@ -349,6 +349,7 @@ void GtkMainWindow::move(const QPoint &pos)
     gint dpi = gtk_widget_get_scale_factor(pimpl->wnd);
     gtk_window_move(GTK_WINDOW(pimpl->wnd), x/dpi, y/dpi);
     gdk_window_process_all_updates();
+    gdk_flush();
 }
 
 void GtkMainWindow::setGeometry(const QRect &rc)
@@ -365,6 +366,7 @@ void GtkMainWindow::setGeometry(const QRect &rc)
     gtk_window_resize(GTK_WINDOW(pimpl->wnd), w/dpi, h/dpi);
     gtk_window_move(GTK_WINDOW(pimpl->wnd), x/dpi, y/dpi);
     gdk_window_process_all_updates();
+    gdk_flush();
 }
 
 void GtkMainWindow::setWindowIcon(const QIcon &icon)
@@ -419,9 +421,6 @@ void GtkMainWindow::setWindowState(Qt::WindowStates ws)
 
 void GtkMainWindow::show()
 {
-    pimpl->underlay->show();
-    gtk_widget_show_all(pimpl->wnd);
-
     GdkWindow *gdk_wnd = gtk_widget_get_window(pimpl->wnd);
     Window *qt_underlay_xid = (Window*)g_malloc(sizeof(Window));
     *qt_underlay_xid = (Window)pimpl->underlay->winId();
@@ -429,7 +428,11 @@ void GtkMainWindow::show()
 
     Window xid = GDK_WINDOW_XID(gdk_wnd);
     pimpl->underlay->setProperty("gtk_window_xid", QVariant::fromValue(xid));
-    gtk_window_present(GTK_WINDOW(pimpl->wnd));
+
+    gtk_widget_show_now(pimpl->wnd);
+    pimpl->underlay->show();
+    gdk_window_process_all_updates();
+    gdk_flush();
 }
 
 void GtkMainWindow::showMinimized()

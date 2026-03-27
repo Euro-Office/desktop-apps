@@ -431,9 +431,9 @@ void CEditorWindow::captureMouse()
         PostMessage((HWND)winId(), WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(cursor.x, cursor.y));
     }
 #else
-    // QMouseEvent _event(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    // QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
-    QTimer::singleShot(60, this, [=]() {
+    QMouseEvent _event(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
+    CX11Decoration::releaseCapture();
     const QPoint cursor = QCursor::pos();
     int x = cursor.x();
     x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
@@ -444,7 +444,6 @@ void CEditorWindow::captureMouse()
     CX11Decoration::dispatchMouseDown(&press_event);
     QMouseEvent move_event = {QEvent::MouseMove, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
     CX11Decoration::dispatchMouseMove(&move_event);
-    });
 #endif
 }
 

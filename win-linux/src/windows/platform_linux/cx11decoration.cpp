@@ -661,6 +661,13 @@ void CX11Decoration::setCursorPos(int x, int y)
     XFlush(xdisplay_);
 }
 
+void CX11Decoration::releaseCapture()
+{
+    Display *xdisplay_ = QX11Info::display();
+    XUngrabPointer(xdisplay_, CurrentTime);
+    XFlush(xdisplay_);
+}
+
 void CX11Decoration::setMinimized()
 {
 #ifdef DONT_USE_GTK_MAINWINDOW
