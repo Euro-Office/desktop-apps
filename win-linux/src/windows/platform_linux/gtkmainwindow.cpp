@@ -240,7 +240,6 @@ void GtkMainWindowPrivate::on_event_after(GtkWidget *wgt, GdkEvent *ev, gpointer
             }
 
             pimpl->underlay->resize(w, h);
-            // pimpl->underlay->update();
         }
         break;
     }
@@ -432,6 +431,7 @@ void GtkMainWindow::show()
 
     gtk_widget_show_now(pimpl->wnd);
     pimpl->underlay->show();
+    gtk_window_present(GTK_WINDOW(pimpl->wnd));
     gdk_window_process_all_updates();
     gdk_flush();
 }

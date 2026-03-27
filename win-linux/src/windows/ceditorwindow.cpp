@@ -433,7 +433,6 @@ void CEditorWindow::captureMouse()
 #else
     QMouseEvent _event(QEvent::MouseButtonRelease, QCursor::pos(), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
-    CX11Decoration::releaseCapture();
     const QPoint cursor = QCursor::pos();
     int x = cursor.x();
     x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
