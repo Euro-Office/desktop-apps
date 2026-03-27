@@ -123,6 +123,7 @@ GtkMainWindowPrivate::GtkMainWindowPrivate(QWidget *underlay, bool isCustomStyle
     gtk_style_context_add_provider(context, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
 
+    gtk_window_set_default_size(GTK_WINDOW(wnd), 520, 480);
     gtk_widget_realize(wnd);
 
     if (WindowHelper::getEnvInfo() == WindowHelper::DesktopEnv::XFCE)
