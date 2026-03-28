@@ -380,8 +380,9 @@ bool CWindowPlatform::nativeEvent(const QByteArray &ev_type, void *msg, long *re
         case XCB_FOCUS_OUT: {
 #ifndef DONT_USE_GTK_MAINWINDOW
             /* Workaround when focus is lost on click in Wayland */
-            if (m_gtk_wnd->isFocused() && WindowHelper::isLeftButtonPressed())
-                XcbUtils::sendNativeFocusTo(winId(), 1);
+            xcb_focus_in_event_t *fe = reinterpret_cast<xcb_focus_in_event_t*>(ev);
+            if (fe->mode != XCB_NOTIFY_MODE_NORMAL)
+                return true;
 #endif
             break;
         }
