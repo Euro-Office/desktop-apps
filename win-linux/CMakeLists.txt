@@ -453,7 +453,7 @@ install(TARGETS
     DesktopEditors
     ascdocumentscore
     qtascdocumentscore
-    ooxmlsignature
+    #ooxmlsignature
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
@@ -487,10 +487,10 @@ install(DIRECTORY "${QT_ROOT}/plugins/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-    FILES_MATCHING PATTERN "lib*.so*"
-)
+#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
+#    DESTINATION ${CMAKE_INSTALL_BINDIR}
+#    FILES_MATCHING PATTERN "lib*.so*"
+#)
 
 
 #Install Core dependencies
