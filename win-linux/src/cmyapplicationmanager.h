@@ -59,10 +59,10 @@ public:
 
     virtual void StartSaveDialog(const std::wstring& sName)
     {
-        // сделал через QMainPanel - чтобы использовать сигналы-слоты.
-        // если сделать QAscApplicationManager : public QObject, то он будет прокидывать
-        // слоты родителю. Т.е. классу CAscApplicationManager.
-        // А в либе я не буду затачиваться на QT
+        // Implemented via QMainPanel to use signals-slots.
+        // If we make QAscApplicationManager : public QObject, it will forward
+        // slots to the parent, i.e., to the CAscApplicationManager class.
+        // And in the library I won't be tying it to Qt.
 
 //        ((QMainPanel*)m_pPanel)->sendDialogSave(sName);
         QMetaObject::invokeMethod(m_pPanel, "onDialogSave", Qt::QueuedConnection, Q_ARG(std::wstring, sName));
