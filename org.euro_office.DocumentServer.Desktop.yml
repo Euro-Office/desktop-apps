@@ -1,0 +1,286 @@
+# Flatpak manifest for Euro-Office DocumentServer Desktop
+#
+# This is a draft/investigative manifest for Flatpak packaging support.
+# It may need adjustment during actual build testing.
+#
+# Build context:
+#   The desktop-apps repo is part of the DesktopEditors monorepo, which
+#   contains git submodules for core (C++ engine), desktop-sdk (CEF wrapper),
+#   sdkjs (JS editor), web-apps (HTML UI), and dictionaries.
+#   The actual build is driven from the DesktopEditors monorepo root.
+#
+# Assumptions:
+#   - The DesktopEditors monorepo is used as the primary source (it includes
+#     desktop-apps as a submodule along with all required sibling repos).
+#   - Qt5 is available via the Freedesktop Sdk 23.08 extensions or built
+#     from source as a module.
+#   - CEF (Chromium Embedded Framework) binaries are fetched or bundled.
+#   - The login page is pre-built or built via npm/grunt during the build.
+#
+# Limitations:
+#   - CEF integration may require additional build steps not yet captured.
+#   - The core/ submodule has its own complex build system (see core/Common/base.pri).
+#   - Converter tooling (libxml2, libxslt, fonts) may need extra modules.
+#   - GStreamer codec support may require additional extensions.
+
+app-id: org.euro_office.DocumentServer.Desktop
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+command: desktopeditors-wrapper.sh
+
+finish-args:
+  # X11 display access
+  - --share=ipc
+  - --socket=x11
+  # Wayland display access
+  - --socket=wayland
+  # Network access for cloud document editing
+  - --share=network
+  # Audio playback (for presentations)
+  - --socket=pulseaudio
+  # GPU acceleration for rendering
+  - --device=dri
+  # D-Bus access for notifications, portal integration, etc.
+  - --system-talk-name=org.freedesktop.Notifications
+  - --talk-name=org.freedesktop.portal.Desktop
+  - --talk-name=org.freedesktop.portal.FileChooser
+  - --talk-name=org.freedesktop.portal.OpenURI
+  # Filesystem access for document editing
+  - --filesystem=home
+  - --filesystem=xdg-documents:rw
+  - --filesystem=xdg-download:rw
+  - --filesystem=xdg-pictures:rw
+  - --filesystem=xdg-desktop:rw
+  - --filesystem=xdg-music:rw
+  - --filesystem=xdg-videos:rw
+  - --filesystem=/tmp
+  # Allow template installation
+  - --filesystem=xdg-templates:rw
+  # Printing support
+  - --socket=cups
+
+add-extensions:
+  org.freedesktop.Sdk.Extension.qt5:
+    directory: extensions/qt5
+    no-autodownload: true
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+  - "*.a"
+  - "*.la"
+
+modules:
+
+  # --- Node.js (build-time only, for login page grunt build) ---
+  - name: nodejs
+    buildsystem: simple
+    cleanup:
+      - "*"
+    sources:
+      - type: archive
+        url: https://nodejs.org/dist/v20.11.1/node-v20.11.1-linux-x64.tar.xz
+        sha256: 3a6e3ed1a13a7736c5e3a6c579f1ba988d3b8839e088b84c8d5e4e40e2e889fa
+        dest: nodejs
+    build-commands:
+      - install -Dm755 nodejs/bin/node /app/bin/node
+      - install -Dm755 nodejs/bin/npm /app/bin/npm
+      - install -Dm755 nodejs/bin/npx /app/bin/npx
+      - cp -r nodejs/lib/node_modules /app/lib/node_modules
+      - ln -sf /app/lib/node_modules/npm/bin/npm-cli.js /app/bin/npm
+      - ln -sf /app/lib/node_modules/npm/bin/npx-cli.js /app/bin/npx
+
+  # --- Boost (required by core submodule) ---
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - ./bootstrap.sh --with-libraries=filesystem,system,thread,regex,locale,iostream,date_time,chrono,atomic
+      - ./b2 -j $FLATPAK_BUILDER_NJOBS variant=release link=shared runtime-link=shared
+            threading=multi --prefix=/app install
+    sources:
+      - type: archive
+        url: https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.gz
+        sha256: 0d0cb24974424c8bc4cc3819b4b34e00f6b3ce1d071e0b9c9fb21e2d5a0ad0e1
+    cleanup:
+      - /lib/cmake
+
+  # --- ICU (required by core for Unicode support) ---
+  - name: icu
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DICU_ENABLE_TRACING=OFF
+      - -DICU_ENABLE_DEBUG=OFF
+      - -DBUILD_TESTING=OFF
+    cleanup:
+      - /lib/icu/*/icu-config
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/unicode-org/icu/releases/download/icu4c-74_2/icu4c-74_2-src.tgz
+        sha256: 4cba853f875ef5263c7790d2b399a8a0943477e6d2985c9f18343cb5d8b7d4f5
+
+  # --- Hunspell (spell-checking support) ---
+  - name: hunspell
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/hunspell/hunspell/releases/download/v1.7.2/hunspell-1.7.2.tar.gz
+        sha256: 57e4e5b35c8b5d37c7e88e3aee6dba05d4b7ae22b387c4a5e44a9a6828682a6a
+    cleanup:
+      - /bin
+
+  # --- OpenSSL (crypto/TLS support, used by update daemon) ---
+  - name: openssl
+    buildsystem: simple
+    build-commands:
+      - ./config --prefix=/app --openssldir=/app/etc/ssl --shared
+            no-tests no-doc
+      - make -j $FLATPAK_BUILDER_NJOBS
+      - make install_sw
+    sources:
+      - type: archive
+        url: https://www.openssl.org/source/openssl-3.2.1.tar.gz
+        sha256: 83c7134fc6f0531c357a64438c3d8357d85a993c1fe3d4f53ff7d6ec6e22e724
+    cleanup:
+      - /bin
+      - /lib/debug
+
+  # --- Desktop Editors (main application) ---
+  - name: desktop-editors
+    buildsystem: simple
+
+    sources:
+      # Clone the full DesktopEditors monorepo which includes desktop-apps,
+      # core, desktop-sdk, sdkjs, web-apps, and dictionaries as submodules.
+      - type: git
+        url: https://github.com/Euro-Office/DesktopEditors.git
+        # Pin to a specific branch/commit for reproducibility.
+        # Replace with a tagged release or specific commit hash.
+        branch: main
+        disable-submodules: false
+
+      # Wrapper script to launch the application inside the Flatpak sandbox
+      - type: inline
+        dest-filename: desktopeditors-wrapper.sh
+        contents: |
+          #!/bin/sh
+          # Flatpak wrapper for Euro-Office DocumentServer Desktop
+          # Sets up the runtime environment and launches the editor.
+
+          APP_PREFIX=/app/euro-office/desktopeditors
+          export LD_LIBRARY_PATH="${APP_PREFIX}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+          # Set XDG data dirs for Flatpak compatibility
+          export XDG_DATA_DIRS="${APP_PREFIX}/share:${XDG_DATA_DIRS:-/usr/share}"
+
+          # Set font directories
+          export FONTCONFIG_FILE=/etc/fonts/fonts.conf
+
+          exec "${APP_PREFIX}/DesktopEditors" "$@"
+
+    build-commands:
+      # --- Step 1: Build the login page (npm/grunt) ---
+      - |
+        cd desktop-apps/common/loginpage/build && \
+        npm install --offline --ignore-scripts && \
+        npx grunt
+
+      # --- Step 2: Create the install prefix ---
+      - mkdir -p /app/euro-office/desktopeditors
+
+      # --- Step 3: Copy built application files ---
+      # NOTE: The actual build command below is a placeholder. The real build
+      # process uses qmake from the DesktopEditors monorepo root and depends
+      # on the core, desktop-sdk, and CEF submodules being fully built first.
+      # This would typically be:
+      #   cd DesktopEditors && qmake ASCDocumentEditor.pro && make -j$N
+      #
+      # For now we document the expected install layout:
+      - echo "Build step: qmake build of ASCDocumentEditor.pro" > /app/euro-office/BUILD-NOTES.txt
+      - |
+        cat >> /app/euro-office/BUILD-NOTES.txt << 'BUILD_NOTES_EOF'
+
+        To complete the Flatpak build, the following steps are needed:
+
+        1. Build the core submodule:
+           cd core && make -j$N BUILD_PLATFORM=linux_64
+
+        2. Build desktop-sdk/ChromiumBasedEditors (CEF integration)
+
+        3. Build the desktop-apps Qt application:
+           cd win-linux
+           qmake ASCDocumentEditor.pro CONFIG+=core_linux
+           make -j$N
+
+        4. Install the resulting binary and resources:
+           cp -r <build_output>/DesktopEditors /app/euro-office/desktopeditors/
+           cp -r <build_output>/converter   /app/euro-office/desktopeditors/
+           cp -r <build_output>/editors     /app/euro-office/desktopeditors/
+
+        See the DesktopEditors repository README for full build instructions.
+      BUILD_NOTES_EOF
+
+      # --- Step 4: Install the wrapper script ---
+      - install -Dm755 desktopeditors-wrapper.sh /app/bin/desktopeditors-wrapper.sh
+
+      # --- Step 5: Install desktop file ---
+      - install -Dm644 desktop-apps/package/common/linux/desktopeditors.desktop.m4 \
+          /app/share/applications/org.euro_office.DocumentServer.Desktop.desktop
+
+      # --- Step 6: Install icons (if available) ---
+      - |
+        for icon_dir in desktop-apps/package/common/linux/icons/*/; do
+          size=$(basename "$icon_dir")
+          if [ -f "${icon_dir}desktopeditors.png" ]; then
+            install -Dm644 "${icon_dir}desktopeditors.png" \
+              "/app/share/icons/hicolor/${size}/apps/org.euro_office.DocumentServer.Desktop.png"
+          fi
+        done
+
+      # --- Step 7: Install MIME type definitions ---
+      - install -Dm644 /dev/null \
+          /app/share/mime/packages/org.euro_office.DocumentServer.Desktop.xml
+
+      # --- Step 8: Install AppStream metadata ---
+      - install -Dm644 /dev/null \
+          /app/share/metainfo/org.euro_office.DocumentServer.Desktop.metainfo.xml
+
+    post-install:
+      # Generate AppStream metadata content
+      - |
+        cat > /app/share/metainfo/org.euro_office.DocumentServer.Desktop.metainfo.xml << 'METAINFO_EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <component type="desktop-application">
+          <id>org.euro_office.DocumentServer.Desktop</id>
+          <metadata_license>CC0-1.0</metadata_license>
+          <project_license>AGPL-3.0-or-later</project_license>
+          <name>Euro-Office Desktop Editors</name>
+          <summary>Desktop editors for documents, spreadsheets, presentations, and PDFs</summary>
+          <description>
+            <p>
+              Euro-Office Desktop Editors is an open-source office suite for working
+              with text documents, spreadsheets, presentations, PDFs, and PDF forms
+              offline. It supports OOXML (DOCX, XLSX, PPTX), ODF, PDF, and many
+              other document formats.
+            </p>
+          </description>
+          <launchable type="desktop-id">org.euro_office.DocumentServer.Desktop.desktop</launchable>
+          <url type="homepage">https://www.euro-office.com</url>
+          <url type="bugtracker">https://github.com/Euro-Office/desktop-apps/issues</url>
+          <provides>
+            <id>euro-office-desktopeditors.desktop</id>
+          </provides>
+          <content_rating type="oars-1.1" />
+          <releases>
+            <release version="0.0.0" date="2026-03-30">
+              <description>
+                <p>Initial Flatpak packaging</p>
+              </description>
+            </release>
+          </releases>
+        </component>
+        METAINFO_EOF
