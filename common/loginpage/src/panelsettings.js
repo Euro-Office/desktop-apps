@@ -936,11 +936,11 @@
                 CommonEvents.on('panel:show', on_panel_show.bind(this));
                 CommonEvents.on('lang:changed', _on_lang_changed.bind(this));
 
-                const badge_new_feat = '<span class="new-feat-badge">NEW</span>';
-                $panel.find('#sett-box-use-ai label').after(badge_new_feat);
-                if (utils.isMacOS) {
-                    $panel.find('#opts-launch-mode label').after(badge_new_feat);
-                }
+                // const badge_new_feat = '<span class="new-feat-badge">NEW</span>';
+                // $panel.find('#sett-box-use-ai label').after(badge_new_feat);
+                // if (utils.isMacOS) {
+                //     $panel.find('#opts-launch-mode label').after(badge_new_feat);
+                // }
 
                 return this;
             },
