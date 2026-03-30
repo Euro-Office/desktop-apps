@@ -342,7 +342,7 @@
             }[$('.nav-item.selected', $panel).data('value')];
 
             const search = $('#template-search').val() || '';
-            const searchСomparison = search.toLowerCase();
+            const searchComparison = search.toLowerCase();
             let matchCount = 0;
 
             $('.table-templates.list .item', $panel).each(function () {
@@ -350,14 +350,14 @@
                 const type = $item.data('type');
                 const title = $item.find('.title').text().toLowerCase();
 
-                const isMatch = searchСomparison ? title.includes(searchСomparison) : type === selectedType;
+                const isMatch = searchComparison ? title.includes(searchComparison) : type === selectedType;
 
                 $item.toggle(isMatch);
                 if (isMatch) matchCount++;
             });
 
-            $('#search-result', $panel).toggle(!!searchСomparison).text(`${utils.Lang.tplSearchResult} "${search}"`);
-            $('#idx-nav-templates', $panel).toggle(!searchСomparison);
+            $('#search-result', $panel).toggle(!!searchComparison).text(`${utils.Lang.tplSearchResult} "${search}"`);
+            $('#idx-nav-templates', $panel).toggle(!searchComparison);
             $('#search-no-results', $panel).toggle(matchCount === 0);
         };
         
