@@ -4,7 +4,7 @@
 # docker-bake.hcl files in the parent monorepos.
 #
 # REQUIRED CONTEXTS:
-# - desktop-apps: files from this repo
+# - desktop-sdk: builds/files from this repo
 # - core: files from this repo and core-base image
 # - core-fonts: files from this repo
 # ==============================================================================

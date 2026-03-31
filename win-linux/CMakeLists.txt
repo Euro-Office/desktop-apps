@@ -142,7 +142,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSup
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus X11Extras)
     add_definitions(-DLINUX -D_LINUX -D_X11)
-    # Equivalent to x11extras for Qt6 if needed, or use X11 directly
 endif()
 
 set(CEF_ROOT "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/cef")
@@ -152,7 +151,7 @@ find_package(CEF REQUIRED)
 # 3. Definitions & Global Config
 add_definitions(-D__DONT_WRITE_IN_APP_TITLE)
 add_definitions(-DAPP_ICON_PATH="./res/icons/desktopeditors.ico")
-add_definitions(-DCOPYRIGHT_YEAR=2026) # Or use a variable
+add_definitions(-DCOPYRIGHT_YEAR=2026)
 
 # Handle Product Version from Environment
 set(ENV_PRODUCT_VERSION $ENV{PRODUCT_VERSION})
@@ -376,9 +375,7 @@ target_include_directories(DesktopEditors PRIVATE
 
 target_link_directories(DesktopEditors PRIVATE
     $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
-    #$<$<CONFIG:Debug>:${CEF_ROOT}/dll-wrapper-debug/libcef_dll_wrapper>
     $<$<CONFIG:Release>:${CEF_ROOT}/Release>
-    #$<$<CONFIG:Release>:${CEF_ROOT}/dll-wrapper-release/libcef_dll_wrapper>
     ${ICU_INSTALL_DIR}/include
 )
 
@@ -397,14 +394,13 @@ target_link_libraries(DesktopEditors PRIVATE
     -Wl,--start-group
         ascdocumentscore
         qtascdocumentscore
-        kernel             # Provides NSOpenSSL
+        kernel
         kernel_network
         graphics
         UnicodeConverter
         PdfFile
         DjVuFile
         XpsFile
-        #cef_dll_wrapper
         ${OPENSSL_INSTALL_DIR_ABS}/lib/libssl.a
         ${OPENSSL_INSTALL_DIR_ABS}/lib/libcrypto.a
     -Wl,--end-group
@@ -438,7 +434,7 @@ endif()
 file(GLOB TS_FILES "langs/*.ts")
 qt5_create_translation(DesktopEditors TS_FILES ${TS_FILES})
 
-# 1. Explicitly set your CEF Path
+# 1. Explicitly set CEF Path
 set(CEF_LIB_PATH "${CEF_ROOT}/Release")
 set(CEF_RESOURCES_PATH "${CEF_ROOT}/Resources")
 
@@ -486,12 +482,6 @@ install(DIRECTORY "${QT_ROOT}/lib/"
 install(DIRECTORY "${QT_ROOT}/plugins/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-#install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
-#    DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    FILES_MATCHING PATTERN "lib*.so*"
-#)
-
 
 #Install Core dependencies
 install(TARGETS 
