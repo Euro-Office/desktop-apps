@@ -73,11 +73,11 @@ $AssociationList = @(
     "xls", "xlt", "xlsx", "xltx", "xlsm", "xltm", "xlsb",
     "ppt", "pot", "pps", "pptx", "potx", "ppsx", "pptm", "potm", "ppsm",
     "vsdx", "vstx", "vssx", "vsdm", "vstm", "vssm",
-    "odt", "ott", "ods", "ots", "odp", "otp", "fodt", "fods", "fodp",
+    "odt", "ott", "ods", "ots", "odp", "otp", "odg", "fodt", "fods", "fodp",
     "pages", "numbers", "key",
     "djvu", "fb2", "pdf", "rtf", "xps", "oxps",
     "epub", "html", "xml",
-    "csv", "txt",
+    "md", "txt", "csv", "tsv",
     "docxf"
 )
 $LicensePath = "common\license"
