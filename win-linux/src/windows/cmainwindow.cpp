@@ -434,7 +434,7 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
 #ifdef _WIN32
     mainPanel->setProperty("unix", false);
     if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle())
-        mainPanel->setProperty("win10", true);
+        mainPanel->setProperty("extended-title", true);
 #else
     mainPanel->setProperty("unix", true);
 #endif
@@ -459,7 +459,7 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
 #ifdef _WIN32
     if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle()) {
         foreach (auto *btn, m_pTopButtons) {
-            btn->setProperty("win10", true);
+            btn->setProperty("extended-title", true);
         }
     }
 #endif
@@ -1664,7 +1664,7 @@ void CMainWindow::applyWindowState()
 {
     if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle()) {
         m_toolbtn_height = isMaximized() ? TOOLBTN_HEIGHT : TOOLBTN_HEIGHT_WIN10;
-        m_pMainPanel->setProperty("win10", !isMaximized());
+        m_pMainPanel->setProperty("extended-title", !isMaximized());
         m_pMainPanel->style()->polish(m_pMainPanel);
         m_pButtonMain->style()->polish(m_pButtonMain);
         m_pButtonMain->setFixedHeight(int(m_toolbtn_height * m_dpiRatio));
@@ -1681,7 +1681,7 @@ void CMainWindow::applyWindowState()
 
         foreach (auto *btn, m_pTopButtons) {
             btn->setFixedHeight(int(m_toolbtn_height * m_dpiRatio));
-            btn->setProperty("win10", !isMaximized());
+            btn->setProperty("extended-title", !isMaximized());
             btn->style()->polish(btn);
         }
     }

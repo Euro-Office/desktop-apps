@@ -6,9 +6,9 @@ QPushButton#toolButtonMaximize,
 QPushButton#toolButtonMinimize,
 QPushButton#toolButtonClose {padding: 10px 0px 14px;}
 
-QPushButton#toolButtonMaximize[win10=true],
-QPushButton#toolButtonMinimize[win10=true],
-QPushButton#toolButtonClose[win10=true] {padding: 19px 0px 19px;}
+QPushButton#toolButtonMaximize[extended-title=true],
+QPushButton#toolButtonMinimize[extended-title=true],
+QPushButton#toolButtonClose[extended-title=true] {padding: 19px 0px 19px;}
 
 QPushButton#toolButtonMaximize[kde=true],
 QPushButton#toolButtonMinimize[kde=true],
@@ -19,11 +19,11 @@ QPushButton#toolButtonMain[theme=light] {border-width: 2px; border-bottom: 0 non
 QPushButton#toolButtonMain[class=normal],
 QPushButton#toolButtonMain[class=normal]:hover {border-bottom-width: 2px;}
 #mainPanel[rtl=true] QPushButton#toolButtonMain {border-left-width: 2px;}
-#mainPanel[win10=true] QPushButton#toolButtonMain {margin-top: 10px;}
+#mainPanel[extended-title=true] QPushButton#toolButtonMain {margin-top: 10px;}
 
 QPushButton#toolButtonDownload {border-right-width: 2px; max-width: 80px; width: 80px; max-height: 56px; height: 56px;}
 #mainPanel[rtl=true] QPushButton#toolButtonDownload {border-left-width: 2px;}
-#mainPanel[win10=true] QPushButton#toolButtonDownload {max-height: 70px; height: 70px;}
+#mainPanel[extended-title=true] QPushButton#toolButtonDownload {max-height: 70px; height: 70px;}
 #mainPanel[uithemetype=dark] QPushButton#toolButtonMain {qproperty-icon: url(:/logo_dark.svg);}
 
 /* Menu */
