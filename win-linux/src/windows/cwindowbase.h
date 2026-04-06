@@ -113,7 +113,6 @@ protected:
 private:
     class CWindowBasePrivate;
     std::unique_ptr<CWindowBasePrivate> pimpl;
-    bool  m_windowActivated;
 };
 
 #endif // CWINDOWBASE_H

@@ -1094,6 +1094,21 @@ namespace WindowHelper {
 //        return _window_min_size;
 //    }
 
+    auto isCustomWindowStyle() -> bool {
+        static const bool value = []() {
+#ifdef Q_OS_LINUX
+            GET_REGISTRY_SYSTEM(reg_system)
+            GET_REGISTRY_USER(reg_user)
+            return (reg_user.value("titlebar") == "custom" ||
+                    reg_system.value("titlebar") == "custom");
+#else
+            return true;
+#endif
+        }();
+
+        return value;
+    }
+
     auto isLeftButtonPressed() -> bool {
 #ifdef Q_OS_LINUX
         return check_button_state(Qt::LeftButton);

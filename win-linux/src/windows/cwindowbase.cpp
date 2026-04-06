@@ -48,21 +48,12 @@
 class CWindowBase::CWindowBasePrivate
 {
 public:
-    CWindowBasePrivate() {
-#ifdef Q_OS_LINUX
-        GET_REGISTRY_SYSTEM(reg_system)
-        GET_REGISTRY_USER(reg_user)
-        if ( reg_user.value("titlebar") == "custom" ||
-                reg_system.value("titlebar") == "custom" )
-        {
-            is_custom_window_ = true;
-        }
-#else
-        is_custom_window_ = true;
-#endif
-    }
+    CWindowBasePrivate()
+        : is_custom_window_(WindowHelper::isCustomWindowStyle())
+    {}
 
     bool is_custom_window_ = false;
+    bool window_activated = false;
 };
 
 
@@ -70,7 +61,6 @@ CWindowBase::CWindowBase(const QRect& rect)
     : QMainWindow(nullptr)
     , m_pTopButtons(3, nullptr)
     , pimpl{new CWindowBasePrivate}
-    , m_windowActivated(false)
 {
     setWindowIcon(Utils::appIcon());
     m_window_rect = startRect(rect, m_dpiRatio);
@@ -105,7 +95,10 @@ QSize CWindowBase::expectedContentSize(const QRect &rc, bool extended)
 #ifdef _WIN32
     int brd = Utils::getWinVersion() < Utils::WinVer::Win10 ? MAIN_WINDOW_BORDER_WIDTH * dpi : 0;
 #else
-    int brd = MAIN_WINDOW_BORDER_WIDTH * dpi;
+    int brd = 0;
+    if ( WindowHelper::isCustomWindowStyle() ) {
+        brd = int(MAIN_WINDOW_BORDER_WIDTH * dpi);
+    }
 #endif
     return win_rc.adjusted(brd, extended ? brd : TITLE_HEIGHT * dpi + brd, -brd, -brd).size();
 }
@@ -302,8 +295,8 @@ void CWindowBase::focus()
 void CWindowBase::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
-    if (!m_windowActivated) {
-        m_windowActivated = true;
+    if ( !pimpl->window_activated ) {
+        pimpl->window_activated = true;
         adjustGeometry();
         applyTheme(GetCurrentTheme().id());
     }
