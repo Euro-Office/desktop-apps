@@ -42,7 +42,6 @@
 #ifdef DOCUMENTSCORE_OPENSSL_SUPPORT
 # include "platform_linux/cdialogopenssl.h"
 #endif
-#define WINDOW_CORNER_RADIUS 6
 
 
 CWindowPlatform::CWindowPlatform(const QRect &rect) :
@@ -102,7 +101,7 @@ void CWindowPlatform::setWindowColors(const QColor& background, const QColor& bo
 
 void CWindowPlatform::adjustGeometry()
 {
-    int border = (CX11Decoration::isDecorated() || isMaximized()) ? 0 : qRound(CX11Decoration::customWindowBorderWith() * m_dpiRatio);
+    int border = CX11Decoration::effectiveFrameMargin();
     setContentsMargins(border, border, border, border);
 }
 
