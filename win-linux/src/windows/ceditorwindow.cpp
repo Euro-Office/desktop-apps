@@ -209,7 +209,7 @@ void CEditorWindow::applyTheme(const std::wstring& theme)
 
 QWidget * CEditorWindow::createMainPanel(QWidget * parent, const QString& title)
 {
-    QWidget * mainPanel = new QWidget(parent);
+    QWidget * mainPanel = new AscMainPanel(parent);
     mainPanel->setObjectName("mainPanel");
 
     QGridLayout * mainGridLayout = new QGridLayout(mainPanel);
@@ -428,14 +428,15 @@ void CEditorWindow::captureMouse()
         PostMessage((HWND)winId(), WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(cursor.x, cursor.y));
     }
 #else
-    QPoint cursor = QCursor::pos();
+    const QPoint cursor = QCursor::pos();
+    const int border = CX11Decoration::effectiveFrameMargin();
     int x = cursor.x();
-    x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X : CAPTURED_WINDOW_OFFSET_X;
+    x -= AscAppManager::isRtlEnabled() ? width() - CAPTURED_WINDOW_OFFSET_X - border : CAPTURED_WINDOW_OFFSET_X + border;
     QMouseEvent _event(QEvent::MouseButtonRelease, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(AscAppManager::mainWindow(), &_event);
-    setGeometry(QRect(QPoint(x, cursor.y() - CAPTURED_WINDOW_OFFSET_Y), size()));
+    setGeometry(QRect(QPoint(x, cursor.y() - CAPTURED_WINDOW_OFFSET_Y - border), size()));
     Q_ASSERT(m_boxTitleBtns != nullptr);
-    QPoint pt_in_title = (m_boxTitleBtns->geometry().topLeft() + QPoint(CAPTURED_WINDOW_OFFSET_X, CAPTURED_WINDOW_OFFSET_Y));
+    QPoint pt_in_title = (m_boxTitleBtns->geometry().topLeft() + QPoint(CAPTURED_WINDOW_OFFSET_X + border, CAPTURED_WINDOW_OFFSET_Y + border));
     _event = {QEvent::MouseButtonPress, pt_in_title, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};
     CX11Decoration::dispatchMouseDown(&_event);
     _event = {QEvent::MouseMove, cursor, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier};

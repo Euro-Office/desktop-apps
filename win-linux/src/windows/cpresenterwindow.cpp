@@ -102,7 +102,7 @@ void CPresenterWindow::onLayoutDirectionChanged()
 
 QWidget * CPresenterWindow::createMainPanel(QWidget * parent, const QString& title, QWidget * view)
 {
-    QWidget * mainPanel = new QWidget(parent);
+    QWidget * mainPanel = new AscMainPanel(parent);
     mainPanel->setObjectName("mainPanel");
     mainPanel->setProperty("rtl-font", CLangater::isRtlLanguage(CLangater::getCurrentLangCode()));
     mainPanel->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().id()));

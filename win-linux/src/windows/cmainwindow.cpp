@@ -427,7 +427,7 @@ void CMainWindow::dropEvent(QDropEvent *event)
 
 QWidget* CMainWindow::createMainPanel(QWidget *parent)
 {
-    QWidget *mainPanel = new QWidget(parent);
+    QWidget *mainPanel = new AscMainPanel(parent);
     mainPanel->setObjectName("mainPanel");
     mainPanel->setProperty("rtl", AscAppManager::isRtlEnabled());
     mainPanel->setProperty("rtl-font", CLangater::isRtlLanguage(CLangater::getCurrentLangCode()));

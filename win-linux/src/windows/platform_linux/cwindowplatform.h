@@ -37,6 +37,17 @@
 #include "cx11decoration.h"
 
 
+class AscMainPanel : public QWidget
+{
+public:
+    explicit AscMainPanel(QWidget *parent);
+    virtual ~AscMainPanel();
+
+private:
+    virtual void resizeEvent(QResizeEvent *re) override;
+    CWindowBase *parent;
+};
+
 class CWindowPlatform : public CWindowBase, public CX11Decoration
 {
 public:
@@ -62,7 +73,12 @@ private:
     virtual void mousePressEvent(QMouseEvent *) final;
     virtual void mouseReleaseEvent(QMouseEvent *) final;
     virtual void mouseDoubleClickEvent(QMouseEvent *) final;
+
+    void updateInputShape();
+
     QTimer *m_propertyTimer;
+    int     m_efectiveFrameMargin;
+    bool    m_isWindowActive;
 };
 
 #endif // CWINDOWPLATFORM_H

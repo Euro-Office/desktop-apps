@@ -40,6 +40,7 @@
 #include "X11/Xlib.h"
 #include "X11/cursorfont.h"
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 #include "platform_linux/xcbutils.h"
 
 #define CUSTOM_BORDER_WIDTH MAIN_WINDOW_BORDER_WIDTH
@@ -311,7 +312,9 @@ CX11Decoration::CX11Decoration(QWidget * w)
 
     need_to_check_motion = guess_window_manager() == WM_KWIN;
     dpi_ratio = Utils::getScreenDpiRatioByWidget(w);
-    m_frameMargin = CUSTOM_BORDER_WIDTH * dpi_ratio;
+    m_frameMargin = QX11Info::isCompositingManagerRunning()
+        ? int(SHADOW_WIDTH * dpi_ratio) + int(WINDOW_THIN_BORDER_WIDTH * dpi_ratio)
+        : int(CUSTOM_BORDER_WIDTH * dpi_ratio);
 }
 
 CX11Decoration::~CX11Decoration()
@@ -562,7 +565,9 @@ void CX11Decoration::setMaximized(bool bVal)
 void CX11Decoration::onDpiChanged(double f)
 {
     dpi_ratio = f;
-    m_frameMargin = CUSTOM_BORDER_WIDTH * dpi_ratio;
+    m_frameMargin = QX11Info::isCompositingManagerRunning()
+        ? int(SHADOW_WIDTH * f) + int(WINDOW_THIN_BORDER_WIDTH * f)
+        : int(CUSTOM_BORDER_WIDTH * f);
 }
 
 bool CX11Decoration::isNativeFocus()
@@ -573,6 +578,38 @@ bool CX11Decoration::isNativeFocus()
 int CX11Decoration::effectiveFrameMargin() const
 {
     return ( m_decoration || m_window->isMaximized() ) ? 0 : m_frameMargin;
+}
+
+void CX11Decoration::updateFrameExtents()
+{
+    Display *disp = QX11Info::display();
+    if (!disp) return;
+
+    Window wnd = (Window)m_window->winId();
+
+    int x = 0;
+    int y1 = 0;
+    int y2 = 0;
+    const int frameMargin = effectiveFrameMargin();
+
+    if (frameMargin != 0) {
+        x = frameMargin - int(WINDOW_THIN_BORDER_WIDTH * dpi_ratio);
+        y1 = x - int(SHADOW_OFFSET_Y * dpi_ratio);
+        y2 = x + int(SHADOW_OFFSET_Y * dpi_ratio);
+    }
+    long extents[4] = { x, x, y1, y2 }; // left right top bottom
+
+    Atom atomNet = XInternAtom(disp, "_NET_FRAME_EXTENTS", False);
+    if (atomNet != None) {
+        XChangeProperty(disp, wnd, atomNet, XA_CARDINAL, 32,
+                        PropModeReplace, (unsigned char*)extents, 4);
+    }
+
+    Atom atomGtk = XInternAtom(disp, "_GTK_FRAME_EXTENTS", False);
+    if (atomGtk != None) {
+        XChangeProperty(disp, wnd, atomGtk, XA_CARDINAL, 32,
+                        PropModeReplace, (unsigned char*)extents, 4);
+    }
 }
 
 void CX11Decoration::raiseWindow()

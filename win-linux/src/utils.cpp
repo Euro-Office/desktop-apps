@@ -1109,6 +1109,18 @@ namespace WindowHelper {
         return value;
     }
 
+    auto shouldUseThinFrame() -> bool {
+        static const bool value = []() {
+#ifdef Q_OS_LINUX
+            return isCustomWindowStyle() && QX11Info::isCompositingManagerRunning();
+#else
+            return isCustomWindowStyle() && Utils::getWinVersion() >= Utils::WinVer::Win10;
+#endif
+        }();
+
+        return value;
+    }
+
     auto isLeftButtonPressed() -> bool {
 #ifdef Q_OS_LINUX
         return check_button_state(Qt::LeftButton);

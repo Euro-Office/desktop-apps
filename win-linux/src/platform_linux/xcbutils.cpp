@@ -259,3 +259,16 @@ void XcbUtils::setInputEnabled(xcb_window_t window, bool enabled)
     }
     xcb_flush(conn);
 }
+
+void XcbUtils::setInputShape(xcb_window_t window, const xcb_rectangle_t &rc)
+{
+    xcb_connection_t *conn = QX11Info::connection();
+    if (!conn) return;
+
+    if (rc.width == 0 && rc.height == 0) {
+        xcb_shape_mask(conn, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT, window, 0, 0, XCB_PIXMAP_NONE);
+    } else {
+        xcb_shape_rectangles(conn, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT, XCB_CLIP_ORDERING_YX_BANDED, window, 0, 0, 1, &rc);
+    }
+    xcb_flush(conn);
+}

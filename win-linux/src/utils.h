@@ -172,6 +172,7 @@ namespace WindowHelper {
 
 //    auto correctWindowMinimumSize(const QRect&, const QSize&) -> QSize;
     auto isCustomWindowStyle() -> bool;
+    auto shouldUseThinFrame() -> bool;
     auto isLeftButtonPressed() -> bool;
     auto constructFullscreenWidget(QWidget * panel) -> CFullScrWidget *;
     auto useNativeDialog() -> bool;
