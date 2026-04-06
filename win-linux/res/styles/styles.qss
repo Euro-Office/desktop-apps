@@ -48,6 +48,14 @@ QPushButton#toolButtonMaximize[kde=true],
 QPushButton#toolButtonMinimize[kde=true],
 QPushButton#toolButtonClose[kde=true] {padding: 2px 0px 7px;}
 
+QPushButton#toolButtonMaximize[kde=true][extended-title=true],
+QPushButton#toolButtonMinimize[kde=true][extended-title=true],
+QPushButton#toolButtonClose[kde=true][extended-title=true] {padding: 0px 5px 6px 0px;}
+
+#mainPanel[rtl=true] QPushButton#toolButtonMaximize[kde=true][extended-title=true],
+#mainPanel[rtl=true] QPushButton#toolButtonMinimize[kde=true][extended-title=true],
+#mainPanel[rtl=true] QPushButton#toolButtonClose[kde=true][extended-title=true] {padding: 0px 0px 6px 5px;}
+
 QPushButton#toolButtonMaximize {image: url(:/restore.svg) center no-repeat;}
 QPushButton#toolButtonMaximize[class=min] {image: url(:/maximize.svg) center no-repeat;}
 

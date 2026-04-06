@@ -14,6 +14,14 @@ QPushButton#toolButtonMaximize[kde=true],
 QPushButton#toolButtonMinimize[kde=true],
 QPushButton#toolButtonClose[kde=true] {padding: 5px 0px 15px;}
 
+QPushButton#toolButtonMaximize[kde=true][extended-title=true],
+QPushButton#toolButtonMinimize[kde=true][extended-title=true],
+QPushButton#toolButtonClose[kde=true][extended-title=true] {padding: 0px 11px 13px 0px;}
+
+#mainPanel[rtl=true] QPushButton#toolButtonMaximize[kde=true][extended-title=true],
+#mainPanel[rtl=true] QPushButton#toolButtonMinimize[kde=true][extended-title=true],
+#mainPanel[rtl=true] QPushButton#toolButtonClose[kde=true][extended-title=true] {padding: 0px 0px 13px 11px;}
+
 QPushButton#toolButtonMain {font-size: 23px; border-right-width: 2px; qproperty-icon: url(:/logo_light.svg);}
 #mainPanel[rtl=true] QPushButton#toolButtonMain {border-left-width: 2px;}
 QPushButton#toolButtonMain[theme=light] {border-width: 2px; border-bottom: 0 none;}

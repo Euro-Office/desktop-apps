@@ -251,12 +251,15 @@ QWidget * CEditorWindow::createMainPanel(QWidget * parent, const QString& title)
 //        gradient.setColorAt(1, QColor("#e4e4e4"));
     }
 
+    mainPanel->setProperty("rtl", AscAppManager::isRtlEnabled());
     mainPanel->setProperty("rtl-font", CLangater::isRtlLanguage(CLangater::getCurrentLangCode()));
     mainPanel->setProperty("zoom", QString::number(m_dpiRatio) + "x");
     mainPanel->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().id()));
     QString css(AscAppManager::getWindowStylesheets(m_dpiRatio) + m_css);
 #ifdef __linux__
     css.append(Utils::readStylesheets(":styles/styles_unix.qss"));
+    if ( m_shouldUseThinFrame )
+        mainPanel->setProperty("extended-title", true);
 #endif
     mainPanel->setStyleSheet(css);
 

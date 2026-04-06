@@ -71,10 +71,9 @@ CMainWindow::CMainWindow(const QRect &rect) :
     m_savePortal(QString())
 {
     setObjectName("MainWindow");
-#ifdef _WIN32
-    if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle())
+    if ( m_shouldUseThinFrame )
         m_toolbtn_height = TOOLBTN_HEIGHT_WIN10;
-#endif
+
     m_pMainPanel = createMainPanel(this);
     setCentralWidget(m_pMainPanel);
     QString css{AscAppManager::getWindowStylesheets(m_dpiRatio)};
@@ -433,11 +432,12 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
     mainPanel->setProperty("rtl-font", CLangater::isRtlLanguage(CLangater::getCurrentLangCode()));
 #ifdef _WIN32
     mainPanel->setProperty("unix", false);
-    if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle())
-        mainPanel->setProperty("extended-title", true);
 #else
     mainPanel->setProperty("unix", true);
 #endif
+    if ( m_shouldUseThinFrame )
+        mainPanel->setProperty("extended-title", true);
+
     QGridLayout *_pMainGridLayout = new QGridLayout(mainPanel);
     _pMainGridLayout->setSpacing(0);
     _pMainGridLayout->setObjectName(QString::fromUtf8("mainGridLayout"));
@@ -456,13 +456,11 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
     _pMainGridLayout->addWidget(m_boxTitleBtns, 0, 2, 1, 1);
     m_boxTitleBtns->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-#ifdef _WIN32
-    if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle()) {
+    if ( m_shouldUseThinFrame ) {
         foreach (auto *btn, m_pTopButtons) {
             btn->setProperty("extended-title", true);
         }
     }
-#endif
 
 #ifdef __DONT_WRITE_IN_APP_TITLE
     QLabel * label = new QLabel(m_boxTitleBtns);
@@ -1659,10 +1657,9 @@ void CMainWindow::onLayoutDirectionChanged()
     }
 }
 
-#ifdef _WIN32
 void CMainWindow::applyWindowState()
 {
-    if (Utils::getWinVersion() >= Utils::WinVer::Win10 && isCustomWindowStyle()) {
+    if ( m_shouldUseThinFrame ) {
         m_toolbtn_height = isMaximized() ? TOOLBTN_HEIGHT : TOOLBTN_HEIGHT_WIN10;
         m_pMainPanel->setProperty("extended-title", !isMaximized());
         m_pMainPanel->style()->polish(m_pMainPanel);
@@ -1687,7 +1684,6 @@ void CMainWindow::applyWindowState()
     }
     CWindowBase::applyWindowState();
 }
-#endif
 
 void CMainWindow::handleWindowAction(const std::wstring& action)
 {
