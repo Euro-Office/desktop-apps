@@ -151,108 +151,19 @@ var
   ChlbAudio: TNewCheckListBox;
   AudioExtEnabled: Array of Boolean;
   AudioExts: Array of String;
-  ExtensionRegistryInfo: array of string;
   AChecked: Boolean;
   associatePage: TWizardPage;
   isFullAssociation: Boolean;
 
-procedure Explode(var Dest: TArrayOfString; Text: String; Separator: String);
-var
-  i, p: Integer;
-begin
-  i := 0;
-  repeat
-    SetArrayLength(Dest, i+1);
-    p := Pos(Separator,Text);
-    if p > 0 then begin
-      Dest[i] := Copy(Text, 1, p-1);
-      Text := Copy(Text, p + Length(Separator), Length(Text));
-      i := i + 1;
-    end else begin
-      Dest[i] := Text;
-      Text := '';
-    end;
-  until Length(Text)=0;
-end;
-
 procedure initExtensions;
-var
-  prefix: string;
 begin
-#ifdef _ONLYOFFICE
-  SetArrayLength(AudioExts, 28);
-#else
-  SetArrayLength(AudioExts, 27);
-#endif
-  SetArrayLength(AudioExtEnabled,  GetArrayLength(AudioExts));
+  SetArrayLength(AudioExts, {#DimOf(FA_ARR)});
+  SetArrayLength(AudioExtEnabled, {#DimOf(FA_ARR)});
 
-  AudioExts[0]  := 'DOC';
-  AudioExts[1]  := 'DOCX';
-  AudioExts[2]  := 'XLS';
-  AudioExts[3]  := 'XLSX';
-  AudioExts[4]  := 'PPT';
-  AudioExts[5]  := 'PPTX';
-  AudioExts[6]  := 'PPS';
-  AudioExts[7]  := 'PPSX';
-  AudioExts[8]  := 'ODT';
-  AudioExts[9]  := 'ODS';
-  AudioExts[10] := 'ODP';
-  AudioExts[11] := 'RTF';
-//  AudioExts[12] := 'TXT';
-  AudioExts[12] := 'CSV';
-  AudioExts[13] := 'PDF';
-  AudioExts[14] := 'DJVU';
-  AudioExts[15] := 'XPS';
-  AudioExts[16] := 'POT';
-  AudioExts[17] := 'PPTM';
-  AudioExts[18] := 'EPUB';
-  AudioExts[19] := 'FB2';
-  AudioExts[20] := 'DOTX';
-  AudioExts[21] := 'OXPS';
-  AudioExts[22] := 'XLSB';
-  AudioExts[23] := 'FODS';
-  AudioExts[24] := 'FODT';
-  AudioExts[25] := 'VSDX';
-  AudioExts[26] := 'XLSM';
-#ifdef _ONLYOFFICE
-  AudioExts[27] := 'DOCXF';
-#endif
-
-  SetArrayLength(ExtensionRegistryInfo,  GetArrayLength(AudioExts));
-
-  prefix := '{#ASCC_REG_PREFIX}' + '.';
-
-  ExtensionRegistryInfo[0]  := prefix + 'Document.1:'   + ExpandConstant('{cm:extDOC}')             + ':' + '11';
-  ExtensionRegistryInfo[1]  := prefix + 'Document.12:'  + ExpandConstant('{cm:extDOCX}')            + ':' + '7';
-  ExtensionRegistryInfo[2]  := prefix + 'Sheet.1:'      + ExpandConstant('{cm:extXLS}')             + ':' + '22';
-  ExtensionRegistryInfo[3]  := prefix + 'Sheet.12:'     + ExpandConstant('{cm:extXLSX}')            + ':' + '10';
-  ExtensionRegistryInfo[4]  := prefix + 'Show.1:'       + ExpandConstant('{cm:extPPT}')             + ':' + '1';
-  ExtensionRegistryInfo[5]  := prefix + 'Show.12:'      + ExpandConstant('{cm:extPPTX}')            + ':' + '9';
-  ExtensionRegistryInfo[6]  := prefix + 'SlideShow.1:'  + ExpandConstant('{cm:extPPS}')             + ':' + '2';
-  ExtensionRegistryInfo[7]  := prefix + 'SlideShow.12:' + ExpandConstant('{cm:extPPSX}')            + ':' + '8';
-  ExtensionRegistryInfo[8]  := prefix + 'Document.2:'   + ExpandConstant('{cm:extODT}')             + ':' + '18';
-  ExtensionRegistryInfo[9]  := prefix + 'Sheet.2:'      + ExpandConstant('{cm:extODS}')             + ':' + '23';
-  ExtensionRegistryInfo[10] := prefix + 'Show.2:'       + ExpandConstant('{cm:extODP}')             + ':' + '3';
-  ExtensionRegistryInfo[11] := prefix + 'Rtf:'          + ExpandConstant('{cm:extRTF}')             + ':' + '19';
-  //ExtensionRegistryInfo[12] := prefix + 'Txt:'                                                      + ':' + '14';
-  ExtensionRegistryInfo[12] := prefix + 'Csv:'          + ExpandConstant('{cm:extCSV}')             + ':' + '24';
-  ExtensionRegistryInfo[13] := prefix + 'Pdf:'          + ExpandConstant('{cm:extPDF}')             + ':' + '5';
-  ExtensionRegistryInfo[14] := prefix + 'DjVu:'         + ExpandConstant('{cm:extDJVU}')            + ':' + '4';
-  ExtensionRegistryInfo[15] := prefix + 'Xps:'          + ExpandConstant('{cm:extXPS}')             + ':' + '6';
-  ExtensionRegistryInfo[16] := prefix + 'Pot:'          + ExpandConstant('{cm:extPOT}')             + ':' + '26';
-  ExtensionRegistryInfo[17] := prefix + 'Pptm:'         + ExpandConstant('{cm:extPPTM}')            + ':' + '27';
-  ExtensionRegistryInfo[18] := prefix + 'Epub:'         + ExpandConstant('{cm:extEPUB}')            + ':' + '28';
-  ExtensionRegistryInfo[19] := prefix + 'Fb2:'          + ExpandConstant('{cm:extFB2}')             + ':' + '29';
-  ExtensionRegistryInfo[20] := prefix + 'Dotx:'         + ExpandConstant('{cm:extDOTX}')            + ':' + '30';
-  ExtensionRegistryInfo[21] := prefix + 'Oxps:'         + ExpandConstant('{cm:extOXPS}')            + ':' + '31';
-  ExtensionRegistryInfo[22] := prefix + 'Xlsb:'         + ExpandConstant('{cm:extXLSB}')            + ':' + '32';
-  ExtensionRegistryInfo[23] := prefix + 'Fods:'         + ExpandConstant('{cm:extFODS}')            + ':' + '34';
-  ExtensionRegistryInfo[24] := prefix + 'Fodt:'         + ExpandConstant('{cm:extFODT}')            + ':' + '35';
-  ExtensionRegistryInfo[25] := prefix + 'Vsdx:'         + ExpandConstant('{cm:extVSDX}')            + ':' + '36';
-  ExtensionRegistryInfo[26] := prefix + 'Xlsm:'         + ExpandConstant('{cm:extXLSM}')            + ':' + '37';
-#ifdef _ONLYOFFICE
-  ExtensionRegistryInfo[27] := prefix + 'Docxf:'        + ExpandConstant('{cm:extDOCXF}')           + ':' + '13';
-#endif
+#sub LoopAudioExt
+  AudioExts[{#i}] := '{#FA_ARR[i]}';
+#endsub
+#for {i = 0; i < DimOf(FA_ARR); i++} LoopAudioExt
 end;
 
 procedure ChlbAudioClickCheck(Sender: TObject);
@@ -267,7 +178,7 @@ begin
       if not AChecked then
       begin
         AChecked := True;
-        for i := 0 to GetArrayLength(AudioExts) - 1 do
+        for i := 0 to {#DimOf(FA_ARR)} - 1 do
         begin
           ChlbAudio.ItemEnabled[i + 3] := True;
           ChlbAudio.Checked[i + 3] := AudioExtEnabled[i];
@@ -275,14 +186,14 @@ begin
       end
       else
       begin
-        for i := 0 to GetArrayLength(AudioExts) - 1 do
+        for i := 0 to {#DimOf(FA_ARR)} - 1 do
           AudioExtEnabled[i] := ChlbAudio.Checked[i + 3];
       end;
     end
     else
     begin
       AChecked := False;
-      for i := 0 to GetArrayLength(AudioExts) - 1 do
+      for i := 0 to {#DimOf(FA_ARR)} - 1 do
       begin
         ChlbAudio.ItemEnabled[i + 3] := False;
 //        ChlbAudio.Checked[i + 3] := ArrAudio[i];
@@ -341,11 +252,11 @@ begin
 
       AChecked := True;
 
-      for  i := 0 to GetArrayLength(AudioExts) - 1 do
-      begin
-        ChlbAudio.AddCheckBox(AudioExts[i], '', 1, False, True, False, False, nil);
-        AudioExtEnabled[i] := True;
-      end;
+#sub LoopCheckBox
+      ChlbAudio.AddCheckBox('{#FA_ARR[i]}', '', 1, False, True, False, False, nil);
+      AudioExtEnabled[{#i}] := True;
+#endsub
+#for {i = 0; i < DimOf(FA_ARR); i++} LoopCheckBox
 
       OnAudioClick := False;
       ChlbAudio.OnClickCheck := @ChlbAudioClickCheck;
@@ -375,8 +286,6 @@ begin
   //WizardForm.TasksList.OnClickCheck := @OnTasksListClickCheck;
 end;
 
-//----------
-
 function isAssociateExtension(index: Integer): Boolean;
 begin
   if ChlbAudio = nil then begin
@@ -386,212 +295,12 @@ begin
     Result := ChlbAudio.Checked[1] or (ChlbAudio.Checked[2] and ChlbAudio.Checked[index + 3]);
 end;
 
-//----------
-
-procedure AddToDefaultPrograms;
-var
-  i: integer;
-  argsArray: TArrayOfString;
-begin
-    RegWriteStringValue(HKEY_LOCAL_MACHINE, '{#APP_REG_PATH}\Capabilities', 'ApplicationDescription', ExpandConstant('{cm:defprogAppDescription}'));
-    RegWriteStringValue(HKEY_LOCAL_MACHINE, '{#APP_REG_PATH}\Capabilities', 'ApplicationIcon', ExpandConstant('"{app}\{#NAME_EXE_OUT},0"'));
-    RegWriteStringValue(HKEY_LOCAL_MACHINE, '{#APP_REG_PATH}\Capabilities', 'ApplicationName', '{#sAppName}');
-
-    for i := 0 to GetArrayLength(AudioExts) - 1 do begin
-      Explode(argsArray, ExtensionRegistryInfo[i],':');
-      RegWriteStringValue(HKEY_LOCAL_MACHINE, '{#APP_REG_PATH}\Capabilities\FileAssociations', '.' + LowerCase(AudioExts[i]), argsArray[0]);
-    end;
-
-    RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\RegisteredApplications', '{#ASCC_REG_REGISTERED_APP_NAME}', '{#APP_REG_PATH}\Capabilities');
-end;
-
-function TryGetValue(const KeyValueList: TArrayOfValues; const Key: string; var Value: string): Boolean;
-var
-  I: Integer;
-begin
-  Result := False;
-  for I := 0 to GetArrayLength(KeyValueList) - 1 do
-    if KeyValueList[I].Key = Key then
-    begin
-      Result := True;
-      Value := KeyValueList[I].Value;
-      Exit;
-    end;
-end;
-
-procedure AddKeyValue(const destarray: TArrayOfValues; const key, value: string);
-var
-  Index: Integer;
-begin
-  Index := GetArrayLength(destarray);
-  SetArrayLength(destarray, Index + 1);
-
-  destarray[Index].Key := key;
-  destarray[Index].Value := value;
-end;
-
-procedure AddContextMenuNewItems;
-var
-  lang, dir, regpath, progpath: String;
-  args, values: TArrayOfString;
-  version: TWindowsVersion;
-  found: Boolean;
-  i: Integer;
-begin
-  lang := ExpandConstant('{cm:AppLocale}');
-  case lang of
-    'ar-SA', 'az-Latn-AZ', 'bg-BG', 'ca-ES', 'cs-CZ', 'da-DK', 'de-DE',
-    'el-GR', 'en-GB', 'en-US', 'es-ES', 'eu-ES', 'fi-FI', 'fr-FR',
-    'gl-ES', 'he-IL', 'hu-HU', 'hy-AM', 'id-ID', 'it-IT', 'ja-JP',
-    'ko-KR', 'lv-LV', 'ms-MY', 'nb-NO', 'nl-NL', 'pl-PL', 'pt-BR',
-    'pt-PT', 'ro-RO', 'ru-RU', 'si-LK', 'sk-SK', 'sl-SI', 'sq-AL',
-    'sr-Cyrl-RS', 'sr-Latn-RS', 'sv-SE', 'tr-TR', 'uk-UA', 'ur-PK', 'vi-VN',
-    'zh-CN', 'zh-TW' : dir := lang;
-  else
-    dir := 'default';
-  end;
-
-  args := ['new.docx:.docx:.Document.12:7:1000:1100',
-           'new.pptx:.pptx:.Show.12:9:1002:1102',
-           'new.xlsx:.xlsx:.Sheet.12:10:1001:1101'
-#ifdef _ONLYOFFICE
-           ,'new.pdf:.pdf:.Pdf:5:1003:1103'
-#endif
-           ];
-
-  GetWindowsVersionEx(version);
-  progpath := ExpandConstant('{app}\converter\empty\' + dir);
-  for i := 0 to GetArrayLength(args) - 1 do begin
-     Explode(values, args[i],':');
-     regpath := ExpandConstant('Software\Classes\' + values[1] + '\{#ASCC_REG_PREFIX}' + values[2] + '\ShellNew');
-     if not RegKeyExists(HKEY_LOCAL_MACHINE, regpath) then begin
-       RegWriteStringValue(HKEY_LOCAL_MACHINE, regpath, 'IconPath', ExpandConstant('{app}\{#iconsExe},' + values[3]));
-       RegWriteStringValue(HKEY_LOCAL_MACHINE, regpath, 'FileName', progpath + '\' + values[0]);
-       RegWriteStringValue(HKEY_LOCAL_MACHINE, regpath, 'MenuText', ExpandConstant('@{app}\{#iconsExe},-' + values[4]));
-       RegWriteStringValue(HKEY_LOCAL_MACHINE, regpath, 'ItemName', ExpandConstant('@{app}\{#iconsExe},-' + values[5]));
-     end;
-     if version.Major = 10 then begin
-       RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + values[1], '', '{#ASCC_REG_PREFIX}' + values[2]);
-       if RegValueExists(HKEY_CURRENT_USER, 'Software\Classes\' + values[1], '') then
-         RegWriteStringValue(HKEY_CURRENT_USER, 'Software\Classes\' + values[1], '', '{#ASCC_REG_PREFIX}' + values[2]);
-     end;
-  end;
-end;
-
 procedure DoPostInstall();
-var
-  i, errorCode: Integer;
-  ext, progId1, progId2, progId3, assocArg: string;
-  argsArray: TArrayOfString;
-  cleanExts, extensionInfo: TArrayOfString;
-  version: TWindowsVersion;
-  prefix, str: string;
 begin
     isFullAssociation := CheckCommandlineParam('/FULLASSOCIATION');
     if (associatePage = nil) and isFullAssociation then begin
       initExtensions();
     end;
-
-    assocArg := '';
-    GetWindowsVersionEx(version);
-    for  i := 0 to GetArrayLength(AudioExts) - 1 do
-    begin
-      Explode(argsArray, ExtensionRegistryInfo[i],':');
-
-      // checking existance is temporary locked to rewrite new icons indexes
-      //if not RegKeyExists(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0]) then begin
-        if Length(argsArray[1]) <> 0 then
-          RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0], '', argsArray[1]);
-
-        RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0], 'AppUserModelID', ExpandConstant('{#APP_USER_MODEL_ID}'));
-        RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0] + '\DefaultIcon', '', ExpandConstant('{app}\{#iconsExe},' + argsArray[2]));
-        RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0] + '\shell\open\command', '', ExpandConstant('"{app}\{#iconsExe}" "%1"'));
-        RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0] + '\Application', 'ApplicationName', '{#sAppName}');
-        if (version.Major = 10) and (version.Minor = 0) and (version.Build < 22000) then begin
-          RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0] + '\Application', 'ApplicationIcon', ExpandConstant('{app}\{#iconsExe},33'));
-        end;
-      //end;
-
-      ext := LowerCase(AudioExts[i]);
-
-      if isAssociateExtension(i) then
-      begin
-        if not RegValueExists(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '') then begin
-          RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', argsArray[0])
-        end else
-          RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', progId1);
-
-        if not RegValueExists(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', argsArray[0]) then
-          RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', argsArray[0], '');
-
-        if RegValueExists(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '') then
-          RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', progId2);
-
-        if RegValueExists(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice', 'ProgId') then
-          RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice', 'ProgId', progId3);
-
-        if ((Length(progId3) <> 0) and (CompareText(progId3, argsArray[0]) <> 0)) or
-              ((Length(progId2) <> 0) and (CompareText(progId2, argsArray[0]) <> 0)) or
-              ((Length(progId1) <> 0) and (CompareText(progId1, argsArray[0]) <> 0)) then
-        begin
-          if (version.Major > 6) or ((version.Major = 6) and (version.Minor >= 2)) then begin
-            assocArg := assocArg + '.' + ext + ':' + argsArray[0] + ';';
-          end else begin
-            RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice');
-            RegWriteStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', argsArray[0])
-            //RegWriteStringValue(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice', 'Progid', argsArray[0]);
-          end;
-        end;
-      end else
-      begin
-        //RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', argsArray[0], '');
-      end;
-    end;
-
-    if Length(assocArg) <> 0 then begin
-      ShellExecAsOriginalUser('', ExpandConstant('{app}\{#iconsExe}'), '--assoc ' + assocArg, '', SW_SHOW, ewNoWait, errorCode);
-    end;
-
-  AddToDefaultPrograms;
-  AddContextMenuNewItems;
-
-#ifndef _ONLYOFFICE
-  //TODO: for bug 55795. remove for ver 7.3
-  SetArrayLength(cleanExts, 1);
-  SetArrayLength(extensionInfo, 1);
-
-  prefix := '{#ASCC_REG_PREFIX}' + '.';
-
-  cleanExts[0]  := 'DOCXF';
-
-  extensionInfo[0] := prefix + 'Docxf:' + ExpandConstant('{cm:extDOCXF}') + ':' + '13';
-
-  for  i := 0 to GetArrayLength(cleanExts) - 1 do
-  begin
-    Explode(argsArray, extensionInfo[i],':');
-    RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0]);
-
-    ext := LowerCase(cleanExts[i]);
-    RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', argsArray[0]);
-    RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', ExpandConstant('{#ASSOC_PROG_ID}'));
-
-    RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', str);
-    if CompareText(str, argsArray[0]) = 0 then
-      RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '');
-
-    RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', str);
-    if CompareText(str, argsArray[0]) = 0 then
-      RegDeleteValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '');
-
-    RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice', 'Progid', str);
-    if CompareText(str, argsArray[0]) = 0 then
-      RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice');
-
-    //RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\Applications\{#NAME_EXE_OUT})'));
-    RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.' + ext + '\OpenWithList\{#NAME_EXE_OUT}'));
-  end;
-#endif
-
 end;
 
 {
@@ -601,52 +310,6 @@ begin
     Result:=MemoUserInfoInfo + NewLine + MemoDirInfo + NewLine + MemoTypeInfo + NewLine + MemoComponentsInfo + NewLine + MemoGroupInfo + NewLine + MemoTasksInfo;
 end;
 }
-
-procedure UnassociateExtensions;
-var
-  i: Integer;
-  argsArray: TArrayOfString;
-  ext, str: string;
-  version: TWindowsVersion;
-begin
-  initExtensions();
-
-  for  i := 0 to GetArrayLength(AudioExts) - 1 do
-  begin
-    Explode(argsArray, ExtensionRegistryInfo[i],':');
-    RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, 'Software\Classes\' + argsArray[0]);
-
-    ext := LowerCase(AudioExts[i]);
-    RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', argsArray[0]);
-    RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', ExpandConstant('{#ASSOC_PROG_ID}'));
-
-    RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', str);
-    if CompareText(str, argsArray[0]) = 0 then
-      RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '');
-
-    RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', str);
-    if CompareText(str, argsArray[0]) = 0 then
-      RegDeleteValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '');
-
-    RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice', 'Progid', str);
-    if CompareText(str, argsArray[0]) = 0 then
-      RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext + '\UserChoice');
-
-    //RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\Applications\{#NAME_EXE_OUT})'));
-    RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.' + ext + '\OpenWithList\{#NAME_EXE_OUT}'));
-  end;
-
-  RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, '{#APP_REG_PATH}\Capabilities');
-  RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\RegisteredApplications', '{#ASCC_REG_REGISTERED_APP_NAME}');
-  RegDeleteValue(HKEY_CLASSES_ROOT, 'Local Settings\Software\Microsoft\Windows\Shell\MuiCache', ExpandConstant('{app}\{#iconsExe}'));
-
-  RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.docx\{#ASCC_REG_PREFIX}.Document.12'));
-  RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.pptx\{#ASCC_REG_PREFIX}.Show.12'));
-  RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.xlsx\{#ASCC_REG_PREFIX}.Sheet.12'));
-#ifdef _ONLYOFFICE
-  RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.pdf\{#ASCC_REG_PREFIX}.Pdf'));
-#endif
-end;
 
 ////////////////////
 // Uninstall Page //
@@ -942,7 +605,7 @@ begin
       RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\{#sIntCompanyName}');
     end;
 
-    UnassociateExtensions();
+    RegDeleteValue(HKEY_CLASSES_ROOT, 'Local Settings\Software\Microsoft\Windows\Shell\MuiCache', ExpandConstant('{app}\{#iconsExe}'));
   end else
   if CurUninstallStep = usPostUninstall then begin
     RemoveExtraFiles();

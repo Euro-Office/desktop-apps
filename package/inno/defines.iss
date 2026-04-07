@@ -30,3 +30,64 @@
 #define ASCC_REG_REGISTERED_APP_NAME    "ONLYOFFICE Editors"
 #define ASSOC_PROG_ID                   "ASC.Editors"
 #define ASSOC_APP_FRIENDLY_NAME         "ONLYOFFICE Editors"
+
+#dim FA_ARR[51] { \
+  "doc", \
+  "dot", \
+  "docx", \
+  "dotx", \
+  "docm", \
+  "dotm", \
+  "xls", \
+  "xlsx", \
+  "xltx", \
+  "xlsm", \
+  "xltm", \
+  "xlsb", \
+  "ppt", \
+  "pot", \
+  "pps", \
+  "pptx", \
+  "potx", \
+  "ppsx", \
+  "pptm", \
+  "potm", \
+  "ppsm", \
+  "vsdx", \
+  "vstx", \
+  "vssx", \
+  "vsdm", \
+  "vstm", \
+  "vssm", \
+  "xps", \
+  "oxps", \
+  "odt", \
+  "ott", \
+  "fodt", \
+  "ods", \
+  "ots", \
+  "fods", \
+  "odp", \
+  "otp", \
+  "fodp", \
+  "odg", \
+  "pages", \
+  "numbers", \
+  "key", \
+  "djvu", \
+  "fb2", \
+  "pdf", \
+  "rtf", \
+  "epub", \
+  "md", \
+  "csv", \
+  "tsv", \
+  "docxf" \
+}
+
+#dim SN_ARR[4] { \
+  "docx", \
+  "xlsx", \
+  "pptx", \
+  "pdf" \
+}
