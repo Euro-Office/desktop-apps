@@ -245,7 +245,7 @@ private:
 //        ,{"ga-IE", {"Gaeilge", "Galego"}}
         ,{"he-IL", {"עברית", "Hebrew"}}
 //        ,{"hi-IN", "हिन्दी"}
-//        ,{"hr-HR", "Hrvatska"}
+        ,{"hr-HR", {"Hrvatska", "Croatian"}}
         ,{"hu-HU", {"Magyar", "Hungarian"}}
         ,{"hy-AM", {"Հայերեն", "Armenian"}}
         ,{"id-ID", {"Indonesian", "Indonesian"}}
