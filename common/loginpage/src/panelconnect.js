@@ -640,7 +640,7 @@
                 const _on_click_btn_login = e => {
                     var portals = PortalsStore.portals();
                     if (portals.length) {
-                        let _data = $(e.currentTarget).data();
+                        let _data = e ? $(e.currentTarget).data() : {cprov:undefined};
                         !_data ? _do_connect.call(this) : _do_connect.call(this, {provider:_data.cprov});
                     } else { 
                         new DialogProviders({
