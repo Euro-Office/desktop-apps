@@ -72,7 +72,7 @@
     };
 
     !sdk.oncloudchanged && (sdk.oncloudchanged = (m, a) => {
-        // console.log('cloud changed', model, 'added'/'removed');
+        sdk.updateClouds();
     });
 
     sdk.externalClouds = function() {
