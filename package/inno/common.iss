@@ -153,7 +153,7 @@ Name: hy_AM; MessagesFile: compiler:Languages\Armenian.isl;
 #endif
 Name: zh_CN; MessagesFile: compiler:Languages\ChineseSimplified.isl;
 ;Name: hy_AM; MessagesFile: compiler:Languages\Armenian.islu;
-;Name: hr; MessagesFile: compiler:Languages\Croatian.isl;
+Name: hr; MessagesFile: compiler:Languages\Croatian.isl;
 Name: da; MessagesFile: compiler:Languages\Danish.isl;
 ;Name: hi; MessagesFile: compiler:Languages\Hindi.islu;
 Name: hu; MessagesFile: compiler:Languages\Hungarian.isl;
