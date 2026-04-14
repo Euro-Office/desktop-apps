@@ -83,6 +83,7 @@ Name: fr;    MessagesFile: compiler:Languages\French.isl;
 Name: gl;    MessagesFile: compiler:Languages\Galician.isl;
 Name: hu;    MessagesFile: compiler:Languages\Hungarian.isl;
 Name: hy_AM; MessagesFile: compiler:Languages\Armenian.isl;
+Name: hr;    MessagesFile: compiler:Languages\Croatian.isl;
 Name: id;    MessagesFile: compiler:Languages\Indonesian.isl;
 Name: it_IT; MessagesFile: compiler:Languages\Italian.isl;
 Name: ja;    MessagesFile: compiler:Languages\Japanese.isl;
