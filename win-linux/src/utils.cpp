@@ -935,19 +935,52 @@ std::wstring Utils::appUserName()
 
 namespace WindowHelper {
 #ifdef Q_OS_LINUX
-    CParentDisable::CParentDisable(QWidget* parent) : m_parent(parent)
+    CParentDisable::CParentDisable(QWidget* parent) : QObject(nullptr), m_parent(parent)
     {
-        enable(false);
+        enable(m_parent, false);
+        const QWidgetList widgets = QApplication::topLevelWidgets();
+        for (QWidget *w : widgets) {
+            if (w != m_parent) {
+                enable(w, false);
+                m_disabled.append(w);
+                connect(w, &QWidget::destroyed, this, [=](){
+                    int idx = m_disabled.indexOf(w);
+                    if ( idx != -1 ) {
+                        m_disabled.removeAt(idx);
+                    }
+                });
+            }
+        }
+        qApp->installEventFilter(this);
     }
 
     CParentDisable::~CParentDisable()
     {
-        enable(true);
+        qApp->removeEventFilter(this);
+        const QWidgetList &widgets = m_disabled;
+        for (QWidget *w : widgets) {
+            enable(w, true);
+        }
+        enable(m_parent, true);
     }
 
-    void CParentDisable::enable(bool enabled)
+    bool CParentDisable::eventFilter(QObject *obj, QEvent *ev)
     {
-        CWindowBase *wb = dynamic_cast<CWindowBase*>(m_parent);
+        if (ev->type() == QEvent::Close) {
+            const QWidgetList &widgets = m_disabled;
+            for (QWidget *w : widgets) {
+                if (obj == w) {
+                    ev->ignore();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    void CParentDisable::enable(QWidget *w, bool enabled)
+    {
+        CWindowBase *wb = dynamic_cast<CWindowBase*>(w);
         if (!wb) return;
 
         wb->setEnabled(enabled);
