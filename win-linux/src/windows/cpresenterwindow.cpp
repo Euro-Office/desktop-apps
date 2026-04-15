@@ -102,7 +102,7 @@ void CPresenterWindow::onLayoutDirectionChanged()
 
 QWidget * CPresenterWindow::createMainPanel(QWidget * parent, const QString& title, QWidget * view)
 {
-    QWidget * mainPanel = new QWidget(parent);
+    QWidget * mainPanel = new AscMainPanel(parent);
     mainPanel->setObjectName("mainPanel");
     mainPanel->setProperty("rtl-font", CLangater::isRtlLanguage(CLangater::getCurrentLangCode()));
     mainPanel->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().id()));
@@ -135,7 +135,7 @@ QWidget * CPresenterWindow::createMainPanel(QWidget * parent, const QString& tit
     if (isCustomWindowStyle()) {
 #ifdef __linux__
         m_labelTitle->setMouseTracking(true);
-        //mainGridLayout->setMargin(CX11Decoration::customWindowBorderWith() * m_dpiRatio);
+        //mainGridLayout->setMargin(CX11Decoration::effectiveFrameMargin());
         /*QPalette _palette(palette());
         _palette.setColor(QPalette::Background, QColor("#f1f1f1"));
         setAutoFillBackground(true);

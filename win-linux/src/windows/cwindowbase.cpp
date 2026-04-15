@@ -48,21 +48,25 @@
 class CWindowBase::CWindowBasePrivate
 {
 public:
-    CWindowBasePrivate() {
-#ifdef Q_OS_LINUX
-        GET_REGISTRY_SYSTEM(reg_system)
-        GET_REGISTRY_USER(reg_user)
-        if ( reg_user.value("titlebar") == "custom" ||
-                reg_system.value("titlebar") == "custom" )
-        {
-            is_custom_window_ = true;
+    CWindowBasePrivate()
+        : is_custom_window_(WindowHelper::isCustomWindowStyle())
+    {}
+
+    QSize minimumWindowSize(double dpi)
+    {
+        QSize minSize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
+        minSize *= dpi;
+#ifdef __linux__
+        if ( WindowHelper::shouldUseThinFrame() ) {
+            int d = 2 * SHADOW_WIDTH * dpi;
+            minSize += QSize(d, d);
         }
-#else
-        is_custom_window_ = true;
 #endif
+        return minSize;
     }
 
     bool is_custom_window_ = false;
+    bool window_activated = false;
 };
 
 
@@ -70,11 +74,11 @@ CWindowBase::CWindowBase(const QRect& rect)
     : QMainWindow(nullptr)
     , m_pTopButtons(3, nullptr)
     , pimpl{new CWindowBasePrivate}
-    , m_windowActivated(false)
 {
     setWindowIcon(Utils::appIcon());
+    m_shouldUseThinFrame = WindowHelper::shouldUseThinFrame();
     m_window_rect = startRect(rect, m_dpiRatio);
-    setMinimumSize(WINDOW_MIN_WIDTH * m_dpiRatio, WINDOW_MIN_HEIGHT * m_dpiRatio);
+    setMinimumSize(pimpl->minimumWindowSize(m_dpiRatio));
 #ifdef __linux__
     setGeometry(m_window_rect); // for Windows is set in CWindowPlatform
 #endif
@@ -105,7 +109,12 @@ QSize CWindowBase::expectedContentSize(const QRect &rc, bool extended)
 #ifdef _WIN32
     int brd = Utils::getWinVersion() < Utils::WinVer::Win10 ? MAIN_WINDOW_BORDER_WIDTH * dpi : 0;
 #else
-    int brd = MAIN_WINDOW_BORDER_WIDTH * dpi;
+    int brd = 0;
+    if ( WindowHelper::isCustomWindowStyle() ) {
+        brd = WindowHelper::shouldUseThinFrame()
+            ? int(SHADOW_WIDTH * dpi) + int(WINDOW_THIN_BORDER_WIDTH * dpi)
+            : int(MAIN_WINDOW_BORDER_WIDTH * dpi);
+    }
 #endif
     return win_rc.adjusted(brd, extended ? brd : TITLE_HEIGHT * dpi + brd, -brd, -brd).size();
 }
@@ -242,7 +251,7 @@ bool CWindowBase::event(QEvent *event)
 void CWindowBase::setScreenScalingFactor(double factor, bool resize)
 {
     if (resize && !isMaximized()) {
-        setMinimumSize(WINDOW_MIN_WIDTH * factor, WINDOW_MIN_HEIGHT * factor);
+        setMinimumSize(pimpl->minimumWindowSize(factor));
         double change_factor = factor / m_dpiRatio;
         QRect _src_rect = geometry();
         double dest_width_change = _src_rect.width() * (1 - change_factor);
@@ -302,8 +311,8 @@ void CWindowBase::focus()
 void CWindowBase::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
-    if (!m_windowActivated) {
-        m_windowActivated = true;
+    if ( !pimpl->window_activated ) {
+        pimpl->window_activated = true;
         adjustGeometry();
         applyTheme(GetCurrentTheme().id());
     }

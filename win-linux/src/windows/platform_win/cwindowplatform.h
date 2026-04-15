@@ -37,6 +37,8 @@
 #include <QtWidgets/QApplication>
 #include <qtcomp/qnativeevent.h>
 
+using AscMainPanel = QWidget;
+
 struct FRAME {
     FRAME() : left(0), top(0)
     {}

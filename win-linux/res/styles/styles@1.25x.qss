@@ -6,24 +6,32 @@ QPushButton#toolButtonMaximize,
 QPushButton#toolButtonMinimize,
 QPushButton#toolButtonClose {padding: 6px 0px 9px;}
 
-QPushButton#toolButtonMaximize[win10=true],
-QPushButton#toolButtonMinimize[win10=true],
-QPushButton#toolButtonClose[win10=true] {padding: 11px 0px 12px;}
+QPushButton#toolButtonMaximize[extended-title=true],
+QPushButton#toolButtonMinimize[extended-title=true],
+QPushButton#toolButtonClose[extended-title=true] {padding: 11px 0px 12px;}
 
 QPushButton#toolButtonMaximize[kde=true],
 QPushButton#toolButtonMinimize[kde=true],
 QPushButton#toolButtonClose[kde=true] {padding: 3px 0px 8px;}
+
+QPushButton#toolButtonMaximize[kde=true][extended-title=true],
+QPushButton#toolButtonMinimize[kde=true][extended-title=true],
+QPushButton#toolButtonClose[kde=true][extended-title=true] {padding: 0px 6px 7px 0px;}
+
+#mainPanel[rtl=true] QPushButton#toolButtonMaximize[kde=true][extended-title=true],
+#mainPanel[rtl=true] QPushButton#toolButtonMinimize[kde=true][extended-title=true],
+#mainPanel[rtl=true] QPushButton#toolButtonClose[kde=true][extended-title=true] {padding: 0px 0px 7px 6px;}
 
 QPushButton#toolButtonMain {border-right-width: 1px; qproperty-icon: url(:/logo_light_1.25x.png);}
 QPushButton#toolButtonMain[theme=light] {border-width: 1px; border-bottom: 0 none;}
 QPushButton#toolButtonMain[class=normal],
 QPushButton#toolButtonMain[class=normal]:hover {border-bottom-width: 1px;}
 #mainPanel[rtl=true] QPushButton#toolButtonMain {border-left-width: 1px;}
-#mainPanel[win10=true] QPushButton#toolButtonMain {margin-top: 6px;}
+#mainPanel[extended-title=true] QPushButton#toolButtonMain {margin-top: 6px;}
 
 QPushButton#toolButtonDownload {border-right-width: 1px; max-width: 50px; width: 50px; max-height: 35px; height: 35px;}
 #mainPanel[rtl=true] QPushButton#toolButtonDownload {border-left-width: 1px;}
-#mainPanel[win10=true] QPushButton#toolButtonDownload {max-height: 44px; height: 44px;}
+#mainPanel[extended-title=true] QPushButton#toolButtonDownload {max-height: 44px; height: 44px;}
 #mainPanel[uithemetype=dark] QPushButton#toolButtonMain {qproperty-icon: url(:/logo_dark_1.25x.png);}
 
 /* Menu */

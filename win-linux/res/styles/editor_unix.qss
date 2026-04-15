@@ -101,63 +101,141 @@
 #toolButtonMinimize[kde=true],
 #toolButtonClose[kde=true],
 #toolButtonMaximize[kde=true] {padding: 2px 0px 7px;}
+#mainPanel[extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 5px 0px 0px;}
+#mainPanel[rtl=true][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 5px;}
 
 /* 1.25x */
 #mainPanel[zoom="1.25x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="1.25x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="1.25x"] #toolButtonMaximize[kde=true] {padding: 3px 0px 8px;}
+#mainPanel[zoom="1.25x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="1.25x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="1.25x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 6px 0px 0px;}
+#mainPanel[rtl=true][zoom="1.25x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="1.25x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="1.25x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 6px;}
 
 /* 1.5x */
 #mainPanel[zoom="1.5x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="1.5x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="1.5x"] #toolButtonMaximize[kde=true] {padding: 3px 0px 10px;}
+#mainPanel[zoom="1.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="1.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="1.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 7px 0px 0px;}
+#mainPanel[rtl=true][zoom="1.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="1.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="1.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 7px;}
 
 /* 1.75x */
 #mainPanel[zoom="1.75x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="1.75x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="1.75x"] #toolButtonMaximize[kde=true] {padding: 4px 0px 12px;}
+#mainPanel[zoom="1.75x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="1.75x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="1.75x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 8px 0px 0px;}
+#mainPanel[rtl=true][zoom="1.75x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="1.75x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="1.75x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 8px;}
 
 /* 2x */
 #mainPanel[zoom="2x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="2x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="2x"] #toolButtonMaximize[kde=true] {padding: 4px 0px 14px;}
+#mainPanel[zoom="2x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="2x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="2x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 10px 0px 0px;}
+#mainPanel[rtl=true][zoom="2x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="2x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="2x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 10px;}
 
 /* 2.25x */
 #mainPanel[zoom="2.25x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="2.25x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="2.25x"] #toolButtonMaximize[kde=true] {padding: 5px 0px 15px;}
+#mainPanel[zoom="2.25x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="2.25x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="2.25x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 11px 0px 0px;}
+#mainPanel[rtl=true][zoom="2.25x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="2.25x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="2.25x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 11px;}
 
 /* 2.5x */
 #mainPanel[zoom="2.5x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="2.5x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="2.5x"] #toolButtonMaximize[kde=true] {padding: 5px 0px 17px;}
+#mainPanel[zoom="2.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="2.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="2.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 12px 0px 0px;}
+#mainPanel[rtl=true][zoom="2.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="2.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="2.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 12px;}
 
 /* 2.75x */
 #mainPanel[zoom="2.75x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="2.75x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="2.75x"] #toolButtonMaximize[kde=true] {padding: 6px 0px 19px;}
+#mainPanel[zoom="2.75x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="2.75x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="2.75x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 13px 0px 0px;}
+#mainPanel[rtl=true][zoom="2.75x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="2.75x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="2.75x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 13px;}
 
 /* 3x */
 #mainPanel[zoom="3x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="3x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="3x"] #toolButtonMaximize[kde=true] {padding: 6px 0px 21px;}
+#mainPanel[zoom="3x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="3x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="3x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 15px 0px 0px;}
+#mainPanel[rtl=true][zoom="3x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="3x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="3x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 15px;}
 
 /* 3.5x */
 #mainPanel[zoom="3.5x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="3.5x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="3.5x"] #toolButtonMaximize[kde=true] {padding: 7px 0px 24px;}
+#mainPanel[zoom="3.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="3.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="3.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 17px 0px 0px;}
+#mainPanel[rtl=true][zoom="3.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="3.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="3.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 17px;}
 
 /* 4x */
 #mainPanel[zoom="4x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="4x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="4x"] #toolButtonMaximize[kde=true] {padding: 8px 0px 28px;}
+#mainPanel[zoom="4x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="4x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="4x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 20px 0px 0px;}
+#mainPanel[rtl=true][zoom="4x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="4x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="4x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 20px;}
 
 /* 4.5x */
 #mainPanel[zoom="4.5x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="4.5x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="4.5x"] #toolButtonMaximize[kde=true] {padding: 9px 0px 31px;}
+#mainPanel[zoom="4.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="4.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="4.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 22px 0px 0px;}
+#mainPanel[rtl=true][zoom="4.5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="4.5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="4.5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 22px;}
 
 /* 5x */
 #mainPanel[zoom="5x"] #toolButtonMinimize[kde=true],
 #mainPanel[zoom="5x"] #toolButtonClose[kde=true],
 #mainPanel[zoom="5x"] #toolButtonMaximize[kde=true] {padding: 10px 0px 35px;}
+#mainPanel[zoom="5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[zoom="5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[zoom="5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 25px 0px 0px;}
+#mainPanel[rtl=true][zoom="5x"][extended-title=true] #toolButtonMinimize[kde=true],
+#mainPanel[rtl=true][zoom="5x"][extended-title=true] #toolButtonClose[kde=true],
+#mainPanel[rtl=true][zoom="5x"][extended-title=true] #toolButtonMaximize[kde=true] {padding: 0px 0px 0px 25px;}

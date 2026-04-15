@@ -47,6 +47,7 @@ void findWindowAsync(const char *window_name, void *user_data,
                      void(*callback)(xcb_window_t, void*));
 std::vector<xcb_window_t> getWindowStack();
 void setInputEnabled(xcb_window_t window, bool enabled);
+void setInputShape(xcb_window_t window, const xcb_rectangle_t &rc);
 bool isWindowCoveredAt(xcb_window_t winId, xcb_window_t ignoringWinId, int x, int y);
 }
 

@@ -112,9 +112,7 @@ protected:
     virtual QString getSaveMessage() const;
     virtual void refreshAboutVersion() {};
     virtual void onLayoutDirectionChanged() final;
-#ifdef _WIN32
     virtual void applyWindowState() final;
-#endif
     void closeEvent(QCloseEvent *) override;
     void showEvent(QShowEvent *) override;
 

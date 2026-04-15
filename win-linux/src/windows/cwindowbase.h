@@ -79,6 +79,9 @@ public:
     virtual void applyTheme(const std::wstring&);
 
 protected:
+#ifdef __linux__
+    friend class AscMainPanel;
+#endif
     enum BtnType {
         Btn_Minimize, Btn_Maximize, Btn_Close
     };
@@ -107,13 +110,13 @@ protected:
                    m_bkgColor;
     QRect          m_window_rect;
     int            m_toolbtn_height = TOOLBTN_HEIGHT;
+    bool           m_shouldUseThinFrame;
 
     virtual void showEvent(QShowEvent *);
 
 private:
     class CWindowBasePrivate;
     std::unique_ptr<CWindowBasePrivate> pimpl;
-    bool  m_windowActivated;
 };
 
 #endif // CWINDOWBASE_H

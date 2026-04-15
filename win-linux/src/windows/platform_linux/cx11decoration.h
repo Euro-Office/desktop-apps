@@ -36,6 +36,14 @@
 #include <QWidget>
 #include <QMouseEvent>
 
+#define WINDOW_THIN_BORDER_WIDTH  1
+#define WINDOW_CORNER_RADIUS      6
+#define SHADOW_WIDTH              26
+#define SHADOW_OFFSET_Y           2
+#define SHADOW_RADIUS             16
+#define SHADOW_ALPHA_ACTIVE       65
+#define SHADOW_ALPHA_INACTIVE     40
+
 #define FORCE_LINUX_CUSTOMWINDOW_MARGINS
 
 namespace WindowHelper {
@@ -56,15 +64,17 @@ public:
 
     void turnOn();
     void turnOff();
-    bool isDecorated();
+    bool isDecorated() const;
     void setMaximized(bool);
     void setMinimized();
     void raiseWindow();
 
-    static int customWindowBorderWith();
+    int effectiveFrameMargin() const;
 
     int m_nDirection;
 protected:
+    void updateFrameExtents();
+
     double dpi_ratio = 1;
     void onDpiChanged(double);
     bool isNativeFocus();
@@ -75,7 +85,7 @@ private:
     QTimer * m_motionTimer;
     ulong m_currentCursor;
     bool m_decoration;
-    int m_nBorderSize;
+    int m_frameMargin;
     bool m_bIsMaximized;
     bool need_to_check_motion = false;
     QSize m_startSize;
