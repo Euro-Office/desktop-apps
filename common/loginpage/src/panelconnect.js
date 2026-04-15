@@ -614,8 +614,8 @@
                             if (!res[1]) {
                                 model.set('logged', false);
                                 if ( model.removed ) {
-                                    model.set('removed', true);
                                     PortalsStore.forget(param);
+                                    model.set('removed', true);
                                 }
                             } else
                                 delete model.removed;
