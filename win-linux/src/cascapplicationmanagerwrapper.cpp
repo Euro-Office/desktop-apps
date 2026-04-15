@@ -1260,7 +1260,7 @@ void CAscApplicationManagerWrapper::startApp()
     bool files_in_args = std::find_if(in_args.begin(), in_args.end(),
                                      [](const std::wstring& arg){
                                             return (arg.rfind(L"--review", 0) != std::string::npos) || (arg.rfind(L"--view", 0) != std::string::npos) ||
-                                                        (arg.rfind(L"--edit", 0) != std::string::npos) || arg.rfind(L"--", 0 == std::string::npos);
+                                                        (arg.rfind(L"--edit", 0) != std::string::npos) || (arg.rfind(L"--new", 0) != std::string::npos);
                                         }) != std::end(in_args);
     if ( !files_in_args && open_in_new_window ) {
         in_args.push_back(L"--new:word");
