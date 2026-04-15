@@ -151,10 +151,10 @@ int main( int argc, char *argv[] )
             foreach (auto w_arg, _args) {
                 const QString arg = QString::fromStdWString(w_arg);
                 if ( arg.startsWith("--new:") )
-                    _out_args.append(arg).append(";");
+                    _out_args.append(arg).append("\x01");
                 else
                 if ( arg.mid(0,2) != "--" )
-                    _out_args.append(arg + ";");
+                    _out_args.append(arg + "\x01");
             }
         }
         bool res = app.sendMessage(_out_args.toUtf8());

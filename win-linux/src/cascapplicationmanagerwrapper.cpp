@@ -1296,7 +1296,7 @@ void CAscApplicationManagerWrapper::initializeApp()
     SingleApplication * app = static_cast<SingleApplication *>(QCoreApplication::instance());
     connect(app, &SingleApplication::receivedMessage, [](const QString &args) {
         std::vector<std::wstring> vec_inargs;
-        foreach (auto arg, args.split(";")) {
+        foreach (auto arg, args.split("\x01")) {
             if ( !arg.isEmpty() )
                 vec_inargs.push_back(arg.toStdWString());
         }
