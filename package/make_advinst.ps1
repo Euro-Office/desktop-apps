@@ -6,8 +6,6 @@
     [string]$ProductName = "DesktopEditors",
     [string]$BuildDir,
     [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
-    [string]$TimestampServer = "http://timestamp.digicert.com",
     [switch]$Debug
 )
 
@@ -75,11 +73,11 @@ $AssociationList = @(
     "xls", "xlt", "xlsx", "xltx", "xlsm", "xltm", "xlsb",
     "ppt", "pot", "pps", "pptx", "potx", "ppsx", "pptm", "potm", "ppsm",
     "vsdx", "vstx", "vssx", "vsdm", "vstm", "vssm",
-    "odt", "ott", "ods", "ots", "odp", "otp", "fodt", "fods", "fodp",
+    "odt", "ott", "ods", "ots", "odp", "otp", "odg", "fodt", "fods", "fodp",
     "pages", "numbers", "key",
     "djvu", "fb2", "pdf", "rtf", "xps", "oxps",
     "epub", "html", "xml",
-    "csv", "txt",
+    "md", "txt", "csv", "tsv",
     "docxf"
 )
 $LicensePath = "common\license"
@@ -130,9 +128,6 @@ Write-Output "package=msi" `
 Write-Host "`n[ Create Advanced Installer config ]"
 
 $AdvInstConfig = @()
-if (-not $Sign) {
-    $AdvInstConfig += "ResetSig"
-}
 if ($Arch -eq "x86") {
     $AdvInstConfig += `
         "SetComponentAttribute -feature_name MainFeature -unset -64bit_component", `
@@ -202,8 +197,7 @@ Write-Host "MsiInfo $MsiFile /p $Template"
 if ($LastExitCode -ne 0) { throw }
 
 if ($Sign) {
-    Write-Host "signtool sign /a /n $CertName /t $TimestampServer /v $MsiFile"
-    & signtool sign /a /n $CertName /t $TimestampServer /v $MsiFile
+    & "$env:WORKSPACE\documents-pipeline\scripts\Sign.ps1" -File $MsiFile
     if ($LastExitCode -ne 0) { throw }
 }
 

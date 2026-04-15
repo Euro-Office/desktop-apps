@@ -27,7 +27,7 @@
     <message>
         <location filename="../src/cascapplicationmanagerwrapper.cpp" line="1988"/>
         <source>You must restart the application for the settings to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Morate ponovno pokrenuti aplikaciju kako bi postavke stupile na snagu.</translation>
     </message>
     <message>
         <location filename="../src/cascapplicationmanagerwrapper.cpp" line="2322"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="96"/>
         <source>XLSB File (*.xlsb)</source>
-        <translation type="unfinished"></translation>
+        <translation>Excel binarna datoteka (*.xlsb)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="99"/>
@@ -417,32 +417,32 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="108"/>
         <source>VSDX File</source>
-        <translation type="unfinished"></translation>
+        <translation>Visio crtež</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="109"/>
         <source>VSDM File</source>
-        <translation type="unfinished"></translation>
+        <translation>Visio crtež s omogućenim makronaredbama</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="110"/>
         <source>VSSX File</source>
-        <translation type="unfinished"></translation>
+        <translation>Visio predložak oblika</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="111"/>
         <source>VSSM File</source>
-        <translation type="unfinished"></translation>
+        <translation>Visio predložak oblika s omogućenim makronaredbama</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="112"/>
         <source>VSTX File</source>
-        <translation type="unfinished"></translation>
+        <translation>Visio predložak</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="113"/>
         <source>VSTM File</source>
-        <translation type="unfinished"></translation>
+        <translation>Visio predložak s omogućenim makronaredbama</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="115"/>
@@ -524,22 +524,22 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="511"/>
         <source>Unknown image format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepoznati format slike.</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="512"/>
         <source>Unknown video format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepoznati format videozapisa.</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="513"/>
         <source>Unknown audio format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepoznati format audiozapisa.</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="513"/>
         <source>Unknown format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepoznati format.</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="268"/>
@@ -693,47 +693,47 @@
     <message>
         <location filename="../src/components/cmenu.cpp" line="374"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatvori</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="375"/>
         <source>Close saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatvori spremljeno</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="376"/>
         <source>Close all</source>
-        <translation type="unfinished"></translation>
+        <translation>Zatvori sve</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="377"/>
         <source>Show in folder</source>
-        <translation type="unfinished">Pokaži u mapi</translation>
+        <translation>Prikaži u mapi</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="378"/>
         <source>Move to start</source>
-        <translation type="unfinished"></translation>
+        <translation>Premjesti na početak</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="379"/>
         <source>Move to end</source>
-        <translation type="unfinished"></translation>
+        <translation>Premjesti na kraj</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="380"/>
         <source>Unpin tab to window</source>
-        <translation type="unfinished"></translation>
+        <translation>Otkvači karticu od prozora</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="381"/>
         <source>Pin to tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikvači na karticu</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="382"/>
         <source>Create new</source>
-        <translation type="unfinished"></translation>
+        <translation>Stvori novo</translation>
     </message>
 </context>
 <context>
@@ -794,27 +794,27 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="81"/>
         <source>Update failed: out of memory!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ažuriranje nije uspjelo: nema dovoljno memorije!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="82"/>
         <source>Update failed: server connection error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ažuriranje nije uspjelo: pogreška veze s poslužiteljem!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="83"/>
         <source>Update failed: wrong URL!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ažuriranje nije uspjelo: pogrešan URL!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="84"/>
         <source>Update failed: unable to create file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ažuriranje nije uspjelo: nije moguće stvoriti datoteku!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="85"/>
         <source>Update failed: network error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ažuriranje nije uspjelo: mrežna pogreška!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="96"/>
@@ -931,12 +931,12 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="92"/>
         <source>Service update is available (version %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostupno je ažuriranje usluge (verzija %1)</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="95"/>
         <source>Preparing update (%1%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Priprema ažuriranja (%1%)</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="100"/>
@@ -961,7 +961,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="889"/>
         <source>The current version does not support installing this update directly. To install updates, you can download the required package from the official website.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trenutna verzija ne podržava izravnu instalaciju ovog ažuriranja. Za instalaciju ažuriranja možete preuzeti potreban paket s službene web stranice.</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="891"/>

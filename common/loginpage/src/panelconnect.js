@@ -460,13 +460,13 @@
                                 _write_portal_cookie(obj.domain);
 
                             if ( model.get('removed') ) {
-                                model.set('removed', false);
                                 PortalsStore.keep({
                                     portal: model.path,
                                     provider: model.provider,
                                     user: model.user,
                                     email: model.email
                                 });
+                                model.set('removed', false);
                             }
 
                             if ( model.get('user') != obj.displayName ) {
@@ -508,6 +508,7 @@
                         (info.portal = info.portal.slice(0,-1));
 
                 PortalsStore.keep(info);
+                sdk.oncloudchanged(info, 'added')
                 if ( obj.provider != 'onlyoffice' ) {
                     // sdk.setCookie(info.portal, utils.skipUrlProtocol(info.portal), "/", "asc_auth_key", utils.fn.uuid());
                     _write_portal_cookie(info.portal);
@@ -636,10 +637,10 @@
                 _init_ppmenu.call(this);
                 // _initCarousel.call(this);
 
-                $('body').on('click', '.login', e=>{
+                const _on_click_btn_login = e => {
                     var portals = PortalsStore.portals();
                     if (portals.length) {
-                        let _data = $(e.currentTarget).data();
+                        let _data = e ? $(e.currentTarget).data() : {cprov:undefined};
                         !_data ? _do_connect.call(this) : _do_connect.call(this, {provider:_data.cprov});
                     } else { 
                         new DialogProviders({
@@ -648,6 +649,24 @@
                                 _do_connect.call(this, provider ? {provider} : {});
                             }
                         }).show();
+                    }
+                };
+
+                $('body').on('click', '.login', _on_click_btn_login);
+
+                sdk.clouds = PortalsStore.portals();
+                sdk.onclickaddportal = e => {
+                    _on_click_btn_login();
+                }
+
+                collection.events.changed.attach((collection, model, value) => {
+                    if ( value ) {
+                        if ( value.removed === true ) {
+                            sdk.oncloudchanged(PortalsStore.get({portal: model.path}), 'removed');
+                        } else
+                        if ( value.removed === false ) {
+                            sdk.oncloudchanged(PortalsStore.get({portal: model.path}), 'added');
+                        }
                     }
                 });
 

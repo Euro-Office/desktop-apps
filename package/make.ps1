@@ -6,9 +6,7 @@
     [string]$ProductName = "DesktopEditors",
     [string]$SourceDir,
     [string]$BuildDir,
-    [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
-    [string]$TimestampServer = "http://timestamp.digicert.com"
+    [switch]$Sign
 )
 
 $ErrorActionPreference = "Stop"
@@ -85,12 +83,12 @@ Write-Host "`n[ Sign files ]"
 
 if ($Sign) {
     Set-Location "$BuildDir\desktop"
-    $SignFiles = Get-ChildItem *.exe, *.dll -Recurse | Resolve-Path -Relative
 
     # Sign
-    Write-Host "signtool sign /a /n $CertName /t $TimestampServer ..."
-    & signtool sign /a /n $CertName /t $TimestampServer /v $SignFiles
-    if ($LastExitCode -ne 0) { throw }
+    Get-ChildItem *.exe, *.dll -Recurse | ForEach-Object {
+        & "$env:WORKSPACE\documents-pipeline\scripts\Sign.ps1" -File $_
+        if ($LastExitCode -ne 0) { throw }
+    }
 
     # Verify
     Get-ChildItem *.exe, *.dll -Recurse | % { Get-AuthenticodeSignature $_ }

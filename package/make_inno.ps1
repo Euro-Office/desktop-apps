@@ -7,8 +7,6 @@
     [string]$BuildDir,
     [string]$BrandingDir,
     [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
-    [string]$TimestampServer = "http://timestamp.digicert.com",
     [switch]$Debug
 )
 
@@ -125,7 +123,7 @@ switch ($Target) {
 }
 if ($Sign) {
     $InnoArgs += "/DSIGN",
-        "/Sbyparam=signtool sign /a /v /n `$q$CertName`$q /t $TimestampServer `$f"
+        "/Sbyparam=powershell -ExecutionPolicy Bypass -File `$q$env:WORKSPACE\documents-pipeline\scripts\Sign.ps1`$q -File `$f"
 }
 if ($Debug) {
     $InnoArgs += "/DPREPROCSAVE"

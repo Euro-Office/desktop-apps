@@ -153,7 +153,7 @@ Name: hy_AM; MessagesFile: compiler:Languages\Armenian.isl;
 #endif
 Name: zh_CN; MessagesFile: compiler:Languages\ChineseSimplified.isl;
 ;Name: hy_AM; MessagesFile: compiler:Languages\Armenian.islu;
-;Name: hr; MessagesFile: compiler:Languages\Croatian.isl;
+Name: hr; MessagesFile: compiler:Languages\Croatian.isl;
 Name: da; MessagesFile: compiler:Languages\Danish.isl;
 ;Name: hi; MessagesFile: compiler:Languages\Hindi.islu;
 Name: hu; MessagesFile: compiler:Languages\Hungarian.isl;
@@ -189,10 +189,6 @@ ur.RightToLeft=yes
 [CustomMessages]
 #include '_messages.iss'
 
-[Dirs]
-Name: {commonappdata}\{#APP_PATH}\webdata\cloud; Flags: uninsalwaysuninstall;
-
-
 [Files]
 Source: "vc_redist.{#ARCH}.exe"; DestDir: {app}; Flags: deleteafterinstall; \
   AfterInstall: installVCRedist(ExpandConstant('{app}\vc_redist.{#ARCH}.exe'), ExpandConstant('{cm:InstallAdditionalComponents}')); \
@@ -221,7 +217,6 @@ Type: files; Name: "{group}\{#sOldAppIconName}.lnk";
 Name: desktopicon; Description: {cm:CreateDesktopIcon,{#sAppName}}; GroupDescription: {cm:AdditionalIcons};
 ;Name: fileassoc; Description: {cm:AssociateCaption};   GroupDescription: {cm:AssociateDescription};
 
-
 [Icons]
 ;Name: {commondesktop}\{#sAppName}; FileName: {app}\{#NAME_EXE_OUT}; WorkingDir: {app}; Tasks: desktopicon;
 Name: {commondesktop}\{#sAppIconName}; FileName: {app}\{#iconsExe}; WorkingDir: {app}; Tasks: desktopicon; IconFilename: {app}\app.ico; AppUserModelID: {#APP_USER_MODEL_ID};
@@ -239,10 +234,6 @@ Name: "{group}\{cm:jumpDOCXF}"; IconFilename: "{app}\{#iconsExe}"; IconIndex: 17
 Filename: {app}\{#iconsExe}; Description: {cm:Launch,{#sAppName}}; Flags: postinstall nowait skipifsilent runasoriginaluser;
 ;Filename: http://www.onlyoffice.com/remove-portal-feedback-form.aspx; Description: Visit website; Flags: postinstall shellexec nowait
 ;Filename: ms-settings:defaultapps; Description: {cm:runOpenDefaultApps}; Flags:postinstall shellexec nowait unchecked; MinVersion: 10.0.10240;
-
-[Ini]
-;Filename: {app}\opts; Section: app; Key: lang; String: {language};
-
 
 [Registry]
 ;Root: HKLM; Subkey: {#APP_REG_PATH};  Flags: uninsdeletekey;
@@ -268,7 +259,6 @@ Root: HKLM; Subkey: "SOFTWARE\Classes\{#sAppProtocol}\Shell\Open\Command"; Value
 #endif
 
 [UninstallDelete]
-Type: filesandordirs; Name: {commonappdata}\{#APP_PATH}\*;  AfterInstall: RefreshEnvironment;
 Type: filesandordirs; Name: "{app}\..\{#UPD_PATH}";
 Type: files; Name: "{app}\svcrestart.bat";
 
