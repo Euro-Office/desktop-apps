@@ -1272,56 +1272,10 @@ sq.extODP =Prezantim OpenDocument
 ur.extODP =اوپن دستاویز پریزنٹیشن
 #endif
 
-en.extDOC =Word 97-2003 Document
-en_GB.extDOC =Word 97-2003 Document
-ar_SA.extDOC =مستند وورد 97-2003
-bg.extDOC =Word 97-2003 документ
-ca.extDOC =Document Word 97-2003
-cs.extDOC =Dokument Word 97-2003
-el.extDOC =Έγγραφο Word 97-2003
 ;et.extDOC =Word 97-2003 dokument
-fi.extDOC =Word 97–2003 -asiakirja
 ;lt.extDOC =Word 97-2003 Dokumentas
-lo.extDOC =ເອກະສານ Word 97-2003
-nl.extDOC =Word 97-2003 Document
-ru.extDOC =Документ Word 97-2003
-de.extDOC =Word 97-2003-Dokument
-fr.extDOC =Document Word 97-2003
-es.extDOC =Documento Word 97-2003
-id.extDOC =Word 97-2003 Document
-it_IT.extDOC =Documento Word 97-2003
-pt_BR.extDOC =Documento do Word 97-2003
-pt_PT.extDOC =Documento Word 97-2003
-pl.extDOC =Dokument Word 97-2003
-ro.extDOC =Document Word 97-2003
-sk.extDOC =Dokument Word 97-2003
-sl.extDOC =Word 97-2003 dokument
-sv.extDOC =Word 97-2003-dokument
-tr.extDOC =Word 97-2003 Belgesi
-vi.extDOC =Tài liệu Word 97-2003
-zh_CN.extDOC =Word 97-2003 文档
-hy_AM.extDOC =Word 97-2003 փաստաթուղթ
-hr.extDOC =Word 97-2003 Dokument
-da.extDOC =Word 97-2003-dokument
 ;hi.extDOC =वर्ड 97-2003 दस्तावेज़
-hu.extDOC =Word 97-2003-as dokumentum
 ;ga_IE.extDOC =Word 97-2003 Document
-ja.extDOC =Word 97-2003ドキュメント
-ko.extDOC =Word 97-2003 문서
-lv.extDOC =Word 97-2003 dokuments
-no.extDOC =Word 97-2003-dokument
-uk.extDOC =Документ Word 97-2003
-be.extDOC =Дакумент Word 97-2003
-gl.extDOC =Documento Word 97-2003
-si.extDOC =වර්ඩ් 97-2003 ලේඛනය
-zh_TW.extDOC =Word 97-2003 文件
-sr_Cyrl_RS.extDOC =Word 97-2003 документ
-sr_Latn_RS.extDOC =Word 97-2003 dokument
-he.extDOC =מסמך Word 97-2003
-sq.extDOC =Dokument Word 97-2003
-#if Ver >= EncodeVer(6,1,1)
-ur.extDOC =ورڈ 97-2003 دستاویز
-#endif
 
 en.extDOCX =Office Open XML Document
 en_GB.extDOCX =Office Open XML Document
@@ -2177,33 +2131,6 @@ sq.extXLSB =Fromati i skedarit binar të Excel
 ur.extXLSB =ایکسل بائنری فائل فارمیٹ
 #endif
 
-en.extXLSM =Microsoft Excel Macro-Enabled Workbook
-en_GB.extXLSM =Microsoft Excel Macro-Enabled Workbook
-sq.extXLSM =Libri i punës i aktivizuar me makro Microsoft Excel
-#if Ver >= EncodeVer(6,1,1)
-ur.extXLSM =مائیکروسافٹ ایکسل میکرو فعال ورک بک
-#endif
-
-en.extFODS =OpenDocument Flat XML Spreadsheet
-en_GB.extFODS =OpenDocument Flat XML Spreadsheet
-sq.extFODS =Fletëllogaritëse e sheshtë OpenDocument XML
-#if Ver >= EncodeVer(6,1,1)
-ur.extFODS =اوپن دستاویز فلیٹ ایکس ایم ایل اسپریڈشیٹ
-#endif
-
-en.extFODT =OpenDocument Flat XML Document
-en_GB.extFODT =OpenDocument Flat XML Document
-sq.extFODT =Dokument XML i sheshtë OpenDocument
-#if Ver >= EncodeVer(6,1,1)
-ur.extFODT =اوپن دستاویز فلیٹ XML دستاویز
-#endif
-
-en.extVSDX =Visio Drawing
-en_GB.extVSDX =Visio Drawing
-sq.extVSDX =Vizatim Visio
-#if Ver >= EncodeVer(6,1,1)
-ur.extVSDX =ویزیو ڈرائنگ
-#endif
 ;======================================================================================================
 
 en.jumpDOCX =New document
