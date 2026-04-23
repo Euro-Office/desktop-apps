@@ -357,6 +357,9 @@ static float kASCRTLTabsRightMargin = 0;
                 case AscEditorType::etPdf          : docType = ASCTabViewTypePdf; break;
                 case AscEditorType::etDraw         : docType = ASCTabViewTypeDraw; break;
                 default:
+                    if ((ASCTabActionType)[tab.params[@"action"] intValue] == ASCTabActionOpenPortal) {
+                        docType = ASCTabViewTypePortal;
+                    }
                     break;
             }
 
