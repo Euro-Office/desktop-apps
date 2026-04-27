@@ -317,10 +317,10 @@
                         fullName: [info['name_form'], file_ext].join('.'),
                         descr: info['template_desc'],
                         preview: info.card_prewiew ? info.card_prewiew.data.attributes.url : undefined,
-                        path: info.file_oform ? info.file_oform.data[0].attributes.url : undefined,
+                        path: info.file_oform && info.file_oform.data ? info.file_oform.data[0].attributes.url : undefined,
                         type: utils.fileExtensionToFileFormat(file_ext),
                         icon: info.template_image ? info.template_image.data.attributes.formats.thumbnail.url : undefined,
-                        size: info.file_oform ? info.file_oform.data[0].attributes.size : undefined,
+                        size: info.file_oform && info.file_oform.data ? info.file_oform.data[0].attributes.size : undefined,
                         isCloud: true,
                     });
 
