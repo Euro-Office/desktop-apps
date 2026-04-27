@@ -51,7 +51,7 @@ static NSString * const tabSlideActiveBackgroundColor   = @"tab-slide-background
 static NSString * const tabPdfActiveBackgroundColor     = @"tab-pdf-background-active-color";
 static NSString * const tabDrawActiveBackgroundColor    = @"tab-draw-background-active-color";
 static NSString * const tabActiveTextColor              = @"tab-editor-text-active-color";
-static NSString * const windowBackgroundColor           = @"window-background-color";
+static NSString * const windowBackgroundColor           = @"window-background-color";
 
 @interface ASCThemesController : NSObject
 

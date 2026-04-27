@@ -208,17 +208,14 @@
         }
     }
 
-    return false;
+    return NO;
 }
 
 + (BOOL)isDarkWindowAppearance {
-    BOOL isDarkWindow;
     if (@available(macOS 10.14, *)) {
-        isDarkWindow = [ASCThemesController isCurrentThemeDark];
-    } else {
-        isDarkWindow = [NSApplication isSystemDarkMode];
+        return [ASCThemesController isCurrentThemeDark];
     }
-    return isDarkWindow;
+    return [NSApplication isSystemDarkMode];
 }
 
 @end
