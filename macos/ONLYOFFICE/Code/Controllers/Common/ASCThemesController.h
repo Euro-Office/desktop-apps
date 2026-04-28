@@ -67,6 +67,14 @@ static NSString * const windowBackgroundColor           = @"window-background-co
 + (BOOL)isSystemDarkMode;
 + (BOOL)isDarkWindowAppearance;
 
++ (NSString*)userThemesPath;
++ (BOOL)validateTheme:(NSDictionary*)jsonObj;
++ (BOOL)containsTheme:(NSString*)themeId;
++ (BOOL)isLocalTheme:(NSString*)themeId;
++ (BOOL)addLocalTheme:(NSDictionary*)jsonObj filePath:(NSString*)filePath;
++ (NSArray*)localThemesToJson;
++ (BOOL)checkDestinationThemeFileExist:(NSString*)srcPath;
+
 @end
 
 #endif /* ASCThemesController_h */

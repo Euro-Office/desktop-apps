@@ -102,6 +102,7 @@ static NSString* jsonKeysForColorName(NSString *name) {
 
 @interface ASCThemesController ()
 @property (nonatomic) NSMutableDictionary<NSString*, NSData*> *builtinThemes;
+@property (nonatomic) NSMutableDictionary<NSString*, NSArray*> *localThemes;
 @end
 
 @implementation ASCThemesController
@@ -134,11 +135,30 @@ static NSString* jsonKeysForColorName(NSString *name) {
     _builtinThemes = [NSMutableDictionary dictionary];
     [self loadBuiltinThemes];
 
+    _localThemes = [NSMutableDictionary dictionary];
+    [self searchLocalThemes];
+
     BOOL isDark = [self isDarkThemeId:uiTheme];
 
     [[ASCEditorJSVariables instance] setVariable:@"theme" withObject:@{@"id":uiTheme,
                                                                        @"system":systemColorScheme,
-                                                                       @"type": isDark ? @"dark" : @"light"}];
+                                                                       @"type": isDark ?
+                                                                       @"dark" : @"light",
+                                                                       @"addlocal": @"on"}];
+
+    NSMutableArray *localThemesArr = [NSMutableArray arrayWithCapacity:_localThemes.count];
+    for (NSArray *info in _localThemes.allValues) {
+        if (info.count < 2) continue;
+        NSError *jsonErr = nil;
+        id obj = [NSJSONSerialization JSONObjectWithData:info[1] options:0 error:&jsonErr];
+        if (!jsonErr && [obj isKindOfClass:[NSDictionary class]]) {
+            [localThemesArr addObject:obj];
+        }
+    }
+    if (localThemesArr.count > 0) {
+        [[ASCEditorJSVariables instance] setVariable:@"localthemes" withArray:localThemesArr];
+        [[ASCEditorJSVariables instance] apply];
+    }
 
     [NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(onSystemThemeChanged:) name:@"AppleInterfaceThemeChangedNotification" object: nil];
 
@@ -171,11 +191,43 @@ static NSString* jsonKeysForColorName(NSString *name) {
     }
 }
 
+- (void)searchLocalThemes {
+    NSString *dir = [[self class] userThemesPath];
+    NSArray<NSString*> *files = [[NSFileManager defaultManager]
+        contentsOfDirectoryAtPath:dir error:nil];
+
+    for (NSString *fileName in files) {
+        if (![fileName.pathExtension.lowercaseString isEqualToString:@"json"]) continue;
+        NSString *fullPath = [dir stringByAppendingPathComponent:fileName];
+        [self addThemeFromFile:fullPath];
+    }
+}
+
+- (BOOL)addThemeFromFile:(NSString*)path {
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    if (!data) return NO;
+
+    NSError *error = nil;
+    id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error || ![obj isKindOfClass:[NSDictionary class]]) return NO;
+
+    NSDictionary *jsonObj = (NSDictionary *)obj;
+    if (![[self class] validateTheme:jsonObj]) return NO;
+
+    NSString *themeId = jsonObj[@"id"];
+    _localThemes[themeId] = @[path, data];
+    return YES;
+}
+
 - (BOOL)isDarkThemeId:(NSString*)themeId {
     if ([uiThemeSystem isEqualToString:themeId]) {
         return [[self class] isSystemDarkMode];
     }
     NSData *data = _builtinThemes[themeId];
+    if (!data) {
+        NSArray *info = _localThemes[themeId];
+        data = (info.count >= 2) ? info[1] : nil;
+    }
     if (data) {
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
         return [@"dark" isEqualToString:json[@"type"]];
@@ -205,6 +257,10 @@ static NSString* jsonKeysForColorName(NSString *name) {
 + (NSData*)jsonDataForTheme:(NSString*)themeId {
     ASCThemesController *instance = [self sharedInstance];
     NSData *data = instance.builtinThemes[themeId];
+    if (!data) {
+        NSArray *info = instance.localThemes[themeId];
+        data = (info.count >= 2) ? info[1] : nil;
+    }
     return data;
 }
 
@@ -312,6 +368,114 @@ static NSString* jsonKeysForColorName(NSString *name) {
         return [ASCThemesController isCurrentThemeDark];
     }
     return [NSApplication isSystemDarkMode];
+}
+
++ (NSString*)userThemesPath {
+    NSString *appSupport = NSSearchPathForDirectoriesInDomains(
+        NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+    return [appSupport stringByAppendingPathComponent:@"ONLYOFFICE/uithemes"];
+}
+
++ (BOOL)validateTheme:(NSDictionary*)jsonObj {
+    if (!jsonObj[@"id"] || !jsonObj[@"name"]) return NO;
+
+    NSString *themeId = jsonObj[@"id"];
+    if (![themeId isKindOfClass:[NSString class]] || themeId.length == 0) return NO;
+
+    NSError *err = nil;
+    NSRegularExpression *re = [NSRegularExpression
+        regularExpressionWithPattern:@"[^\\w\\d\\-]"
+                             options:0
+                               error:&err];
+    if (!err && [re numberOfMatchesInString:themeId
+                                    options:0
+                                      range:NSMakeRange(0, themeId.length)] > 0) {
+        return NO;
+    }
+
+    NSDictionary *colors = jsonObj[@"colors"] ?: jsonObj[@"values"];
+    if ([colors isKindOfClass:[NSDictionary class]]) {
+        for (NSString *key in colors) {
+            if (!err && [re numberOfMatchesInString:key
+                                            options:0
+                                              range:NSMakeRange(0, key.length)] > 0) {
+                return NO;
+            }
+        }
+    }
+
+    return YES;
+}
+
++ (BOOL)isLocalTheme:(NSString*)themeId {
+    if (!themeId) return NO;
+    ASCThemesController *instance = [self sharedInstance];
+    return instance.builtinThemes[themeId] == nil;
+}
+
++ (BOOL)addLocalTheme:(NSDictionary*)jsonObj filePath:(NSString*)filePath {
+    if (![self validateTheme:jsonObj]) return NO;
+
+    NSString *destDir = [self userThemesPath];
+    NSFileManager *fm = [NSFileManager defaultManager];
+
+    NSError *err = nil;
+    if (![fm createDirectoryAtPath:destDir withIntermediateDirectories:YES attributes:nil error:&err]) {
+        NSLog(@"ASCThemesController: failed to create themes dir: %@", err);
+        return NO;
+    }
+
+    NSString *fileName = [filePath lastPathComponent];
+    NSString *destPath = [destDir stringByAppendingPathComponent:fileName];
+
+    if ([fm fileExistsAtPath:destPath]) {
+        [fm removeItemAtPath:destPath error:nil];
+    }
+
+    NSData *outData = [NSJSONSerialization dataWithJSONObject:jsonObj options:0 error:&err];
+    if (err || !outData) {
+        NSLog(@"ASCThemesController: failed to serialize theme json: %@", err);
+        return NO;
+    }
+
+    if (![outData writeToFile:destPath options:NSDataWritingAtomic error:&err]) {
+        NSLog(@"ASCThemesController: failed to write theme file: %@", err);
+        return NO;
+    }
+
+    NSString *themeId = jsonObj[@"id"];
+    ASCThemesController *instance = [self sharedInstance];
+    instance.localThemes[themeId] = @[destPath, outData];
+    return YES;
+}
+
++ (NSArray*)localThemesToJson {
+    ASCThemesController *instance = [self sharedInstance];
+    NSDictionary<NSString*, NSArray*> *localThemes = instance.localThemes;
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:localThemes.count];
+
+    for (NSArray *info in localThemes.allValues) {
+        if (info.count < 2) continue;
+        NSError *err = nil;
+        id obj = [NSJSONSerialization JSONObjectWithData:info[1] options:0 error:&err];
+        if (!err && [obj isKindOfClass:[NSDictionary class]]) {
+            [result addObject:obj];
+        }
+    }
+    return [result copy];
+}
+
++ (BOOL)containsTheme:(NSString*)themeId {
+    if (!themeId) return NO;
+    ASCThemesController *instance = [self sharedInstance];
+    return instance.builtinThemes[themeId] != nil ||
+           instance.localThemes[themeId] != nil;
+}
+
++ (BOOL)checkDestinationThemeFileExist:(NSString*)srcPath {
+    NSString *fileName = [srcPath lastPathComponent];
+    NSString *destPath = [[self userThemesPath] stringByAppendingPathComponent:fileName];
+    return [[NSFileManager defaultManager] fileExistsAtPath:destPath];
 }
 
 @end
