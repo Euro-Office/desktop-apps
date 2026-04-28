@@ -1,0 +1,68 @@
+{
+    "id": "theme-light",
+    "type": "light",
+    "values": {
+        "brand-word": "#446995",
+        "brand-slide": "#b75b44",
+        "brand-cell": "#3a8056",
+        "brand-pdf": "#aa5252",
+        "brand-draw": "#444796",
+
+        "window-background": "#e4e4e4",
+        "window-border": "#888",
+
+        "border-control-focus": "#4a87e7",
+
+        "text-normal": "#444",
+        "text-pretty": "#fff",
+        "text-inverse": "#fff",
+
+        "tool-button-background": "#f1f1f1",
+        "tool-button-hover-background": "#cecece",
+        "tool-button-pressed-background": "#b7b7b7",
+        "tool-button-active-background": "#f7f7f7",
+
+        "download-widget-background": "#fff",
+        "download-widget-border": "#d1d1d1",
+        "download-item-hover-background": "#e0e0e0",
+
+        "download-ghost-button-text": "#3a83db",
+        "download-ghost-button-text-hover": "#444",
+        "download-ghost-button-text-pressed": "#a5a5a5",
+        "download-ghost-button-text-pressed-item-hover": "#868686",
+
+        "download-label-text": "#444",
+        "download-label-text-info": "#a5a5a5",
+        "download-label-text-info-item-hover": "#868686",
+
+        "download-progressbar-chunk": "#3a83db",
+        "download-progressbar-background": "#e6e6e6",
+        "download-progressbar-background-item-hover": "#cacaca",
+
+        "download-scrollbar-handle": "#cacaca",
+
+        "menu-background": "#fff",
+        "menu-border": "#c0c0c0",
+        "menu-item-hover-background": "#e0e0e0",
+
+        "menu-text": "#444",
+        "menu-text-item-hover": "#444",
+        "menu-text-item-disabled": "#c9c9c9",
+
+        "menu-separator": "#dfdfdf",
+
+        "tooltip-text": "#373737",
+        "tooltip-border": "#c0c0c0",
+        "tooltip-background": "#fff",
+
+        "tab-active-background": "#fff",
+        "tab-simple-active-background": "#fff",
+        "tab-simple-active-text": "#444",
+        "tab-default-active-background": "#fff",
+        "tab-default-active-text": "#444",
+        "tab-divider": "#dfdfdf",
+
+        "button-normal-opacity": "#ffffff",
+        "logo-type": "dark"
+    }
+}

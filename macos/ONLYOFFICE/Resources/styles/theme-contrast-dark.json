@@ -1,0 +1,68 @@
+{
+    "id": "theme-contrast-dark",
+    "type": "dark",
+    "values": {
+        "brand-word": "#1e1e1e",
+        "brand-slide": "#1e1e1e",
+        "brand-cell": "#1e1e1e",
+        "brand-pdf": "#1e1e1e",
+        "brand-draw": "#1e1e1e",
+
+        "window-background": "#181818",
+        "window-border": "#616161",
+
+        "border-control-focus": "#4a87e7",
+
+        "text-normal": "#e8e8e8",
+        "text-pretty": "#e8e8e8",
+        "text-inverse": "#444",
+
+        "tool-button-background": "#2a2a2a",
+        "tool-button-hover-background": "#424242",
+        "tool-button-pressed-background": "#666666",
+        "tool-button-active-background": "#2a2a2a",
+
+        "download-widget-background": "#2a2a2a",
+        "download-widget-border": "#666666",
+        "download-item-hover-background": "#555",
+
+        "download-ghost-button-text": "#96c8fd",
+        "download-ghost-button-text-hover": "#d6d6d6",
+        "download-ghost-button-text-pressed": "#858585",
+        "download-ghost-button-text-pressed-item-hover": "#999999",
+
+        "download-label-text": "#d6d6d6",
+        "download-label-text-info": "#858585",
+        "download-label-text-info-item-hover": "#999999",
+
+        "download-progressbar-chunk": "#96c8fd",
+        "download-progressbar-background": "#858585",
+        "download-progressbar-background-item-hover": "#999999",
+
+        "download-scrollbar-handle": "#999999",
+
+        "menu-background": "#212121",
+        "menu-border": "#696969",
+        "menu-item-hover-background": "#424242",
+
+        "menu-text": "#e8e8e8",
+        "menu-text-item-hover": "#e8e8e8",
+        "menu-text-item-disabled": "#717171",
+
+        "menu-separator": "#505050",
+
+        "tooltip-text": "#d2d2d2",
+        "tooltip-border": "#696969",
+        "tooltip-background": "#212121",
+
+        "tab-active-background": "#121212",
+        "tab-simple-active-background": "#333",
+        "tab-simple-active-text": "#fff",
+        "tab-default-active-background": "#333",
+        "tab-default-active-text": "#fff",
+        "tab-divider": "#414141",
+
+        "button-normal-opacity": "#ffffffc8",
+        "logo-type": "light"
+    }
+}

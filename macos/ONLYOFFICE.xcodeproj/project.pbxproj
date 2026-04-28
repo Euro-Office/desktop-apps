@@ -80,6 +80,9 @@
 		5AC461B92E4E141100FD2689 /* license in Resources */ = {isa = PBXBuildFile; fileRef = 5AC461B72E4E12F600FD2689 /* license */; };
 		5AC461BA2E4E15E700FD2689 /* license in Resources */ = {isa = PBXBuildFile; fileRef = 5AC461B72E4E12F600FD2689 /* license */; };
 		5AC461BB2E4E160D00FD2689 /* license in Resources */ = {isa = PBXBuildFile; fileRef = 5AC461B72E4E12F600FD2689 /* license */; };
+		5A0000002F0A00000000AA02 /* styles in Resources */ = {isa = PBXBuildFile; fileRef = 5A0000002F0A00000000AA01 /* styles */; };
+		5A0000002F0A00000000AA03 /* styles in Resources */ = {isa = PBXBuildFile; fileRef = 5A0000002F0A00000000AA01 /* styles */; };
+		5A0000002F0A00000000AA04 /* styles in Resources */ = {isa = PBXBuildFile; fileRef = 5A0000002F0A00000000AA01 /* styles */; };
 		5ACC12852BC033080089A585 /* file-xlsb.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5ACC12842BC033080089A585 /* file-xlsb.icns */; };
 		5ACC12862BC033080089A585 /* file-xlsb.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5ACC12842BC033080089A585 /* file-xlsb.icns */; };
 		5ACC12872BC033080089A585 /* file-xlsb.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5ACC12842BC033080089A585 /* file-xlsb.icns */; };
@@ -833,6 +836,7 @@
 		5ABE02582B22699F0031328E /* ar-SA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ar-SA"; path = "ar-SA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5ABE02592B22699F0031328E /* ar-SA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ar-SA"; path = "ar-SA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5AC461B72E4E12F600FD2689 /* license */ = {isa = PBXFileReference; lastKnownFileType = folder; name = license; path = Vendor/ONLYOFFICE/license; sourceTree = SOURCE_ROOT; };
+		5A0000002F0A00000000AA01 /* styles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = styles; path = ONLYOFFICE/Resources/styles; sourceTree = SOURCE_ROOT; };
 		5AC6441F2D36901900145A90 /* sq-AL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sq-AL"; path = "sq-AL.lproj/Document-Sign.strings"; sourceTree = "<group>"; };
 		5AC644202D36901900145A90 /* sq-AL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sq-AL"; path = "sq-AL.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5AC644212D36901900145A90 /* sq-AL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "sq-AL"; path = "sq-AL.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -1495,6 +1499,7 @@
 				FC09073D1C1855A400D9E881 /* editors */,
 				FC3B777A1BB28CE900DB9705 /* login */,
 				5AC461B72E4E12F600FD2689 /* license */,
+				5A0000002F0A00000000AA01 /* styles */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2039,6 +2044,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AC461BA2E4E15E700FD2689 /* license in Resources */,
+				5A0000002F0A00000000AA03 /* styles in Resources */,
 				5AFA1CF3277A6DA600619952 /* file-oform.icns in Resources */,
 				FC0BD6C9258B63F700C47F95 /* file-otp.icns in Resources */,
 				FCB4C78026DD02960012C20D /* InfoPlist.strings in Resources */,
@@ -2105,6 +2111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AC461BB2E4E160D00FD2689 /* license in Resources */,
+				5A0000002F0A00000000AA04 /* styles in Resources */,
 				5AFA1CF4277A6DF100619952 /* file-docxf.icns in Resources */,
 				FCB4C70526DD018B0012C20D /* file-otp.icns in Resources */,
 				FCB4C77D26DD027B0012C20D /* InfoPlist.strings in Resources */,
@@ -2171,6 +2178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AC461B92E4E141100FD2689 /* license in Resources */,
+				5A0000002F0A00000000AA02 /* styles in Resources */,
 				5AFA1CF2277A6D4C00619952 /* file-oform.icns in Resources */,
 				5AFA1CF1277A6D2900619952 /* file-docxf.icns in Resources */,
 				FCA3F3092570EC9500DCAB12 /* file-otp.icns in Resources */,
