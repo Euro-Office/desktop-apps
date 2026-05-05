@@ -1,3 +1,70 @@
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This Program is licensed under the GNU Affero General Public License v3.0
+(AGPLv3). Pursuant to Section 7 of the License, the Program is supplemented
+by the additional terms set forth below. These additional terms form an
+integral part of the License and shall be included in all copies and
+distributions of the Program. Failure to comply with these additional terms
+constitutes a violation of the License.
+
+Additional Terms:
+
+1. Retention of Notices and Attribution
+Pursuant to Sections 4, 5, and 7(b) of the License, you must retain all
+applicable copyright notices, license notices, warranty disclaimers, and
+attribution or origin notices included in the Program.
+
+2. Modification Notice Requirement
+Modified versions of the Program must carry prominent notices stating that
+they have been modified, including the date (or dates) of such modification,
+and must clearly indicate that they are based on the original ONLYOFFICE
+software developed by Ascensio System SIA.
+
+3. Appropriate Legal Notices in User Interfaces
+Where the Program, or any modified version thereof, includes interactive user
+interfaces, the required notices shall be displayed through a clearly
+accessible and prominently visible feature, in accordance with the requirement
+to present Appropriate Legal Notices under Section 5 of the License. Such
+notices must enable users to:
+(i) identify ONLYOFFICE as the original developer;
+(ii) understand that the version in use may be a modified version; and
+(iii) access the applicable license information.
+
+4. Form of Attribution Notice
+A notice substantially in the following form may be used to satisfy the
+attribution requirement:
+"This software is based on the original ONLYOFFICE work developed by
+Ascensio System SIA."
+
+5. No Trademark License
+In accordance with Section 7(e) this License does not grant any rights to use
+the trademarks, service marks, trade names, logos, or branding of the
+Licensor. Any use of such trademarks is governed by the Licensor's Trademark
+Policy, available at: https://docspace.onlyoffice.com/s/R5Nm5zx84nDSptG
+
+6. Non-Code Content Licensing
+Certain non-code elements included in the Program or its distribution,
+including but not limited to illustrations, icon sets, and technical writing
+or documentation content, are licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0).
+For the avoidance of doubt, this license applies solely to such non-code
+content and does not modify or replace the licensing terms applicable to the
+Program's source code, which remains subject to the GNU Affero General Public
+License v3.0 (AGPLv3). Nothing in this section limits any obligation to
+retain copyright notices, attribution, origin information, or Appropriate
+Legal Notices under the AGPLv3 and the additional terms applicable to the
+Program. The full license text is available at:
+http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+You can contact Ascensio System SIA by electronic mail at: info@onlyoffice.com
+and by postal mail at: 20A-6 Ernesta Birznieka-Upisa Street, Riga, LV-1050,
+Latvia, European Union.
+
+The full text of the GNU Affero General Public License v3.0 is set forth below:
+
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
@@ -629,8 +696,8 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    ONLYOFFICE Desktop Editors
+    Copyright (C) 2009-2026  Ascensio System SIA
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
