@@ -4,12 +4,12 @@ Upstream-Contact: M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
 Source: M4_PUBLISHER_URL
 
 Files: *
-Copyright: 2016-M4_CURRENT_YEAR, M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
+Copyright: 2009-M4_CURRENT_YEAR, M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
 ifelse(M4_PACKAGE_EDITION, commercial,
 `License: Proprietary',
 `License: AGPL-3.0-only')
 
 ifelse(M4_PACKAGE_EDITION, commercial,,
 `Files: *.gif *.ico *.jpg *.png *.svg
-Copyright: 2016-M4_CURRENT_YEAR, M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
+Copyright: 2009-M4_CURRENT_YEAR, M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
 License: CC-BY-SA-4.0')
