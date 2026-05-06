@@ -232,12 +232,16 @@
     }
 
     if (true/*!self.state*/) {
-        NSBezierPath * leftRectanglePath = [NSBezierPath bezierPathWithRect: NSMakeRect(-1, 0, 1, NSHeight(rectangleRect))];
-        NSBezierPath * rightRectanglePath = [NSBezierPath bezierPathWithRect: NSMakeRect(NSMaxX(rectangleRect) - 1, 0, 1, NSHeight(rectangleRect))];
         NSColor * lineColor = kColorRGBA(0, 0, 0, 0.2);
         [lineColor setFill];
-        [leftRectanglePath fill];
-        [rightRectanglePath fill];
+
+        if ( [self userInterfaceLayoutDirection] == NSUserInterfaceLayoutDirectionRightToLeft ) {
+            NSBezierPath * leftRectanglePath = [NSBezierPath bezierPathWithRect: NSMakeRect(0, 0, 1, NSHeight(rectangleRect))];
+            [leftRectanglePath fill];
+        } else {
+            NSBezierPath * rightRectanglePath = [NSBezierPath bezierPathWithRect: NSMakeRect(NSMaxX(rectangleRect) - 1, 0, 1, NSHeight(rectangleRect))];
+            [rightRectanglePath fill];
+        }
     }
 
     if (self.title) {
