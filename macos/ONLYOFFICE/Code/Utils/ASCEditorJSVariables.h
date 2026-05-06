@@ -48,6 +48,7 @@
 - (void)apply;
 - (void)setVariable:(NSString*)name withString:(NSString *)value;
 - (void)setVariable:(NSString*)name withObject:(NSDictionary *)value;
+- (void)setVariable:(NSString*)name withArray:(NSArray *)value;
 - (void)setVariable:(NSString*)name withBool:(BOOL)value;
 - (void)setParameter:(NSString*)name withString:(NSString *)value;
 - (void)removeParameter:(NSString*)name;

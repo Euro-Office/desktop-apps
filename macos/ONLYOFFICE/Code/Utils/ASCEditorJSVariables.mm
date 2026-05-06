@@ -114,6 +114,10 @@
     [_jsVariables setObject:object forKey:name];
 }
 
+- (void)setVariable:(NSString*)name withArray:(NSArray *)value {
+    [_jsVariables setObject:value forKey:name];
+}
+
 - (void)setParameter:(NSString*)name withString:(NSString *)value {
     [_urlParams setValue:value forKey:name];
 }

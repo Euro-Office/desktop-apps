@@ -51,7 +51,7 @@ static NSString * const tabSlideActiveBackgroundColor   = @"tab-slide-background
 static NSString * const tabPdfActiveBackgroundColor     = @"tab-pdf-background-active-color";
 static NSString * const tabDrawActiveBackgroundColor    = @"tab-draw-background-active-color";
 static NSString * const tabActiveTextColor              = @"tab-editor-text-active-color";
-static NSString * const windowBackgroundColor           = @"window-background-color";
+static NSString * const windowBackgroundColor           = @"window-background-color";
 
 @interface ASCThemesController : NSObject
 
@@ -66,6 +66,14 @@ static NSString * const windowBackgroundColor           = @"window-backg
 + (NSColor*)currentThemeColor:(NSString*)name;
 + (BOOL)isSystemDarkMode;
 + (BOOL)isDarkWindowAppearance;
+
++ (NSString*)userThemesPath;
++ (BOOL)validateTheme:(NSDictionary*)jsonObj;
++ (BOOL)containsTheme:(NSString*)themeId;
++ (BOOL)isLocalTheme:(NSString*)themeId;
++ (BOOL)addLocalTheme:(NSDictionary*)jsonObj filePath:(NSString*)filePath;
++ (NSArray*)localThemesToJson;
++ (BOOL)checkDestinationThemeFileExist:(NSString*)srcPath;
 
 @end
 

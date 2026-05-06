@@ -920,6 +920,93 @@ public:
 //                                    }
 //                                }
 //                            }
+                        } else if (cmd.find(L"uitheme:add") != std::wstring::npos) {
+                            NSOpenPanel *panel = [NSOpenPanel openPanel];
+                            panel.canChooseFiles = YES;
+                            panel.canChooseDirectories = NO;
+                            panel.allowsMultipleSelection = NO;
+                            panel.allowedFileTypes = @[@"json"];
+                            panel.title = NSLocalizedString(@"Select theme file", nil);
+
+                            if ([panel runModal] != NSModalResponseOK) break;
+
+                            NSString *filePath = panel.URL.path;
+                            NSError *jsonError = nil;
+                            NSData *fileData = [NSData dataWithContentsOfFile:filePath];
+
+                            if (!fileData) {
+                                NSAlert *alert = [[NSAlert alloc] init];
+                                [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
+                                [alert setMessageText:NSLocalizedString(@"This theme file is not valid", nil)];
+                                [alert setAlertStyle:NSAlertStyleWarning];
+                                [alert runModal];
+                                break;
+                            }
+
+                            id jsonRoot = [NSJSONSerialization JSONObjectWithData:fileData
+                                                                         options:0
+                                                                           error:&jsonError];
+                            if (jsonError || ![jsonRoot isKindOfClass:[NSDictionary class]]) {
+                                NSAlert *alert = [[NSAlert alloc] init];
+                                [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
+                                [alert setMessageText:NSLocalizedString(@"This file doesn't contain theme", nil)];
+                                [alert setAlertStyle:NSAlertStyleWarning];
+                                [alert runModal];
+                                break;
+                            }
+
+                            NSDictionary *jsonObj = (NSDictionary *)jsonRoot;
+
+                            if (![ASCThemesController validateTheme:jsonObj]) {
+                                NSAlert *alert = [[NSAlert alloc] init];
+                                [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
+                                [alert setMessageText:NSLocalizedString(@"Selected theme isn't valid", nil)];
+                                [alert setAlertStyle:NSAlertStyleWarning];
+                                [alert runModal];
+                                break;
+                            }
+
+                            if ([ASCThemesController checkDestinationThemeFileExist:filePath]) {
+                                NSAlert *confirm = [[NSAlert alloc] init];
+                                [confirm addButtonWithTitle:NSLocalizedString(@"Replace", nil)];
+                                [confirm addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+                                [confirm setMessageText:NSLocalizedString(@"Theme already exists. Replace it?", nil)];
+                                [confirm setAlertStyle:NSAlertStyleWarning];
+                                if ([confirm runModal] != NSAlertFirstButtonReturn) break;
+                            }
+
+                            if ([ASCThemesController addLocalTheme:jsonObj filePath:filePath]) {
+                                NSArray *localThemes = [ASCThemesController localThemesToJson];
+                                if (localThemes.count > 0) {
+                                    [[ASCEditorJSVariables instance] setVariable:@"localthemes" withArray:localThemes];
+                                    [[ASCEditorJSVariables instance] apply];
+                                }
+
+                                NSArray *newThemes = @[jsonObj];
+                                NSData *themesData = [NSJSONSerialization dataWithJSONObject:newThemes
+                                                                                    options:0
+                                                                                      error:nil];
+                                if (themesData) {
+                                    NSString *themesStr = [[NSString alloc] initWithData:themesData
+                                                                                encoding:NSUTF8StringEncoding];
+                                    CAscApplicationManager *appManager = [NSAscApplicationWorker getAppManager];
+
+                                    NSEditorApi::CAscExecCommandJS *pCommand = new NSEditorApi::CAscExecCommandJS;
+                                    pCommand->put_Command(L"uitheme:added");
+                                    pCommand->put_Param([themesStr stdwstring]);
+
+                                    NSEditorApi::CAscMenuEvent *pEvent = new NSEditorApi::CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_EXECUTE_COMMAND_JS);
+                                    pEvent->m_pData = pCommand;
+                                    appManager->SetEventToAllMainWindows(pEvent);
+                                }
+                            } else {
+                                NSAlert *alert = [[NSAlert alloc] init];
+                                [alert addButtonWithTitle:NSLocalizedString(@"OK", nil)];
+                                [alert setMessageText:NSLocalizedString(@"Failed to install theme", nil)];
+                                [alert setAlertStyle:NSAlertStyleCritical];
+                                [alert runModal];
+                            }
+
                         } else if (cmd.find(L"uitheme:changed") != std::wstring::npos) {
                             if (NSDictionary * json = [[NSString stringWithstdwstring:param] dictionary]) {
                                 if ( NSString * newTheme = json[@"name"] ) {
