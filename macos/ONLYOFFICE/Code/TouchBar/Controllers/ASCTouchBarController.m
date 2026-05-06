@@ -289,6 +289,11 @@ NSString *tabScrubberItemIdentifier = @"tabItem";
         if ([self.viewController.view userInterfaceLayoutDirection] == NSUserInterfaceLayoutDirectionRightToLeft)
             creationButtons = [[creationButtons reverseObjectEnumerator] allObjects];
         NSGroupTouchBarItem * createonGroup = [NSGroupTouchBarItem groupItemWithIdentifier:kNewItemsItemIdentifier items:creationButtons];
+        if (@available(macOS 10.13, *)) {
+            createonGroup.prioritizedCompressionOptions =
+                @[[NSUserInterfaceCompressionOptions reduceMetricsOption],
+                  [NSUserInterfaceCompressionOptions hideImagesOption]];
+        }
         return createonGroup;
     }
     // Create the tabs of open documents
