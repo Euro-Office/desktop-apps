@@ -42,6 +42,7 @@ $LanguageCodes = @(
     1036, # fr              French
     1110, # gl              Galician
     1037, # he              Hebrew
+    1050, # hr              Croatian
     1038, # hu              Hungarian
     1057, # id              Indonesian
     1040, # it              Italian
