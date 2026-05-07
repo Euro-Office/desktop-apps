@@ -24,6 +24,8 @@ PACKAGE_COMMERCIAL := $(PACKAGE_NAME)-enterprise
 PACKAGE_EDITION ?= opensource
 ifeq ($(PACKAGE_EDITION), commercial)
 PACKAGE_NAME := $(PACKAGE_COMMERCIAL)
+else
+RPM_PARAMS += --define 'cc_license 1'
 endif
 PACKAGE_VERSION := $(PRODUCT_VERSION)-$(BUILD_NUMBER)
 
