@@ -1,0 +1,92 @@
+button {
+  height: 36px;
+  color: var(--text-inverse);
+  font-size: 14px;
+  outline: 0;
+  border: none 0;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 36px;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  &.btn {
+    border: 1px solid var(--border-regular-control);
+
+    &.btn--primary {
+      background-color: var(--background-primary-button);
+      border: 0 none;
+    }
+
+    &:not(.dropdown-toggle) {
+      &:hover:not(:disabled) {
+        border-color: var(--highlight-button-hover);
+        background-color: var(--highlight-button-hover);
+      }
+
+      &:active:not(:disabled) {
+        border-color: var(--highlight-button-pressed);
+        background-color: var(--highlight-button-pressed);
+      }
+
+      &.btn--primary {
+        &:hover:not(:disabled) {
+          background-color: var(--highlight-primary-button-hover);
+        }
+
+        &:active:not(:disabled) {
+          background-color: var(--highlight-primary-button-pressed);
+        }
+      }
+    }
+  }
+
+  &.btn--big {
+    height: 50px;
+  }
+}
+
+.tbox {
+  color: var(--text-normal);
+  border: 1px solid var(--border-regular-control);
+  width: 100%;
+  outline: 0;
+  background: var(--background-normal);
+  font-size: 14px;
+  padding: 0 15px;
+  height: 36px;
+  border-radius: 3px;
+
+  &:focus {
+    border-color: var(--border-control-focus);
+  }
+
+  &::selection {
+    background: var(--highlight-text-select);
+    color: var(--text-inverse);
+  }
+}
+
+.icon {
+  display: inline-block;
+  fill: currentColor;
+}
+
+.injected-svg {
+  width: 0;
+  height: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.stub-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-tertiary);
+  font-size: 16px;
+}

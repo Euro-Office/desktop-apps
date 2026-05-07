@@ -1,0 +1,140 @@
+:root {
+  --background-normal: #f7f7f7;
+  --background-normal-element: #f7f7f7;
+  --background-normal-element-light: #f7f7f7;
+  --background-tabbar: #f7f7f7;
+  --background-button: #fff;
+  --background-accent-button: #3483db;
+  --background-primary-button: #444;
+  --background-scroll-thumb: #e0e0e0;
+  --background-action-panel: #fff;
+  --background-icon-normal: #fff;
+
+  --highlight-button-hover: #e0e0e0;
+  --highlight-button-pressed: #cbcbcb;
+  --highlight-button-pressed-hover: #bababa;
+  --highlight-accent-button-hover: #5293e2;
+  --highlight-accent-button-pressed: #3475c5;
+  --highlight-primary-button-hover: #2b2b2b;
+  --highlight-primary-button-pressed: #2b2b2b;
+  --highlight-header-button-hover: rgba(0, 0, 0, 0.2);
+  --highlight-text-select: #3494fb;
+  --highlight-scroll-thumb-hover: #ccc;
+  --highlight-scroll-track-hover: rgba(0, 0, 0, 0.03);
+  --highlight-sidebar-item-pressed: #fff;
+  --highlight-toolbar-tab-underline-document: #4a87e7;
+
+  --border-tabbar: #cbcbcb;
+  --border-divider: #dfdfdf;
+  --border-regular-control: #c0c0c0;
+  --border-control-focus: #848484;
+  --border-sidebar: #f7f7f7;
+  --border-sidebar-item: transparent;
+  --border-sidebar-icon: #cbcbcb;
+  --border-radius-sidebar-item: 8px;
+  --border-radius-sidebar-item-icon: 6px;
+  --border-radius-list-files-item: 4px;
+
+  --text-normal: rgba(0, 0, 0, 0.8);
+  --text-normal-pressed: rgba(0, 0, 0, 0.8);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-tertiary: rgba(0, 0, 0, 0.4);
+  --text-link: #445799;
+  --text-inverse: #fff;
+  --text-contrast-background: #fff;
+  --text-negative: var(--text-normal);
+
+  --icon-normal: rgba(0, 0, 0, 0.8);
+
+  --disabled-element-opacity: 0.4;
+  --theme-inverted-image-filter: none;
+
+  --shadow-sidebar-item-pressed: 0px 1px 4px -1px rgba(0, 0, 0, 0.2);
+  --layout-list-items-gap: 0;
+  --action-active-font-weight: normal;
+
+  --chb-border-radius: 2px;
+  --chb-check-mark-background: var(--text-normal);
+  --chb-background-normal: var(--background-normal);
+  --chb-background-checked: var(--background-normal);
+  --chb-border-normal: var(--border-regular-control);
+  --chb-border-checked: var(--border-regular-control);
+
+  --pixel-ratio: 1;
+  --scaled-one-px: 1px;
+
+  --font-family-base: Arial, Helvetica, "Helvetica Neue", sans-serif;
+
+  --col-width: 288px;
+  --ai-w: 0;
+
+  --z-index-modal: 1050;
+}
+
+html.theme-type-dark {
+  --background-normal: #404040;
+  --background-tabbar: #404040;
+  --background-button: #333;
+  --background-primary-button: #ddd;
+  --background-accent-button: #3483db;
+  --background-scroll-thumb: #555;
+  --background-action-panel: #333;
+  --background-icon-normal: #333;
+  --background-normal-element-light: #404040;
+  --background-normal-element: var(--background-normal);
+
+  --highlight-button-hover: #555;
+  --highlight-button-pressed: #707070;
+  --highlight-button-pressed-hover: #808080;
+  --highlight-accent-button-hover: #5293e2;
+  --highlight-accent-button-pressed: #3475c5;
+  --highlight-primary-button-hover: #e5e5e5;
+  --highlight-primary-button-pressed: #e5e5e5;
+  --highlight-header-button-hover: rgba(0, 0, 0, 0.2);
+  --highlight-text-select: #96c8fd;
+  --highlight-scroll-thumb-hover: #606060;
+  --highlight-scroll-track-hover: rgba(255, 255, 255, 0.03);
+  --highlight-sidebar-item-pressed: #333;
+  --highlight-toolbar-tab-underline-document: #4a87e7;
+
+  --border-tabbar: #2a2a2a;
+  --border-divider: #505050;
+  --border-regular-control: #666666;
+  --border-control-focus: #ccc;
+  --border-sidebar: #2a2a2a;
+  --border-sidebar-icon: #616161;
+
+  --text-normal: rgba(255, 255, 255, 0.8);
+  --text-normal-pressed: rgba(255, 255, 255, 0.8);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
+  --text-link: #acbfff;
+  --text-inverse: #333;
+  --text-contrast-background: #fff;
+  --text-negative: var(--text-normal);
+
+  --icon-normal: rgba(255, 255, 255, 0.8);
+
+  --disabled-element-opacity: 0.3;
+  --theme-inverted-image-filter: invert(1);
+
+  --chb-check-mark-background: var(--text-normal);
+  --chb-background-normal: var(--background-normal);
+  --chb-background-checked: var(--background-normal);
+  --chb-border-normal: var(--border-regular-control);
+  --chb-border-checked: var(--border-regular-control);
+}
+
+html.theme-classic {
+  --background-normal: #f7f7f7;
+  --background-normal-element: #f7f7f7;
+  --background-action-panel: #fff;
+  --highlight-button-hover: #e0e0e0;
+  --highlight-button-pressed: #cbcbcb;
+}
+
+html.theme-contrast-dark {
+  --background-normal: #2a2a2a;
+  --text-normal: #fff;
+  --border-regular-control: #888;
+}

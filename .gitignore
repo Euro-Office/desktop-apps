@@ -28,6 +28,7 @@ package/common/changelog/*/changes_???
 package/common/changelog/*/news_???
 
 common/loginpage/res/img/generated/*
+common/loginpage/build/dist-solid
 common/loginpage/build/plugins/*
 common/**/node_modules/*
 common/loginpage/deploy/*
@@ -50,6 +51,7 @@ common/converter/*
 dsa_priv.pem
 Gemfile.lock
 package-lock.json
+bun.lock
 macos/build
 macos/fastlane/node_modules
 macos/fastlane/README.md

@@ -1,0 +1,85 @@
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  cursor: default;
+  font-family: var(--font-family-base, Arial, Helvetica, "Helvetica Neue", sans-serif);
+}
+
+input,
+button {
+  font-family: "Open Sans", sans-serif;
+}
+
+.text-normal {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+#wrap {
+  overflow: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: var(--background-normal);
+}
+
+#root {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: var(--background-normal);
+  font-family: Arial, Helvetica, "Helvetica Neue", sans-serif;
+}
+
+h3,
+caption {
+  font-weight: 100;
+  font-size: 24px;
+}
+
+h4 {
+  font-weight: 100;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--col-width, 288px) 1fr var(--ai-w, 0);
+  width: 100%;
+  height: 100%;
+}
+
+.col-sidebar {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid var(--border-sidebar);
+}
+
+.col-center {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  background: var(--background-action-panel);
+  color: var(--text-normal);
+}
+
+.col-ai {
+  height: 100%;
+  overflow-y: auto;
+  border-left: 1px solid var(--border-divider);
+  background-color: var(--background-action-panel);
+}
+
+.scrollable {
+  overflow-y: auto;
+}
+
+::-webkit-input-placeholder {
+  color: var(--text-tertiary);
+}
