@@ -1236,10 +1236,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="1100" height="38"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4nh-tb-OhZ">
-                                <rect key="frame" x="468" y="-29" width="163" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="M3X-hR-EHh">
                                 <rect key="frame" x="1065" y="0.0" width="30" height="38"/>
                                 <subviews>
