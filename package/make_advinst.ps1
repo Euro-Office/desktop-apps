@@ -149,7 +149,7 @@ $AdvInstConfig += `
     "UpdateFile APPDIR\updatesvc.exe ..\$BuildDir\desktop\updatesvc.exe", `
     "NewSync APPDIR ..\$BuildDir\desktop -existingfiles keep -feature Files", `
     "NewSync APPDIR\$PluginManagerPath ..\$BuildDir\desktop\$PluginManagerPath -existingfiles delete -feature PluginManager", `
-    "AddFile APPDIR ..\$LicensePath\3dparty\3DPARTYLICENSE"
+    "AddFile APPDIR\3DPARTYLICENSE.txt ..\$LicensePath\3dparty\3DPARTYLICENSE"
 if ($Target -ne "commercial") {
     $AdvInstConfig += `
         "AddFile APPDIR ..\$LicensePath\opensource\LICENSE.txt"
