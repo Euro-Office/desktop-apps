@@ -497,6 +497,11 @@
     [self.updateMenuItem setHidden:YES];
     [self.eulaMenuItem setHidden:YES];
 #endif
+    if ([item action] == @selector(checkForUpdates:)) {
+        NSString *feedURL = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SUFeedURL"];
+        [self.updateMenuItem setHidden:(feedURL.length == 0)];
+        return feedURL.length > 0;
+    }
     NSWindow *keyWindow = [NSApp keyWindow];
     ASCTabView * tab = [[ASCSharedSettings sharedInstance] settingByKey:kSettingsCurrentTab];
     BOOL hasKeyWindow = (keyWindow != nil && ([keyWindow isKindOfClass:[ASCTitleWindow class]] || [keyWindow isKindOfClass:[ASCEditorWindow class]]));

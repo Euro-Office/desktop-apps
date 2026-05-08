@@ -1,6 +1,6 @@
 /* Bundle name */
-"CFBundleName" = "ONLYOFFICE";
+"CFBundleName" = "Euro-Office";
 
 /* Copyright (human-readable) */
-"NSHumanReadableCopyright" = "Copyright © 2026 Ascensio System SIA. Todos los derechos reservados.";
+"NSHumanReadableCopyright" = "Copyright © 2026 Euro-Office contributors. Todos los derechos reservados.";
 

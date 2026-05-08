@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ASCBundleBuildNumber</key>
+	<string>0</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDocumentTypes</key>
@@ -476,7 +478,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>file-docxf</string>
 			<key>CFBundleTypeName</key>
-			<string>ONLYOFFICE Document Form Template</string>
+			<string>Euro-Office Document Form Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -488,7 +490,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>file-oform</string>
 			<key>CFBundleTypeName</key>
-			<string>ONLYOFFICE Fillable Online Form</string>
+			<string>Euro-Office Fillable Online Form</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -497,10 +499,10 @@
 			<array>
 				<string>xlsm</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Microsoft Excel Workbook with macro enabled (.xlsm)</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>file-xlsm</string>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel Workbook with macro enabled (.xlsm)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -509,10 +511,10 @@
 			<array>
 				<string>xlsb</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Microsoft Excel binary workbook (.xlsb)</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>file-xlsb</string>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel binary workbook (.xlsb)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -652,14 +654,12 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>oo-office</string>
+				<string>euro-office</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>537</string>
-	<key>ASCBundleBuildNumber</key>
-	<string>0</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>LSMinimumSystemVersion</key>
@@ -670,24 +670,18 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2026 Ascensio System SIA. All rights reserved.</string>
+	<string>Copyright © 2026 Euro-Office contributors. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUFeedURL</key>
-	<string>https://download.onlyoffice.com/install/desktop/editors/mac/x86_64/onlyoffice.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>N2LfKoNN6LkD5qNMjt+lEh6LYrQMEFNCEXQ3Kk6nTlM=</string>
-	<key>SUScheduledCheckInterval</key>
-	<integer>86400</integer>
 </dict>
 </plist>
