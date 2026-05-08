@@ -77,7 +77,7 @@ static float kASCRTLTabsRightMargin = 0;
 
 @property (weak) IBOutlet NSView *titleContainerView;
 @property (weak) IBOutlet NSButton *portalButton;
-@property (weak) IBOutlet NSButton *userProfileButton;
+// @property (weak) IBOutlet NSButton *userProfileButton;
 @property (weak) IBOutlet NSLayoutConstraint *downloadWidthConstraint;
 @property (weak) IBOutlet NSLayoutConstraint *buttonPortalLeadingConstraint;
 @property (weak) IBOutlet NSLayoutConstraint *buttonPortalTrailingConstraint;
@@ -219,7 +219,7 @@ static float kASCRTLTabsRightMargin = 0;
     [self.tabsControl.multicastDelegate addDelegate:self];
     
 //    [self.userProfileButton setHidden:YES];
-        [self.userProfileButton setHidden:NO];
+//    [self.userProfileButton setHidden:NO];
     [self.portalButton setState:NSControlStateValueOn];
     if ( [self.view userInterfaceLayoutDirection] == NSUserInterfaceLayoutDirectionRightToLeft ) {
         self.buttonPortalLeadingConstraint.constant = -1;
@@ -427,12 +427,12 @@ static float kASCRTLTabsRightMargin = 0;
 }
 
 - (void)onCEFLogin:(NSNotification *)notification {
-    if (notification && notification.userInfo) {
-        NSDictionary * userInfo = (NSDictionary *)notification.userInfo;
-        
-        [[ASCHelper localSettings] setValue:userInfo forKey:ASCUserSettingsNameUserInfo];
-        [self.userProfileButton setHidden:NO];
-    }
+//    if (notification && notification.userInfo) {
+//        NSDictionary * userInfo = (NSDictionary *)notification.userInfo;
+//
+//        [[ASCHelper localSettings] setValue:userInfo forKey:ASCUserSettingsNameUserInfo];
+//        [self.userProfileButton setHidden:NO];
+//    }
 }
 
 -(void)onChangedUITheme:(NSNotification *)notification {
@@ -518,23 +518,23 @@ static float kASCRTLTabsRightMargin = 0;
     }
 }
 
-- (IBAction)onUserInfoClick:(id)sender {
-    ASCUserInfoViewController * controller = [self.storyboard instantiateControllerWithIdentifier:@"ASCUserInfoControllerId"];
-    self.popover = [[SFBPopover alloc] initWithContentViewController:controller];
-    self.popover.arrowOffset = 8.0f;
-    [self setupCustomPopover:self.popover];
-    
-    NSRect rectOfSender = [sender convertRect:[sender bounds] toView:nil];
-    NSPoint where = rectOfSender.origin;
-    where.x += rectOfSender.size.width / 2;
-
-    [controller setPopover:self.popover];
-    [self.popover displayPopoverInWindow:[sender window] atPoint:where chooseBestLocation:YES];
-    
-    if (_delegate && [_delegate respondsToSelector:@selector(onShowUserInfoController:)]) {
-        [_delegate onShowUserInfoController:controller];
-    }
-}
+//- (IBAction)onUserInfoClick:(id)sender {
+//    ASCUserInfoViewController * controller = [self.storyboard instantiateControllerWithIdentifier:@"ASCUserInfoControllerId"];
+//    self.popover = [[SFBPopover alloc] initWithContentViewController:controller];
+//    self.popover.arrowOffset = 8.0f;
+//    [self setupCustomPopover:self.popover];
+//
+//    NSRect rectOfSender = [sender convertRect:[sender bounds] toView:nil];
+//    NSPoint where = rectOfSender.origin;
+//    where.x += rectOfSender.size.width / 2;
+//
+//    [controller setPopover:self.popover];
+//    [self.popover displayPopoverInWindow:[sender window] atPoint:where chooseBestLocation:YES];
+//
+//    if (_delegate && [_delegate respondsToSelector:@selector(onShowUserInfoController:)]) {
+//        [_delegate onShowUserInfoController:controller];
+//    }
+//}
 
 - (IBAction)onDownloadButton:(id)sender {
     ASCDownloadViewController * controller = [self.storyboard instantiateControllerWithIdentifier:@"ASCDownloadListControllerId"];
