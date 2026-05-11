@@ -725,16 +725,20 @@
                     }
                 ].filter(doc => utils.isProductComponentEnabled(doc.id));
 
-                const docGrid = new DocumentCreationGrid({
-                    documentTypes,
-                    onDocumentSelect: (docType) => {
-                        window.sdk.command("create:new", docType);
-                    }
-                });
-
                 CommonEvents.on('lang:changed', _init_ppmenu.bind(this));
 
-                docGrid.render(this.view.$panel.find("#area-document-creation-grid"));
+                if (documentTypes.length) {
+                    const docGrid = new DocumentCreationGrid({
+                        documentTypes,
+                        onDocumentSelect: (docType) => {
+                            window.sdk.command("create:new", docType);
+                        }
+                    });
+
+                    docGrid.render(this.view.$panel.find("#area-document-creation-grid"));
+                } else {
+                    this.view.$panel.find("#area-document-creation-grid").hide();
+                }
 
                 $('#idx-recent-filter', this.view.$panel).on('input', _on_filter_recents.bind(this));
 

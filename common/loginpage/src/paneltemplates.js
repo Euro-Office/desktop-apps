@@ -61,7 +61,8 @@
             { value: 'Documents', editor: 'word', title: _lang.tplDocument },
             { value: 'Spreadsheets', editor: 'cell', title: _lang.tplSpreadsheet },
             { value: 'Presentations', editor: 'slide', title: _lang.tplPresentation },
-            { value: 'PDFs', editor: 'pdf', title: _lang.tplPDF }
+            { value: 'PDFs', editor: 'pdf', title: _lang.tplPDF },
+            { value: 'Drawings', editor: 'draw', title: _lang.tplDrawing }
         ].filter(item => utils.isProductComponentEnabled(item.editor));
         const navItemsHtml = navItems.map((item, index) =>
             `<a data-value='${item.value}' class='nav-item${index === 0 ? ' selected' : ''}' l10n>${item.title}</a>`
@@ -161,7 +162,7 @@
 
             const panel = $item.data('value');
 
-            this.view.$panel.removeClass('Documents Spreadsheets Presentations PDFs').addClass(panel);
+            this.view.$panel.removeClass('Documents Spreadsheets Presentations PDFs Drawings').addClass(panel);
 
             applyFilter(this.view.$panel);
             $('.themed-sroll', this.view.$panel).scrollTop(0);
@@ -268,7 +269,7 @@
                 (this.tmpls || tmpls)
                     .forEach(item => {
                         const type = utils.formatToEditor(item.type);
-                        if (['word', 'cell', 'slide', 'pdf'].includes(type) && utils.isProductComponentEnabled(type)) {
+                        if (['word', 'cell', 'slide', 'pdf', 'draw'].includes(type) && utils.isProductComponentEnabled(type)) {
                             // this.templates.add(new FileTemplateModel(item));
 
                             const m = this.templates.find('path', item.path);
@@ -339,7 +340,8 @@
                 'Documents': 'word',
                 'Spreadsheets': 'cell',
                 'Presentations': 'slide',
-                'PDFs': 'pdf'
+                'PDFs': 'pdf',
+                'Drawings': 'draw'
             }[$('.nav-item.selected', $panel).data('value')];
 
             const search = $('#template-search').val() || '';

@@ -153,6 +153,7 @@ l10n.en = {
     tplDocument: "Documents",
     tplSpreadsheet: "Spreadsheets",
     tplPresentation: "Presentations",
+    tplDrawing: "Drawings",
     tplSearch: "Search for templates",
     tplSearchResult: "Results for",
     tplNoResultsTitle: "Nothing found",

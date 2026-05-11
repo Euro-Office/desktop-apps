@@ -233,9 +233,10 @@ utils.defines.links = {
 };
 
 utils.formatToEditor = function(f) {
+    if ( f > FILE_DRAW ) return 'draw'; else
     if ( f > FILE_PRESENTATION && f < FILE_SPREADSHEET ) return 'slide'; else
     if ( f > FILE_SPREADSHEET && f < FILE_CROSSPLATFORM ) return 'cell'; else
-    if ( f > FILE_CROSSPLATFORM || f === utils.defines.FileFormat.FILE_DOCUMENT_OFORM_PDF ) return 'pdf'; 
+    if ( (f > FILE_CROSSPLATFORM && f < FILE_DRAW) || f === utils.defines.FileFormat.FILE_DOCUMENT_OFORM_PDF ) return 'pdf'; 
     else return 'word';
 }
 
@@ -355,6 +356,13 @@ utils.fileExtensionToFileFormat = function(extension) {
     case 'pdf':     return utils.defines.FileFormat.FILE_CROSSPLATFORM_PDF;
     case 'djvu':    return utils.defines.FileFormat.FILE_CROSSPLATFORM_DJVU;
     case 'xps':     return utils.defines.FileFormat.FILE_CROSSPLATFORM_XPS;
+
+    case 'vsdx':    return utils.defines.FileFormat.FILE_DRAW_VSDX;
+    case 'vssx':    return utils.defines.FileFormat.FILE_DRAW_VSSX;
+    case 'vstx':    return utils.defines.FileFormat.FILE_DRAW_VSTX;
+    case 'vsdm':    return utils.defines.FileFormat.FILE_DRAW_VSDM;
+    case 'vssm':    return utils.defines.FileFormat.FILE_DRAW_VSSM;
+    case 'vstm':    return utils.defines.FileFormat.FILE_DRAW_VSTM;
 
     default: return utils.defines.FileFormat.FILE_UNKNOWN;
     }
@@ -560,7 +568,11 @@ utils.productComponent = function() {
         presentations: 'presentation',
         slide: 'presentation',
         pdf: 'pdf',
-        form: 'pdf'
+        form: 'pdf',
+        visio: 'visio',
+        draw: 'visio',
+        drawing: 'visio',
+        drawings: 'visio'
     };
 
     return aliases[value] || '';
@@ -573,7 +585,8 @@ utils.isProductComponentEnabled = function(editor) {
         text: ['word', 'Documents'],
         spreadsheet: ['cell', 'Spreadsheets'],
         presentation: ['slide', 'Presentations'],
-        pdf: ['form', 'pdf', 'PDFs']
+        pdf: ['form', 'pdf', 'PDFs'],
+        visio: ['draw', 'Drawings']
     };
 
     return (editorsByComponent[component] || []).indexOf(editor) >= 0;
