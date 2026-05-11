@@ -767,7 +767,8 @@ public:
 //                                    if ( tplType > AVS_OFFICESTUDIO_FILE_DOCUMENT and tplType < AVS_OFFICESTUDIO_FILE_PRESENTATION ) docType = AscEditorType::etDocument; else
                                     if ( tplType > AVS_OFFICESTUDIO_FILE_PRESENTATION and tplType < AVS_OFFICESTUDIO_FILE_SPREADSHEET ) docType = AscEditorType::etPresentation; else
                                     if ( tplType > AVS_OFFICESTUDIO_FILE_SPREADSHEET and tplType < AVS_OFFICESTUDIO_FILE_CROSSPLATFORM ) docType = AscEditorType::etSpreadsheet; else
-                                    if ( tplType == AVS_OFFICESTUDIO_FILE_DOCUMENT_OFORM_PDF ) { docType = AscEditorType::etPdf; }
+                                    if ( tplType == AVS_OFFICESTUDIO_FILE_DOCUMENT_OFORM_PDF ) { docType = AscEditorType::etPdf; } else
+                                    if ( 0 != (tplType & AVS_OFFICESTUDIO_FILE_DRAW) ) docType = AscEditorType::etDraw;
 //                                    else if ( tplType > AVS_OFFICESTUDIO_FILE_CROSSPLATFORM and tplType < AVS_OFFICESTUDIO_FILE_IMAGE ) {}
                                 }
 
@@ -789,6 +790,8 @@ public:
                                     docType = AscEditorType::etPresentation;
                                 } else if ([nsParam isEqualToString:@"form"]) {
                                     docType = AscEditorType::etDocumentMasterForm;
+                                } else if ([nsParam isEqualToString:@"draw"]) {
+                                    docType = AscEditorType::etDraw;
                                 }
 
                                 if ( docType != AscEditorType::etUndefined ) {
