@@ -41,20 +41,43 @@
 #import "ASCDownloadViewController.h"
 #import "ASCDownloadController.h"
 #import "ASCDownloadCellView.h"
+#import "ASCHeaderButton.h"
 #import "GTMNSString+HTML.h"
+#import "ASCThemesController.h"
+#import "ASCConstants.h"
+#import "SFBPopoverWindow.h"
+
+static const int kRowHeight    = 70;
+static const int kHeaderHeight = 48;
+static const int kPopoverWidth = 300;
+static const int kMaxRows      = 6;
 
 @interface ASCDownloadViewController() <NSTableViewDelegate, NSTableViewDataSource, ASCDownloadControllerDelegate, ASCDownloadCellViewDelegate>
+@property (weak) IBOutlet NSView      *headerView;
+@property (weak) IBOutlet NSView      *separatorView;
+@property (weak) IBOutlet NSTextField *downloadsLabel;
 @property (weak) IBOutlet NSTableView *tableView;
 @property (weak) IBOutlet NSScrollView *tableScrollView;
+@property (weak) IBOutlet ASCHeaderButton *clearButton;
 
+@property (nonatomic, strong) NSMutableArray<NSString *> *rowUUIDs;
 @end
 
 @implementation ASCDownloadViewController
 
 
 - (void)viewDidLoad {
+    _rowUUIDs = [NSMutableArray array];
+    
+    for (id dl in [[ASCDownloadController sharedInstance] downloads]) {
+        NSString *uuid = dl[@"idx"];
+        if (uuid) [_rowUUIDs addObject:uuid];
+    }
+
     [[[ASCDownloadController sharedInstance] multicastDelegate] addDelegate:self];
-    [self updateViewConstraints];
+    
+    self.clearButton.title = NSLocalizedString(@"Clear", nil);
+    self.downloadsLabel.stringValue = NSLocalizedString(@"Downloads", nil);
 }
 
 - (void)viewDidDisappear {
@@ -62,52 +85,162 @@
 }
 
 - (void)viewWillAppear {
+    [self applyThemeColors];
     [self updatePopoverSize];
+    [self updateClearButton];
 }
 
 - (void)updatePopoverSize {
-    int minHeight = self.tableView.rowHeight - 2; // 2px to hide cell border
-    int maxHeight = self.tableView.rowHeight * 3;
-    int newHeight = [[[ASCDownloadController sharedInstance] downloads] count] * self.tableView.rowHeight - 2; // 2px to hide cell border
-    int width     = 270;
+    NSInteger count  = _rowUUIDs.count;
+    int  newHeight   = [self desiredContentHeight];
+    BOOL needsScroll = (count > kMaxRows);
+
+    self.tableScrollView.hasVerticalScroller = needsScroll;
+    self.tableScrollView.verticalScrollElasticity = needsScroll ? NSScrollElasticityAutomatic : NSScrollElasticityNone;
+
+    self.preferredContentSize = NSMakeSize(kPopoverWidth, newHeight);
     
-    [self.tableScrollView setHasVerticalScroller:(newHeight > maxHeight)];
-    [self.tableScrollView setVerticalScrollElasticity:(newHeight > maxHeight) ? NSScrollElasticityAutomatic : NSScrollElasticityNone];
+    NSWindow *window = self.view.window;
+    NSRect  winFrame  = window.frame;
+    CGFloat oldHeight = self.view.frame.size.height;
+    CGFloat yOverhead = winFrame.size.height - oldHeight;
+
+    NSRect newFrame = self.view.frame;
+    newFrame.size.height = (CGFloat)newHeight;
+    [self.view setFrame:newFrame];
     
-    self.preferredContentSize = NSMakeSize(width, MIN(MAX(minHeight, newHeight), maxHeight));
+    CGFloat newWinH = (CGFloat)newHeight + yOverhead;
+    CGFloat delta = winFrame.size.height - newWinH;
+    [window setFrame:NSMakeRect(winFrame.origin.x, winFrame.origin.y + delta, winFrame.size.width, newWinH) display:YES];
+}
+
+- (int)desiredContentHeight {
+    NSInteger count = _rowUUIDs.count;
+    int minH = kRowHeight + kHeaderHeight;
+    int maxH = kRowHeight * kMaxRows + kHeaderHeight;
+    int rawH = kRowHeight * (int)count + kHeaderHeight;
+    return MAX(minH, MIN(rawH, maxH));
+}
+
+- (void)applyThemeColors {
+    NSString *currentTheme = [ASCThemesController currentThemeId];
+    SFBPopoverWindow *popoverWindow = (SFBPopoverWindow *)self.view.window;
+
+    NSColor *bgColor = [ASCThemesController color:downloadWidgetBackgroundColor forTheme:currentTheme];
+    if (bgColor) {
+        [popoverWindow setPopoverBackgroundColor:bgColor];
+        self.view.wantsLayer = YES;
+        self.view.layer.backgroundColor = bgColor.CGColor;
+    }
     
-    if (self.popover) {
-        NSSize oldSize = [[self.popover popoverWindow] frame].size;
-        NSSize newSize = NSMakeSize(270, MIN(MAX(minHeight, newHeight), maxHeight));
-        NSInteger delta = oldSize.height - newSize.height - self.popover.arrowWidth;
-        
-        if (delta > 0) {
-            NSRect rect = NSOffsetRect([[self.popover popoverWindow] frame], 0, delta);
-            [[[self.popover popoverWindow] contentView] setFrame:NSMakeRect(0, 0, width, newSize.height)];
-            [[self.popover popoverWindow] setFrame:NSMakeRect(rect.origin.x, rect.origin.y, rect.size.width, newSize.height + self.popover.arrowWidth) display:YES];
+    NSColor *borderColor = [ASCThemesController color:downloadWidgetBorderColor forTheme:currentTheme];
+    if (borderColor && self.separatorView) {
+        [popoverWindow setBorderColor:borderColor];
+        self.separatorView.wantsLayer = YES;
+        self.separatorView.layer.backgroundColor = borderColor.CGColor;
+    }
+    
+    NSColor *buttonTextColor = [ASCThemesController color:downloadGhostButtonTextColor forTheme:currentTheme];
+    if (buttonTextColor && self.clearButton) {
+        if (@available(macOS 10.14, *)) {
+            self.clearButton.contentTintColor = buttonTextColor;
         }
     }
+}
+
+- (void)configureCell:(ASCDownloadCellView *)cell withDownload:(id)download {
+    BOOL isComplete = [download[@"complete"] boolValue];
+    BOOL isCanceled = [download[@"canceled"] boolValue];
+
+    if (isComplete) {
+        cell.progress.hidden       = YES;
+        cell.sizeLabel.hidden      = NO;
+        cell.sizeLabel.stringValue = [self fileSizeStringForPath:download[@"filePath"]] ?: @"";
+        cell.filePath              = download[@"filePath"];
+        cell.infoTextField.stringValue = [download[@"filePath"] stringByDeletingLastPathComponent] ?: @"";
+        [self configureButton:cell.cancelButton asIconNamed:@"icon-confirm_normal"];
+
+    } else if (isCanceled) {
+        cell.progress.hidden   = YES;
+        cell.infoTextField.stringValue = NSLocalizedString(@"Canceled", nil);
+        [self configureButton:cell.cancelButton asIconNamed:@"icon-warning_normal"];
+
+    } else {
+        cell.progress.doubleValue = [download[@"percent"] doubleValue];
+        cell.infoTextField.stringValue = [NSString stringWithFormat:@"%.0f %@", [download[@"speed"] doubleValue], NSLocalizedString(@"kBps", nil)];
+        [self configureButton:cell.cancelButton asTitle:NSLocalizedString(@"Cancel", nil)];
+    }
+}
+
+- (NSString *)fileSizeStringForPath:(NSString *)path {
+    NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+    if (!attrs) return nil;
+    long long size = [[attrs objectForKey:NSFileSize] longLongValue];
+    return [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
+}
+
+- (void)configureButton:(NSButton *)btn asIconNamed:(NSString *)name {
+    btn.image = [NSImage imageNamed:name];
+    btn.title = @"";
+    btn.imagePosition = NSImageOnly;
+    btn.imageScaling = NSImageScaleProportionallyDown;
+    btn.bordered = NO;
+    btn.bezelStyle = NSBezelStyleRegularSquare;
+}
+
+- (void)configureButton:(NSButton *)btn asTitle:(NSString *)title {
+    btn.image = nil;
+    btn.title = title;
+    btn.imagePosition = NSNoImage;
+    btn.bordered = NO;
+    btn.bezelStyle = NSBezelStyleRegularSquare;
+}
+
+- (void)updateClearButton {
+    BOOL hasFinished = NO;
+    for (id dl in [[ASCDownloadController sharedInstance] downloads]) {
+        if ([dl[@"finished"] boolValue]) {
+            hasFinished = YES;
+            break;
+        }
+    }
+    _clearButton.enabled = hasFinished;
+}
+
+- (IBAction)onClearButtonClicked:(id)sender {
+    [[ASCDownloadController sharedInstance] clearFinished];
 }
 
 #pragma mark -
 #pragma mark NSTableViewDataSource
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-    return [[[ASCDownloadController sharedInstance] downloads] count];
+    return _rowUUIDs.count;
 }
 
 #pragma mark -
 #pragma mark NSTableView Delegate
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    id download = [[[ASCDownloadController sharedInstance] downloads] objectAtIndex:row];
+    if (row < 0 || row >= (NSInteger)_rowUUIDs.count) return nil;
+
+    NSString *uuid = _rowUUIDs[row];
+    id download = [[ASCDownloadController sharedInstance] downloadWithId:uuid];
+    if (!download) return nil;
 
     ASCDownloadCellView * cellView  = [tableView makeViewWithIdentifier:@"ASCDownloadTableViewCellId" owner:self];
     cellView.textField.stringValue  = [download[@"name"] gtm_stringByUnescapingFromHTML];
-    cellView.progress.doubleValue   = [download[@"percent"] doubleValue];
     cellView.uuid                   = download[@"idx"];
     cellView.delegate               = self;
+    cellView.filePath               = nil;
+    cellView.infoTextField.hidden   = NO;
+    cellView.sizeLabel.hidden       = YES;
+    cellView.openButton.hidden      = YES;
+    cellView.openFolderButton.hidden = YES;
+    cellView.openButton.title = NSLocalizedString(@"Open", nil);
+    cellView.openFolderButton.title = NSLocalizedString(@"Show in folder", nil);
     
+    [self configureCell:cellView withDownload:download];
     return cellView;
 }
 
@@ -119,36 +252,73 @@
 #pragma mark ASCDownloadCellView Delegate
 
 - (void)onCancelButton:(ASCDownloadCellView *)cell {
-    id download = [[ASCDownloadController sharedInstance] downloadWithId:cell.uuid];
-    
+    ASCDownloadController *controller = [ASCDownloadController sharedInstance];
+    id download = [controller downloadWithId:cell.uuid];
     if (download) {
-        download[@"canceled"] = @(YES);
+        if (![download[@"canceled"] boolValue]) {
+            download[@"canceled"] = @(YES);
+            if (![download[@"complete"] boolValue]) {
+                [controller cancelDownload:cell.uuid];
+            }
+        }
     }
-    
-    [[ASCDownloadController sharedInstance] removeDownload:cell.uuid];
 }
 
 #pragma mark -
 #pragma mark ASCDownloadController Delegate
 
 - (void)downloadController:(ASCDownloadController *)controler didAddDownload:(id)download {
-    [self.tableView reloadData];
+    NSString *uuid = download[@"idx"];
+    if (!uuid || [_rowUUIDs containsObject:uuid]) return;
+
+    [_rowUUIDs addObject:uuid];
+    NSInteger newRow = (NSInteger)_rowUUIDs.count - 1;
+
     [self updatePopoverSize];
+
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:newRow] withAnimation:NSTableViewAnimationEffectNone];
+    [self.tableView endUpdates];
+
+    [self updateClearButton];
 }
 
 - (void)downloadController:(ASCDownloadController *)controler didRemovedDownload:(id)download {
-    [self.tableView reloadData];
+    NSString *uuid = download[@"idx"];
+    if (!uuid) return;
     
-    if ([[[ASCDownloadController sharedInstance] downloads] count] < 1) {
-        [self.popover closePopover:nil];
+    NSInteger row = (NSInteger)[_rowUUIDs indexOfObject:uuid];
+    if (row != (NSInteger)NSNotFound) {
+        [self.tableView beginUpdates];
+        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] withAnimation:NSTableViewAnimationEffectNone];
+        [self.tableView endUpdates];
+    }
+    
+    [_rowUUIDs removeObject:uuid];
+    
+    if (_rowUUIDs.count == 0) {
+        NSWindow *popoverWindow = self.view.window;
+        if (popoverWindow) {
+            [[popoverWindow parentWindow] removeChildWindow:popoverWindow];
+            [popoverWindow orderOut:nil];
+        }
     } else {
         [self updatePopoverSize];
+        [self updateClearButton];
     }
 }
 
 - (void)downloadController:(ASCDownloadController *)controler didUpdatedDownload:(id)download {
-    [self.tableView reloadData];
-    [self updatePopoverSize];
+    NSString *uuid = download[@"idx"];
+    if (!uuid) return;
+    
+    NSInteger row = (NSInteger)[_rowUUIDs indexOfObject:uuid];
+    if (row != (NSInteger)NSNotFound) {
+        ASCDownloadCellView *cell = [self.tableView viewAtColumn:0 row:row makeIfNecessary:NO];
+        if (cell) [self configureCell:cell withDownload:download];
+    }
+    
+    [self updateClearButton];
 }
 
 @end

@@ -52,6 +52,7 @@
 #import "ASCDownloadController.h"
 #import "ASCMenuButtonCell.h"
 #import "ASCThemesController.h"
+#import "ASCHeaderButton.h"
 #import "ASCApplicationManager.h"
 #import "AppDelegate.h"
 #import "ASCLinguist.h"
@@ -78,8 +79,7 @@ static float kASCRTLTabsRightMargin = 0;
 @property (weak) IBOutlet NSLayoutConstraint *downloadWidthConstraint;
 @property (weak) IBOutlet NSLayoutConstraint *buttonPortalLeadingConstraint;
 @property (weak) IBOutlet NSLayoutConstraint *buttonPortalTrailingConstraint;
-@property (weak) IBOutlet NSImageView *downloadImageView;
-@property (weak) IBOutlet NSView *downloadBackgroundView;
+@property (weak) IBOutlet ASCHeaderButton *downloadButton;
 @property (nonatomic) SFBPopover * popover;
 @end
 
@@ -136,27 +136,6 @@ static float kASCRTLTabsRightMargin = 0;
     // Other window controls
 
     self.downloadWidthConstraint.constant = .0f;
-    self.downloadImageView.canDrawSubviewsIntoLayer = YES;
-    self.downloadImageView.animates = NO;
-    self.downloadImageView.hidden = NO;
-
-    NSDataAsset * asset = [[NSDataAsset alloc] initWithName:@"progress_download_icon"];
-    NSBitmapImageRep * rep = [[NSBitmapImageRep alloc] initWithData:[asset data]];
-//    int framescount = [[rep valueForProperty:NSImageFrameCount] intValue];
-    [rep setProperty:NSImageCurrentFrame withValue:[NSNumber numberWithUnsignedInt:15]];
-    NSData *repData = [rep representationUsingType:NSPNGFileType properties:nil];
-    NSImage * img = [[NSImage alloc] initWithData:repData];
-    [self.downloadImageView setImage:img];
-
-//    NSImage * image = [NSImage imageNamed:@"progress_download_icon"];
-//    if ( image ) {
-//
-//        NSLog(@"download1: image loaded, %d", framescount);
-////        self.downloadImageView.image = image;
-//        [self.downloadImageView setImage:img];
-//    } else {
-//        NSLog(@"download1: load failed");
-//    }
 
     kASCWindowDefaultTrafficButtonsLeftMargin = NSWidth(self.closeButtonFullscreen.frame) - 2.0; // OSX 10.11 magic
 
@@ -250,8 +229,12 @@ static float kASCRTLTabsRightMargin = 0;
             [self.portalButton setImage:[NSImage imageNamed:@"logo-tab-light"]];
         }
     }
+    self.downloadButton.bgHoverColor = [ASCThemesController currentThemeColor:btnHoverBackgroundColor];
 
+    [self doLayout];
+}
 
+- (void)viewDidLayout {
     [self doLayout];
 }
 
@@ -282,7 +265,8 @@ static float kASCRTLTabsRightMargin = 0;
 
     // Layout title and tabs
     CGFloat containerWidth  = CGRectGetWidth(self.titleContainerView.frame);
-    CGFloat maxTabsWidth    = containerWidth - kASCWindowMinTitleWidth - 100;
+    CGFloat downloadButtonWidth = self.downloadWidthConstraint.constant;
+    CGFloat maxTabsWidth    = containerWidth - kASCWindowMinTitleWidth - downloadButtonWidth - 50;
     CGFloat actualTabsWidth = self.tabsControl.maxTabWidth * [self.tabsControl.tabs count];
 
     int btnSpacing = 6.0;
@@ -460,6 +444,8 @@ static float kASCRTLTabsRightMargin = 0;
             [tab setType:tab.type];
             [self.tabsControl updateTab:tab];
         }
+
+        [self applyDownloadIconTheme];
     }
 }
 
@@ -489,6 +475,8 @@ static float kASCRTLTabsRightMargin = 0;
         [tab setType:tab.type];
         [self.tabsControl updateTab:tab];
     }
+
+    [self applyDownloadIconTheme];
 }
 
 #pragma mark -
@@ -502,10 +490,11 @@ static float kASCRTLTabsRightMargin = 0;
     popover.viewMargin                      = 0.0f;
     popover.borderWidth                     = 0.0f;
     popover.cornerRadius                    = 2.0f;
-    popover.drawsArrow                      = YES;
+    popover.drawsArrow                      = NO;
     popover.movable                         = NO;
-    popover.arrowWidth                      = 20.0f;
-    popover.arrowHeight                     = 10.0f;
+    popover.arrowWidth                      = 0.0f;
+    popover.arrowHeight                     = 0.0f;
+    popover.arrowOffset                     = 15.0f;
     popover.distance                        = 10.0f;
 }
 
@@ -534,16 +523,18 @@ static float kASCRTLTabsRightMargin = 0;
 //}
 
 - (IBAction)onDownloadButton:(id)sender {
+    if (self.popover && [self.popover isVisible]) {
+        return;
+    }
+    
     ASCDownloadViewController * controller = [self.storyboard instantiateControllerWithIdentifier:@"ASCDownloadListControllerId"];
     self.popover = [[SFBPopover alloc] initWithContentViewController:controller];
-    self.popover.arrowOffset = 40.0f;
     [self setupCustomPopover:self.popover];
     
     NSRect rectOfSender = [sender convertRect:[sender bounds] toView:nil];
     NSPoint where = rectOfSender.origin;
     where.x += rectOfSender.size.width / 2;
     
-    [controller setPopover:self.popover];
     [self.popover displayPopoverInWindow:[sender window] atPoint:where chooseBestLocation:YES];
 }
 
@@ -603,16 +594,66 @@ static float kASCRTLTabsRightMargin = 0;
 #pragma mark -
 #pragma mark ASCDownloadController Delegate
 
+- (NSImage *)themedDownloadImage:(NSImage *)image {
+    NSImage *copy = [image copy];
+    copy.size = NSMakeSize(20.0, 20.0);
+    if ([ASCThemesController isDarkWindowAppearance]) {
+        [copy lockFocus];
+        [[NSColor colorWithWhite:1.0 alpha:1.0] set];
+        NSRectFillUsingOperation(NSMakeRect(0, 0, 20.0, 20.0), NSCompositingOperationSourceAtop);
+        [copy unlockFocus];
+    }
+    return copy;
+}
+
+- (void)applyDownloadIconTheme {
+    self.downloadButton.bgHoverColor = [ASCThemesController currentThemeColor:btnHoverBackgroundColor];
+    NSImage * image = [NSImage imageNamed:self.downloadButton.isSpinning
+                                            ? @"icon-loading_normal"
+                                            : @"icon-loading-finished_normal"];
+    [self.downloadButton setImage:[self themedDownloadImage:image]];
+}
+
+- (void)updateDownloadIcon:(ASCDownloadController *)controller {
+    if ([controller downloads].count == 0) return;
+
+    BOOL allFinished = YES;
+    for (id dl in [controller downloads]) {
+        if (![dl[@"finished"] boolValue]) {
+            allFinished = NO;
+            break;
+        }
+    }
+
+    if (allFinished) {
+        [self.downloadButton stopAnimation];
+        [self.downloadButton setImage:[self themedDownloadImage:[NSImage imageNamed:@"icon-loading-finished_normal"]]];
+    } else {
+        if (!self.downloadButton.isSpinning) {
+            [self.downloadButton setImage:[self themedDownloadImage:[NSImage imageNamed:@"icon-loading_normal"]]];
+            [self.downloadButton startAnimation];
+        }
+    }
+}
+
 - (void)downloadController:(ASCDownloadController *)controler didAddDownload:(id)download {
-    self.downloadWidthConstraint.constant = ([[controler downloads] count] > 0) ? 30.f : .0f;
+    self.downloadWidthConstraint.constant = ([[controler downloads] count] > 0) ? 40.f : .0f;
+    [self.downloadButton setImage:[self themedDownloadImage:[NSImage imageNamed:@"icon-loading_normal"]]];
+    [self.downloadButton startAnimation];
 }
 
 - (void)downloadController:(ASCDownloadController *)controler didRemovedDownload:(id)download {
-    self.downloadWidthConstraint.constant = ([[controler downloads] count] > 0) ? 30.f : .0f;
+    self.downloadWidthConstraint.constant = ([[controler downloads] count] > 0) ? 40.f : .0f;
+    if ([[controler downloads] count] == 0) {
+        [self.downloadButton stopAnimation];
+        [self.downloadButton setImage:[self themedDownloadImage:[NSImage imageNamed:@"icon-loading-finished_normal"]]];
+    } else {
+        [self updateDownloadIcon:controler];
+    }
 }
 
 - (void)downloadController:(ASCDownloadController *)controler didUpdatedDownload:(id)download {
-    //
+    [self updateDownloadIcon:controler];
 }
 
 #pragma mark -

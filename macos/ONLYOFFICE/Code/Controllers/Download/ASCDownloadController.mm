@@ -103,6 +103,7 @@ static NSString * const kASCDownloadControllerMulticastDelegateKey = @"ASCDownlo
                                                                                      @"percent"  : @0,
                                                                                      @"complete" : @(NO),
                                                                                      @"canceled" : @(NO),
+                                                                                     @"finished" : @(NO),
                                                                                      @"speed"    : @0
                                                                                      }];
 
@@ -119,6 +120,7 @@ static NSString * const kASCDownloadControllerMulticastDelegateKey = @"ASCDownlo
     if (download) {
         NSString * filePath = download[@"filePath"];
         BOOL isCanceled     = [download[@"canceled"] boolValue];
+        BOOL isFinished     = [download[@"finished"] boolValue];
 
         CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
         
@@ -126,7 +128,7 @@ static NSString * const kASCDownloadControllerMulticastDelegateKey = @"ASCDownlo
             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         }
         
-        if (appManager) {
+        if (appManager && !isFinished) {
             appManager->CancelDownload([download[@"idx"] intValue]);
         }
         
@@ -143,16 +145,37 @@ static NSString * const kASCDownloadControllerMulticastDelegateKey = @"ASCDownlo
     id download = [self downloadWithId:idx];
     
     if (download && pDownloadFileInfo) {
-        NSString * fileName = [[NSString stringWithstdwstring:pDownloadFileInfo->get_FilePath()] lastPathComponent];
+        NSString * filePath = [NSString stringWithstdwstring:pDownloadFileInfo->get_FilePath()];
+        NSString * fileName = [filePath lastPathComponent];
+        BOOL isComplete = pDownloadFileInfo->get_IsComplete();
+        BOOL isCanceled = pDownloadFileInfo->get_IsCanceled();
+
         [download setObject:[NSNumber numberWithInt:pDownloadFileInfo->get_Percent()] forKey:@"percent"];
         [download setObject:(fileName && fileName.length > 0) ? fileName : NSLocalizedString(@"Preparing...", nil) forKey:@"name"];
         [download setObject:[NSString stringWithstdwstring:pDownloadFileInfo->get_Url()] forKey:@"url"];
-        [download setObject:[NSString stringWithstdwstring:pDownloadFileInfo->get_FilePath()] forKey:@"filePath"];
-        [download setObject:@(pDownloadFileInfo->get_IsCanceled()) forKey:@"canceled"];
+        [download setObject:filePath forKey:@"filePath"];
+        [download setObject:@(isCanceled) forKey:@"canceled"];
+        [download setObject:@(isComplete) forKey:@"complete"];
+        [download setObject:@(pDownloadFileInfo->get_Speed()) forKey:@"speed"];
+        [download setObject:@(isComplete || isCanceled) forKey:@"finished"];
         
         if (_delegate && [_delegate respondsToSelector:@selector(downloadController:didUpdatedDownload:)]) {
             [_delegate downloadController:self didUpdatedDownload:download];
         }
+    }
+}
+
+- (void)cancelDownload:(NSString *)idx {
+    CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
+    if (appManager) {
+        appManager->CancelDownload([idx intValue]);
+    }
+}
+
+- (void)clearFinished {
+    NSArray * finished = [[_downloads filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"finished == YES"]] copy];
+    for (id download in finished) {
+        [self removeDownload:download[@"idx"]];
     }
 }
 

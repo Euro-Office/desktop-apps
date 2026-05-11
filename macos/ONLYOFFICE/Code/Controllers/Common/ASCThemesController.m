@@ -89,12 +89,24 @@ static NSString* jsonKeysForColorName(NSString *name) {
     dispatch_once(&token, ^{
         map = @{
             btnPortalActiveBackgroundColor : @"tool-button-active-background",
+            btnHoverBackgroundColor        : @"tool-button-hover-background",
             tabWordActiveBackgroundColor   : @"brand-word",
             tabCellActiveBackgroundColor   : @"brand-cell",
             tabSlideActiveBackgroundColor  : @"brand-slide",
             tabPdfActiveBackgroundColor    : @"brand-pdf",
             tabDrawActiveBackgroundColor   : @"brand-draw",
             windowBackgroundColor          : @"window-background",
+            downloadWidgetBackgroundColor   : @"download-widget-background",
+            downloadWidgetBorderColor       : @"download-widget-border",
+            downloadItemHoverBackgroundColor : @"download-item-hover-background",
+            downloadGhostButtonTextColor    : @"download-ghost-button-text",
+            downloadGhostButtonTextHoverColor : @"download-ghost-button-text-hover",
+            downloadGhostButtonTextPressedColor : @"download-ghost-button-text-pressed",
+            downloadLabelTextColor          : @"download-label-text",
+            downloadLabelTextInfoColor      : @"download-label-text-info",
+            downloadProgressbarChunkColor   : @"download-progressbar-chunk",
+            downloadProgressbarBackgroundColor : @"download-progressbar-background",
+            downloadScrollbarHandleColor    : @"download-scrollbar-handle",
         };
     });
     return map[name];
