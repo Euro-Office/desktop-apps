@@ -562,14 +562,15 @@ double Utils::getScreenDpiRatio(int scrnum)
 
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
-    QWidget _w;
-    _w.setGeometry(QRect(pt, QSize(10,10)));
-
-#ifdef Q_OS_LINUX
-    return getScreenDpiRatioByWidget(&_w);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    int nScreenNumber = -1;
+    QScreen *screen = QGuiApplication::screenAt(pt);
+    if (screen)
+        nScreenNumber = QGuiApplication::screens().indexOf(screen);
 #else
-    return getScreenDpiRatioByHWND(_w.winId());
+    int nScreenNumber = QApplication::desktop()->screenNumber(pt);
 #endif
+    return getScreenDpiRatio(nScreenNumber);
 }
 
 double Utils::getScreenDpiRatioByHWND(int hwnd)
