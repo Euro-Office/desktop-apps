@@ -107,10 +107,10 @@
 "OK" = "ٹھیک ہے";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE ڈیجیٹل دستخط فائل نہیں کھول سکتا۔ دوسری فائل کھولنے کی کوشش کریں۔";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office ڈیجیٹل دستخط فائل نہیں کھول سکتا۔ دوسری فائل کھولنے کی کوشش کریں۔";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE نجی کلید نہیں کھول سکتا۔ دوسری فائل کھولنے کی کوشش کریں۔";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office نجی کلید نہیں کھول سکتا۔ دوسری فائل کھولنے کی کوشش کریں۔";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "دستاویز دستاویز ٹیمپلیٹ کھولیں۔";

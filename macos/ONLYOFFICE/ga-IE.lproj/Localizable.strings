@@ -92,10 +92,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "Ní féidir le ONLYOFFICE an comhad Síniú Digiteach a oscailt. Bain triail as comhad eile a oscailt.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Ní féidir le Euro-Office an comhad Síniú Digiteach a oscailt. Bain triail as comhad eile a oscailt.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "Ní féidir le ONLYOFFICE an Eochair Phríobháideach a oscailt. Bain triail as comhad eile a oscailt.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Ní féidir le Euro-Office an Eochair Phríobháideach a oscailt. Bain triail as comhad eile a oscailt.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Teimpléad doiciméad OpenDocument (*.ott)";

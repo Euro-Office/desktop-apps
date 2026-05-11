@@ -107,10 +107,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE не может открыть файл цифровой подписи. Попробуйте открыть другой файл.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office не может открыть файл цифровой подписи. Попробуйте открыть другой файл.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE не может открыть файл приватного ключа. Попробуйте открыть другой файл.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office не может открыть файл приватного ключа. Попробуйте открыть другой файл.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Шаблон документа OpenDocument (*.ott)";

@@ -92,10 +92,10 @@
 "OK" = "Labi";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE nevar atvērt Digitālā Paraksta failu. Mēģiniet atvērt citu failu.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office nevar atvērt Digitālā Paraksta failu. Mēģiniet atvērt citu failu.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE nevar atvērt Privāto Atslēgu. Mēģiniet atvērt citu failu.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office nevar atvērt Privāto Atslēgu. Mēģiniet atvērt citu failu.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument Dokumenta veidne (*.ott)";

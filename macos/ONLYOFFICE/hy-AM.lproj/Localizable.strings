@@ -92,10 +92,10 @@
 "OK" = "Լավ";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE-ը չի կարող բացել Թվային ստորագրության ֆայլը։ Փորձեք բացել այլ ֆայլ։";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office-ը չի կարող բացել Թվային ստորագրության ֆայլը։ Փորձեք բացել այլ ֆայլ։";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE-ի չի կարող բացել Գաղտնի բանալին։ Փորձեք բացել այլ ֆայլ։";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office-ի չի կարող բացել Գաղտնի բանալին։ Փորձեք բացել այլ ֆայլ։";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument փաստաթղթի ձևանմուշ (*.ott)";

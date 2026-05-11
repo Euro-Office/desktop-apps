@@ -101,10 +101,10 @@
 "OK" = "හරි";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ඔන්ලිඔෆිස් සඳහා සංඛ්‍යාංක අත්සන ගොනුව ඇරීමට නොහැකිය. වෙනත් ගොනුවක් ඇරීමට උත්සාහ කරන්න.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office සඳහා සංඛ්‍යාංක අත්සන ගොනුව ඇරීමට නොහැකිය. වෙනත් ගොනුවක් ඇරීමට උත්සාහ කරන්න.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ඔන්ලිඔෆිස් සඳහා පෞද්. යතුර ඇරීමට නොහැකිය. වෙනත් ගොනුවක් ඇරීමට උත්සාහ කරන්න.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office සඳහා පෞද්. යතුර ඇරීමට නොහැකිය. වෙනත් ගොනුවක් ඇරීමට උත්සාහ කරන්න.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "ඕපන්ඩොකියුමන්ට් ලේඛන අච්චුව (*.ott)";

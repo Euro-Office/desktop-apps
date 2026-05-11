@@ -50,7 +50,7 @@
 
 
 		//language=HTML
-        const helpLink = `<a l10n class="link" href="https://helpcenter.onlyoffice.com/" target="popup">${_lang.textHelpCenter}</a>`;
+        const helpLink = `<a l10n class="link" href="https://github.com/Euro-Office" target="popup">${_lang.textHelpCenter}</a>`;
 		const welcomeBannerTemplate = !localStorage.getItem('welcome') ? `
             <div id="area-welcome">
                 <h2 l10n>${_lang.welWelcome}</h2>

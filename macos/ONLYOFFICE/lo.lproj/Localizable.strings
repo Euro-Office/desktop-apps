@@ -95,10 +95,10 @@
 "OK" = "ໄດ້";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE ບໍສາມາດເປີດຟາຍລາຍເຊັນດິຈິຕອນ. ລອງເປີດຟາຍອື່ນ.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office ບໍສາມາດເປີດຟາຍລາຍເຊັນດິຈິຕອນ. ລອງເປີດຟາຍອື່ນ.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE ບໍ່ສາມາດເປີດກຸນແຈສ່ວນບຸກຄົນ. ລອງເປີດຟາຍອື່ນ.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office ບໍ່ສາມາດເປີດກຸນແຈສ່ວນບຸກຄົນ. ລອງເປີດຟາຍອື່ນ.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "ເປີດເອກະສານ ເປັນຮູບແບບເອກະສານ (*.ott)";

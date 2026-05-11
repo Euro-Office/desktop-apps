@@ -1,7 +1,7 @@
 [
     {
         "provider": "asc",
-        "name" : "ONLYOFFICE",
+        "name" : "Euro-Office",
         "check" : {
             "url":"/api/2.0/capabilities.json"
         },

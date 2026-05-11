@@ -92,10 +92,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE kan ikke åpne filen for digital signatur. Prøv å åpne en annen fil.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office kan ikke åpne filen for digital signatur. Prøv å åpne en annen fil.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE kan ikke åpne den private nøkkelen. Prøv å åpne en annen fil.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office kan ikke åpne den private nøkkelen. Prøv å åpne en annen fil.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument dokumentmal (*.ott)";

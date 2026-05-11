@@ -1,7 +1,7 @@
 {
     "name": "desktop-editor-start-page",
     "version": "0.1.2",
-    "homepage": "http://www.onlyoffice.com",
+    "homepage": "https://github.com/Euro-Office",
     "private": true,
     "dependencies": {
         "grunt": "~0.4.2",

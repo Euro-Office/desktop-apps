@@ -7,8 +7,8 @@
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP"; */
 "1UK-8n-QPP.title" = "Toolbar ແບບສາມາດແກ້ໄຂໄດ້…";
 
-/* Class = "NSMenuItem"; title = "ONLYOFFICE"; ObjectID = "1Xt-HY-uBw"; */
-"1Xt-HY-uBw.title" = "ONLYOFFICE";
+/* Class = "NSMenuItem"; title = "Euro-Office"; ObjectID = "1Xt-HY-uBw"; */
+"1Xt-HY-uBw.title" = "Euro-Office";
 
 /* Class = "NSMenuItem"; title = "Raise"; ObjectID = "2h7-ER-AoG"; */
 "2h7-ER-AoG.title" = "ທາງເທີງ";
@@ -31,11 +31,11 @@
 /* Class = "NSMenuItem"; title = "License Agreement"; ObjectID = "4et-TX-a4m"; */
 "4et-TX-a4m.title" = "ສັນຍາໃບອະນຸຍາດ";
 
-/* Class = "NSMenuItem"; title = "Quit ONLYOFFICE"; ObjectID = "4sb-4s-VLi"; */
-"4sb-4s-VLi.title" = "ອອກຈາກ ONLYOFFICE";
+/* Class = "NSMenuItem"; title = "Quit Euro-Office"; ObjectID = "4sb-4s-VLi"; */
+"4sb-4s-VLi.title" = "ອອກຈາກ Euro-Office";
 
-/* Class = "NSMenuItem"; title = "About ONLYOFFICE"; ObjectID = "5kV-Vb-QxS"; */
-"5kV-Vb-QxS.title" = "ກ່ຽວກັບ ONLYOFFICE";
+/* Class = "NSMenuItem"; title = "About Euro-Office"; ObjectID = "5kV-Vb-QxS"; */
+"5kV-Vb-QxS.title" = "ກ່ຽວກັບ Euro-Office";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "5QF-Oa-p0T"; */
 "5QF-Oa-p0T.title" = "ແກ້ໄຂ";
@@ -214,8 +214,8 @@
 /* Class = "NSMenu"; title = "Baseline"; ObjectID = "ijk-EB-dga"; */
 "ijk-EB-dga.title" = "ພື້ນຖານ";
 
-/* Class = "NSWindow"; title = "ONLYOFFICE"; ObjectID = "IQv-IB-iLA"; */
-"IQv-IB-iLA.title" = "ONLYOFFICE";
+/* Class = "NSWindow"; title = "Euro-Office"; ObjectID = "IQv-IB-iLA"; */
+"IQv-IB-iLA.title" = "Euro-Office";
 
 /* Class = "NSMenuItem"; title = "Justify"; ObjectID = "J5U-5w-g23"; */
 "J5U-5w-g23.title" = "ຢືນຢັນ";
@@ -235,7 +235,7 @@
 /* Class = "NSMenuItem"; title = "Revert to Saved"; ObjectID = "KaW-ft-85H"; */
 "KaW-ft-85H.title" = "ກັບໄປຄືນເພື່ອບັນທືກ";
 
-/* Class = "NSTabViewItem"; label = "ONLYOFFICE"; ObjectID = "kcg-El-49G"; */
+/* Class = "NSTabViewItem"; label = "Euro-Office"; ObjectID = "kcg-El-49G"; */
 "kcg-El-49G.label" = "ຫ້ອງການ";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
@@ -277,8 +277,8 @@
 /* Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1"; */
 "ogc-rX-tC1.title" = "ແບບຫຼົມ";
 
-/* Class = "NSMenuItem"; title = "Hide ONLYOFFICE"; ObjectID = "Olw-nP-bQN"; */
-"Olw-nP-bQN.title" = "ເຊື່ອງ ONLYOFFICE";
+/* Class = "NSMenuItem"; title = "Hide Euro-Office"; ObjectID = "Olw-nP-bQN"; */
+"Olw-nP-bQN.title" = "ເຊື່ອງ Euro-Office";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
 "OwM-mh-QMV.title" = "ຊອກຫາ ກ່ອນໜ້າ";
@@ -364,7 +364,7 @@
 /* Class = "NSMenuItem"; title = "Capitalize"; ObjectID = "UEZ-Bs-lqG"; */
 "UEZ-Bs-lqG.title" = "ໃຫ້ເປັນໂຕອັກສອນໃຫ່ຍ";
 
-/* Class = "NSMenu"; title = "ONLYOFFICE"; ObjectID = "uQy-DD-JDr"; */
+/* Class = "NSMenu"; title = "Euro-Office"; ObjectID = "uQy-DD-JDr"; */
 "uQy-DD-JDr.title" = "ຫ້ອງການຢ່າງດຽວ";
 
 /* Class = "NSMenuItem"; title = "Cut"; ObjectID = "uRl-iY-unG"; */

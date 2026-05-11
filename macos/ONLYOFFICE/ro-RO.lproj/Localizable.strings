@@ -101,10 +101,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE nu poate deschide fişierul de Semnătură Digitală. Încercați să deschideți un alt fișier.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office nu poate deschide fişierul de Semnătură Digitală. Încercați să deschideți un alt fișier.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE nu poate deschide Cheia Privată. Încercați să deschideți un alt fișier.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office nu poate deschide Cheia Privată. Încercați să deschideți un alt fișier.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Șablon document OpenDocument (*.ott)";

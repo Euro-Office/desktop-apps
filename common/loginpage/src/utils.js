@@ -228,8 +228,8 @@ utils.defines.FileFormat = {
 
 utils.defines.DBLCLICK_LOCK_TIMEOUT = 800;
 utils.defines.links = {
-    regnew: 'https://www.onlyoffice.com/registration.aspx?app=desktop',
-    restorepass: 'https://www.onlyoffice.com/signin.aspx'
+    regnew: 'https://github.com/Euro-Office',
+    restorepass: 'https://github.com/Euro-Office'
 };
 
 utils.formatToEditor = function(f) {
