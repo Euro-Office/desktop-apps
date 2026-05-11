@@ -190,8 +190,14 @@
         if (externalDelegate && [externalDelegate respondsToSelector:@selector(onAppPreferredLanguage)]) {
             countryCode = [NSURLQueryItem queryItemWithName:@"lang" value:[externalDelegate onAppPreferredLanguage]];
         }
-        
-        loginPage.queryItems            = @[countryCode, portalAddress];
+
+        NSMutableArray *queryItems = [@[countryCode, portalAddress] mutableCopy];
+        NSString *productComponent = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"EOProductComponent"];
+        if ([productComponent isKindOfClass:[NSString class]] && [productComponent length] > 0) {
+            [queryItems addObject:[NSURLQueryItem queryItemWithName:@"app_component" value:productComponent]];
+        }
+
+        loginPage.queryItems            = queryItems;
         loginPage.scheme                = NSURLFileScheme;
         
         [self.cefStartPageView loadWithUrl:[loginPage string]];

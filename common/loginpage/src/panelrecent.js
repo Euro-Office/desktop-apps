@@ -674,57 +674,59 @@
                 this.dndZone = new DnDFileZone();
                 this.dndZone.render(this.view.$panel.find("#area-dnd-file"));
 
+                const documentTypes = [
+                    {
+                        id: 'word',
+                        title: utils.Lang.newDoc,
+                        langKey: 'newDoc',
+                        formatLabel: {
+                            value: 'DOCX',
+                            gradientColorStart: '#4298C5',
+                            gradientColorEnd: '#2D84B2',
+                            bgColorWinXP: '#287ca9',
+                        },
+                        icon: '#docx-big',
+                    },
+                    {
+                        id: 'cell',
+                        title: utils.Lang.newXlsx,
+                        langKey: 'newXlsx',
+                        formatLabel: {
+                            value: 'XLSX',
+                            gradientColorStart: '#5BB514',
+                            gradientColorEnd: '#318C2B',
+                            bgColorWinXP: '#3aa133',
+                        },
+                        icon: '#xlsx-big',
+                    },
+                    {
+                        id: 'slide',
+                        title: utils.Lang.newPptx,
+                        langKey: 'newPptx',
+                        formatLabel: {
+                            value: 'PPTX',
+                            gradientColorStart: '#F4893A',
+                            gradientColorEnd: '#DE7341',
+                            bgColorWinXP: '#f36700',
+                        },
+                        icon: '#pptx-big',
+                    },
+                    {
+                        id: 'form',
+                        title: utils.Lang.newForm,
+                        langKey: 'newForm',
+                        formatLabel: {
+                            value: 'PDF',
+                            gradientColorStart: '#F36653',
+                            gradientColorEnd: '#D2402D',
+                            bgColorWinXP: '#e54d39',
+                        },
+                        icon: '#pdf-big',
+                    }
+                ].filter(doc => utils.isProductComponentEnabled(doc.id));
+
                 const docGrid = new DocumentCreationGrid({
-                    documentTypes: [
-                        {
-                            id: 'word',
-                            title: utils.Lang.newDoc,
-                            langKey: 'newDoc',
-                            formatLabel: {
-                                value: 'DOCX',
-                                gradientColorStart: '#4298C5',
-                                gradientColorEnd: '#2D84B2',
-                                bgColorWinXP: '#287ca9',
-                            },
-                            icon: '#docx-big',
-                        },
-                        {
-                            id: 'cell',
-                            title: utils.Lang.newXlsx,
-                            langKey: 'newXlsx',
-                            formatLabel: {
-                                value: 'XLSX',
-                                gradientColorStart: '#5BB514',
-                                gradientColorEnd: '#318C2B',
-                                bgColorWinXP: '#3aa133',
-                            },
-                            icon: '#xlsx-big',
-                        },
-                        {
-                            id: 'slide',
-                            title: utils.Lang.newPptx,
-                            langKey: 'newPptx',
-                            formatLabel: {
-                                value: 'PPTX',
-                                gradientColorStart: '#F4893A',
-                                gradientColorEnd: '#DE7341',
-                                bgColorWinXP: '#f36700',
-                            },
-                            icon: '#pptx-big',
-                        },
-                        {
-                            id: 'form',
-                            title: utils.Lang.newForm,
-                            langKey: 'newForm',
-                            formatLabel: {
-                                value: 'PDF',
-                                gradientColorStart: '#F36653',
-                                gradientColorEnd: '#D2402D',
-                                bgColorWinXP: '#e54d39',
-                            },
-                            icon: '#pdf-big',
-                        }
-                    ],
+                    documentTypes,
                     onDocumentSelect: (docType) => {
                         window.sdk.command("create:new", docType);
                     }

@@ -398,6 +398,8 @@ utils.fn.parseRecent = function(arr, out = 'files') {
     const _is_win = /Win/.test(navigator.platform);
     const _re_name = !_is_win ? /([^/]+\.[a-zA-Z0-9]{1,})$/ : /([^\\/]+\.[a-zA-Z0-9]{1,})$/;
     for (let _f_ of arr) {
+        if (out == 'files' && !utils.isProductComponentEnabled(utils.formatToEditor(_f_.type))) continue;
+
         if ( _is_win && /^\w:[\\\/]/.test(_f_.path) && /(?:\\{2,})+/.test(_f_.path) )
             _f_.path = _f_.path.replace(/(?:\\{2,})+/g,"\\");
 
@@ -543,6 +545,39 @@ function getUrlParams() {
 }
 
 utils.inParams = getUrlParams();
+utils.productComponent = function() {
+    const value = (utils.inParams.app_component || utils.inParams.product_component || '').toLowerCase();
+    const aliases = {
+        text: 'text',
+        document: 'text',
+        documents: 'text',
+        word: 'text',
+        spreadsheet: 'spreadsheet',
+        spreadsheets: 'spreadsheet',
+        sheet: 'spreadsheet',
+        cell: 'spreadsheet',
+        presentation: 'presentation',
+        presentations: 'presentation',
+        slide: 'presentation',
+        pdf: 'pdf',
+        form: 'pdf'
+    };
+
+    return aliases[value] || '';
+};
+utils.isProductComponentEnabled = function(editor) {
+    const component = utils.productComponent();
+    if (!component) return true;
+
+    const editorsByComponent = {
+        text: ['word', 'Documents'],
+        spreadsheet: ['cell', 'Spreadsheets'],
+        presentation: ['slide', 'Presentations'],
+        pdf: ['form', 'pdf', 'PDFs']
+    };
+
+    return (editorsByComponent[component] || []).indexOf(editor) >= 0;
+};
 utils.brandCheck = opts => false;
 utils.isWinXp = utils.inParams.osver == 'winxp' || /windows nt 5/i.test(navigator.appVersion);
 utils.isMacOS = /mac os/i.test(navigator.userAgent);
