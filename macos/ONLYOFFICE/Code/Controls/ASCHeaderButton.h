@@ -41,4 +41,11 @@
 
 @interface ASCHeaderButton : NSButton
 @property (nonatomic) NSColor * bgHoverColor;
+@property (nonatomic) NSColor * textColor;
+@property (nonatomic) NSColor * textHoverColor;
+@property (nonatomic, readonly) BOOL isSpinning;
+
+- (void)startAnimation;
+- (void)stopAnimation;
+
 @end

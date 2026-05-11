@@ -42,6 +42,13 @@
 //
 
 #import "ASCDownloadCellView.h"
+#import "ASCHeaderButton.h"
+#import "ASCThemesController.h"
+#import "ASCConstants.h"
+
+@interface ASCDownloadCellView()
+@property (nonatomic) NSTrackingArea *hoverTrackingArea;
+@end
 
 @implementation ASCDownloadCellView
 
@@ -49,9 +56,112 @@
     [super setBackgroundStyle: NSBackgroundStyleLight];
 }
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    [self applyThemeColors];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onThemeChanged:)
+                                                 name:ASCEventNameChangedUITheme
+                                               object:nil];
+}
+
+- (void)applyThemeColors {
+    NSString *currentTheme = [ASCThemesController currentThemeId];
+    
+    NSColor *textColor = [ASCThemesController color:downloadLabelTextColor forTheme:currentTheme];
+    if (textColor && self.textField) {
+        self.textField.textColor = textColor;
+    }
+    
+    NSColor *infoColor = [ASCThemesController color:downloadLabelTextInfoColor forTheme:currentTheme];
+    if (infoColor && self.infoTextField) {
+        self.infoTextField.textColor = infoColor;
+    }
+    if (infoColor && self.sizeLabel) {
+        self.sizeLabel.textColor = infoColor;
+    }
+    
+    NSColor *buttonTextColor = [ASCThemesController color:downloadGhostButtonTextColor forTheme:currentTheme];
+    if (buttonTextColor) {
+        if (self.cancelButton) {
+            if (@available(macOS 10.14, *)) {
+                self.cancelButton.contentTintColor = buttonTextColor;
+            }
+        }
+        if (self.openButton) {
+            if (@available(macOS 10.14, *)) {
+                self.openButton.contentTintColor = buttonTextColor;
+            }
+        }
+        if (self.openFolderButton) {
+            if (@available(macOS 10.14, *)) {
+                self.openFolderButton.contentTintColor = buttonTextColor;
+            }
+        }
+    }
+}
+
+- (void)onThemeChanged:(NSNotification *)notification {
+    [self applyThemeColors];
+}
+
+- (void)updateTrackingAreas {
+    [super updateTrackingAreas];
+    
+    if (self.hoverTrackingArea) {
+        [self removeTrackingArea:self.hoverTrackingArea];
+    }
+
+    self.hoverTrackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
+                                                          options:NSTrackingMouseEnteredAndExited |
+                                                                  NSTrackingActiveInKeyWindow |
+                                                                  NSTrackingInVisibleRect
+                                                            owner:self
+                                                         userInfo:nil];
+
+    [self addTrackingArea:self.hoverTrackingArea];
+}
+
+- (void)mouseEntered:(NSEvent *)event {
+    self.wantsLayer = YES;
+    
+    NSString *currentTheme = [ASCThemesController currentThemeId];
+    NSColor *hoverColor = [ASCThemesController color:downloadItemHoverBackgroundColor forTheme:currentTheme];
+    if (hoverColor) {
+        self.layer.backgroundColor = hoverColor.CGColor;
+    }
+    
+    if (!_sizeLabel.isHidden) {
+        _infoTextField.hidden    = YES;
+        _openButton.hidden       = NO;
+        _openFolderButton.hidden = NO;
+    }
+}
+
+- (void)mouseExited:(NSEvent *)event {
+    self.layer.backgroundColor = [NSColor clearColor].CGColor;
+    
+    _infoTextField.hidden    = NO;
+    _openButton.hidden       = YES;
+    _openFolderButton.hidden = YES;
+}
+
 - (IBAction)onCancelButton:(NSButton *)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(onCancelButton:)]) {
         [_delegate onCancelButton:self];
+    }
+}
+
+- (IBAction)onOpenButton:(NSButton *)sender {
+    if (_filePath.length > 0) {
+        [[NSWorkspace sharedWorkspace] openFile:_filePath];
+    }
+}
+
+- (IBAction)onShowInFolderButton:(NSButton *)sender {
+    if (_filePath.length > 0) {
+        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs: @[[NSURL fileURLWithPath:_filePath]]];
     }
 }
 

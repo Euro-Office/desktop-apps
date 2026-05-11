@@ -54,6 +54,21 @@
 @property (weak) IBOutlet NSProgressIndicator *progress;
 @property (weak) IBOutlet NSButton *cancelButton;
 
+// Speed/path info label; hidden on hover when download is complete
+@property (weak) IBOutlet NSTextField *infoTextField;
+
+// File-size label shown instead of progress bar after completion
+@property (weak) IBOutlet NSTextField *sizeLabel;
+
+// "Open" button - shown on hover when download is complete
+@property (weak) IBOutlet NSButton *openButton;
+
+// "Show in folder" button - shown on hover when download is complete
+@property (weak) IBOutlet NSButton *openFolderButton;
+
+// Full path to the downloaded file; drives Open/Show in folder actions
+@property (nonatomic, copy) NSString *filePath;
+
 @property (nonatomic) NSString *uuid;
 @property (nonatomic) id <ASCDownloadCellViewDelegate> delegate;
 @end

@@ -793,35 +793,33 @@
 - (void)onCEFDownload:(NSNotification *)notification {
     if (notification && notification.userInfo) {
         NSDictionary * params = (NSDictionary *)notification.userInfo;
-        CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
         NSValue * eventData = params[@"data"];
         
-        if (nil == appManager || nil == eventData)
+        if (nil == eventData)
             return;
         
         NSEditorApi::CAscDownloadFileInfo * pDownloadFileInfo = (NSEditorApi::CAscDownloadFileInfo *)[eventData pointerValue];
         
-        NSString * idx = [NSString stringWithFormat:@"%d", pDownloadFileInfo->get_Id()];
+        // BUG: get_Id() returns the same value for all downloads
+        // NSString * idx = [NSString stringWithFormat:@"%d", pDownloadFileInfo->get_Id()];
+        NSString * path = [NSString stringWithstdwstring:pDownloadFileInfo->get_FilePath()];
         
-        if (pDownloadFileInfo->get_IsComplete()) {
-            [[ASCDownloadController sharedInstance] removeDownload:idx];
-        } else if (pDownloadFileInfo->get_IsCanceled()) {
-            [[ASCDownloadController sharedInstance] removeDownload:idx];
-        } else {
+        if (path && [path length] > 0) {
+            // TEMP: synthetic ID from hash
+            NSString *idx = [NSString stringWithFormat:@"%lu", (unsigned long)[path hash]];
             id download = [[ASCDownloadController sharedInstance] downloadWithId:idx];
             
             if (nil == download) {
-                NSString * path = [NSString stringWithstdwstring:pDownloadFileInfo->get_FilePath()];
-                NSString * fileName = NSLocalizedString(@"Unconfirmed", nil);
                 
-                if (path && [path length] > 0) {
-                    fileName = [path lastPathComponent];
+                if (!pDownloadFileInfo->get_IsCanceled()) {
+                    NSString * fileName = [path lastPathComponent];
+                    [[ASCDownloadController sharedInstance] addDownload:idx fileName:fileName];
                 }
                 
-                [[ASCDownloadController sharedInstance] addDownload:idx fileName:fileName];
+            } else {
+                [[ASCDownloadController sharedInstance] updateDownload:idx data:eventData];
             }
             
-            [[ASCDownloadController sharedInstance] updateDownload:idx data:eventData];
         }
     }
 }

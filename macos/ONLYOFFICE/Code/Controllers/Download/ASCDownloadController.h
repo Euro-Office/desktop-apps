@@ -63,5 +63,7 @@
 - (void)addDownload:(NSString *)idx fileName:(NSString *)fileName;
 - (void)removeDownload:(NSString *)idx;
 - (void)updateDownload:(NSString *)idx data:(NSValue *)data;
+- (void)cancelDownload:(NSString *)idx;
+- (void)clearFinished;
 
 @end

@@ -42,8 +42,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "SFBPopover.h"
 
 @interface ASCDownloadViewController : NSViewController
-@property (weak) SFBPopover * popover;
 @end
