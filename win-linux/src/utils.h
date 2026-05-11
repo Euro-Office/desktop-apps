@@ -99,7 +99,7 @@ public:
     static QString getPortalName(const QString&);
     static double getScreenDpiRatio(int);
     static double getScreenDpiRatio(const QPoint&);
-    static double getScreenDpiRatioByHWND(int);
+    // static double getScreenDpiRatioByHWND(int);
     static double getScreenDpiRatioByWidget(QWidget*);
     static QScreen * screenAt(const QPoint&);
     static QString replaceBackslash(const QString&);

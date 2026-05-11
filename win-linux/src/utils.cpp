@@ -573,13 +573,13 @@ double Utils::getScreenDpiRatio(const QPoint& pt)
     return getScreenDpiRatio(nScreenNumber);
 }
 
-double Utils::getScreenDpiRatioByHWND(int hwnd)
-{
-    unsigned int _dpi_x = 0;
-    unsigned int _dpi_y = 0;
-    double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
-}
+// double Utils::getScreenDpiRatioByHWND(int hwnd)
+// {
+//     unsigned int _dpi_x = 0;
+//     unsigned int _dpi_y = 0;
+//     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
+//     return choose_scaling(nScale);
+// }
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
