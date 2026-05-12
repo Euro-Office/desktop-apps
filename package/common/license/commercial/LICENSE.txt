@@ -12,14 +12,14 @@ ONLYOFFICE Desktop Enterprise.
 
 Definitions
 "Ascensio System SIA" means Ascensio System SIA, a company incorporated under
-the law s of Republic of Latvia, right holder and developer of ONLYOFFICE
+the laws of Republic of Latvia, right holder and developer of ONLYOFFICE
 software.
 "ONLYOFFICE" means all software provided by Ascensio System SIA in accordance
-with the official website at www.onlyoffice.com.
+with the official website at https://www.onlyoffice.com.
 "ONLYOFFICE Desktop Enterprise" means a professional desktop application for
 document editing, viewing, and collaboration, covering text documents,
 spreadsheets, and presentations, as described on the official website
-www.onlyoffice.com.
+https://www.onlyoffice.com.
 "Licensed Software" means ONLYOFFICE software you entitled to use in accordance
 with this Agreement.
 "Effective Date" means the date when you click "Accept" button or otherwise
@@ -55,17 +55,19 @@ considered as infringement of exclusive (economic) rights.
 3. Payment and Taxes
 3.1. In order to use ONLYOFFICE Desktop Enterprise you shall pay us a License
 fee. The License Fee is payable according to the selected plan listed on the
-official website www.onlyoffice.com.
-3.2. If you are not satisfied with our product and terminate the Agreement
+official website at https://www.onlyoffice.com.
+3.2. Upon receiving the license fee we will send you instructions on how to
+install and activate ONLYOFFICE Desktop Enterprise.
+3.3. If you are not satisfied with our product and terminate the Agreement
 within 30 days from the Effective Date we will return you your License Fee;
 otherwise, this Fee shall be considered non-recoverable.
-3.3. Upon expiration of the license, continued access to the full functionality
+3.4. Upon expiration of the license, continued access to the full functionality
 of ONLYOFFICE Desktop Enterprise requires the purchase of a valid renewal
-license from our official website at www.onlyoffice.com.
-3.4. We shall have the right to modify the amount of the license fee for any
+license from our official website at https://www.onlyoffice.com.
+3.5. We shall have the right to modify the amount of the license fee for any
 future period of using ONLYOFFICE Desktop Enterprise by you at any time without
 prior notice.
-3.5. We guarantee that no advertising materials may be presented in your copy of
+3.6. We guarantee that no advertising materials may be presented in your copy of
 ONLYOFFICE Desktop Enterprise as long as your license is valid.
 
 4. Restrictions on Use
@@ -77,7 +79,7 @@ notices contained therein.
 elements of ONLYOFFICE Desktop Enterprise.
 4.3. You may not interfere with or disrupt the integrity or performance of
 ONLYOFFICE Desktop Enterprise or any data contained therein.
-4.4. You should not try to disassemble, reverse engineer, analyze, decompile or
+4.4. You may not try to disassemble, reverse engineer, analyze, decompile or
 convert your copy of ONLYOFFICE Desktop Enterprise or permit third parties to
 do so.
 4.5. You may not remove, obscure or interfere with any logo, copyright,
@@ -100,7 +102,7 @@ Software under your own brand name and logo provided that you have paid us the
 License Fee.
 5.3.2. In this case, you may integrate your own brand name and/or logo into the
 Licensed Software in accordance with our technical requirements and
-instructions described on our official website at api.onlyoffice.com.
+instructions described on our official website at https://api.onlyoffice.com.
 5.3.3. Once you have changed the logos in Licensed Software using the
 appropriate function your copy of Licensed Software remains re-branded.
 5.3.4. The Licensee shall abstain from any modification which may cause any
@@ -111,10 +113,10 @@ Enterprise.
 6.1. We will provide you with consulting help and updates for ONLYOFFICE Desktop
 Enterprise once they are available during the period defined by the pricing
 plan selected from the Effective Date according to SLA available on our
-Official website https://onlyo.co/372RPLE.
+Official website https://www.onlyoffice.com/sla.
 The pricing terms are correct at the time they are posted online on our Official
 website, but are subject to change. We reserve the right to amend these terms
-from time to time, please check https://onlyo.co/372RPLE for our most up-to
+from time to time, please check https://www.onlyoffice.com/sla for our most up-to
 date terms. New terms apply for every new support subscription accordingly.
 6.2. Our services include
 * provision of updates for ONLYOFFICE Desktop Enterprise once they are available
@@ -132,7 +134,7 @@ ONLYOFFICE Desktop Enterprise provided for free.
 term of one (1) year commencing on the Effective Date of this Agreement. You
 are granted the right to get free updates and support during the period defined
 by the pricing plan selected by you in accordance with our official website at
-www.onlyoffice.com. Continued use beyond this period requires renewal.
+https://www.onlyoffice.com. Continued use beyond this period requires renewal.
 7.2. You may cease to use ONLYOFFICE Desktop Enterprise at any time.
 7.3. We are entitled to immediately terminate this Agreement without any refunds
 and without giving any advance notice in case of material breach of the
@@ -176,7 +178,7 @@ which are not directly related to it. These problems include, but are not
 limited to, its incompatibility or conflicts with any software, hardware,
 improper functioning of local network, lack of proper Internet connection,
 failure to comply with technical specifications for ONLYOFFICE Desktop
-Enterprise published on www.onlyoffice.com.
+Enterprise published on https://www.onlyoffice.com.
 
 10. Audit rights.
 10.1. We shall have the right to conduct audit and inspect your records anytime
@@ -192,7 +194,7 @@ the amount and basis for the claim of underpayment.
 10.4. If, upon any audit and inspection of your data or software pursuant
 hereto, we shall discover any copyright infringement by you, we are entitled at
 our own discretion to either immediately terminate this Agreement pursuant to
-clause 10.3 or demand to immediately rectify this issue in timely manner.
+clause 7.3 or demand to immediately rectify this issue in timely manner.
 10.5. We shall have the right to conduct audit not more frequently than once
 every twelve (12) months.
 10.6. By requesting an audit, we do not waive our rights to enforce this
