@@ -66,6 +66,8 @@ BEGIN
     IDS_JUMP_DOCX  "New document"
     IDS_JUMP_XLSX  "New spreadsheet"
     IDS_JUMP_PPTX  "New presentation"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
@@ -131,6 +133,8 @@ BEGIN
     IDS_JUMP_DOCX  "New document"
     IDS_JUMP_XLSX  "New spreadsheet"
     IDS_JUMP_PPTX  "New presentation"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_ARABIC, SUBLANG_ARABIC_SAUDI_ARABIA
@@ -196,6 +200,8 @@ BEGIN
     IDS_JUMP_DOCX  "مستند جديد"
     IDS_JUMP_XLSX  "جدول بياني جديد"
     IDS_JUMP_PPTX  "عرض تقديمي جديد"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_BULGARIAN, SUBLANG_DEFAULT
@@ -261,6 +267,8 @@ BEGIN
     IDS_JUMP_DOCX  "Нов документ"
     IDS_JUMP_XLSX  "Нова електронна таблица"
     IDS_JUMP_PPTX  "Нова презентация"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_CATALAN, SUBLANG_DEFAULT
@@ -326,6 +334,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nou document"
     IDS_JUMP_XLSX  "Nou full de càlcul"
     IDS_JUMP_PPTX  "Nova presentació"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_CZECH, SUBLANG_DEFAULT
@@ -391,6 +401,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nový dokument"
     IDS_JUMP_XLSX  "Nový sešit"
     IDS_JUMP_PPTX  "Nová prezentace"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_GREEK, SUBLANG_DEFAULT
@@ -456,6 +468,8 @@ BEGIN
     IDS_JUMP_DOCX  "Νέο έγγραφο"
     IDS_JUMP_XLSX  "Νέο λογιστικό φύλλο"
     IDS_JUMP_PPTX  "Νέα παρουσίαση"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_FINNISH, SUBLANG_DEFAULT
@@ -521,6 +535,8 @@ BEGIN
     IDS_JUMP_DOCX  "Uusi asiakirja"
     IDS_JUMP_XLSX  "Uusi laskentataulukko"
     IDS_JUMP_PPTX  "Uusi esitys"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_LAO, SUBLANG_DEFAULT
@@ -586,6 +602,8 @@ BEGIN
     IDS_JUMP_DOCX  "ເອກະສານໃໝ່"
     IDS_JUMP_XLSX  "ຕາຕະລາງໃໝ່"
     IDS_JUMP_PPTX  "ບົດນຳສະເໜີໃໝ່"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
@@ -651,6 +669,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nieuw Document"
     IDS_JUMP_XLSX  "Nieuw werkblad"
     IDS_JUMP_PPTX  "Nieuwe presentatie"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
@@ -716,6 +736,8 @@ BEGIN
     IDS_JUMP_DOCX  "Новый документ"
     IDS_JUMP_XLSX  "Новая таблица"
     IDS_JUMP_PPTX  "Новая презентация"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
@@ -781,6 +803,8 @@ BEGIN
     IDS_JUMP_DOCX  "Neues Dokument"
     IDS_JUMP_XLSX  "Neue Tabelle"
     IDS_JUMP_PPTX  "Neue Präsentation"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
@@ -846,6 +870,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nouveau document"
     IDS_JUMP_XLSX  "Nouvelle feuille de calcul"
     IDS_JUMP_PPTX  "Nouvelle présentation"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SPANISH, SUBLANG_SPANISH
@@ -911,6 +937,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nuevo documento"
     IDS_JUMP_XLSX  "Nueva hoja de cálculo"
     IDS_JUMP_PPTX  "Nueva presentación"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_INDONESIAN, SUBLANG_DEFAULT
@@ -976,6 +1004,8 @@ BEGIN
     IDS_JUMP_DOCX  "Dokumen baru"
     IDS_JUMP_XLSX  "Lembar kerja baru"
     IDS_JUMP_PPTX  "Presentasi baru"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_ITALIAN, SUBLANG_ITALIAN
@@ -1041,6 +1071,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nuovo documento"
     IDS_JUMP_XLSX  "Nuovo foglio elettronico"
     IDS_JUMP_PPTX  "Nuova presentazione"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN
@@ -1106,6 +1138,8 @@ BEGIN
     IDS_JUMP_DOCX  "Novo documento"
     IDS_JUMP_XLSX  "Nova planilha"
     IDS_JUMP_PPTX  "Nova apresentação"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_PORTUGUESE, SUBLANG_PORTUGUESE
@@ -1171,6 +1205,8 @@ BEGIN
     IDS_JUMP_DOCX  "Novo documento"
     IDS_JUMP_XLSX  "Nova folha de cálculo"
     IDS_JUMP_PPTX  "Nova apresentação"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
@@ -1236,6 +1272,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nowy dokument"
     IDS_JUMP_XLSX  "Nowy arkusz kalkulacyjny"
     IDS_JUMP_PPTX  "Nowa prezentacja"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_ROMANIAN, SUBLANG_DEFAULT
@@ -1301,6 +1339,8 @@ BEGIN
     IDS_JUMP_DOCX  "Document nou"
     IDS_JUMP_XLSX  "Foaie de calcul nouă"
     IDS_JUMP_PPTX  "Prezentare nouă"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SLOVAK, SUBLANG_DEFAULT
@@ -1366,6 +1406,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nový dokument"
     IDS_JUMP_XLSX  "Nová tabuľka"
     IDS_JUMP_PPTX  "Nová prezentácia"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SLOVENIAN, SUBLANG_DEFAULT
@@ -1431,6 +1473,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nov dokument"
     IDS_JUMP_XLSX  "Nova razpredelnica"
     IDS_JUMP_PPTX  "Nova predstavitev"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SWEDISH, SUBLANG_DEFAULT
@@ -1496,6 +1540,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nytt dokument"
     IDS_JUMP_XLSX  "Nytt kalkylblad"
     IDS_JUMP_PPTX  "Ny presentation"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_TURKISH, SUBLANG_DEFAULT
@@ -1561,6 +1607,8 @@ BEGIN
     IDS_JUMP_DOCX  "Yeni Belge"
     IDS_JUMP_XLSX  "Yeni Hesap Tablosu"
     IDS_JUMP_PPTX  "Yeni Sunum"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_VIETNAMESE, SUBLANG_DEFAULT
@@ -1626,6 +1674,8 @@ BEGIN
     IDS_JUMP_DOCX  "Tài liệu mới"
     IDS_JUMP_XLSX  "Bảng tính mới"
     IDS_JUMP_PPTX  "Bản trình chiếu mới"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -1691,6 +1741,8 @@ BEGIN
     IDS_JUMP_DOCX  "新建文档"
     IDS_JUMP_XLSX  "新建表格"
     IDS_JUMP_PPTX  "新建幻灯片"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_ARMENIAN, SUBLANG_DEFAULT
@@ -1756,6 +1808,8 @@ BEGIN
     IDS_JUMP_DOCX  "Նոր փաստաթուղթ"
     IDS_JUMP_XLSX  "Նոր աղյուսակաթերթ"
     IDS_JUMP_PPTX  "Նոր ներկայացում"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_DANISH, SUBLANG_DEFAULT
@@ -1821,6 +1875,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nyt dokument"
     IDS_JUMP_XLSX  "Nyt regneark"
     IDS_JUMP_PPTX  "Ny præsentation"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_HUNGARIAN, SUBLANG_DEFAULT
@@ -1886,6 +1942,8 @@ BEGIN
     IDS_JUMP_DOCX  "Új dokumentum"
     IDS_JUMP_XLSX  "Új táblázat"
     IDS_JUMP_PPTX  "Új bemutató"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
@@ -1951,6 +2009,8 @@ BEGIN
     IDS_JUMP_DOCX  "新しいドキュメント"
     IDS_JUMP_XLSX  "新しいスプレッドシート"
     IDS_JUMP_PPTX  "新しいプレゼンテーション"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -2016,6 +2076,8 @@ BEGIN
     IDS_JUMP_DOCX  "신규 문서"
     IDS_JUMP_XLSX  "새로운 스프레드 시트"
     IDS_JUMP_PPTX  "새 프리젠 테이션"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_LATVIAN, SUBLANG_DEFAULT
@@ -2081,6 +2143,8 @@ BEGIN
     IDS_JUMP_DOCX  "Jauns dokuments"
     IDS_JUMP_XLSX  "Jauna tabula"
     IDS_JUMP_PPTX  "Jauna prezentācija"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_NORWEGIAN, SUBLANG_DEFAULT
@@ -2146,6 +2210,8 @@ BEGIN
     IDS_JUMP_DOCX  "Nytt dokument"
     IDS_JUMP_XLSX  "Nytt regneark"
     IDS_JUMP_PPTX  "Ny presentasjon"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_UKRAINIAN, SUBLANG_DEFAULT
@@ -2211,6 +2277,8 @@ BEGIN
     IDS_JUMP_DOCX  "Новий документ"
     IDS_JUMP_XLSX  "Нова таблиця"
     IDS_JUMP_PPTX  "Нова презентація"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_BELARUSIAN, SUBLANG_DEFAULT
@@ -2276,6 +2344,8 @@ BEGIN
     IDS_JUMP_DOCX  "Новы дакумент"
     IDS_JUMP_XLSX  "Новая электронная табліца"
     IDS_JUMP_PPTX  "Новая прэзентацыя"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_GALICIAN, SUBLANG_DEFAULT
@@ -2341,6 +2411,8 @@ BEGIN
     IDS_JUMP_DOCX  "Novo documento"
     IDS_JUMP_XLSX  "Nova folla de cálculo"
     IDS_JUMP_PPTX  "Nova presentación"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SINHALESE, SUBLANG_DEFAULT
@@ -2406,6 +2478,8 @@ BEGIN
     IDS_JUMP_DOCX  "නව ලේඛනය"
     IDS_JUMP_XLSX  "නව පැතුරුම්පත"
     IDS_JUMP_PPTX  "නව සමර්පණය"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_TRADITIONAL
@@ -2471,6 +2545,8 @@ BEGIN
     IDS_JUMP_DOCX  "新文件"
     IDS_JUMP_XLSX  "新試算表"
     IDS_JUMP_PPTX  "新簡報"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SERBIAN, SUBLANG_SERBIAN_LATIN
@@ -2536,6 +2612,8 @@ BEGIN
     IDS_JUMP_DOCX  "Novi dokument"
     IDS_JUMP_XLSX  "Nova proračunska tabela"
     IDS_JUMP_PPTX  "Nova prezentacija"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_SERBIAN, SUBLANG_SERBIAN_CYRILLIC
@@ -2601,6 +2679,8 @@ BEGIN
     IDS_JUMP_DOCX  "Нови документ"
     IDS_JUMP_XLSX  "Нова прорачунска табела"
     IDS_JUMP_PPTX  "Нова презентација"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_HEBREW, SUBLANG_DEFAULT
@@ -2666,6 +2746,8 @@ BEGIN
     IDS_JUMP_DOCX  "מסמך חדש"
     IDS_JUMP_XLSX  "גיליון אלקטרוני חדש"
     IDS_JUMP_PPTX  "מצגת חדשה"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_ALBANIAN, SUBLANG_ALBANIAN_ALBANIA
@@ -2731,6 +2813,8 @@ BEGIN
     IDS_JUMP_DOCX  "Dokument i ri"
     IDS_JUMP_XLSX  "Fletëllogaritëse e re"
     IDS_JUMP_PPTX  "Prezantim i ri"
+
+    IDS_MENU_PDF   "PDF"
 END
 
 LANGUAGE LANG_URDU, SUBLANG_DEFAULT
@@ -2796,6 +2880,8 @@ BEGIN
     IDS_JUMP_DOCX  "نئی دستاویز"
     IDS_JUMP_XLSX  "نئی اسپریڈشیٹ"
     IDS_JUMP_PPTX  "نئی پیشکش"
+
+    IDS_MENU_PDF   "پی ڈی ایف"
 END
 
 LANGUAGE LANG_CROATIAN, SUBLANG_DEFAULT
@@ -2861,4 +2947,6 @@ BEGIN
     IDS_JUMP_DOCX  "Novi dokument"
     IDS_JUMP_XLSX  "Nova proračunska tablica"
     IDS_JUMP_PPTX  "Nova prezentacija"
+
+    IDS_MENU_PDF   "PDF"
 END

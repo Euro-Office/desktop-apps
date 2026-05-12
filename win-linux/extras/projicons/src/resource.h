@@ -100,3 +100,5 @@
 #define IDS_JUMP_DOCX  1200
 #define IDS_JUMP_XLSX  1201
 #define IDS_JUMP_PPTX  1202
+
+#define IDS_MENU_PDF   1303
