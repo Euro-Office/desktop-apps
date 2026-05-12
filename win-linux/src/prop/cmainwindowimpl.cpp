@@ -100,6 +100,9 @@ void CMainWindowImpl::refreshAboutVersion()
                 }
             }
         }
+    } else if (_lic_name == "ONLYOFFICE Desktop Enterprise") {
+        _lic_name = tr("License Agreement");
+        _json_obj["commercial"] = true;
     } else {
         _json_obj["commercial"] = _lic_name != DEFAULT_LICENSE_NAME;
     }

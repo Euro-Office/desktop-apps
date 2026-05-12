@@ -691,6 +691,11 @@
         <source>Licensed under</source>
         <translation>Licencirano pod</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Licenčna pogodba</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

@@ -691,6 +691,11 @@
         <source>Licensed under</source>
         <translation>Được cấp phép theo</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Thỏa thuận cấp phép</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>
