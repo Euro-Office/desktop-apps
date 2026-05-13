@@ -724,5 +724,5 @@ applicable to the Program.  The full license text is available at:
 <https://creativecommons.org/licenses/by-sa/4.0/legalcode>
 
   You can contact Ascensio System SIA by electronic mail at:
-info@onlyoffice.com and by postal mail at: 20A-6 Ernesta Birznieka-Upīša
+info@onlyoffice.com and by postal mail at: 20A-6 Ernesta Birznieka-Upisha
 Street, Riga, LV-1050, Latvia, European Union.
