@@ -379,20 +379,29 @@ public:
                 }
 
                 bool duplex_supported = ppdFindOption(ppdF, "Duplex");
+                bool color_supported = true;
+
+                const char *printerType = cupsGetOption("printer-type", dest->num_options, dest->options);
+                if (printerType) {
+                    unsigned long type = strtoul(printerType, nullptr, 10);
+                    // Some monochrome printers incorrectly report CUPS_PRINTER_COLOR,
+                    // so ColorModel options are checked as a fallback.
+                    color_supported = (type & CUPS_PRINTER_COLOR) != 0;
+                }
 
                 printerObject["driver"] = driverName;
                 printerObject["name"] = QString::fromUtf8(dest->name);
                 printerObject["duplex_supported"] = duplex_supported;
-                printerObject["color_supported"] = false;
+                printerObject["color_supported"] = color_supported;
 
                 ppd_option_t *option = ppdFirstOption(ppdF);
                 while (option) {
                     if (strcmp(option->keyword, "ColorModel") == 0) {
-                        for (int j = 0; j < option->num_choices; j++) {
-                            if (strcmp(option->choices[j].choice, "Gray") != 0) {
-                                printerObject["color_supported"] = true;
-                                break;
-                            }
+                        // Fallback check for color support.
+                        if (color_supported && option->num_choices == 1
+                                && strcmp(option->choices[0].choice, "Gray") == 0) {
+                            color_supported = false;
+                            printerObject["color_supported"] = color_supported;
                         }
                     } else
                     if (strcmp(option->keyword, "PageSize") == 0) {
