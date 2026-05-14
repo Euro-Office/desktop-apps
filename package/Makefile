@@ -209,12 +209,10 @@ deb/build/debian/% : deb/template/%
 CC_LICENSE_FILE = $(wildcard $(BRANDING_DIR)/common/license/$(PACKAGE_EDITION)/LICENSE-CC.txt)
 deb/build/debian/copyright : deb/template/copyright.m4
 	mkdir -pv $(@D) && m4 $(M4_DEB_PARAMS) $< > $@
-ifeq ($(PACKAGE_EDITION), opensource)
 	awk -v MAIN_LICENSE="$(BRANDING_DIR)/common/license/$(PACKAGE_EDITION)/LICENSE.txt" -v CC_LICENSE="$(CC_LICENSE_FILE)" '\
 		/^License: CC-BY-SA-4.0$$/ { print; while ((getline l < CC_LICENSE)   > 0) print (l == "" ? " ." : " " l); next }\
 		/^License:/                { print; while ((getline l < MAIN_LICENSE) > 0) print (l == "" ? " ." : " " l); next }\
 		                           { print }' $@ > $@.tmp && mv $@.tmp $@
-endif
 
 deb/build/debian/% : deb/template/%.m4
 	mkdir -pv $(@D) && m4 $(M4_DEB_PARAMS) $< > $@
