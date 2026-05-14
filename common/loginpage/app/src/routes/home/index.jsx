@@ -14,7 +14,7 @@ import {
   clearRecovers,
 } from "@/sdk";
 import { DocTypeGrid } from "./components/DocTypeGrid.jsx";
-import RecentList from "./components/recent-list.jsx";
+import { RecentList } from "./components/RecentList.jsx";
 import { FileDropZone } from "./components/FileDropZone.jsx";
 import "@/styles/components/home.css";
 
@@ -117,7 +117,6 @@ export default function Index() {
 
       <div id="box-container">
         <RecentList
-          t={t}
           recents={recentRows()}
           recovers={recoverRows()}
           onTogglePin={togglePin}

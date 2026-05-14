@@ -136,7 +136,7 @@ l10n.en = {
     tplUseTemplate : 'Use this template',
     tplFileSize: "File size",
     tplFileType: "File type",
-    colFileName: "File name",
+    colFileName: "Name",
     colLocation: 'Location',
     colLastOpened: 'Last opened',
     // labelDropFile: 'Drag your files here or',

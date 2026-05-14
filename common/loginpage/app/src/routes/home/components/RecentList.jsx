@@ -20,21 +20,13 @@ function buildItems(model, isRecovery, onTogglePin, onRemove, onClear) {
   });
 
   if (!isRecovery) {
-    if (model.pinned) {
-      items.push({
-        key: "unpin",
-        label: t("menuFileUnpin"),
-        onSelect: () => onTogglePin(model.fileid),
-      });
-    } else {
-      items.push({
-        key: "pin",
-        label: t("menuFilePin"),
-        onSelect: () => onTogglePin(model.fileid),
-      });
-    }
+    items.push({
+      key: model.pinned ? "unpin" : "pin",
+      label: t(model.pinned ? "menuFileUnpin" : "menuFilePin"),
+      onSelect: () => onTogglePin(model.fileid),
+    });
 
-    const showExplore = !(!model.cloud && !model.descr) && model.exist;
+    const showExplore = (model.cloud || model.descr) && model.exist;
     if (showExplore) {
       items.push({
         key: "explore",
@@ -179,8 +171,7 @@ function RecentRow(props) {
   );
 }
 
-export default function RecentList(props) {
-  const t = props.t;
+export function RecentList(props) {
   const recents = () => props.recents || [];
   const recovers = () => props.recovers || [];
 
@@ -217,9 +208,6 @@ export default function RecentList(props) {
 
       <Show when={hasRecents()}>
         <div id="box-recent">
-          <div class="file-list-title">
-            <h3>{t("listRecentFileTitle")}</h3>
-          </div>
           <div class="file-list-head text-normal">
             <div class="col-name">{t("colFileName")}</div>
             <div class="col-location">{t("colLocation")}</div>
