@@ -152,6 +152,11 @@ static const int kMaxRows      = 6;
     BOOL isComplete = [download[@"complete"] boolValue];
     BOOL isCanceled = [download[@"canceled"] boolValue];
 
+    if (isCanceled) {
+        cell.infoTextField.stringValue = NSLocalizedString(@"Canceled", nil);
+        [self configureButton:cell.cancelButton asIconNamed:@"icon-warning_normal"];
+        
+    } else
     if (isComplete) {
         cell.progress.hidden       = YES;
         cell.sizeLabel.hidden      = NO;
@@ -159,11 +164,6 @@ static const int kMaxRows      = 6;
         cell.filePath              = download[@"filePath"];
         cell.infoTextField.stringValue = [download[@"filePath"] stringByDeletingLastPathComponent] ?: @"";
         [self configureButton:cell.cancelButton asIconNamed:@"icon-confirm_normal"];
-
-    } else if (isCanceled) {
-        cell.progress.hidden   = YES;
-        cell.infoTextField.stringValue = NSLocalizedString(@"Canceled", nil);
-        [self configureButton:cell.cancelButton asIconNamed:@"icon-warning_normal"];
 
     } else {
         cell.progress.doubleValue = [download[@"percent"] doubleValue];

@@ -797,13 +797,10 @@
         
         NSEditorApi::CAscDownloadFileInfo * pDownloadFileInfo = (NSEditorApi::CAscDownloadFileInfo *)[eventData pointerValue];
         
-        // BUG: get_Id() returns the same value for all downloads
-        // NSString * idx = [NSString stringWithFormat:@"%d", pDownloadFileInfo->get_Id()];
+        NSString * idx = [NSString stringWithFormat:@"%u", pDownloadFileInfo->get_IdDownload()];
         NSString * path = [NSString stringWithstdwstring:pDownloadFileInfo->get_FilePath()];
         
         if (path && [path length] > 0) {
-            // TEMP: synthetic ID from hash
-            NSString *idx = [NSString stringWithFormat:@"%lu", (unsigned long)[path hash]];
             id download = [[ASCDownloadController sharedInstance] downloadWithId:idx];
             
             if (nil == download) {
