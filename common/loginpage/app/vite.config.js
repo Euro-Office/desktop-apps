@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
+import { viteSingleFile } from "vite-plugin-singlefile";
 
 const _dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -28,29 +29,19 @@ function injectSprites() {
 
 export default defineConfig({
   base: "./",
-  plugins: [injectSprites(), solid()],
+  plugins: [injectSprites(), solid(), viteSingleFile({ removeViteModuleLoader: true })],
   css: {
     transformer: "lightningcss",
   },
   build: {
     outDir: "../build/dist-solid",
     target: "es2022",
-    modulePreload: false,
     cssMinify: "lightningcss",
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true,
-      },
-    },
+    assetsInlineLimit: 100_000_000,
   },
   resolve: {
     alias: {
       "@": "/src",
-    },
-  },
-  server: {
-    fs: {
-      allow: [".."],
     },
   },
 });

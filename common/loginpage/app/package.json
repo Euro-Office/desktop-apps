@@ -9,17 +9,18 @@
     "lint:fix": "oxlint --fix"
   },
   "dependencies": {
-    "@kobalte/core": "^0.13.0",
-    "@solid-primitives/storage": "^4.0.0",
-    "@solidjs/router": "^0.15.0",
+    "@kobalte/core": "^0.13.11",
+    "@solid-primitives/storage": "^4.3.4",
+    "@solidjs/router": "^0.16.1",
     "clsx": "^2.1.1",
-    "solid-js": "^1.9.0"
+    "solid-js": "^1.9.12"
   },
   "devDependencies": {
-    "lightningcss": "^1.28.0",
-    "oxfmt": "latest",
-    "oxlint": "latest",
-    "vite": "^6.0.0",
-    "vite-plugin-solid": "^2.11.0"
+    "lightningcss": "^1.32.0",
+    "oxfmt": "^0.48.0",
+    "oxlint": "^1.63.0",
+    "vite": "^8.0.11",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vite-plugin-solid": "^2.11.12"
   }
 }
