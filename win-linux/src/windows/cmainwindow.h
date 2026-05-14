@@ -153,6 +153,7 @@ public slots:
     void onDocumentPrint(void *);
     void onReporterMode(int, bool);
     void onErrorPage(int, const std::wstring&);
+    void onAddUserTemplates();
     virtual void onDocumentReady(int);
 
 private:

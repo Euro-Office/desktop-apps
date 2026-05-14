@@ -1525,6 +1525,39 @@ void CMainWindow::onErrorPage(int id, const std::wstring& action)
     }
 }
 
+void CMainWindow::onAddUserTemplates()
+{
+    const QString templatesDir = QString::fromStdWString(AscAppManager::getInstance().m_oSettings.user_templates_path);
+
+    CFileDialogWrapper dlg(this);
+    const QStringList selectedFiles = dlg.modalOpenTemplates(Utils::lastPath(LOCAL_PATH_OPEN));
+
+    if (selectedFiles.isEmpty())
+        return;
+
+    Utils::makepath(templatesDir);
+    bool templatesUpdated = false;
+
+    for (const QString &srcFilePath : selectedFiles) {
+        QFileInfo fi(srcFilePath);
+        const QString dstFilePath = templatesDir + "/" + fi.fileName();
+
+        if (QFile::exists(dstFilePath)) {
+            int res = CMessage::showMessage(this, tr("%1 already exists.<br>Do you want to replace it?").arg(fi.fileName().toHtmlEscaped()),
+                                            MsgType::MSG_WARN, MsgBtns::mbYesDefNo);
+            if (res != MODAL_RESULT_YES)
+                continue;
+        }
+
+        QFile::copy(srcFilePath, dstFilePath);
+        if (!templatesUpdated)
+            templatesUpdated = true;
+    }
+
+    if (templatesUpdated)
+        AscAppManager::getInstance().UpdateTemplates();
+}
+
 void CMainWindow::updateScalingFactor(double dpiratio)
 {
     CScalingWrapper::updateScalingFactor(dpiratio);

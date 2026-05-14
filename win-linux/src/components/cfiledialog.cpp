@@ -357,6 +357,14 @@ QStringList CFileDialogWrapper::modalOpenPlugins(const QString& path)
     return modalOpen(path, _filter, &_plugins_filter, true);
 }
 
+QStringList CFileDialogWrapper::modalOpenTemplates(const QString& path)
+{
+    QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN];
+    filter.prepend(tr("Templates") + " (*.dotx *.xltx *.potx *.pdf);;");
+
+    return modalOpen(path, filter, &filter, true);
+}
+
 QStringList CFileDialogWrapper::modalOpenDocuments(const QString& path, bool multi)
 {
     QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN];
