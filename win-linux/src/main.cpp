@@ -81,38 +81,6 @@ int main( int argc, char *argv[] )
     QCoreApplication::setApplicationName(QString::fromUtf8(WINDOW_NAME));
     QApplication::setApplicationDisplayName(QString::fromUtf8(WINDOW_NAME));
 
-    QString user_data_path = Utils::getUserPath() + APP_DATA_PATH;
-    auto setup_paths = [&user_data_path](CAscApplicationManager * manager) {
-#ifdef _WIN32
-        QString common_data_path = Utils::getAppCommonPath();
-        if ( !common_data_path.isEmpty() ) {
-            manager->m_oSettings.SetUserDataPath(common_data_path.toStdWString());
-            manager->m_oSettings.user_templates_path = (common_data_path + "/templates").toStdWString();
-
-            Utils::makepath(user_data_path.append("/data"));
-            manager->m_oSettings.cookie_path = (user_data_path + "/cookie").toStdWString();
-            manager->m_oSettings.recover_path = (user_data_path + "/recover").toStdWString();
-            manager->m_oSettings.fonts_cache_info_path = (user_data_path + "/fonts").toStdWString();
-
-            Utils::makepath(QString().fromStdWString(manager->m_oSettings.fonts_cache_info_path));
-        } else
-#else
-#endif
-        {
-            manager->m_oSettings.SetUserDataPath(user_data_path.toStdWString());
-        }
-        std::wstring app_path = NSFile::GetProcessDirectory();
-        manager->m_oSettings.spell_dictionaries_path    = app_path + L"/dictionaries";
-        manager->m_oSettings.file_converter_path        = app_path + L"/converter";
-        manager->m_oSettings.recover_path               = (user_data_path + "/recover").toStdWString();
-        manager->m_oSettings.user_plugins_path          = (user_data_path + "/sdkjs-plugins").toStdWString();
-        manager->m_oSettings.local_editors_path         = app_path + L"/editors/web-apps/apps/api/documents/index.html";
-        manager->m_oSettings.system_templates_path      = app_path  + L"/converter/templates";
-        manager->m_oSettings.additional_fonts_folder.push_back(app_path + L"/fonts");
-        manager->m_oSettings.country = Utils::systemLocationCode().toStdString();
-        manager->m_oSettings.connection_error_path      = app_path + L"/editors/webext/noconnect.html";
-    };
-
     if ( InputArgs::contains(L"--version") ) {
         qWarning() << VER_PRODUCTNAME_STR << "ver." << VER_FILEVERSION_STR;
         return 0;
@@ -171,8 +139,27 @@ int main( int argc, char *argv[] )
 #endif
     CApplicationCEF::Prepare(argc, argv);
     CApplicationCEF* application_cef = new CApplicationCEF();
-    setup_paths(&AscAppManager::getInstance());
-    application_cef->Init_CEF(&AscAppManager::getInstance(), argc, argv);
+    CAscApplicationManager &manager = AscAppManager::getInstance();
+
+    /* setup paths */
+    QString common_data_path = Utils::getAppCommonPath();
+    manager.m_oSettings.SetUserDataPath(common_data_path.toStdWString());
+    manager.m_oSettings.user_templates_path = (common_data_path + "/templates").toStdWString();
+#ifdef _WIN32
+    Utils::makepath(common_data_path + "/data");
+    Utils::makepath(QString::fromStdWString(manager.m_oSettings.fonts_cache_info_path));
+#endif
+
+    const std::wstring app_path = NSFile::GetProcessDirectory();
+    manager.m_oSettings.spell_dictionaries_path    = app_path + L"/dictionaries";
+    manager.m_oSettings.file_converter_path        = app_path + L"/converter";
+    manager.m_oSettings.local_editors_path         = app_path + L"/editors/web-apps/apps/api/documents/index.html";
+    manager.m_oSettings.system_templates_path      = app_path  + L"/converter/templates";
+    manager.m_oSettings.additional_fonts_folder.push_back(app_path + L"/fonts");
+    manager.m_oSettings.country = Utils::systemLocationCode().toStdString();
+    manager.m_oSettings.connection_error_path      = app_path + L"/editors/webext/noconnect.html";
+
+    application_cef->Init_CEF(&manager, argc, argv);
     /* ********************** */
 
 //    GET_REGISTRY_SYSTEM(reg_system)
@@ -186,16 +173,16 @@ int main( int argc, char *argv[] )
     CLangater::init();
     AscAppManager::initializeApp();
     AscAppManager::startApp();
-    AscAppManager::getInstance().StartSpellChecker();
-    AscAppManager::getInstance().StartKeyboardChecker();
-    AscAppManager::getInstance().CheckFonts();
+    manager.StartSpellChecker();
+    manager.StartKeyboardChecker();
+    manager.CheckFonts();
 
     bool bIsOwnMessageLoop = false;
     int exit_code = application_cef->RunMessageLoop(bIsOwnMessageLoop);
     if (!bIsOwnMessageLoop)
         exit_code = app.exec();
 
-    AscAppManager::getInstance().CloseApplication();
+    manager.CloseApplication();
     delete application_cef;
     return exit_code;
 }
