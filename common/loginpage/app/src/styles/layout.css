@@ -65,8 +65,13 @@ h4 {
   height: 100%;
   overflow-x: auto;
   overflow-y: auto;
-  background: var(--background-action-panel);
   color: var(--text-normal);
+  padding: 8px;
+
+  > * {
+    border-radius: 8px;
+    background: var(--background-action-panel);
+  }
 }
 
 .col-ai {

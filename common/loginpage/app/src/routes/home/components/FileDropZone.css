@@ -1,0 +1,32 @@
+.file-drop-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 56px;
+  border-radius: 12px;
+  border: 1px dashed var(--background-accent-button);
+
+  .content {
+    text-align: center;
+
+    h3 {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      margin: 0;
+      color: var(--text-normal);
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 20px;
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    button {
+      margin-top: 12px;
+    }
+  }
+}

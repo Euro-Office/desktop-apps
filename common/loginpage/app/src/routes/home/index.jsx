@@ -15,7 +15,7 @@ import {
 } from "@/sdk";
 import { DocTypeGrid } from "./components/DocTypeGrid.jsx";
 import RecentList from "./components/recent-list.jsx";
-import DnDZone from "./components/dnd-zone.jsx";
+import { FileDropZone } from "./components/FileDropZone.jsx";
 import "@/styles/components/home.css";
 
 const toArray = (v) => (Array.isArray(v) ? v : []);
@@ -112,8 +112,8 @@ export default function Index() {
       </section>
 
       <Show when={!hasFiles()}>
-        <section id="area-dnd-file">
-          <DnDZone />
+        <section id="area-file-drop">
+          <FileDropZone />
         </section>
       </Show>
 

@@ -1,7 +1,7 @@
 import { t } from "@/services/l10n.js";
 import { openLocal, dropOfficeFiles } from "@/sdk";
 
-export default function DnDZone() {
+export function FileDropZone() {
   function handleDrop(e) {
     dropOfficeFiles();
     e.preventDefault();
@@ -15,11 +15,14 @@ export default function DnDZone() {
   }
 
   return (
-    <div class="dnd-zone" onDrop={handleDrop} onDragOver={handleDragOver}>
+    <div class="file-drop-zone" onDrop={handleDrop} onDragOver={handleDragOver}>
       <div class="content">
-        <p class="text-normal">{t("labelDropFile")}</p>
-        <button class="btn btn--primary" onClick={() => openLocal()}>
-          {t("labelSelectFile")}
+        <div>
+          <h3>{t("dropZoneTitle")}</h3>
+          <p class="text-normal">{t("dropZoneText")}</p>
+        </div>
+        <button class="btn btn-accent" onClick={() => openLocal()}>
+          {t("actOpenLocal")}
         </button>
       </div>
     </div>
