@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "node scripts/dev.mjs",
     "build": "vite build",
     "fmt": "oxfmt",
     "lint": "oxlint",

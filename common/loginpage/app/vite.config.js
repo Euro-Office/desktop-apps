@@ -29,6 +29,9 @@ function injectSprites() {
 
 export default defineConfig({
   base: "./",
+  server: {
+    cors: { origin: "*" },
+  },
   plugins: [injectSprites(), solid(), viteSingleFile({ removeViteModuleLoader: true })],
   css: {
     transformer: "lightningcss",
