@@ -27,9 +27,5 @@ const routes = [
 ];
 
 export default function App() {
-  return (
-    <HashRouter root={Shell}>
-      {routes}
-    </HashRouter>
-  );
+  return <HashRouter root={Shell}>{routes}</HashRouter>;
 }

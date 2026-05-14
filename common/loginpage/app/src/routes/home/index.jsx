@@ -116,13 +116,7 @@ export default function Index() {
       </Show>
 
       <div id="box-container">
-        <RecentList
-          recents={recentRows()}
-          recovers={recoverRows()}
-          onTogglePin={togglePin}
-          onRemove={removeFile}
-          onClearAll={clearAll}
-        />
+        <RecentList recents={recentRows()} recovers={recoverRows()} onTogglePin={togglePin} onRemove={removeFile} onClearAll={clearAll} />
       </div>
     </div>
   );
