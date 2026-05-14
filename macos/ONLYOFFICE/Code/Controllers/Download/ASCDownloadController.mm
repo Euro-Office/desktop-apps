@@ -132,7 +132,7 @@ static NSString * const kASCDownloadControllerMulticastDelegateKey = @"ASCDownlo
         }
         
         if (appManager && !isFinished) {
-            appManager->CancelDownload([download[@"idx"] intValue]);
+            appManager->CancelDownload([download[@"idx"] unsignedIntValue]);
         }
         
         [_downloads removeObject:download];
@@ -171,7 +171,7 @@ static NSString * const kASCDownloadControllerMulticastDelegateKey = @"ASCDownlo
 - (void)cancelDownload:(NSString *)idx {
     CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
     if (appManager) {
-        appManager->CancelDownload([idx intValue]);
+        appManager->CancelDownload((unsigned int)[idx integerValue]);
     }
 }
 
