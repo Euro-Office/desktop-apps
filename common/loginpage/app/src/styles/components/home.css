@@ -4,39 +4,33 @@
   max-width: 1680px;
   margin-inline: auto;
   padding: 32px;
+  padding-top: 0;
   background: var(--background-action-panel);
   height: 100%;
   overflow-y: auto;
   color: var(--text-normal);
 }
 
-#area-document-creation-grid {
-  padding: 12px 16px 0;
-  min-height: 204px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  margin-bottom: 40px;
+.cnt-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  padding-right: 24px;
+  padding-left: 48px;
+
+  > h1 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    width: 727px;
+    margin: 0;
+  }
 }
 
-#area-welcome {
-  margin: 40px auto;
-  text-align: center;
-  max-width: 744px;
-
-  h2 {
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 16px;
-  }
-
-  .link {
-    color: var(--text-link);
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+.new-doc-section {
+  overflow-x: auto;
+  margin-bottom: 48px;
 }
 
 #box-container {
@@ -238,18 +232,17 @@
   }
 }
 
-.document-creation-grid {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-
-  @media (min-width: 1280px) {
-    padding-inline: 104px 112px;
-    justify-content: center;
-  }
+.doc-type-grid {
+  display: grid;
+  place-items: center;
+  grid-auto-flow: column;
+  gap: 8px;
+  min-width: 0;
+  width: fit-content;
+  margin: 0 auto;
 }
 
-.document-creation-item {
+.doc-type-item {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -261,9 +254,9 @@
   position: relative;
   width: 172px;
   height: 172px;
-  padding: 24px 16px 16px;
+  padding: 24px 32px 16px;
 
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--background-normal-element);
 
   &:hover {
@@ -276,26 +269,29 @@
 
   .format-label {
     position: absolute;
-    top: 14px;
-    left: 10px;
+    top: 12px;
+    left: 15px;
     display: flex;
-    height: 28px;
     align-items: center;
-    padding: 0px 6px;
+    padding: 5px 6px;
     border-radius: 6px;
     background: conic-gradient(from 225deg at 50% 50%, var(--format-bg-start) 0deg, var(--format-bg-end) 360deg);
+    z-index: 1;
 
     span {
       color: var(--text-contrast-background);
       font-size: 16px;
       font-weight: 700;
       transform: translateY(calc(1px / 2));
+      line-height: 1;
     }
   }
 
   .icon {
     width: 108px;
     height: 100px;
+    /* fixme: variable */
+    filter: drop-shadow(0px 1px 2px #0000004D);
   }
 
   .title {

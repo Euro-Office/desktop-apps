@@ -14,7 +14,7 @@ import {
   clearRecents,
   clearRecovers,
 } from "@/sdk";
-import CreateGrid from "./components/create-grid.jsx";
+import DocTypeGrid from "./components/doc-type-grid.jsx";
 import RecentList from "./components/recent-list.jsx";
 import DnDZone from "./components/dnd-zone.jsx";
 import "@/styles/components/home.css";
@@ -108,8 +108,13 @@ export default function Index() {
 
   return (
     <div class="recent-panel-container">
-      <section id="area-document-creation-grid">
-        <CreateGrid t={t} />
+      <div class='cnt-title'>
+        {/* FIXME: i18n */}
+        <h1>Create new</h1>
+      </div>
+
+      <section class="new-doc-section">
+        <DocTypeGrid t={t} />
       </section>
 
       <Show when={!welcomeDismissed()}>

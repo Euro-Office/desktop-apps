@@ -28,14 +28,14 @@ const DOC_TYPES = [
   },
 ];
 
-export default function CreateGrid(props) {
+export default function DocTypeGrid(props) {
   const onSelect = props.onDocumentSelect || ((id) => createDocument(id));
 
   return (
-    <div class="document-creation-grid">
+    <div class="doc-type-grid">
       <For each={DOC_TYPES}>
         {(item) => (
-          <div class="document-creation-item" onClick={() => onSelect(item.id)}>
+          <div class="doc-type-item" onClick={() => onSelect(item.id)}>
             <div
               class="format-label"
               style={{

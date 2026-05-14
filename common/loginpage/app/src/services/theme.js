@@ -1,16 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import { makePersisted } from "@solid-primitives/storage";
-import { onNativeMessage } from "../sdk";
-
-function parseQueryParams() {
-  const q = window.location.search.substring(1);
-  const params = {};
-  q.split("&").forEach((pair) => {
-    const [k, v] = pair.split("=");
-    if (k) params[decodeURIComponent(k)] = decodeURIComponent((v || "").replace(/\+/g, " "));
-  });
-  return params;
-}
+import { onNativeMessage } from "@/sdk";
+import { parseQueryParams } from "@/utils/url";
 
 function resolveTheme(raw) {
   let name = raw;
