@@ -28,7 +28,7 @@ const DOC_TYPES = [
   },
 ];
 
-export default function DocTypeGrid(props) {
+export function DocTypeGrid(props) {
   const onSelect = props.onDocumentSelect || ((id) => createDocument(id));
 
   return (

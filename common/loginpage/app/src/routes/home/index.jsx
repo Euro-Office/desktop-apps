@@ -13,7 +13,7 @@ import {
   clearRecents,
   clearRecovers,
 } from "@/sdk";
-import DocTypeGrid from "./components/doc-type-grid.jsx";
+import { DocTypeGrid } from "./components/DocTypeGrid.jsx";
 import RecentList from "./components/recent-list.jsx";
 import DnDZone from "./components/dnd-zone.jsx";
 import "@/styles/components/home.css";
@@ -102,7 +102,7 @@ export default function Index() {
 
   return (
     <div class="recent-panel-container">
-      <div class='cnt-title'>
+      <div class="cnt-title">
         {/* FIXME: i18n */}
         <h1>Create new</h1>
       </div>
