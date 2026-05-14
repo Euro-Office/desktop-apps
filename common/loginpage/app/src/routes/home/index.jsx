@@ -1,6 +1,5 @@
-import { createMemo, createSignal, Show, onCleanup, onMount } from "solid-js";
+import { createMemo, Show, onCleanup, onMount } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
-import { makePersisted } from "@solid-primitives/storage";
 import { t } from "@/services/l10n.js";
 import {
   listRecents,
@@ -27,7 +26,6 @@ function sortByPin(arr) {
 }
 
 export default function Index() {
-  const [welcomeDismissed, setWelcomeDismissed] = makePersisted(createSignal(false), { name: "welcome" });
   const [recents, setRecents] = createStore([]);
   const [recovers, setRecovers] = createStore([]);
   const recentRows = createMemo(() => recents);
@@ -86,8 +84,6 @@ export default function Index() {
   }
 
   onMount(() => {
-    setWelcomeDismissed(true);
-
     listRecents()
       .then(loadRecents)
       .catch(() => {});
@@ -104,8 +100,6 @@ export default function Index() {
     });
   });
 
-  const [helpBefore, helpAfter = ""] = t("welNeedHelp").split("$1");
-
   return (
     <div class="recent-panel-container">
       <div class='cnt-title'>
@@ -116,20 +110,6 @@ export default function Index() {
       <section class="new-doc-section">
         <DocTypeGrid t={t} />
       </section>
-
-      <Show when={!welcomeDismissed()}>
-        <div id="area-welcome">
-          <h2>{t("welWelcome")}</h2>
-          <p class="text-normal">{t("welDescr")}</p>
-          <p class="text-normal">
-            {helpBefore}
-            <a class="link" href="https://helpcenter.onlyoffice.com/" target="popup">
-              {t("textHelpCenter")}
-            </a>
-            {helpAfter}
-          </p>
-        </div>
-      </Show>
 
       <Show when={!hasFiles()}>
         <section id="area-dnd-file">
