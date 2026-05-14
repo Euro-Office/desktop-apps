@@ -112,9 +112,7 @@ export default function Index() {
       </section>
 
       <Show when={!hasFiles()}>
-        <section id="area-file-drop">
-          <FileDropZone />
-        </section>
+        <FileDropZone />
       </Show>
 
       <div id="box-container">

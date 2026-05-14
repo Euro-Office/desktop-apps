@@ -55,7 +55,7 @@ l10n.en = {
     newForm: 'PDF',
     actCreateNew: 'Create new',
     actRecentFiles: 'Recent files',
-    // actOpenLocal: 'Open local file',
+    actOpenLocal: 'Open local file',
     actConnectTo: 'Connect to cloud',
     actActivate: 'Activate',
     actAbout: 'About',
@@ -144,5 +144,5 @@ l10n.en = {
     settUseAI: 'Use AI functions',
     dropZoneTitle: 'No files yet',
     dropZoneText: 'Drag & drop files here or open one',
-    actOpenLocal: 'Open file'
+    dropZoneOpenAction: 'Open file'
 }

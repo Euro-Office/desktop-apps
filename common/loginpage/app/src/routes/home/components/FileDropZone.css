@@ -6,6 +6,7 @@
   padding: 56px;
   border-radius: 12px;
   border: 1px dashed var(--background-accent-button);
+  margin-block: 32px;
 
   .content {
     text-align: center;

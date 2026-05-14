@@ -22,7 +22,7 @@ export function FileDropZone() {
           <p class="text-normal">{t("dropZoneText")}</p>
         </div>
         <button class="btn btn-accent" onClick={() => openLocal()}>
-          {t("actOpenLocal")}
+          {t("dropZoneOpenAction")}
         </button>
       </div>
     </div>
