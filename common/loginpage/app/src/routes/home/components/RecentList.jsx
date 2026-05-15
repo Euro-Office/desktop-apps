@@ -106,13 +106,13 @@ function RecentRow(props) {
           {model.descr}
         </div>
         <Show when={model.type !== "folder"}>
-          <div class="col-date">
-            <p>{model.date}</p>
+          <div class="col-date" title={model.date}>
+            <p>{model.dateLabel}</p>
           </div>
         </Show>
-        <div class="col-pin">
+        <div class='col-actions'>
           <button
-            class="btn-quick"
+            class='pin'
             onClick={(e) => {
               e.stopPropagation();
               props.onTogglePin(model.fileid);
@@ -122,34 +122,32 @@ function RecentRow(props) {
               <use href="#pin" />
             </svg>
           </button>
+          <Show when={model.type !== "folder"}>
+              <DropdownMenu>
+                <DropdownMenu.Trigger as="button" class="more" onClick={(e) => e.stopPropagation()}>
+                  <svg class="icon">
+                    <use href="#more" />
+                  </svg>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content
+                    class="file-context-menu"
+                    onMouseDown={() => {
+                      suppressRowClick = true;
+                    }}
+                  >
+                    <FileMenuContent
+                      model={model}
+                      isRecovery={props.isRecovery}
+                      onTogglePin={props.onTogglePin}
+                      onRemove={props.onRemove}
+                      onClear={props.onClear}
+                    />
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu>
+          </Show>
         </div>
-        <Show when={model.type !== "folder"}>
-          <div class="col-more">
-            <DropdownMenu>
-              <DropdownMenu.Trigger as="button" class="btn-quick more" onClick={(e) => e.stopPropagation()}>
-                <svg class="icon">
-                  <use href="#more" />
-                </svg>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Portal>
-                <DropdownMenu.Content
-                  class="file-context-menu"
-                  onMouseDown={() => {
-                    suppressRowClick = true;
-                  }}
-                >
-                  <FileMenuContent
-                    model={model}
-                    isRecovery={props.isRecovery}
-                    onTogglePin={props.onTogglePin}
-                    onRemove={props.onRemove}
-                    onClear={props.onClear}
-                  />
-                </DropdownMenu.Content>
-              </DropdownMenu.Portal>
-            </DropdownMenu>
-          </div>
-        </Show>
       </ContextMenu.Trigger>
       <ContextMenu.Portal>
         <ContextMenu.Content

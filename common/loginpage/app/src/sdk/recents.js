@@ -1,5 +1,6 @@
 import { cmd } from "./bridge";
 import { parseFileFormat } from "./format";
+import {formatDate} from "@/utils/formatDate.js";
 
 const sdk = window.AscDesktopEditor;
 
@@ -104,6 +105,7 @@ export function parseRecent(arr) {
       descr: dir,
       path: decodeHtml(p),
       date: f.modifyed || "",
+      dateLabel: formatDate(f.modifyed),
       cloud: f.cloud || "",
       pinned: !!f.pin,
       crypted: !!f.crypted,

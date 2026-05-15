@@ -4,14 +4,7 @@
   flex-direction: column;
 }
 
-#box-recent {
-  padding-bottom: 32px;
-
-  &.empty {
-    display: none;
-  }
-}
-
+/* fixme: ask for actual status */
 #box-recovery {
   .file-list-body,
   .file-list-head {
@@ -27,36 +20,19 @@
   }
 }
 
-.file-list-title {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--background-action-panel);
-  padding: 4px 56px 26px 16px;
-  margin-top: -4px;
-  text-align: left;
-
-  h3 {
-    margin: 0;
-    font-size: 20px;
-    line-height: 28px;
-    font-weight: 700;
-  }
-}
-
 .file-list-head,
 .file-list-body .row {
   display: grid;
   gap: 8px;
-  grid-template-columns: minmax(250px, 65fr) minmax(200px, 35fr) 130px;
+  grid-template-columns: minmax(320px, 1fr) 320px 130px;
   align-items: center;
   padding-left: 16px;
-  padding-right: 88px;
+  padding-right: 120px;
 }
 
 .file-list-head {
   position: sticky;
-  top: 54px;
+  top: 0;
   z-index: 1;
   background: var(--background-action-panel);
   padding-bottom: 4px;
@@ -71,16 +47,22 @@
   .row {
     position: relative;
     border-radius: var(--border-radius-list-files-item);
-    padding-block: 8px;
+    padding: 8px 120px 8px 16px;
     cursor: pointer;
+
+    &:nth-child(even) {
+      background: var(--background-normal-element-light);
+    }
 
     &:hover {
       background: var(--highlight-button-hover);
     }
 
-    &.pinned {
-      background: var(--highlight-scroll-track-hover);
-    }
+    /*&.pinned {*/
+    /*  background: var(--highlight-scroll-track-hover);*/
+    /*}*/
+
+    /* fixme: ask for actual status */
 
     &.lost {
       opacity: 0.4;
@@ -88,37 +70,37 @@
   }
 }
 
-.col-pin,
-.col-more {
+.col-actions {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 16px;
+  display: flex;
+  gap: 4px;
 
-  .btn-quick {
+  button {
     width: 24px;
     height: 24px;
-    padding: 4px;
-    background: transparent;
-    border: none;
+    padding: 0;
+    /* background/fill-input/input */
+    background: var(--background-action-panel);
+    border: 1px solid var(--border-divider);
     border-radius: 2px;
+    display: flex;
+    align-items: center;
 
     &:hover {
-      background: var(--highlight-button-pressed);
+      /*background: var(--highlight-button-hover);*/
     }
 
     svg.icon {
       fill: var(--background-icon-normal);
       stroke: var(--icon-normal);
       color: var(--icon-normal);
-      width: 16px;
-      height: 16px;
+      width: 24px;
+      height: 24px;
     }
   }
-}
-
-.col-pin {
-  right: 44px;
 }
 
 .col-name {
@@ -129,12 +111,12 @@
 
   .icon {
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
 
     svg {
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
     }
   }
 
@@ -154,16 +136,30 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--text-secondary);
 }
 
 .col-date {
-  color: var(--text-secondary);
   white-space: nowrap;
   text-align: right;
 
   p {
     margin: 0;
+  }
+}
+
+.col-actions {
+  .pin, .more {
+    opacity: 0;
+  }
+}
+
+.file-list-body .row.pinned .col-actions .pin {
+  opacity: 1;
+}
+
+.file-list-body .row:hover .col-actions {
+  .pin, .more {
+    opacity: 1;
   }
 }
 
@@ -209,7 +205,7 @@
   #box-recent {
     .file-list-head,
     .file-list-body .row {
-      grid-template-columns: minmax(250px, 1fr) 130px;
+      grid-template-columns: minmax(320px, 1fr) 130px;
 
       .col-location {
         display: none;
