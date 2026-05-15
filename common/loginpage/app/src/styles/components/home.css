@@ -1,7 +1,3 @@
-@import "../../routes/home/components/DocTypeGrid.css";
-@import "../../routes/home/components/FileDropZone.css";
-@import "../../routes/home/components/RecentList.css";
-
 .recent-panel-container {
   display: flex;
   flex-direction: column;

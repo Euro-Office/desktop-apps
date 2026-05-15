@@ -57,8 +57,7 @@ h4 {
 .col-sidebar {
   height: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
-  border-right: 1px solid var(--border-sidebar);
+  padding: 8px 0 8px 8px;
 }
 
 .col-center {
@@ -66,7 +65,7 @@ h4 {
   overflow-x: auto;
   overflow-y: auto;
   color: var(--text-normal);
-  padding: 8px;
+  padding: 8px 8px 8px 4px;
 
   > * {
     border-radius: 8px;

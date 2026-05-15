@@ -1,6 +1,6 @@
 import { lazy } from "solid-js";
 import { HashRouter } from "@solidjs/router";
-import Sidebar from "./shell/sidebar";
+import Sidebar from "./shell/Sidebar";
 import "./styles/layout.css";
 import "./styles/components/common.css";
 

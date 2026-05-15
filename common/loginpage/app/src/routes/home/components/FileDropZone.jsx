@@ -1,5 +1,6 @@
 import { t } from "@/services/l10n.js";
 import { openLocal, dropOfficeFiles } from "@/sdk";
+import './FileDropZone.styles.css'
 
 export function FileDropZone() {
   function handleDrop(e) {

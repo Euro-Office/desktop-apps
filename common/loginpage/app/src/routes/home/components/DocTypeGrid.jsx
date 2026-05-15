@@ -1,5 +1,6 @@
 import { createDocument } from "@/sdk";
 import { For } from "solid-js";
+import './DocTypeGrid.styles.css'
 
 const DOC_TYPES = [
   {

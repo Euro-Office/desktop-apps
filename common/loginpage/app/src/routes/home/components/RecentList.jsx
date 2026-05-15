@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { t } from "@/services/l10n";
 import { ContextMenu } from "@kobalte/core/context-menu";
 import { DropdownMenu } from "@kobalte/core/dropdown-menu";
+import './RecentList.styles.css'
 
 let suppressRowClick = false;
 

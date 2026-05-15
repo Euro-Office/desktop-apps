@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router";
 import { t } from "@/services/l10n";
-import "@/styles/components/sidebar.css";
+import "./Sidebar.styles.css";
 
 export default function Sidebar() {
   return (
