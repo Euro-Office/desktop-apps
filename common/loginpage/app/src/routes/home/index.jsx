@@ -101,10 +101,9 @@ export default function Index() {
   });
 
   return (
-    <div class="recent-panel-container">
+    <div class="home-page">
       <div class="cnt-title">
-        {/* FIXME: i18n */}
-        <h1>Create new</h1>
+        <h1>{t('actCreateNew')}</h1>
       </div>
 
       <section class="new-doc-section">
@@ -115,9 +114,9 @@ export default function Index() {
         <FileDropZone />
       </Show>
 
-      <div id="box-container">
+      <section class="file-list-section">
         <RecentList recents={recentRows()} recovers={recoverRows()} onTogglePin={togglePin} onRemove={removeFile} onClearAll={clearAll} />
-      </div>
+      </section>
     </div>
   );
 }

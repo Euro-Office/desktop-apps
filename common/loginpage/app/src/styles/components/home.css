@@ -1,3 +1,9 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .recent-panel-container {
   display: flex;
   flex-direction: column;
@@ -35,10 +41,10 @@
   margin-bottom: 48px;
 }
 
-#box-container {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+.file-list-section {
   flex: 1;
   overflow-y: auto;
+  position: relative;
+  margin-inline: 32px;
+  margin-bottom: 32px;
 }

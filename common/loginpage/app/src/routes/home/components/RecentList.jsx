@@ -172,41 +172,11 @@ function RecentRow(props) {
 
 export function RecentList(props) {
   const recents = () => props.recents || [];
-  const recovers = () => props.recovers || [];
-
-  const hasRecovers = () => recovers().length > 0;
   const hasRecents = () => recents().length > 0;
 
   return (
     <>
-      <Show when={hasRecovers()}>
-        <div id="box-recovery">
-          <div class="file-list-title">
-            <h3>{t("listRecoveryTitle")}</h3>
-          </div>
-          <div class="file-list-head text-normal">
-            <div class="col-name">{t("colFileName")}</div>
-            <div class="col-location">{t("colLocation")}</div>
-            <div class="col-date">{t("colLastOpened")}</div>
-          </div>
-          <div class="file-list-body scrollable">
-            <For each={recovers()}>
-              {(model) => (
-                <RecentRow
-                  model={model}
-                  isRecovery={true}
-                  onTogglePin={props.onTogglePin}
-                  onRemove={(fileid) => props.onRemove(fileid, true)}
-                  onClear={() => props.onClearAll(true)}
-                />
-              )}
-            </For>
-          </div>
-        </div>
-      </Show>
-
       <Show when={hasRecents()}>
-        <div id="box-recent">
           <div class="file-list-head text-normal">
             <div class="col-name">{t("colFileName")}</div>
             <div class="col-location">{t("colLocation")}</div>
@@ -225,7 +195,6 @@ export function RecentList(props) {
               )}
             </For>
           </div>
-        </div>
       </Show>
     </>
   );

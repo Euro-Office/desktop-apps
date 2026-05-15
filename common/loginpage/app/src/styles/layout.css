@@ -55,15 +55,12 @@ h4 {
 }
 
 .col-sidebar {
-  height: 100%;
   overflow-y: auto;
   padding: 8px 0 8px 8px;
 }
 
 .col-center {
-  height: 100%;
-  overflow-x: auto;
-  overflow-y: auto;
+  height: 100dvh;
   color: var(--text-normal);
   padding: 8px 8px 8px 4px;
 
