@@ -1,6 +1,7 @@
 import { createDocument } from "@/sdk";
 import { For } from "solid-js";
-import './DocTypeGrid.styles.css'
+import { t } from "@/services/l10n";
+import "./DocTypeGrid.styles.css";
 
 const DOC_TYPES = [
   {
@@ -50,7 +51,7 @@ export function DocTypeGrid(props) {
             <svg class="icon">
               <use href={item.icon} />
             </svg>
-            <div class="title">{props.t(item.titleKey)}</div>
+            <div class="title">{t(item.titleKey)}</div>
           </div>
         )}
       </For>

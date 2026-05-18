@@ -42,7 +42,7 @@ export function createTheme() {
     applyTheme(name(), type());
   });
 
-  onNativeMessage((cmd, param) => {
+  const dispose = onNativeMessage((cmd, param) => {
     if (cmd === "ui:theme") {
       const resolved = resolveTheme(param);
       setName(resolved.name);
@@ -50,5 +50,5 @@ export function createTheme() {
     }
   });
 
-  return { name, setName, type, setType };
+  return { name, setName, type, setType, dispose };
 }

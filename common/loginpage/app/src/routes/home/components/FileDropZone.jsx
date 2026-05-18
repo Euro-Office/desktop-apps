@@ -1,15 +1,19 @@
 import { t } from "@/services/l10n.js";
 import { openLocal, dropOfficeFiles } from "@/sdk";
-import './FileDropZone.styles.css'
+import "./FileDropZone.styles.css";
 
 export function FileDropZone() {
+  // todo: mb delete?
   function handleDrop(e) {
+    e.stopPropagation();
     dropOfficeFiles();
     e.preventDefault();
     return false;
   }
 
+  // todo: mb delete?
   function handleDragOver(e) {
+    e.stopPropagation();
     e.dataTransfer.dropEffect = "copy";
     e.preventDefault();
     return false;

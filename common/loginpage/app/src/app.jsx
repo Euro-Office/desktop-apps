@@ -1,6 +1,7 @@
-import { lazy } from "solid-js";
+import { lazy, onMount } from "solid-js";
 import { HashRouter } from "@solidjs/router";
 import Sidebar from "./shell/Sidebar";
+import { signalAppReady } from "@/sdk";
 import "./styles/layout.css";
 import "./styles/components/common.css";
 
@@ -27,5 +28,6 @@ const routes = [
 ];
 
 export default function App() {
+  onMount(signalAppReady);
   return <HashRouter root={Shell}>{routes}</HashRouter>;
 }

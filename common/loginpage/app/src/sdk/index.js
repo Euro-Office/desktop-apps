@@ -9,7 +9,9 @@ export {
   clearRecovers,
   parseRecent,
   parseRecentDirs,
-  pinnedFolders,
+  getPinnedFolders,
+  isPinnedFolder,
+  togglePinnedFolder,
 } from "./recents";
 export { createDocument, openLocal, openRecentFile, openRecoveryFile, exploreFile, checkFiles, dropOfficeFiles } from "./files";
 export { signalAppReady } from "./app";

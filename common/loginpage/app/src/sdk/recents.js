@@ -1,6 +1,6 @@
 import { cmd } from "./bridge";
 import { parseFileFormat } from "./format";
-import {formatDate} from "@/utils/formatDate.js";
+import { formatDate } from "@/utils/formatDate.js";
 
 const sdk = window.AscDesktopEditor;
 
@@ -50,10 +50,8 @@ const isWin = /Win/.test(navigator.platform);
 const reBaseName = isWin ? /([^\\/]+\.[a-zA-Z0-9]{1,})$/ : /([^/]+\.[a-zA-Z0-9]{1,})$/;
 const reFolderName = isWin ? /([^\\/]+)$/ : /([^/]+)$/;
 
-const decoder = document.createElement("div");
 function decodeHtml(s) {
-  decoder.innerHTML = s;
-  return decoder.textContent;
+  return new DOMParser().parseFromString(s, "text/html").body.textContent ?? "";
 }
 
 function hashCode(s) {
@@ -64,22 +62,26 @@ function hashCode(s) {
   return h;
 }
 
-export function pinnedFolders(action, path) {
-  const key = "pinnedFolders";
-  const list = JSON.parse(localStorage.getItem(key) || "[]");
-  if (action === "list") return list;
-  if (action === "check") return list.includes(path);
+const PINNED_FOLDERS_KEY = "pinnedFolders";
+
+export function getPinnedFolders() {
+  return JSON.parse(localStorage.getItem(PINNED_FOLDERS_KEY) || "[]");
+}
+
+export function isPinnedFolder(path) {
+  return getPinnedFolders().includes(path);
+}
+
+export function togglePinnedFolder(path) {
+  const list = getPinnedFolders();
   const i = list.indexOf(path);
-  if (action === "toggle") {
-    i === -1 ? list.push(path) : list.splice(i, 1);
-  }
-  localStorage.setItem(key, JSON.stringify(list));
+  i === -1 ? list.push(path) : list.splice(i, 1);
+  localStorage.setItem(PINNED_FOLDERS_KEY, JSON.stringify(list));
   return list;
 }
 
 export function parseRecent(arr) {
   const files = [];
-  const dirs = [];
   for (const f of arr || []) {
     let p = f.path || "";
     if (isWin && /^\w:[\\/]/.test(p) && /\\{2,}/.test(p)) {
@@ -112,7 +114,6 @@ export function parseRecent(arr) {
       exist: f.exist !== false,
       hash: f.hash || 0,
     });
-    if (!dirs.includes(dir)) dirs.push(dir);
   }
   return files;
 }
@@ -133,7 +134,7 @@ export function parseRecentDirs(arr, t) {
       dirs.push(dir);
     }
   }
-  for (const pinned of pinnedFolders("list")) {
+  for (const pinned of getPinnedFolders()) {
     if (!seen.has(pinned)) {
       seen.add(pinned);
       dirs.push(pinned);
@@ -142,10 +143,10 @@ export function parseRecentDirs(arr, t) {
   const out = [];
   for (const full of dirs) {
     const m = reFolderName.exec(full);
-    let name = m ? m[1] : full;
-    let parent = m ? full.slice(0, full.length - name.length - 1) : t ? t("textMyComputer") : "My Computer";
+    const name = m ? m[1] : full;
+    const parent = m ? full.slice(0, full.length - name.length - 1) : t ? t("textMyComputer") : "My Computer";
     const id = hashCode(full);
-    const isPinned = pinnedFolders("check", full);
+    const isPinned = isPinnedFolder(full);
     out.push({
       uid: `folder-${id}`,
       type: "folder",

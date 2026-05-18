@@ -1,40 +1,33 @@
 import { For, Show } from "solid-js";
-import { openRecentFile, openRecoveryFile, exploreFile } from "@/sdk";
+import { openRecentFile, exploreFile } from "@/sdk";
 import { clsx } from "clsx";
 import { t } from "@/services/l10n";
 import { ContextMenu } from "@kobalte/core/context-menu";
 import { DropdownMenu } from "@kobalte/core/dropdown-menu";
-import './RecentList.styles.css'
+import "./RecentList.styles.css";
 
-let suppressRowClick = false;
-
-function buildItems(model, isRecovery, onTogglePin, onRemove, onClear) {
+function buildItems(model, onTogglePin, onRemove, onClear) {
   const items = [];
 
   items.push({
     key: "open",
     label: t("menuFileOpen"),
-    onSelect: () => {
-      if (isRecovery) openRecoveryFile(model);
-      else openRecentFile(model);
-    },
+    onSelect: () => openRecentFile(model),
   });
 
-  if (!isRecovery) {
-    items.push({
-      key: model.pinned ? "unpin" : "pin",
-      label: t(model.pinned ? "menuFileUnpin" : "menuFilePin"),
-      onSelect: () => onTogglePin(model.fileid),
-    });
+  items.push({
+    key: model.pinned ? "unpin" : "pin",
+    label: t(model.pinned ? "menuFileUnpin" : "menuFilePin"),
+    onSelect: () => onTogglePin(model.fileid),
+  });
 
-    const showExplore = (model.cloud || model.descr) && model.exist;
-    if (showExplore) {
-      items.push({
-        key: "explore",
-        label: t("menuFileExplore"),
-        onSelect: () => exploreFile(model),
-      });
-    }
+  const showExplore = (model.cloud || model.descr) && model.exist;
+  if (showExplore) {
+    items.push({
+      key: "explore",
+      label: t("menuFileExplore"),
+      onSelect: () => exploreFile(model),
+    });
   }
 
   items.push({
@@ -55,7 +48,7 @@ function buildItems(model, isRecovery, onTogglePin, onRemove, onClear) {
 }
 
 function FileMenuContent(props) {
-  const items = () => buildItems(props.model, props.isRecovery, props.onTogglePin, props.onRemove, props.onClear);
+  const items = () => buildItems(props.model, props.onTogglePin, props.onRemove, props.onClear);
 
   return (
     <For each={items()}>
@@ -71,82 +64,80 @@ function FileMenuContent(props) {
 }
 
 function RecentRow(props) {
-  const model = props.model;
+  let suppressRowClick = false;
 
   return (
     <ContextMenu>
       <ContextMenu.Trigger
         as="div"
-        class={clsx("row text-normal", model.pinned && "pinned", !model.exist && "lost")}
+        class={clsx("row text-normal", props.model.pinned && "pinned", !props.model.exist && "lost")}
         onClick={() => {
           if (suppressRowClick) {
             suppressRowClick = false;
             return;
           }
-          if (props.isRecovery) openRecoveryFile(model);
-          else openRecentFile(model);
+          openRecentFile(props.model);
         }}
       >
-        <div class="col-name" title={model.fullName}>
+        <div class="col-name" title={props.model.fullName}>
           <div class="icon">
             <svg class="icon">
-              <use href={`#${model.type === "folder" ? "folder-small" : model.format}`} />
+              <use href={`#${props.model.type === "folder" ? "folder-small" : props.model.format}`} />
             </svg>
-            <Show when={model.crypted}>
+            <Show when={props.model.crypted}>
               <svg class="icon shield">
                 <use href="#shield" />
               </svg>
             </Show>
           </div>
           <p class="name">
-            {model.name}
-            <span class="ext">{model.ext}</span>
+            {props.model.name}
+            <span class="ext">{props.model.ext}</span>
           </p>
         </div>
-        <div class="col-location" title={model.descr}>
-          {model.descr}
+        <div class="col-location" title={props.model.descr}>
+          {props.model.descr}
         </div>
-        <Show when={model.type !== "folder"}>
-          <div class="col-date" title={model.date}>
-            <p>{model.dateLabel}</p>
+        <Show when={props.model.type !== "folder"}>
+          <div class="col-date" title={props.model.date}>
+            <p>{props.model.dateLabel}</p>
           </div>
         </Show>
-        <div class='col-actions'>
+        <div class="col-actions">
           <button
-            class='pin'
+            class="pin"
             onClick={(e) => {
               e.stopPropagation();
-              props.onTogglePin(model.fileid);
+              props.onTogglePin(props.model.fileid);
             }}
           >
             <svg class="icon">
               <use href="#pin" />
             </svg>
           </button>
-          <Show when={model.type !== "folder"}>
-              <DropdownMenu>
-                <DropdownMenu.Trigger as="button" class="more" onClick={(e) => e.stopPropagation()}>
-                  <svg class="icon">
-                    <use href="#more" />
-                  </svg>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Portal>
-                  <DropdownMenu.Content
-                    class="file-context-menu"
-                    onMouseDown={() => {
-                      suppressRowClick = true;
-                    }}
-                  >
-                    <FileMenuContent
-                      model={model}
-                      isRecovery={props.isRecovery}
-                      onTogglePin={props.onTogglePin}
-                      onRemove={props.onRemove}
-                      onClear={props.onClear}
-                    />
-                  </DropdownMenu.Content>
-                </DropdownMenu.Portal>
-              </DropdownMenu>
+          <Show when={props.model.type !== "folder"}>
+            <DropdownMenu>
+              <DropdownMenu.Trigger as="button" class="more" onClick={(e) => e.stopPropagation()}>
+                <svg class="icon">
+                  <use href="#more" />
+                </svg>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                  class="file-context-menu"
+                  onMouseDown={() => {
+                    suppressRowClick = true;
+                  }}
+                >
+                  <FileMenuContent
+                    model={props.model}
+                    onTogglePin={props.onTogglePin}
+                    onRemove={props.onRemove}
+                    onClear={props.onClear}
+                  />
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu>
           </Show>
         </div>
       </ContextMenu.Trigger>
@@ -158,8 +149,7 @@ function RecentRow(props) {
           }}
         >
           <FileMenuContent
-            model={model}
-            isRecovery={props.isRecovery}
+            model={props.model}
             onTogglePin={props.onTogglePin}
             onRemove={props.onRemove}
             onClear={props.onClear}
@@ -175,27 +165,26 @@ export function RecentList(props) {
   const hasRecents = () => recents().length > 0;
 
   return (
-    <>
-      <Show when={hasRecents()}>
-          <div class="file-list-head text-normal">
-            <div class="col-name">{t("colFileName")}</div>
-            <div class="col-location">{t("colLocation")}</div>
-            <div class="col-date">{t("colLastOpened")}</div>
-          </div>
-          <div class="file-list-body scrollable">
-            <For each={recents()}>
-              {(model) => (
-                <RecentRow
-                  model={model}
-                  isRecovery={false}
-                  onTogglePin={props.onTogglePin}
-                  onRemove={(fileid) => props.onRemove(fileid, false)}
-                  onClear={() => props.onClearAll(false)}
-                />
-              )}
-            </For>
-          </div>
-      </Show>
-    </>
+    <Show when={hasRecents()}>
+      <div id="box-recent">
+        <div class="file-list-head text-normal">
+          <div class="col-name">{t("colFileName")}</div>
+          <div class="col-location">{t("colLocation")}</div>
+          <div class="col-date">{t("colLastOpened")}</div>
+        </div>
+        <div class="file-list-body scrollable">
+          <For each={recents()}>
+            {(model) => (
+              <RecentRow
+                model={model}
+                onTogglePin={props.onTogglePin}
+                onRemove={props.onRemove}
+                onClear={props.onClear}
+              />
+            )}
+          </For>
+        </div>
+      </div>
+    </Show>
   );
 }
