@@ -311,8 +311,10 @@ core_windows {
         DEFINES += __OS_WIN_XP
     } else {
         HEADERS += $$PWD/src/platform_win/wintoastlib.h \
+                   $$PWD/src/platform_win/taskdialogtheme.h \
                    $$PWD/src/components/cnotification.h
         SOURCES += $$PWD/src/platform_win/wintoastlib.cpp \
+                   $$PWD/src/platform_win/taskdialogtheme.cpp \
                    $$PWD/src/components/cnotification.cpp
     }
 }

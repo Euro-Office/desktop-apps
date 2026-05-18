@@ -468,9 +468,31 @@ void QtMsg::setContent( const QString& t)
 
 #ifdef _WIN32
 # ifndef __OS_WIN_XP
+#  include "platform_win/taskdialogtheme.h"
+
+struct TaskDialogContext {
+    TASKDIALOGCONFIG *pConfig;
+    bool useDark;
+};
+
 static HRESULT CALLBACK Pftaskdialogcallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, LONG_PTR lpRefData)
 {
+    TaskDialogContext *pCtx = (TaskDialogContext*)lpRefData;
+
     switch (msg) {
+    case TDN_CREATED: {
+        if (pCtx->useDark)
+            TaskDialogTheme::AllowForTaskDialog(hwnd, pCtx->pConfig, TaskDialogTheme::Theme::Dark);
+        break;
+    }
+    case TDN_NAVIGATED:
+        if (pCtx->useDark)
+            TaskDialogTheme::AllowForTaskDialog(hwnd, (TASKDIALOGCONFIG*)lParam, TaskDialogTheme::Theme::Dark);
+        break;
+    case TDN_DESTROYED:
+        if (pCtx->useDark)
+            TaskDialogTheme::RemoveFromTaskDialog(hwnd);
+        break;
     case TDN_HYPERLINK_CLICKED:
         ShellExecute(NULL, L"open", (PCWSTR)lParam, NULL, NULL, SW_SHOWNORMAL);
         break;
@@ -632,6 +654,9 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
 
     BOOL chkState = (opts.checkBoxState) ? (BOOL)*opts.checkBoxState : FALSE;
 
+    TaskDialogContext ctx;
+    ctx.useDark = (Utils::getWinVersion() >= Utils::WinVer::Win10 && GetCurrentTheme().isDark());
+
     TASKDIALOGCONFIG config = {0};
     ZeroMemory(&config, sizeof(config));
     config.cbSize             = sizeof(config);
@@ -643,6 +668,8 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     config.hwndParent         = parent_hwnd;
     config.hInstance          = GetModuleHandle(NULL);
     config.pfCallback         = (PFTASKDIALOGCALLBACK)Pftaskdialogcallback;
+    ctx.pConfig = &config;
+    config.lpCallbackData     = (LONG_PTR)&ctx;
     config.pButtons           = pButtons;
     config.cButtons           = cButtons;
     config.nDefaultButton     = nDefltBtn;
