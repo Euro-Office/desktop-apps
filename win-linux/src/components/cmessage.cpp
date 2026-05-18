@@ -469,6 +469,7 @@ void QtMsg::setContent( const QString& t)
 
 struct TaskDialogContext {
     TASKDIALOGCONFIG *pConfig;
+    HICON hIcon;
     bool useDark;
 };
 
@@ -480,6 +481,9 @@ static HRESULT CALLBACK Pftaskdialogcallback(HWND hwnd, UINT msg, WPARAM wParam,
     case TDN_CREATED: {
         if (pCtx->useDark)
             TaskDialogTheme::AllowForTaskDialog(hwnd, pCtx->pConfig, TaskDialogTheme::Theme::Dark);
+
+        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)pCtx->hIcon);
+        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)pCtx->hIcon);
         break;
     }
     case TDN_NAVIGATED:
@@ -525,7 +529,7 @@ namespace WinMsg
 {
 int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns msgBtns, const CMessageOpts &opts)
 {
-    std::wstring lpCaption = QString("  %1").arg(WINDOW_TITLE).toStdWString();
+    std::wstring lpCaption = QString("%1").arg(WINDOW_TITLE).toStdWString();
     std::wstring lpText = QTextDocumentFragment::fromHtml(msg).toPlainText().toStdWString();
     std::wstring lpContent = opts.contentText.toStdWString();
     if (!lpContent.empty() && !opts.linkText.isEmpty())
@@ -649,10 +653,13 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     default:                        nDefltBtn = IDOK; break;
     }
 
+    HMODULE hInstance = GetModuleHandle(nullptr);
     BOOL chkState = (opts.checkBoxState) ? (BOOL)*opts.checkBoxState : FALSE;
 
     TaskDialogContext ctx;
     ctx.useDark = (Utils::getWinVersion() >= Utils::WinVer::Win10 && GetCurrentTheme().isDark());
+    ctx.hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_MAINICON), IMAGE_ICON,
+                                  GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
 
     TASKDIALOGCONFIG config = {0};
     ZeroMemory(&config, sizeof(config));
