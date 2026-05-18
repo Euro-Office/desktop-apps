@@ -673,7 +673,7 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     if (AscAppManager::isRtlEnabled())
         config.dwFlags |= TDF_RTL_LAYOUT;
     config.hwndParent         = parent_hwnd;
-    config.hInstance          = GetModuleHandle(NULL);
+    config.hInstance          = hInstance;
     config.pfCallback         = (PFTASKDIALOGCALLBACK)Pftaskdialogcallback;
     ctx.pConfig = &config;
     config.lpCallbackData     = (LONG_PTR)&ctx;
