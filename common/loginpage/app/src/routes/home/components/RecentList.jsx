@@ -1,60 +1,59 @@
 import { For, Show } from "solid-js";
-import { openRecentFile, exploreFile } from "@/sdk";
+import { exploreFile } from "@/sdk";
 import { clsx } from "clsx";
 import { t } from "@/services/l10n";
 import { ContextMenu } from "@kobalte/core/context-menu";
 import { DropdownMenu } from "@kobalte/core/dropdown-menu";
 import "./RecentList.styles.css";
 
-function buildItems(model, onTogglePin, onRemove, onClear) {
-  const items = [];
-
-  items.push({
-    key: "open",
-    label: t("menuFileOpen"),
-    onSelect: () => openRecentFile(model),
-  });
-
-  items.push({
-    key: model.pinned ? "unpin" : "pin",
-    label: t(model.pinned ? "menuFileUnpin" : "menuFilePin"),
-    onSelect: () => onTogglePin(model.fileid),
-  });
-
-  const showExplore = (model.cloud || model.descr) && model.exist;
-  if (showExplore) {
-    items.push({
-      key: "explore",
+// TODO: Update icons
+function buildMenuItems(model, onTogglePin, onRemove, onClear) {
+  return [
+    {
+      key: "open",
+      icon: "#gofolder",
       label: t("menuFileExplore"),
       onSelect: () => exploreFile(model),
-    });
-  }
-
-  items.push({
-    key: "remove",
-    label: t("menuRemoveModel"),
-    onSelect: () => onRemove(model.fileid),
-  });
-
-  items.push({ key: "sep", separator: true });
-
-  items.push({
-    key: "clear",
-    label: t("menuClear"),
-    onSelect: () => onClear(),
-  });
-
-  return items;
+    },
+    {
+      key: model.pinned ? "unpin" : "pin",
+      icon: model.pinned ? "#unpin20" : "#pin20",
+      label: t(model.pinned ? "menuFileUnpin" : "menuFilePin"),
+      onSelect: () => onTogglePin(model.fileid),
+    },
+    {
+      key: "remove",
+      icon: "#remove",
+      label: t("menuRemoveModel"),
+      onSelect: () => onRemove(model.fileid),
+    },
+    { key: "sep", separator: true },
+    {
+      key: "clear",
+      icon: null,
+      label: t("menuClear"),
+      onSelect: () => onClear(),
+      class: "negative",
+    },
+  ];
 }
 
-function FileMenuContent(props) {
-  const items = () => buildItems(props.model, props.onTogglePin, props.onRemove, props.onClear);
+function MenuItems(props) {
+  const items = () => buildMenuItems(props.model, props.onTogglePin, props.onRemove, props.onClear);
 
   return (
     <For each={items()}>
       {(item) => (
         <Show when={!item.separator} fallback={<ContextMenu.Separator class="context-menu-separator" />}>
-          <ContextMenu.Item class={`context-menu-item${item.key === "clear" ? " negative" : ""}`} onSelect={item.onSelect}>
+          <ContextMenu.Item
+            class={clsx("context-menu-item", item.class)}
+            onSelect={item.onSelect}
+          >
+            <Show when={item.icon}>
+              <svg class="menu-icon">
+                <use href={item.icon} />
+              </svg>
+            </Show>
             {item.label}
           </ContextMenu.Item>
         </Show>
@@ -129,7 +128,7 @@ function RecentRow(props) {
                     suppressRowClick = true;
                   }}
                 >
-                  <FileMenuContent
+                  <MenuItems
                     model={props.model}
                     onTogglePin={props.onTogglePin}
                     onRemove={props.onRemove}
@@ -148,7 +147,7 @@ function RecentRow(props) {
             suppressRowClick = true;
           }}
         >
-          <FileMenuContent
+          <MenuItems
             model={props.model}
             onTogglePin={props.onTogglePin}
             onRemove={props.onRemove}
