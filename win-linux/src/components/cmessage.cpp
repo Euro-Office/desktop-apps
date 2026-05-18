@@ -472,10 +472,6 @@ static HRESULT CALLBACK Pftaskdialogcallback(HWND hwnd, UINT msg, WPARAM wParam,
         ShellExecute(NULL, L"open", (PCWSTR)lParam, NULL, NULL, SW_SHOWNORMAL);
         break;
     case TDN_DIALOG_CONSTRUCTED: {
-        QTimer::singleShot(0, [=]() {
-            if (hwnd)
-                WindowHelper::bringToTop(hwnd);
-        });
         break;
     }
     default:
