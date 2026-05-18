@@ -27,7 +27,7 @@ Suggests: %{_package_opensource}-help
 Open-source office suite pack that comprises all the tools you need to
 work offline with documents, spreadsheets, presentations, PDFs, and PDF forms.
 
-%if "%{_company_name}" == "ONLYOFFICE"
+%if "%{_company_name}" == "euro-office"
 %package help
 Summary: Offline help for %{_company_name} %{_product_name}
 BuildArch: noarch
@@ -53,7 +53,7 @@ mkdir -p %{buildroot}
 cp -rt %{buildroot}/ $BUILD_DIR/main/*
 echo "package = rpm" > $OPT_DIR/%{_desktopeditors_prefix}/converter/package.config
 
-%if "%{_company_name}" == "ONLYOFFICE"
+%if "%{_company_name}" == "euro-office"
 ln -srf $BIN_DIR/%{_desktopeditors_exec} $BIN_DIR/desktopeditors
 cp -rt %{buildroot}/ $BUILD_DIR/help/*
 %else
@@ -71,7 +71,7 @@ rm -rf "%{buildroot}"
 %attr(-, root, root) %{_datadir}/icons/*
 %attr(-, root, root) %{_datadir}/licenses/*
 %attr(755, root, root) %{_bindir}/%{_desktopeditors_exec}
-%if "%{_company_name}" == "ONLYOFFICE"
+%if "%{_company_name}" == "euro-office"
 %attr(-, root, root) %{_bindir}/desktopeditors
 %exclude /opt/%{_desktopeditors_prefix}/editors/web-apps/apps/*/main/resources/help
 %else
@@ -81,7 +81,7 @@ rm -rf "%{buildroot}"
 %attr(777, root, root) %{_sysconfdir}/%{_package_name}
 %endif
 
-%if "%{_company_name}" == "ONLYOFFICE"
+%if "%{_company_name}" == "euro-office"
 %files help
 %defattr(-, root, root, -)
 /opt/%{_desktopeditors_prefix}/editors/web-apps/apps/*/main/resources/help

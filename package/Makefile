@@ -1,6 +1,6 @@
 PWD := $(shell pwd)
 
-COMPANY_NAME ?= ONLYOFFICE
+COMPANY_NAME ?= euro-office
 PRODUCT_NAME ?= Desktop Editors
 PRODUCT_NAME_SHORT ?= $(subst $(empty) $(empty),,$(PRODUCT_NAME))
 
@@ -84,7 +84,7 @@ DEB_DEPS += deb/build/debian/$(PACKAGE_NAME).links
 DEB_DEPS += deb/build/debian/$(PACKAGE_NAME)-help.install
 DEB_DEPS += deb/build/package.config
 
-SOURCE_DIR := ../../build_tools/out/$(PLATFORM)/$(COMPANY_NAME_LOW)
+SOURCE_DIR := /build/package/out/$(PLATFORM)/$(COMPANY_NAME_LOW)
 
 M4_PARAMS += -D M4_COMPANY_NAME='$(COMPANY_NAME)'
 M4_PARAMS += -D M4_COMPANY_NAME_LOW='$(COMPANY_NAME_LOW)'
