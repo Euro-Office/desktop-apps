@@ -1,82 +1,41 @@
 import { For, Show } from "solid-js";
-import { exploreFile } from "@/sdk";
+import { exploreFile, openRecentFile } from "@/sdk";
 import { clsx } from "clsx";
 import { t } from "@/services/l10n";
-import { ContextMenu } from "@kobalte/core/context-menu";
-import { DropdownMenu } from "@kobalte/core/dropdown-menu";
+import { ContextMenu, DropdownMenu } from "@/components";
 import "./RecentList.styles.css";
 
-// TODO: Update icons
-function buildMenuItems(model, onTogglePin, onRemove, onClear) {
-  return [
-    {
-      key: "open",
-      icon: "#gofolder",
-      label: t("menuFileExplore"),
-      onSelect: () => exploreFile(model),
-    },
-    {
-      key: model.pinned ? "unpin" : "pin",
-      icon: model.pinned ? "#unpin20" : "#pin20",
-      label: t(model.pinned ? "menuFileUnpin" : "menuFilePin"),
-      onSelect: () => onTogglePin(model.fileid),
-    },
-    {
-      key: "remove",
-      icon: "#remove",
-      label: t("menuRemoveModel"),
-      onSelect: () => onRemove(model.fileid),
-    },
-    { key: "sep", separator: true },
-    {
-      key: "clear",
-      icon: null,
-      label: t("menuClear"),
-      onSelect: () => onClear(),
-      class: "negative",
-    },
-  ];
-}
-
-function MenuItems(props) {
-  const items = () => buildMenuItems(props.model, props.onTogglePin, props.onRemove, props.onClear);
-
+function FileMenuItems(props) {
+  const Menu = props.menu;
   return (
-    <For each={items()}>
-      {(item) => (
-        <Show when={!item.separator} fallback={<ContextMenu.Separator class="context-menu-separator" />}>
-          <ContextMenu.Item
-            class={clsx("context-menu-item", item.class)}
-            onSelect={item.onSelect}
-          >
-            <Show when={item.icon}>
-              <svg class="menu-icon">
-                <use href={item.icon} />
-              </svg>
-            </Show>
-            {item.label}
-          </ContextMenu.Item>
-        </Show>
-      )}
-    </For>
+    <>
+      <Menu.Item icon="#gofolder" onSelect={() => exploreFile(props.model)}>
+        {t("menuFileExplore")}
+      </Menu.Item>
+      <Menu.Item
+        icon={props.model.pinned ? "#unpin20" : "#pin20"}
+        onSelect={() => props.onTogglePin(props.model.fileid)}
+      >
+        {t(props.model.pinned ? "menuFileUnpin" : "menuFilePin")}
+      </Menu.Item>
+      <Menu.Item icon="#remove" onSelect={() => props.onRemove(props.model.fileid)}>
+        {t("menuRemoveModel")}
+      </Menu.Item>
+      <Menu.Separator />
+      <Menu.Item class="negative" onSelect={props.onClear}>
+        {t("menuClear")}
+      </Menu.Item>
+    </>
   );
 }
 
 function RecentRow(props) {
-  let suppressRowClick = false;
-
   return (
     <ContextMenu>
       <ContextMenu.Trigger
         as="div"
         class={clsx("row text-normal", props.model.pinned && "pinned", !props.model.exist && "lost")}
-        onClick={() => {
-          if (suppressRowClick) {
-            suppressRowClick = false;
-            return;
-          }
-          openRecentFile(props.model);
-        }}
+        onClick={() => openRecentFile(props.model)}
       >
         <div class="col-name" title={props.model.fullName}>
           <div class="icon">
@@ -116,45 +75,36 @@ function RecentRow(props) {
           </button>
           <Show when={props.model.type !== "folder"}>
             <DropdownMenu>
-              <DropdownMenu.Trigger as="button" class="more" onClick={(e) => e.stopPropagation()}>
+              <DropdownMenu.Trigger
+                class="more"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <svg class="icon">
                   <use href="#more" />
                 </svg>
               </DropdownMenu.Trigger>
-              <DropdownMenu.Portal>
-                <DropdownMenu.Content
-                  class="file-context-menu"
-                  onMouseDown={() => {
-                    suppressRowClick = true;
-                  }}
-                >
-                  <MenuItems
-                    model={props.model}
-                    onTogglePin={props.onTogglePin}
-                    onRemove={props.onRemove}
-                    onClear={props.onClear}
-                  />
-                </DropdownMenu.Content>
-              </DropdownMenu.Portal>
+              <DropdownMenu.Content onContextMenu={(e) => e.stopPropagation()}>
+                <FileMenuItems
+                  menu={DropdownMenu}
+                  model={props.model}
+                  onTogglePin={props.onTogglePin}
+                  onRemove={props.onRemove}
+                  onClear={props.onClear}
+                />
+              </DropdownMenu.Content>
             </DropdownMenu>
           </Show>
         </div>
       </ContextMenu.Trigger>
-      <ContextMenu.Portal>
-        <ContextMenu.Content
-          class="file-context-menu"
-          onMouseDown={() => {
-            suppressRowClick = true;
-          }}
-        >
-          <MenuItems
-            model={props.model}
-            onTogglePin={props.onTogglePin}
-            onRemove={props.onRemove}
-            onClear={props.onClear}
-          />
-        </ContextMenu.Content>
-      </ContextMenu.Portal>
+      <ContextMenu.Content>
+        <FileMenuItems
+          menu={ContextMenu}
+          model={props.model}
+          onTogglePin={props.onTogglePin}
+          onRemove={props.onRemove}
+          onClear={props.onClear}
+        />
+      </ContextMenu.Content>
     </ContextMenu>
   );
 }

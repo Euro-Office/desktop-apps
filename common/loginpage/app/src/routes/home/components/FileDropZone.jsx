@@ -1,6 +1,7 @@
 import { t } from "@/services/l10n.js";
 import { openLocal, dropOfficeFiles } from "@/sdk";
 import "./FileDropZone.styles.css";
+import {Button} from "@/components";
 
 export function FileDropZone() {
   // todo: mb delete?
@@ -26,9 +27,9 @@ export function FileDropZone() {
           <h3>{t("dropZoneTitle")}</h3>
           <p class="text-normal">{t("dropZoneText")}</p>
         </div>
-        <button class="btn btn-accent" onClick={() => openLocal()}>
+        <Button variant='accent' onClick={openLocal}>
           {t("dropZoneOpenAction")}
-        </button>
+        </Button>
       </div>
     </div>
   );

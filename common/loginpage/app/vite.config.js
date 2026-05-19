@@ -18,7 +18,7 @@ function injectSprites() {
         for (const file of files) {
           svgContent += readFileSync(join(spritesDir, file), "utf-8");
         }
-      } catch (e) {
+      } catch {
         // sprites not available
       }
       if (!svgContent) return html;
