@@ -23,7 +23,13 @@ const routes = [
   { path: "/open", component: lazy(() => import("./routes/open/index.jsx")) },
   { path: "/templates", component: lazy(() => import("./routes/templates/index.jsx")) },
   { path: "/clouds/*", component: lazy(() => import("./routes/clouds/index.jsx")) },
-  { path: "/settings", component: lazy(() => import("./routes/settings/index.jsx")) },
+  {
+    path: "/settings",
+    component: lazy(() => import("./routes/settings/layout.jsx")),
+    children: [
+      { path: "", component: lazy(() => import("./routes/settings/general/index.jsx")) },
+    ]
+  },
   { path: "/about", component: lazy(() => import("./routes/about/index.jsx")) },
 ];
 
