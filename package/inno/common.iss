@@ -210,7 +210,7 @@ Source: "{#BRANDING_DIR}\..\common\license\commercial\LICENSE.txt"; DestDir: {ap
 #else
 Source: "{#BRANDING_DIR}\..\common\license\opensource\LICENSE.txt"; DestDir: {app};
 #endif
-Source: "{#BRANDING_DIR}\..\common\license\3dparty\3DPARTYLICENSE"; DestDir: {app};
+Source: "{#BRANDING_DIR}\..\common\license\3dparty\3DPARTYLICENSE"; DestDir: {app}; DestName: "3DPARTYLICENSE.txt";
 
 [InstallDelete]
 Type: filesandordirs; Name: {app}\editors\sdkjs-plugins
