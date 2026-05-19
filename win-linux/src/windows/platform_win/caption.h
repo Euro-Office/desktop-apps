@@ -75,6 +75,25 @@ private:
         return posY <= RESIZE_AREA_PART * height();
     }
 
+    bool canResizeOrMoveAt(const QPoint &pos) {
+        QWidget *child = childAt(pos);
+        if (!child) return true;
+
+        if (qobject_cast<QLabel*>(child)) {
+            const QString objName = child->objectName();
+            if (objName != "tabText" && objName != "tabIcon")
+                return true;
+        } else
+        if (qobject_cast<QFrame*>(child)) {
+            if (child->objectName() == "tabScroll")
+                return true;
+        } else
+        if (child->objectName() == "boxtitlelabel") {
+            return true;
+        }
+        return false;
+    }
+
     QPoint cursorPos() {
         POINT pt;
         ::GetCursorPos(&pt);
@@ -95,7 +114,7 @@ private:
         POINT pt;
         ::GetCursorPos(&pt);
         QPoint pos = mapFromGlobal(QPoint(int(pt.x), int(pt.y)));
-        if (!buttonAtPos(pos)) {
+        if (canResizeOrMoveAt(pos)) {
             ::ReleaseCapture();
             ::PostMessage(hwnd_root, cmd, isResizingAvailable() && isPointInResizeArea(pos.y()) ? HTTOP : HTCAPTION, POINTTOPOINTS(pt));
 #ifndef QT_VERSION_6
@@ -130,7 +149,7 @@ private:
         case WM_MOUSEMOVE: {
             if (isResizingAvailable()) {
                 int y = GET_Y_LPARAM(msg->lParam);
-                setCursor(!buttonAtPos(QPoint(GET_X_LPARAM(msg->lParam), y)) && isPointInResizeArea(y) ? Qt::SizeVerCursor : Qt::ArrowCursor);
+                setCursor(canResizeOrMoveAt(QPoint(GET_X_LPARAM(msg->lParam), y)) && isPointInResizeArea(y) ? Qt::SizeVerCursor : Qt::ArrowCursor);
             }
             break;
         }

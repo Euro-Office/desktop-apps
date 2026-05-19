@@ -444,17 +444,9 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
     _pMainGridLayout->setContentsMargins(0, 0, 0, 0);
     mainPanel->setLayout(_pMainGridLayout);
 
-    // Set custom TabBar
-    CTabBar *pTabBar = new CTabBar(mainPanel);
-    _pMainGridLayout->addWidget(pTabBar, 0, 1, 1, 1);
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    sizePolicy.setHorizontalStretch(1);
-    pTabBar->setSizePolicy(sizePolicy);
-
     m_boxTitleBtns = createTopPanel(mainPanel);
     m_boxTitleBtns->setObjectName("CX11Caption");
-    _pMainGridLayout->addWidget(m_boxTitleBtns, 0, 2, 1, 1);
-    m_boxTitleBtns->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    _pMainGridLayout->addWidget(m_boxTitleBtns, 0, 0, 1, 1);
 
     if ( m_shouldUseThinFrame ) {
         foreach (auto *btn, m_pTopButtons) {
@@ -469,14 +461,26 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
 #endif
     label->setObjectName("labelAppTitle");
     label->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
-    static_cast<QHBoxLayout*>(m_boxTitleBtns->layout())->insertWidget(1,label);
+    QSizePolicy spAppTitle(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    spAppTitle.setHorizontalStretch(1);
+    label->setSizePolicy(spAppTitle);
+
+    QHBoxLayout *pBoxTitleBtnsLayout = static_cast<QHBoxLayout*>(m_boxTitleBtns->layout());
+    pBoxTitleBtnsLayout->insertWidget(1,label);
+
+    // Set custom TabBar
+    CTabBar *pTabBar = new CTabBar(m_boxTitleBtns);
+    pBoxTitleBtnsLayout->insertWidget(0, pTabBar, 0, Qt::AlignBottom);
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    sizePolicy.setHorizontalStretch(8);
+    pTabBar->setSizePolicy(sizePolicy);
 
     // Main
-    m_pButtonMain = new CSVGPushButton(mainPanel);
+    m_pButtonMain = new CSVGPushButton(m_boxTitleBtns);
     m_pButtonMain->setObjectName( "toolButtonMain" );
     m_pButtonMain->setProperty("class", "active");
-    m_pButtonMain->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    _pMainGridLayout->addWidget(m_pButtonMain, 0, 0, 1, 1);
+    m_pButtonMain->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    pBoxTitleBtnsLayout->insertWidget(0, m_pButtonMain, 0, Qt::AlignBottom);
     QObject::connect(m_pButtonMain, SIGNAL(clicked()), this, SLOT(pushButtonMainClicked()));
 
     QPalette palette;
@@ -1243,7 +1247,7 @@ void CMainWindow::onDocumentDownload(void * info)
             m_pWidgetDownload = nullptr;
         });
         QHBoxLayout * layoutBtns = qobject_cast<QHBoxLayout *>(m_boxTitleBtns->layout());
-        layoutBtns->insertWidget(1, m_pWidgetDownload->toolButton());
+        layoutBtns->insertWidget(4, m_pWidgetDownload->toolButton());
         m_pWidgetDownload->setLayoutDirection(AscAppManager::isRtlEnabled() ? Qt::RightToLeft : Qt::LeftToRight);
         m_pWidgetDownload->applyTheme();
         m_pWidgetDownload->updateScalingFactor(m_dpiRatio);
@@ -1536,7 +1540,8 @@ void CMainWindow::updateScalingFactor(double dpiratio)
         foreach (auto btn, m_pTopButtons)
             btn->setFixedSize(small_btn_size);
     }*/
-    m_pButtonMain->setFixedSize(int(BUTTON_MAIN_WIDTH * dpiratio), int(m_toolbtn_height * dpiratio));
+    m_pButtonMain->setFixedSize(int(BUTTON_MAIN_WIDTH * dpiratio), int(TOOLBTN_HEIGHT * dpiratio));
+    m_pTabs->tabBar()->setFixedHeight(int(TOOLBTN_HEIGHT * m_dpiRatio));
     m_pMainPanel->setProperty("zoom", QString::number(dpiratio) + "x");
     QString tab_css = Utils::readStylesheets(":/styles/tabbar.qss");
     m_pTabs->tabBar()->setStyleSheet(tab_css.arg(GetColorQValueByRole(ecrWindowBackground),
@@ -1661,20 +1666,10 @@ void CMainWindow::applyWindowState()
 {
     if ( m_shouldUseThinFrame ) {
         m_toolbtn_height = isMaximized() ? TOOLBTN_HEIGHT : TOOLBTN_HEIGHT_WIN10;
-        m_pMainPanel->setProperty("extended-title", !isMaximized());
-        m_pMainPanel->style()->polish(m_pMainPanel);
-        m_pButtonMain->style()->polish(m_pButtonMain);
-        m_pButtonMain->setFixedHeight(int(m_toolbtn_height * m_dpiRatio));
+        m_boxTitleBtns->setFixedHeight(int(m_toolbtn_height * m_dpiRatio));
+
         if (m_pWidgetDownload && m_pWidgetDownload->toolButton())
             m_pWidgetDownload->toolButton()->style()->polish(m_pWidgetDownload->toolButton());
-
-        QString tab_css = Utils::readStylesheets(":/styles/tabbar.qss");
-        m_pTabs->tabBar()->setStyleSheet(tab_css.arg(GetColorQValueByRole(ecrWindowBackground),
-                                                     GetColorQValueByRole(ecrButtonBackground),
-                                                     GetColorQValueByRole(ecrButtonHoverBackground),
-                                                     GetColorQValueByRole(ecrButtonPressedBackground),
-                                                     GetColorQValueByRole(ecrTabDivider),
-                                                     GetColorQValueByRole(ecrTabWordActive)));
 
         foreach (auto *btn, m_pTopButtons) {
             btn->setFixedHeight(int(m_toolbtn_height * m_dpiRatio));
