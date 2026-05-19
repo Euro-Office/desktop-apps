@@ -1,34 +1,37 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2019
+ * Copyright (C) Ascensio System SIA, 2009-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
- * version 3 as published by the Free Software Foundation. In accordance with
- * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement
- * of any third-party rights.
+ * version 3 as published by the Free Software Foundation, together with the
+ * additional terms provided in the LICENSE file.
  *
  * This program is distributed WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For
+ * details, see the GNU AGPL at: https://www.gnu.org/licenses/agpl-3.0.html
  *
- * You can contact Ascensio System SIA at 20A-12 Ernesta Birznieka-Upisha
- * street, Riga, Latvia, EU, LV-1050.
+ * You can contact Ascensio System SIA by email at info@onlyoffice.com
+ * or by postal mail at 20A-6 Ernesta Birznieka-Upisha Street, Riga,
+ * LV-1050, Latvia, European Union.
  *
- * The  interactive user interfaces in modified source and object code versions
- * of the Program must display Appropriate Legal Notices, as required under
+ * The interactive user interfaces in modified versions of the Program
+ * are required to display Appropriate Legal Notices in accordance with
  * Section 5 of the GNU AGPL version 3.
  *
- * Pursuant to Section 7(b) of the License you must retain the original Product
- * logo when distributing the program. Pursuant to Section 7(e) we decline to
- * grant you any rights under trademark law for use of our trademarks.
+ * No trademark rights are granted under this License.
  *
- * All the Product's GUI elements, including illustrations and icon sets, as
- * well as technical writing content are licensed under the terms of the
- * Creative Commons Attribution-ShareAlike 4.0 International. See the License
- * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ * All non-code elements of the Product, including illustrations,
+ * icon sets, and technical writing content, are licensed under the
+ * Creative Commons Attribution-ShareAlike 4.0 International License:
+ * https://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
-*/
+ * This license applies only to such non-code elements and does not
+ * modify or replace the licensing terms applicable to the Program's
+ * source code, which remains licensed under the GNU Affero General
+ * Public License v3.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 
 /*
     "connect to portal" page
@@ -460,13 +463,13 @@
                                 _write_portal_cookie(obj.domain);
 
                             if ( model.get('removed') ) {
-                                model.set('removed', false);
                                 PortalsStore.keep({
                                     portal: model.path,
                                     provider: model.provider,
                                     user: model.user,
                                     email: model.email
                                 });
+                                model.set('removed', false);
                             }
 
                             if ( model.get('user') != obj.displayName ) {
@@ -508,6 +511,7 @@
                         (info.portal = info.portal.slice(0,-1));
 
                 PortalsStore.keep(info);
+                sdk.oncloudchanged(info, 'added')
                 if ( obj.provider != 'onlyoffice' ) {
                     // sdk.setCookie(info.portal, utils.skipUrlProtocol(info.portal), "/", "asc_auth_key", utils.fn.uuid());
                     _write_portal_cookie(info.portal);
@@ -613,8 +617,8 @@
                             if (!res[1]) {
                                 model.set('logged', false);
                                 if ( model.removed ) {
-                                    model.set('removed', true);
                                     PortalsStore.forget(param);
+                                    model.set('removed', true);
                                 }
                             } else
                                 delete model.removed;
@@ -636,10 +640,10 @@
                 _init_ppmenu.call(this);
                 // _initCarousel.call(this);
 
-                $('body').on('click', '.login', e=>{
+                const _on_click_btn_login = e => {
                     var portals = PortalsStore.portals();
                     if (portals.length) {
-                        let _data = $(e.currentTarget).data();
+                        let _data = e ? $(e.currentTarget).data() : {cprov:undefined};
                         !_data ? _do_connect.call(this) : _do_connect.call(this, {provider:_data.cprov});
                     } else { 
                         new DialogProviders({
@@ -648,6 +652,24 @@
                                 _do_connect.call(this, provider ? {provider} : {});
                             }
                         }).show();
+                    }
+                };
+
+                $('body').on('click', '.login', _on_click_btn_login);
+
+                sdk.clouds = PortalsStore.portals();
+                sdk.onclickaddportal = e => {
+                    _on_click_btn_login();
+                }
+
+                collection.events.changed.attach((collection, model, value) => {
+                    if ( value ) {
+                        if ( value.removed === true ) {
+                            sdk.oncloudchanged(PortalsStore.get({portal: model.path}), 'removed');
+                        } else
+                        if ( value.removed === false ) {
+                            sdk.oncloudchanged(PortalsStore.get({portal: model.path}), 'added');
+                        }
                     }
                 });
 

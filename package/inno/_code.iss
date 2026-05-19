@@ -6,37 +6,6 @@
 // Utils          //
 ////////////////////
 
-procedure DirectoryCopy(SourcePath, DestPath: string);
-var
-  FindRec: TFindRec;
-  SourceFilePath: string;
-  DestFilePath: string;
-begin
-  if FindFirst(SourcePath + '\*', FindRec) then begin
-    try
-      repeat
-        if (FindRec.Name <> '.') and (FindRec.Name <> '..') then begin
-          SourceFilePath := SourcePath + '\' + FindRec.Name;
-          DestFilePath := DestPath + '\' + FindRec.Name;
-          if FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY = 0 then begin
-            if not FileCopy(SourceFilePath, DestFilePath, False) then
-              Log(Format('Failed to copy %s to %s', [SourceFilePath, DestFilePath]));
-          end else begin
-            if DirExists(DestFilePath) or CreateDir(DestFilePath) then begin
-              DirectoryCopy(SourceFilePath, DestFilePath);
-            end else
-              Log(Format('Failed to create %s', [DestFilePath]));
-          end;
-        end;
-      until not FindNext(FindRec);
-    finally
-      FindClose(FindRec);
-    end;
-  end else begin
-    Log(Format('Failed to list %s', [SourcePath]));
-  end;
-end;
-
 function StartsWith(SubStr, S: String): Boolean;
 begin
    Result := Pos(SubStr, S) = 1;
@@ -471,10 +440,10 @@ var
 begin
   lang := ExpandConstant('{cm:AppLocale}');
   case lang of
-    'ar-SA', 'az-Latn-AZ', 'bg-BG', 'ca-ES', 'cs-CZ', 'da-DK', 'de-DE',
+    'ar-SA', 'az-Latn-AZ', 'be-BY', 'bg-BG', 'ca-ES', 'cs-CZ', 'da-DK', 'de-DE',
     'el-GR', 'en-GB', 'en-US', 'es-ES', 'eu-ES', 'fi-FI', 'fr-FR',
-    'gl-ES', 'he-IL', 'hu-HU', 'hy-AM', 'id-ID', 'it-IT', 'ja-JP',
-    'ko-KR', 'lv-LV', 'ms-MY', 'nb-NO', 'nl-NL', 'pl-PL', 'pt-BR',
+    'gl-ES', 'he-IL', 'hr-HR', 'hu-HU', 'hy-AM', 'id-ID', 'it-IT', 'ja-JP',
+    'ko-KR', 'lo-LA', 'lv-LV', 'ms-MY', 'nb-NO', 'nl-NL', 'pl-PL', 'pt-BR',
     'pt-PT', 'ro-RO', 'ru-RU', 'si-LK', 'sk-SK', 'sl-SI', 'sq-AL',
     'sr-Cyrl-RS', 'sr-Latn-RS', 'sv-SE', 'tr-TR', 'uk-UA', 'ur-PK', 'vi-VN',
     'zh-CN', 'zh-TW' : dir := lang;
@@ -982,7 +951,6 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var
-  commonCachePath, userCachePath: string;
   paramStore: string;
   ErrorCode: Integer;
   version: TWindowsVersion;
@@ -996,13 +964,6 @@ begin
         RegWriteDWordValue(HKEY_LOCAL_MACHINE, ExpandConstant('{#APP_REG_PATH}'), 'CheckForUpdates', 0);
       end else
         Exec(ExpandConstant('{app}\updatesvc.exe'), '--install "' + ExpandConstant('{cm:UpdateService}') + '."', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
-    end;
-    // migrate from the prev version when user's data saved to system common path
-    commonCachePath := ExpandConstant('{commonappdata}\{#APP_PATH}\data\cache');
-    userCachePath := ExpandConstant('{localappdata}\{#APP_PATH}\data\cache');
-    if DirExists(commonCachePath) then begin
-      ForceDirectories(userCachePath);
-      DirectoryCopy(commonCachePath, userCachePath);
     end;
 
     paramStore := GetCommandlineParam('/store');
@@ -1124,33 +1085,4 @@ begin
   end;
 
   result := lang;
-end;
-
-function libExists(const dllname: String) : boolean;
-begin
-  Result := not FileExists(ExpandConstant('{sys}\'+dllname));
-end;
-
-function NeedsAddPath(Param: string): boolean;
-var
-  OrigPath: string;
-begin
-  if not RegQueryStringValue(GetHKLM(), 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'Path', OrigPath)
-  then begin
-    Result := True;
-    Result := True;
-    exit;
-  end;
-  // look for the path with leading and trailing semicolon
-  // Pos() returns 0 if not found
-  Result := Pos(';' + Param + ';', ';' + OrigPath + ';') = 0;
-end;
-
-procedure RefreshEnvironment;
-var
-  S: AnsiString;
-  MsgResult: DWORD;
-begin
-  S := 'Environment';
-  SendTextMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, PAnsiChar(S), SMTO_ABORTIFHUNG, 5000, MsgResult);
 end;

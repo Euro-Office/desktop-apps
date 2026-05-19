@@ -691,6 +691,11 @@
         <source>Licensed under</source>
         <translation>Licensierad enligt</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Licensavtal</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

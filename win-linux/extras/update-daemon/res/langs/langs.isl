@@ -794,9 +794,13 @@ ur.MESSAGE_TEXT_ERR17 =ServiceCtrlDispatcher نے غلطی واپس کردی:
 en.MESSAGE_TEXT_ERR18 =An error occurred while start install updates!
 sq.MESSAGE_TEXT_ERR18 =Ka ndodhur një gabim gjatë fillimit të instalimit të përditësimeve!
 ur.MESSAGE_TEXT_ERR18 =اپ ڈیٹس کو انسٹال کرنے کے دوران ایک خرابی پیش آگئی!
+hr.MESSAGE_TEXT_ERR18 =Došlo je do pogreške pri pokretanju instalacije ažuriranja!
 
 en.MESSAGE_TEXT_ERR19 =Update cancelled. Can't rename updatesvc to ~updatesvc:
+hr.MESSAGE_TEXT_ERR19 =Ažuriranje otkazano. Nije moguće preimenovati updatesvc u ~updatesvc:
 
 en.MESSAGE_TEXT_ERR20 =Update cancelled. Can't replace file updatesvc to app path:
+hr.MESSAGE_TEXT_ERR20 =Ažuriranje otkazano. Nije moguće zamijeniti datoteku updatesvc na putanji aplikacije:
 
 en.MESSAGE_TEXT_ERR21 =Can't restore file updatesvc!
+hr.MESSAGE_TEXT_ERR21 =Nije moguće vratiti datoteku updatesvc!

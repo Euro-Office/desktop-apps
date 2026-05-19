@@ -776,3 +776,21 @@ BEGIN
     IDS_JUMP_XLSX  "نئی اسپریڈشیٹ"
     IDS_JUMP_PPTX  "نئی پیشکش"
 END
+
+LANGUAGE LANG_CROATIAN, SUBLANG_DEFAULT
+STRINGTABLE
+BEGIN
+    IDS_DOCX  "Office Open XML dokument"
+    IDS_XLSX  "Office Open XML proračunska tablica"
+    IDS_PPTX  "Office Open XML prezentacija"
+    IDS_PDF   "PDF"
+
+    IDS_NEW_DOCX  "Novi Office Open XML dokument"
+    IDS_NEW_XLSX  "Nova Office Open XML proračunska tablica"
+    IDS_NEW_PPTX  "Nova Office Open XML prezentacija"
+    IDS_NEW_PDF   "Novi PDF"
+
+    IDS_JUMP_DOCX  "Novi dokument"
+    IDS_JUMP_XLSX  "Nova proračunska tablica"
+    IDS_JUMP_PPTX  "Nova prezentacija"
+END

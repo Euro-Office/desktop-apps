@@ -6,8 +6,6 @@
     [string]$ProductName = "DesktopEditors",
     [string]$BuildDir,
     [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
-    [string]$TimestampServer = "http://timestamp.digicert.com",
     [switch]$Debug
 )
 
@@ -44,6 +42,7 @@ $LanguageCodes = @(
     1036, # fr              French
     1110, # gl              Galician
     1037, # he              Hebrew
+    1050, # hr              Croatian
     1038, # hu              Hungarian
     1057, # id              Indonesian
     1040, # it              Italian
@@ -75,11 +74,11 @@ $AssociationList = @(
     "xls", "xlt", "xlsx", "xltx", "xlsm", "xltm", "xlsb",
     "ppt", "pot", "pps", "pptx", "potx", "ppsx", "pptm", "potm", "ppsm",
     "vsdx", "vstx", "vssx", "vsdm", "vstm", "vssm",
-    "odt", "ott", "ods", "ots", "odp", "otp", "fodt", "fods", "fodp",
+    "odt", "ott", "ods", "ots", "odp", "otp", "odg", "fodt", "fods", "fodp",
     "pages", "numbers", "key",
     "djvu", "fb2", "pdf", "rtf", "xps", "oxps",
     "epub", "html", "xml",
-    "csv", "txt",
+    "md", "txt", "csv", "tsv",
     "docxf"
 )
 $LicensePath = "common\license"
@@ -130,9 +129,6 @@ Write-Output "package=msi" `
 Write-Host "`n[ Create Advanced Installer config ]"
 
 $AdvInstConfig = @()
-if (-not $Sign) {
-    $AdvInstConfig += "ResetSig"
-}
 if ($Arch -eq "x86") {
     $AdvInstConfig += `
         "SetComponentAttribute -feature_name MainFeature -unset -64bit_component", `
@@ -153,7 +149,8 @@ $AdvInstConfig += `
     "UpdateFile APPDIR\updatesvc.exe ..\$BuildDir\desktop\updatesvc.exe", `
     "NewSync APPDIR ..\$BuildDir\desktop -existingfiles keep -feature Files", `
     "NewSync APPDIR\$PluginManagerPath ..\$BuildDir\desktop\$PluginManagerPath -existingfiles delete -feature PluginManager", `
-    "AddFile APPDIR ..\$LicensePath\3dparty\3DPARTYLICENSE"
+    "AddFile APPDIR ..\$LicensePath\3dparty\3DPARTYLICENSE", `
+    "UpdateFile APPDIR\3DPARTYLICENSE -name 3DPARTYLICENSE.txt"
 if ($Target -ne "commercial") {
     $AdvInstConfig += `
         "AddFile APPDIR ..\$LicensePath\opensource\LICENSE.txt"
@@ -202,8 +199,7 @@ Write-Host "MsiInfo $MsiFile /p $Template"
 if ($LastExitCode -ne 0) { throw }
 
 if ($Sign) {
-    Write-Host "signtool sign /a /n $CertName /t $TimestampServer /v $MsiFile"
-    & signtool sign /a /n $CertName /t $TimestampServer /v $MsiFile
+    & "$env:WORKSPACE\documents-pipeline\scripts\Sign.ps1" -File $MsiFile
     if ($LastExitCode -ne 0) { throw }
 }
 
