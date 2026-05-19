@@ -693,6 +693,9 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     if (opts.checkBoxState != nullptr)
         *opts.checkBoxState = (chkState == TRUE);
 
+    if (ctx.hIcon)
+        DestroyIcon(ctx.hIcon);
+
     for (int i = 0; i < (int)cButtons; i++)
         free((void*)pButtons[i].pszButtonText);
     delete[] pButtons;
