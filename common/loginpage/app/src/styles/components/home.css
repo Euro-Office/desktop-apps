@@ -41,6 +41,12 @@
   margin-bottom: 48px;
 }
 
+.file-drop-section {
+  max-width: 864px;
+  width: 100%;
+  margin-inline: auto;
+}
+
 .file-list-section {
   flex: 1;
   overflow-y: auto;

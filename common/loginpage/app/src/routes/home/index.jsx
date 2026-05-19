@@ -80,7 +80,9 @@ export default function Index() {
       </section>
 
       <Show when={!hasFiles()}>
-        <FileDropZone />
+        <section class="file-drop-section">
+          <FileDropZone />
+        </section>
       </Show>
 
       <section class="file-list-section">
