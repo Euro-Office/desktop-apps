@@ -17,6 +17,7 @@
     <STRING lang="fr" value="[Setup] [ProductName]"/>
     <STRING lang="gl" value="[ProductName] [Setup]"/>
     <STRING lang="he" value="[ProductName] [Setup]"/>
+    <STRING lang="hr" value="[ProductName] [Setup]"/>
     <STRING lang="hu" value="[ProductName] [Setup]"/>
     <STRING lang="id" value="[ProductName] [Setup]"/>
     <STRING lang="it" value="[Setup] [ProductName]"/>
@@ -70,6 +71,7 @@
     <STRING lang="fr" value="Suite bureautique d&apos;applications de bureau gratuite pour l&apos;édition de documents et la collaboration"/>
     <STRING lang="gl" value="Suite ofimática de escritorio gratuíta para a edición e colaboración de documentos"/>
     <STRING lang="he" value="חבילת תוכנות משרדיות חינמית לשולחן העבודה לעריכת מסמכים ושיתוף פעולה"/>
+    <STRING lang="hr" value="Besplatan uredski paket za stolna računala za uređivanje dokumenata i suradnju"/>
     <STRING lang="hu" value="Ingyenes asztali office-programcsomag dokumentumszerkesztéshez és csoportmunkához"/>
     <STRING lang="id" value="Gratis kumpulan desktop office untuk mengedit dokumen dan berkolaborasi"/>
     <STRING lang="it" value="Suite gratuita per l&apos;ufficio desktop per la modifica e la collaborazione in tempo reale di documenti"/>
@@ -99,7 +101,7 @@
   <ENTRY id="Property.EMPTY_LANG_DIR">
     <STRING lang="en" value="en-US"/>
     <STRING lang="ar" value="ar-SA"/>
-    <STRING lang="be" value="default"/>
+    <STRING lang="be" value="be-BY"/>
     <STRING lang="bg" value="bg-BG"/>
     <STRING lang="ca" value="ca-ES"/>
     <STRING lang="cs" value="cs-CZ"/>
@@ -112,6 +114,7 @@
     <STRING lang="fr" value="fr-FR"/>
     <STRING lang="gl" value="gl-ES"/>
     <STRING lang="he" value="he-IL"/>
+    <STRING lang="hr" value="hr-HR"/>
     <STRING lang="hu" value="hu-HU"/>
     <STRING lang="id" value="id-ID"/>
     <STRING lang="it" value="it-IT"/>
@@ -154,6 +157,7 @@
     <STRING lang="fr" value="fr-FR"/>
     <STRING lang="gl" value="gl-ES"/>
     <STRING lang="he" value="he-IL"/>
+    <STRING lang="hr" value="hr-HR"/>
     <STRING lang="hu" value="hu-HU"/>
     <STRING lang="id" value="id-ID"/>
     <STRING lang="it" value="it-IT"/>
@@ -196,6 +200,7 @@
     <STRING lang="fr" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="gl" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="he" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="hr" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="hu" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="id" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="it" value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
@@ -238,6 +243,7 @@
     <STRING lang="fr" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="gl" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="he" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="hr" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="hu" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="id" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="it" value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing."/>
@@ -280,6 +286,7 @@
     <STRING lang="fr" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="gl" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="he" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
+    <STRING lang="hr" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="hu" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="id" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
     <STRING lang="it" value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing."/>
@@ -322,6 +329,7 @@
     <STRING lang="fr" value="Nouveau document"/>
     <STRING lang="gl" value="Novo documento"/>
     <STRING lang="he" value="מסמך חדש"/>
+    <STRING lang="hr" value="Novi dokument"/>
     <STRING lang="hu" value="Új dokumentum"/>
     <STRING lang="id" value="Dokumen baru"/>
     <STRING lang="it" value="Nuovo documento"/>
@@ -364,6 +372,7 @@
     <STRING lang="fr" value="Nouveau PDF"/>
     <STRING lang="gl" value="Novo PDF"/>
     <STRING lang="he" value="PDF חדש"/>
+    <STRING lang="hr" value="Novi PDF"/>
     <STRING lang="hu" value="Új PDF"/>
     <STRING lang="id" value="PDF baru"/>
     <STRING lang="it" value="Nuovo PDF"/>
@@ -406,6 +415,7 @@
     <STRING lang="fr" value="Nouvelle présentation"/>
     <STRING lang="gl" value="Nova presentación"/>
     <STRING lang="he" value="מצגת חדשה"/>
+    <STRING lang="hr" value="Nova prezentacija"/>
     <STRING lang="hu" value="Új bemutató"/>
     <STRING lang="id" value="Presentasi Baru"/>
     <STRING lang="it" value="Nuova presentazione"/>
@@ -448,6 +458,7 @@
     <STRING lang="fr" value="Nouvelle feuille de calcul"/>
     <STRING lang="gl" value="Nova folla de cálculo"/>
     <STRING lang="he" value="גיליון אלקטרוני חדש"/>
+    <STRING lang="hr" value="Nova proračunska tablica"/>
     <STRING lang="hu" value="Új táblázat"/>
     <STRING lang="id" value="Lembar kerja baru"/>
     <STRING lang="it" value="Nuovo foglio elettronico"/>
@@ -490,6 +501,7 @@
     <STRING lang="fr" value="Service de mise à jour [|AppName]"/>
     <STRING lang="gl" value="Update service for [|AppName]"/>
     <STRING lang="he" value="שירות עדכון עבור [|AppName]"/>
+    <STRING lang="hr" value="Servis ažuriranja za [|AppName]"/>
     <STRING lang="hu" value="Update service for [|AppName]"/>
     <STRING lang="id" value="Update service for [|AppName]"/>
     <STRING lang="it" value="Servizio per l&apos;aggiornamento [|AppName]"/>
@@ -532,6 +544,7 @@
     <STRING lang="fr" value="Désélectionner tout"/>
     <STRING lang="gl" value="Deselect All"/>
     <STRING lang="he" value="Deselect All"/>
+    <STRING lang="hr" value="Poništi odabir svega"/>
     <STRING lang="hu" value="Deselect All"/>
     <STRING lang="id" value="Deselect All"/>
     <STRING lang="it" value="Deselect All"/>
@@ -574,6 +587,7 @@
     <STRING lang="fr" value="Tout sélectionner"/>
     <STRING lang="gl" value="Select All"/>
     <STRING lang="he" value="Select All"/>
+    <STRING lang="hr" value="Odaberi sve"/>
     <STRING lang="hu" value="Select All"/>
     <STRING lang="id" value="Select All"/>
     <STRING lang="it" value="Select All"/>
