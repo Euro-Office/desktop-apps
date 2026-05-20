@@ -107,19 +107,6 @@ void CMainWindowImpl::refreshAboutVersion()
         if ( _lic_name.isEmpty() ) {
             _lic_name = DEFAULT_LICENSE_NAME;
             _lic_url = DEFAULT_LICENSE_URL;
-        } else if (_lic_name == "GNU AFFERO GENERAL PUBLIC LICENSE") {
-            QFile f(_lic_path);
-            if ( f.exists() ) {
-                if ( f.open(QIODevice::ReadOnly | QIODevice::Text )) {
-                    QTextStream stream(&f);
-                    QString n = stream.readLine();
-                    n = stream.readLine().trimmed();
-                    if (n.contains("Version 3")) {
-                        _lic_name = DEFAULT_LICENSE_NAME;
-                    }
-                    f.close();
-                }
-            }
         }
     } else if (_lic_name == "ONLYOFFICE Desktop Enterprise") {
         _lic_name = tr("License Agreement");
