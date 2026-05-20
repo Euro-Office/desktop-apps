@@ -1,0 +1,56 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.loadmask {
+  left: 0;
+  top: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border: none;
+  background-color: var(--background-normal, #fff);
+  z-index: 100;
+}
+
+.loader-page {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  margin-top: -40px;
+  transform: translate(-50%);
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../../../core-fonts/opensans/OpenSans-Regular.ttf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../../../core-fonts/opensans/OpenSans-Light.ttf");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../../../core-fonts/opensans/OpenSans-Bold.ttf");
+  font-weight: bold;
+}

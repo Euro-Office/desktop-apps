@@ -10,7 +10,6 @@
     "lint:fix": "oxlint --fix"
   },
   "dependencies": {
-    "@knst/clsv": "^1.0.0",
     "@kobalte/core": "^0.13.11",
     "@solid-primitives/storage": "^4.3.4",
     "@solidjs/router": "^0.16.1",

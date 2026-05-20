@@ -2,8 +2,8 @@ import { lazy, onMount } from "solid-js";
 import { HashRouter } from "@solidjs/router";
 import Sidebar from "./shell/Sidebar";
 import { signalAppReady } from "@/sdk";
+import "./styles/main.css";
 import "./styles/layout.css";
-import "./styles/components/common.css";
 
 function Shell(props) {
   return (

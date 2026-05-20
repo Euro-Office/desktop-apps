@@ -19,14 +19,10 @@ document.getElementById("wrap").ondragover = function (e) {
   return false;
 };
 
-function hideLoader() {
-  const mask = document.getElementById("loading-mask");
-  if (mask) mask.style.display = "none";
-}
-
 onNativeMessage((cmd) => {
   if (cmd === "app:ready") {
-    hideLoader();
+    const mask = document.getElementById("loading-mask");
+    if (mask) mask.style.display = "none";
   }
 });
 

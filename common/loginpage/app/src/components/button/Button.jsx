@@ -1,25 +1,29 @@
-import { cva } from '@knst/clsv'
 import { Button as ButtonPrimitive } from "@kobalte/core/button";
-import './Button.styles.css'
-import {splitProps} from "solid-js";
+import { mergeProps, splitProps } from "solid-js";
+import "./Button.styles.css";
 
-export const buttonVariants = cva({
-  base: 'btn',
-  variants: {
-    variant: {
-      default: 'btn-default',
-      primary: 'btn-primary',
-      accent: 'btn-accent',
-    }
-  },
-  defaultVariants: {
-    variant: 'default'
-  }
-})
+const variantClass = {
+  default: "btn-default",
+  primary: "btn-primary",
+  accent: "btn-accent",
+};
+
+const defaultProps = {
+  variant: "default",
+}
 
 export function Button(props) {
-  const [, rest] = splitProps(props, ['variant', 'class'])
+  const merged = mergeProps(defaultProps, props);
+  const [local, rest] = splitProps(merged, ["variant", "class"]);
+
   return (
-    <ButtonPrimitive class={buttonVariants({ variant: props.variant, class: props.class })} {...rest}/>
-  )
+    <ButtonPrimitive
+      class='btn'
+      classList={{
+        [variantClass[local.variant]]: true,
+        [local.class]: !!local.class,
+      }}
+      {...rest}
+    />
+  );
 }

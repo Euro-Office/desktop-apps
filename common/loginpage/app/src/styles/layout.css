@@ -23,15 +23,17 @@ button {
   overflow: auto;
   -webkit-user-select: none;
   user-select: none;
-  background-color: var(--background-normal);
+  background-color: var(--background-normal-element);
 }
+
+/* fixme: choose one, wrap or root */
 
 #root {
   position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
-  background-color: var(--background-normal);
+  background-color: var(--background-normal-element);
   font-family: Arial, Helvetica, "Helvetica Neue", sans-serif;
 }
 

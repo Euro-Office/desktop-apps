@@ -1,6 +1,5 @@
 import { For, Show } from "solid-js";
 import { exploreFile, openRecentFile } from "@/sdk";
-import { clsx } from "clsx";
 import { t } from "@/services/l10n";
 import { ContextMenu, DropdownMenu } from "@/components";
 import "./RecentList.styles.css";
@@ -34,7 +33,11 @@ function RecentRow(props) {
     <ContextMenu>
       <ContextMenu.Trigger
         as="div"
-        class={clsx("row text-normal", props.model.pinned && "pinned", !props.model.exist && "lost")}
+        class='row text-normal'
+        classList={{
+          "pinned": props.model.pinned,
+          "lost": !props.model.exist,
+        }}
         onClick={() => openRecentFile(props.model)}
       >
         <div class="col-name" title={props.model.fullName}>
