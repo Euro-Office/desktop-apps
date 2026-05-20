@@ -182,11 +182,12 @@ QWidget* CWindowBase::createTopPanel(QWidget *parent)
 #else
     _boxTitleBtns = static_cast<QWidget*>(new Caption(parent));
 #endif
-    _boxTitleBtns->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    _boxTitleBtns->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    _boxTitleBtns->setFixedHeight(int(m_toolbtn_height * m_dpiRatio));
 
     QHBoxLayout *layoutBtns = new QHBoxLayout(_boxTitleBtns);
     layoutBtns->setContentsMargins(0, 0, 0, 0);
-    layoutBtns->setSpacing(int(1*m_dpiRatio));
+    layoutBtns->setSpacing(0);
     layoutBtns->addStretch();
     layoutBtns->setAlignment(Qt::AlignTop);
     _boxTitleBtns->setLayout(layoutBtns);
