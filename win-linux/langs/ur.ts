@@ -675,6 +675,11 @@
         <source>Licensed under</source>
         <translation>کے تحت لائسنس یافتہ</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>لائسنس کا معاہدہ</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

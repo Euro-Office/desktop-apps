@@ -77,7 +77,6 @@ QPushButton#toolButtonMain {
     qproperty-icon: url(:/logo_light.png);
 }
 #mainPanel[rtl=true] QPushButton#toolButtonMain {border-right: 0px; border-left: 1px solid %7;}
-#mainPanel[extended-title=true] QPushButton#toolButtonMain {margin-top: 5px;}
 
 QPushButton#toolButtonMain[class=active] {background: %7;}
 /*QPushButton#toolButtonMain[class=active],

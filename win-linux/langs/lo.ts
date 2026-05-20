@@ -683,6 +683,11 @@
         <source>Licensed under</source>
         <translation>ລາຍເຊັນຄວບຄຸມເຖິງ</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>ຂໍ້ຕົກລົງສິດທິການນຳໃຊ້</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>
