@@ -565,23 +565,24 @@ double Utils::getScreenDpiRatio(int scrnum)
 
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
-    QWidget _w;
-    _w.setGeometry(QRect(pt, QSize(10,10)));
-
-#ifdef Q_OS_LINUX
-    return getScreenDpiRatioByWidget(&_w);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    int nScreenNumber = -1;
+    QScreen *screen = QGuiApplication::screenAt(pt);
+    if (screen)
+        nScreenNumber = QGuiApplication::screens().indexOf(screen);
 #else
-    return getScreenDpiRatioByHWND(_w.winId());
+    int nScreenNumber = QApplication::desktop()->screenNumber(pt);
 #endif
+    return getScreenDpiRatio(nScreenNumber);
 }
 
-double Utils::getScreenDpiRatioByHWND(int hwnd)
-{
-    unsigned int _dpi_x = 0;
-    unsigned int _dpi_y = 0;
-    double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
-}
+// double Utils::getScreenDpiRatioByHWND(int hwnd)
+// {
+//     unsigned int _dpi_x = 0;
+//     unsigned int _dpi_y = 0;
+//     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
+//     return choose_scaling(nScale);
+// }
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
