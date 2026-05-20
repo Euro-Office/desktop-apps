@@ -691,6 +691,11 @@
         <source>Licensed under</source>
         <translation>Licencēts saskaņā ar</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Licences līgums</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

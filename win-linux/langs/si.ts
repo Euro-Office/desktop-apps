@@ -703,6 +703,11 @@
         <source>Licensed under</source>
         <translation>බලපත්‍රය</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>බලපත්‍ර ගිවිසුම</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

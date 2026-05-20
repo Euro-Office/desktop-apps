@@ -27,7 +27,6 @@ QPushButton#toolButtonMain[theme=light] {border-width: 5px; border-bottom: 0 non
 QPushButton#toolButtonMain[class=normal],
 QPushButton#toolButtonMain[class=normal]:hover {border-bottom-width: 5px;}
 #mainPanel[rtl=true] QPushButton#toolButtonMain {border-left-width: 5px;}
-#mainPanel[extended-title=true] QPushButton#toolButtonMain {margin-top: 23px;}
 
 QPushButton#toolButtonDownload {border-right-width: 5px; max-width: 180px; width: 180px; max-height: 126px; height: 126px;}
 #mainPanel[rtl=true] QPushButton#toolButtonDownload {border-left-width: 5px;}
