@@ -687,6 +687,11 @@
         <source>Licensed under</source>
         <translation>Licencované na základe</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Licenčná zmluva</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

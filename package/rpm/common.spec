@@ -61,6 +61,9 @@ ETC_DIR=%{buildroot}%{_sysconfdir}
 mkdir -p $ETC_DIR/%{_package_name}
 %endif
 
+%{?cc_license:cp %{_builddir}/../../../common/license/opensource/LICENSE-CC.txt \
+    %{buildroot}%{_datadir}/licenses/%{_package_name}/LICENSE-CC.txt}
+
 %clean
 rm -rf "%{buildroot}"
 
@@ -69,7 +72,9 @@ rm -rf "%{buildroot}"
 %attr(-, root, root) %{_datadir}/applications/*
 %attr(-, root, root) %{_datadir}/doc/*
 %attr(-, root, root) %{_datadir}/icons/*
-%attr(-, root, root) %{_datadir}/licenses/*
+%license %{_datadir}/licenses/%{_package_name}/LICENSE
+%license %{_datadir}/licenses/%{_package_name}/3DPARTYLICENSE
+%{?cc_license:%license %{_datadir}/licenses/%{_package_name}/LICENSE-CC.txt}
 %attr(755, root, root) %{_bindir}/%{_desktopeditors_exec}
 %if "%{_company_name}" == "ONLYOFFICE"
 %attr(-, root, root) %{_bindir}/desktopeditors

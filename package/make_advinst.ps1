@@ -42,6 +42,7 @@ $LanguageCodes = @(
     1036, # fr              French
     1110, # gl              Galician
     1037, # he              Hebrew
+    1050, # hr              Croatian
     1038, # hu              Hungarian
     1057, # id              Indonesian
     1040, # it              Italian
@@ -148,7 +149,8 @@ $AdvInstConfig += `
     "UpdateFile APPDIR\updatesvc.exe ..\$BuildDir\desktop\updatesvc.exe", `
     "NewSync APPDIR ..\$BuildDir\desktop -existingfiles keep -feature Files", `
     "NewSync APPDIR\$PluginManagerPath ..\$BuildDir\desktop\$PluginManagerPath -existingfiles delete -feature PluginManager", `
-    "AddFile APPDIR ..\$LicensePath\3dparty\3DPARTYLICENSE"
+    "AddFile APPDIR ..\$LicensePath\3dparty\3DPARTYLICENSE", `
+    "UpdateFile APPDIR\3DPARTYLICENSE -name 3DPARTYLICENSE.txt"
 if ($Target -ne "commercial") {
     $AdvInstConfig += `
         "AddFile APPDIR ..\$LicensePath\opensource\LICENSE.txt"
