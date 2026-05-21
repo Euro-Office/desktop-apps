@@ -23,7 +23,7 @@
 */
 
 ///////////////////////////////////////////////////////////////////////////////
-// TaskDialogTheme.cpp  —  Win32 TaskDialog dark-mode support
+// DarkTaskDialog-Native  —  Win32 TaskDialog dark-mode support
 //
 // Rendering strategy derived from comctl32.dll UIFILE (resource 4255, 26100)
 //
