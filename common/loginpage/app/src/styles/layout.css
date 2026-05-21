@@ -51,7 +51,8 @@ h4 {
 
 .shell {
   display: grid;
-  grid-template-columns: var(--col-width, 288px) 1fr var(--ai-w, 0);
+  grid-template-columns: calc(62px + 8px) 1fr var(--ai-w, 0);
+  gap: 4px;
   width: 100%;
   height: 100%;
 }
@@ -64,7 +65,7 @@ h4 {
 .col-center {
   height: 100dvh;
   color: var(--text-normal);
-  padding: 8px 8px 8px 4px;
+  padding: 8px 8px 8px 0;
 
   > * {
     border-radius: 8px;

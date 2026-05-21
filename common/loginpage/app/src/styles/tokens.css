@@ -7,6 +7,7 @@
   --background-primary-button: #3483db;
   --background-scrim: #00000033;
   --background-scroll-thumb: #e0e0e0;
+  --background-toolbar: var(--background-action-panel);
 
   /* border */
   --border-divider: #dfdfdf;

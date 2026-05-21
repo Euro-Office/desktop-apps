@@ -7,31 +7,25 @@ export default function Sidebar() {
     <nav class="tool-menu">
       <li class="menu-item">
         <A href="/" activeClass="selected" end>
-          <div class="icon-box">
-            <svg class="icon">
-              <use href="#home" />
-            </svg>
-          </div>
+          <svg class="icon">
+            <use href="#home" />
+          </svg>
           <span class="text">{t("actHome")}</span>
         </A>
       </li>
       <li class="menu-item">
         <A href="/open" activeClass="selected">
-          <div class="icon-box">
-            <svg class="icon">
-              <use href="#folder" />
-            </svg>
-          </div>
+          <svg class="icon">
+            <use href="#folder" />
+          </svg>
           <span class="text">{t("actOpenLocal")}</span>
         </A>
       </li>
       <li class="menu-item">
         <A href="/templates" activeClass="selected">
-          <div class="icon-box">
-            <svg class="icon">
-              <use href="#templates" />
-            </svg>
-          </div>
+          <svg class="icon">
+            <use href="#templates" />
+          </svg>
           <span class="text">{t("actTemplates")}</span>
         </A>
       </li>
@@ -39,21 +33,17 @@ export default function Sidebar() {
       <li class="menu-item devider" />
       <li class="menu-item">
         <A href="/settings" activeClass="selected">
-          <div class="icon-box">
-            <svg class="icon">
-              <use href="#settings" />
-            </svg>
-          </div>
+          <svg class="icon">
+            <use href="#settings" />
+          </svg>
           <span class="text">{t("actSettings")}</span>
         </A>
       </li>
       <li class="menu-item hidden">
         <A href="/about" activeClass="selected">
-          <div class="icon-box">
-            <svg class="icon">
-              <use href="#about" />
-            </svg>
-          </div>
+          <svg class="icon">
+            <use href="#about" />
+          </svg>
           <span class="text">{t("actAbout")}</span>
         </A>
       </li>
