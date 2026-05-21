@@ -91,7 +91,7 @@
         <file alias="arrow_down_1.75x.png">res/icons/arrow_down@1.75x.png</file>
         <file alias="arrow_down_2x.png">res/icons/arrow_down@2x.png</file>
         <file alias="app.ico">res/icons/desktopeditors-eo.ico</file>
-        <file>res/icons/splash-eo.png</file>
+        <file>res/icons/splash-eo.svg</file>
         <file alias="logo-light-eo.svg">res/icons/logo-light-eo.svg</file>
         <file alias="logo-light-eo.png">res/icons/logo-light-eo.png</file>
         <file alias="logo-light-eo_1.25x.png">res/icons/logo-light-eo@1.25x.png</file>
