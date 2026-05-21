@@ -90,18 +90,18 @@
         <file alias="arrow_down_1.5x.png">res/icons/arrow_down@1.5x.png</file>
         <file alias="arrow_down_1.75x.png">res/icons/arrow_down@1.75x.png</file>
         <file alias="arrow_down_2x.png">res/icons/arrow_down@2x.png</file>
-        <file alias="app.ico">res/icons/desktopeditors.ico</file>
+        <file alias="app.ico">res/icons/desktopeditors-eo.ico</file>
         <file>res/icons/splash.svg</file>
-        <file alias="logo_light.svg">res/icons/logo_light.svg</file>
-        <file alias="logo_light.png">res/icons/logo_light.png</file>
-        <file alias="logo_light_1.25x.png">res/icons/logo_light@1.25x.png</file>
-        <file alias="logo_light_1.5x.png">res/icons/logo_light@1.5x.png</file>
-        <file alias="logo_light_1.75x.png">res/icons/logo_light@1.75x.png</file>
-        <file alias="logo_dark.svg">res/icons/logo_dark.svg</file>
-        <file alias="logo_dark.png">res/icons/logo_dark.png</file>
-        <file alias="logo_dark_1.25x.png">res/icons/logo_dark@1.25x.png</file>
-        <file alias="logo_dark_1.5x.png">res/icons/logo_dark@1.5x.png</file>
-        <file alias="logo_dark_1.75x.png">res/icons/logo_dark@1.75x.png</file>
+        <file alias="logo-light-eo.svg">res/icons/logo-light-eo.svg</file>
+        <file alias="logo-light-eo.png">res/icons/logo-light-eo.png</file>
+        <file alias="logo-light-eo_1.25x.png">res/icons/logo-light-eo@1.25x.png</file>
+        <file alias="logo-light-eo_1.5x.png">res/icons/logo-light-eo@1.5x.png</file>
+        <file alias="logo-light-eo_1.75x.png">res/icons/logo-light-eo@1.75x.png</file>
+        <file alias="logo-dark-eo.svg">res/icons/logo-dark-eo.svg</file>
+        <file alias="logo-dark-eo.png">res/icons/logo-dark-eo.png</file>
+        <file alias="logo-dark-eo_1.25x.png">res/icons/logo-dark-eo@1.25x.png</file>
+        <file alias="logo-dark-eo_1.5x.png">res/icons/logo-dark-eo@1.5x.png</file>
+        <file alias="logo-dark-eo_1.75x.png">res/icons/logo-dark-eo@1.75x.png</file>
     </qresource>
     <qresource prefix="/tabbar/icons">
         <file alias="de.svg">res/icons/tabbar/tabicon_de_normal.svg</file>

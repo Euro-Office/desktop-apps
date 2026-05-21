@@ -61,12 +61,12 @@ QPushButton#toolButtonClose[class=normal][unix=false]:pressed {image: url(:/clos
 
 QPushButton#toolButtonMain {
     background: %5;
-    font-size: 10px;
+    font-size: 5px;
     font-family: 'Open Sans',sans-serif;
     font-weight: bold;
     border-left: 0px;
     border-right: 1px solid %7;
-    qproperty-icon: url(:/logo_light.png);
+    qproperty-icon: url(:/logo-light-eo.png);
 }
 #mainPanel[rtl=true] QPushButton#toolButtonMain {border-right: 0px; border-left: 1px solid %7;}
 #mainPanel[win10=true] QPushButton#toolButtonMain {margin-top: 5px;}
@@ -94,7 +94,7 @@ QPushButton#toolButtonDownload {border-left: 0px; border-right: 1px solid %6; ma
 #mainPanel[uithemetype=dark] QPushButton#toolButtonMaximize[class=min] {image: url(:/maximize_light.svg) center no-repeat;}
 #mainPanel[uithemetype=dark] QPushButton#toolButtonMinimize {image: url(:/minimize_light.svg) center no-repeat;}
 #mainPanel[uithemetype=dark] QPushButton#toolButtonClose {image: url(:/close_light.svg) center no-repeat;}
-#mainPanel[uithemetype=dark] QPushButton#toolButtonMain {qproperty-icon: url(:/logo_dark.png);}
+#mainPanel[uithemetype=dark] QPushButton#toolButtonMain {qproperty-icon: url(:/logo-dark-eo.png);}
 
 /* Menu */
 

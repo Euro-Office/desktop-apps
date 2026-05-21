@@ -150,7 +150,7 @@ find_package(CEF REQUIRED)
 
 # 3. Definitions & Global Config
 add_definitions(-D__DONT_WRITE_IN_APP_TITLE)
-add_definitions(-DAPP_ICON_PATH="./res/icons/desktopeditors.ico")
+add_definitions(-DAPP_ICON_PATH="./res/icons/desktopeditors-eo.ico")
 add_definitions(-DCOPYRIGHT_YEAR=2026)
 
 # Handle Product Version from Environment

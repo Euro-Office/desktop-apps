@@ -52,7 +52,7 @@ window.DialogConnect = function(params) {
                                 </div>
                                 <div style="height:12px;"></div>
                                 <div class="lr-flex">
-                                    <a class="text-sub link newportal" target="popup" href="javascript:void(0)">${utils.Lang.linkCreatePortal}</a>
+                                    <!--<a class="text-sub link newportal" target="popup" href="javascript:void(0)">${utils.Lang.linkCreatePortal}</a>-->
                                     <span />
                                     <div class="lr-flex">
                                         <img class="img-loader">

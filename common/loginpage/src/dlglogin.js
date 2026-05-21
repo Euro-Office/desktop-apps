@@ -39,7 +39,7 @@ window.LoginDlg = function(opts) {
                           </div>
                           <div style="height:10px;"></div>
                           <div id="box-btn-next" class="lr-flex">
-                            <a id="link-create" class="text-sub link newportal" target="popup" href="javascript:void(0)">${utils.Lang.linkCreatePortal}</a>
+                            <!--<a id="link-create" class="text-sub link newportal" target="popup" href="javascript:void(0)">${utils.Lang.linkCreatePortal}</a>-->
                             <span />
                             <div>
                               <img class="img-loader">

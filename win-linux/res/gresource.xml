@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/">
-    <file>icons/app-icon_64.png</file>
+    <file>icons/app-icon-eo.svg</file>
   </gresource>
 </gresources>
 

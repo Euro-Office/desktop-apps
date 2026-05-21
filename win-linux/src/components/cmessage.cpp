@@ -736,7 +736,7 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     case MsgType::MSG_WARN:    img_name = "dialog-warning"; break;
     case MsgType::MSG_CONFIRM: img_name = "dialog-question"; break;
     case MsgType::MSG_ERROR:   img_name = "dialog-error"; break;
-    case MsgType::MSG_BRAND:   img_name = "/icons/app-icon_64.png"; break;
+    case MsgType::MSG_BRAND:   img_name = "/icons/app-icon-eo.svg"; break;
     default:                   img_name = "dialog-information"; break;
     }
 

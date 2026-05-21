@@ -85,8 +85,8 @@
                             <section class="hbox">
                                 <div id="idx-about-cut-logo" class="${_opts.logocls}">
                                     <svg class="ver-logo">
-                                        <use id="idx-ver-logo--light" href="#idx-logo-light" />
-                                        <use id="idx-ver-logo--dark" href="#idx-logo-dark" />
+                                        <use id="idx-ver-logo--light" href="#idx-logo-light-eo" />
+                                        <use id="idx-ver-logo--dark" href="#idx-logo-dark-eo" />
                                     </svg>
                                 </div>
                                 <div class="vbox">

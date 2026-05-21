@@ -143,13 +143,13 @@
                                         <div id='box-providers-premium-button' />
                                         <div id="box-providers-buttons" style='font-size:0;' />
                                     </section>
-                                    <h4 class='text-description separate-top' l10n='portalEmptyAdv1'>${_lang.portalEmptyAdv1}</h4>
+                                    <!--<h4 class='text-description separate-top' l10n='portalEmptyAdv1'>${_lang.portalEmptyAdv1}</h4>
                                     <div class="tools-connect">
                                         <button class="btn btn--landing newportal" l10n>${_lang.btnCreatePortal}</button>
                                         <section class="link-connect">
                                             <label l10n>${_lang.textHavePortal}</label><a class="login link" href="#" l10n>${_lang.btnConnect}</a>
                                         </section>
-                                    </div>
+                                    </div>-->
                                 </section>
                             </div>`;
 
