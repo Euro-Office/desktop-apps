@@ -1,7 +1,7 @@
 import { Show, splitProps } from "solid-js";
 import { ContextMenu as Primitive } from "@kobalte/core/context-menu";
 import { mergeClass } from "@/utils/classes";
-import "./ContextMenu.styles.css";
+import styles from "./ContextMenu.module.css";
 
 function Root(props) {
   return <Primitive {...props} />;
@@ -15,7 +15,7 @@ function Content(props) {
   const [, rest] = splitProps(props, ["class"]);
   return (
     <Primitive.Portal>
-      <Primitive.Content classList={mergeClass("menu", props.class)} {...rest} />
+      <Primitive.Content classList={mergeClass(styles.menu, props.class)} {...rest} />
     </Primitive.Portal>
   );
 }
@@ -23,7 +23,7 @@ function Content(props) {
 function Item(props) {
   const [, rest] = splitProps(props, ["class", "icon", "children"]);
   return (
-    <Primitive.Item classList={mergeClass("menu-item", props.class)} {...rest}>
+    <Primitive.Item classList={mergeClass(styles.menuItem, props.class)} {...rest}>
       <Show when={props.icon}>
         <svg class="menu-icon">
           <use href={props.icon} />
@@ -36,7 +36,7 @@ function Item(props) {
 
 function Separator(props) {
   const [, rest] = splitProps(props, ["class"]);
-  return <Primitive.Separator classList={mergeClass("menu-separator", props.class)} {...rest} />;
+  return <Primitive.Separator classList={mergeClass(styles.menuSeparator, props.class)} {...rest} />;
 }
 
 export const ContextMenu = Object.assign(Root, { Trigger, Content, Item, Separator });
