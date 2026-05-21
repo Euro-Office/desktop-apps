@@ -1,0 +1,28 @@
+<svg width="500" height="250" viewBox="0 0 500 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#a)">
+        <!-- White background -->
+        <path d="M0 0h500v250H0V0Z" fill="#fff"/>
+        <!-- Gray border (kept from original) -->
+        <path d="M499 1v248H1V1h498ZM0 0v250h500V0H0Z" fill="#ACACAC"/>
+
+        <!-- Euro-Office app icon on the left (replaces the three colored shapes) -->
+        <g transform="translate(15, 35) scale(0.1875) translate(0, 960)">
+            <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" fill="#5DC0E8"/>
+        </g>
+
+        <!-- Title: "Euro-Office" (bold) + " Desktop Editors" (regular) -->
+        <text x="485" y="135" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#333" text-anchor="end">Desktop Editors</text>
+        <text x="337" y="135" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="bold" fill="#333" text-anchor="end">Euro-Office</text>
+
+        <!-- Subtitle -->
+        <text x="485" y="208" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#787878" text-anchor="end">Powered by Ascensio System SIA &amp; Euro-Office 2026</text>
+
+        <!-- URL -->
+        <text x="485" y="232" font-family="Arial, Helvetica, sans-serif" font-size="10" fill="#787878" text-anchor="end">https://github.com/Euro-Office</text>
+    </g>
+    <defs>
+        <clipPath id="a">
+            <path fill="#fff" d="M0 0h500v250H0z"/>
+        </clipPath>
+    </defs>
+</svg>
