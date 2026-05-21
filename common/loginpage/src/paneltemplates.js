@@ -466,16 +466,25 @@
                     window.sdk.LocalFileTemplates(ls);
                 };
 
+                let langChange = true;
+
                 CommonEvents.on('lang:changed', (ol, nl) => {
                     if (ol === nl) return;
-                    _resetPagination.call(this);  
+                    langChange = true;
+                    _resetPagination.call(this);
                     _reload_templates(nl);
-                    _loadTemplates.call(this, nl);
                     $('#template-search', this.view.$panel).attr('placeholder', utils.Lang.tplSearch);
                 });
 
+                CommonEvents.on('panel:show', (panel) => {
+                    if (panel !== 'templates') return;
+                    if (langChange) {
+                        langChange = false;
+                        _loadTemplates.call(this, utils.Lang.id);
+                    }
+                });
+
                 _reload_templates(utils.Lang.id);
-                _loadTemplates.call(this, utils.Lang.id);
 
                 return this;
             }
