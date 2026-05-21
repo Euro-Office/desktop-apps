@@ -28,7 +28,7 @@
 #include <QPainter>
 
 auto getSplashImage(double ratio) -> QPixmap {
-    QSvgRenderer _svg(QString(":/res/icons/splash.svg"));
+    QSvgRenderer _svg(QString(":/res/icons/splash-eo.png"));
 
     QPixmap _image(_svg.defaultSize() * ratio);
     QPainter _painter(&_image);
