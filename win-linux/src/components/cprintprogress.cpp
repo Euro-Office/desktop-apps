@@ -98,7 +98,7 @@ public:
         useNativeDialog = WindowHelper::useNativeDialog();
         const QString primaryText = QObject::tr("Printing...", "CPrintProgress");
         const QString secondaryText = QObject::tr("Document is preparing", "CPrintProgress");
-        const QString cancelText = QObject::tr("&Cancel", "CPrintProgress");
+        const QString cancelText = QObject::tr("Cancel", "CPrintProgress");
         if (useNativeDialog) {
 #ifdef _WIN32
             parentHwnd = parent ? (HWND)parent->winId() : NULL;
