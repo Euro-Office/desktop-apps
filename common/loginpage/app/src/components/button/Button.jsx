@@ -1,11 +1,11 @@
 import { Button as ButtonPrimitive } from "@kobalte/core/button";
 import { mergeProps, splitProps } from "solid-js";
-import "./Button.styles.css";
+import styles from "./Button.module.css";
 
 const variantClass = {
-  default: "btn-default",
-  primary: "btn-primary",
-  accent: "btn-accent",
+  default: styles.btnDefault,
+  primary: styles.btnPrimary,
+  accent: styles.btnAccent,
 };
 
 const defaultProps = {
@@ -18,7 +18,7 @@ export function Button(props) {
 
   return (
     <ButtonPrimitive
-      class='btn'
+      class={styles.btn}
       classList={{
         [variantClass[local.variant]]: true,
         [local.class]: !!local.class,
