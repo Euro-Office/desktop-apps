@@ -325,5 +325,6 @@ for arg in "$@"; do
 done
 
 APP_PATH=/opt/M4_DESKTOPEDITORS_PREFIX
-export LD_LIBRARY_PATH=$APP_PATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=$APP_PATH:$APP_PATH/converter${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_PRELOAD=$APP_PATH/libcef.so
 exec $APP_PATH/DesktopEditors "$@"
