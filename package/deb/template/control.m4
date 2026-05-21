@@ -33,14 +33,14 @@ ifelse(M4_PACKAGE_EDITION, full,
   fonts-crosextra-carlito,
   xdg-utils')
 Recommends: ttf-mscorefonts-installer, fonts-takao-gothic 
-ifelse(M4_COMPANY_NAME, ONLYOFFICE,Suggests: M4_PACKAGE_NAME-help
+ifelse(M4_COMPANY_NAME, Euro-Office,Suggests: M4_PACKAGE_NAME-help
 ,)dnl
 Conflicts: ifelse(M4_PACKAGE_EDITION, commercial, M4_PACKAGE_OPENSOURCE, M4_PACKAGE_COMMERCIAL)
 Description: Desktop editors for text docs, spreadsheets, presentations, PDFs, and PDF forms.
  Open-source office suite pack that comprises all the tools you need to
  work offline with documents, spreadsheets, presentations, PDFs, and PDF forms.
 
-ifelse(M4_COMPANY_NAME, ONLYOFFICE,
+ifelse(M4_COMPANY_NAME, Euro-Office,
 Package: M4_PACKAGE_NAME-help
 Architecture: all
 Pre-Depends: dpkg (>= 1.14.0)

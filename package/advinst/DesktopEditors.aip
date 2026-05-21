@@ -17,11 +17,11 @@
     <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
     <ROW Property="ARPURLINFOABOUT" Value="http://www.onlyoffice.com" ValueLocId="-"/>
     <ROW Property="ARPURLUPDATEINFO" Value="http://www.onlyoffice.com/download.aspx" ValueLocId="-"/>
-    <ROW Property="AppName" Value="ONLYOFFICE" ValueLocId="-"/>
+    <ROW Property="AppName" Value="Euro-Office" ValueLocId="-"/>
     <ROW Property="AppUserModelID" Value="ASC.Documents.5" ValueLocId="-"/>
     <ROW Property="Arch" Value="x64" MultiBuildValue="MsiBuild32:x86#MsiBuildARM64:arm64" ValueLocId="-"/>
     <ROW Property="CTRLS" Value="2"/>
-    <ROW Property="CompanyPath" Value="ONLYOFFICE" ValueLocId="-"/>
+    <ROW Property="CompanyPath" Value="Euro-Office" ValueLocId="-"/>
     <ROW Property="DesktopPath" Value="DesktopEditors" ValueLocId="-"/>
     <ROW Property="EMPTY_LANG_DIR" Value="en-US"/>
     <ROW Property="Edition" Value="Community" ValueLocId="-"/>
@@ -41,7 +41,7 @@
     <ROW Property="NewSpreadsheet" Value="New spreadsheet"/>
     <ROW Property="PLUGINS" Value="1" ValueLocId="-"/>
     <ROW Property="PackageFileName" Value="[|CompanyPath]-[|DesktopPath]" ValueLocId="-"/>
-    <ROW Property="PackageName" Value="ONLYOFFICE Desktop Editors" ValueLocId="-"/>
+    <ROW Property="PackageName" Value="Euro-Office Desktop Editors" ValueLocId="-"/>
     <ROW Property="ProductCode" Value="1025:{00000000-0000-0000-0000-000000000000} 1026:{00000000-0000-0000-0000-000000000000} 1027:{00000000-0000-0000-0000-000000000000} 1028:{00000000-0000-0000-0000-000000000000} 1029:{00000000-0000-0000-0000-000000000000} 1030:{00000000-0000-0000-0000-000000000000} 1031:{00000000-0000-0000-0000-000000000000} 1032:{00000000-0000-0000-0000-000000000000} 1033:{00000000-0000-0000-0000-000000000000} 1035:{00000000-0000-0000-0000-000000000000} 1036:{00000000-0000-0000-0000-000000000000} 1037:{00000000-0000-0000-0000-000000000000} 1038:{00000000-0000-0000-0000-000000000000} 1040:{00000000-0000-0000-0000-000000000000} 1041:{00000000-0000-0000-0000-000000000000} 1042:{00000000-0000-0000-0000-000000000000} 1043:{00000000-0000-0000-0000-000000000000} 1044:{00000000-0000-0000-0000-000000000000} 1045:{00000000-0000-0000-0000-000000000000} 1046:{00000000-0000-0000-0000-000000000000} 1048:{00000000-0000-0000-0000-000000000000} 1049:{00000000-0000-0000-0000-000000000000} 1051:{00000000-0000-0000-0000-000000000000} 1052:{00000000-0000-0000-0000-000000000000} 1053:{00000000-0000-0000-0000-000000000000} 1055:{00000000-0000-0000-0000-000000000000} 1056:{00000000-0000-0000-0000-000000000000} 1057:{00000000-0000-0000-0000-000000000000} 1058:{00000000-0000-0000-0000-000000000000} 1059:{00000000-0000-0000-0000-000000000000} 1060:{00000000-0000-0000-0000-000000000000} 1062:{00000000-0000-0000-0000-000000000000} 1066:{00000000-0000-0000-0000-000000000000} 1110:{00000000-0000-0000-0000-000000000000} 2052:{00000000-0000-0000-0000-000000000000} 2057:{00000000-0000-0000-0000-000000000000} 2070:{00000000-0000-0000-0000-000000000000} 2074:{00000000-0000-0000-0000-000000000000} 3082:{00000000-0000-0000-0000-000000000000} 3098:{00000000-0000-0000-0000-000000000000} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="[|AppName]" ValueLocId="-"/>
@@ -102,7 +102,7 @@
     <ROW Property="REGISTER_XML" Value="1" Type="4" ValueLocId="-"/>
     <ROW Property="REGISTER_XPS" Value="1" Type="4" ValueLocId="-"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
-    <ROW Property="RegisteredAppName" Value="ONLYOFFICE Editors" ValueLocId="-"/>
+    <ROW Property="RegisteredAppName" Value="Euro-Office Editors" ValueLocId="-"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1"/>
     <ROW Property="ServiceDescription" Value="Update service for [|AppName]"/>
     <ROW Property="ServiceName" Value="[|AppName] Update Service" ValueLocId="-"/>
@@ -1800,7 +1800,7 @@
     <ROW Registry="reg_fa_progid__doc" Root="0" Key="[ExtPfx].Document.1" Value="Word 97-2003 Document" Component_="c_reg_fa_progid__doc"/>
     <ROW Registry="reg_fa_progid__docm" Root="0" Key="[ExtPfx].Docm" Value="Word 97-2003 Macro-Enabled Document" Component_="c_reg_fa_progid__docm"/>
     <ROW Registry="reg_fa_progid__docx" Root="0" Key="[ExtPfx].Document.12" Value="Microsoft Word Document" Component_="c_reg_fa_progid__docx"/>
-    <ROW Registry="reg_fa_progid__docxf" Root="0" Key="[ExtPfx].Docxf" Value="ONLYOFFICE Form Template" Component_="c_reg_fa_progid__docxf"/>
+    <ROW Registry="reg_fa_progid__docxf" Root="0" Key="[ExtPfx].Docxf" Value="Euro-Office Form Template" Component_="c_reg_fa_progid__docxf"/>
     <ROW Registry="reg_fa_progid__dot" Root="0" Key="[ExtPfx].Dot" Value="Word 97-2003 Template" Component_="c_reg_fa_progid__dot"/>
     <ROW Registry="reg_fa_progid__dotm" Root="0" Key="[ExtPfx].Dotm" Value="Word 97-2003 Macro-Enabled Template" Component_="c_reg_fa_progid__dotm"/>
     <ROW Registry="reg_fa_progid__dotx" Root="0" Key="[ExtPfx].Dotx" Value="Microsoft Word Document Template" Component_="c_reg_fa_progid__dotx"/>

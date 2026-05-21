@@ -68,7 +68,7 @@ Compression=lzma2/ultra64
 LZMAUseSeparateProcess=yes
 
 [Languages]
-#ifdef _ONLYOFFICE
+#ifdef _Euro-Office
 Name: en;    MessagesFile: compiler:Default.isl;
 Name: be;    MessagesFile: compiler:Languages\Belarusian.isl;
 Name: bg;    MessagesFile: compiler:Languages\Bulgarian.isl;

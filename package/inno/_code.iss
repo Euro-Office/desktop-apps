@@ -210,7 +210,7 @@ procedure initExtensions;
 var
   prefix: string;
 begin
-#ifdef _ONLYOFFICE
+#ifdef _Euro-Office
   SetArrayLength(AudioExts, 28);
 #else
   SetArrayLength(AudioExts, 27);
@@ -245,7 +245,7 @@ begin
   AudioExts[24] := 'FODT';
   AudioExts[25] := 'VSDX';
   AudioExts[26] := 'XLSM';
-#ifdef _ONLYOFFICE
+#ifdef _Euro-Office
   AudioExts[27] := 'DOCXF';
 #endif
 
@@ -281,7 +281,7 @@ begin
   ExtensionRegistryInfo[24] := prefix + 'Fodt:'         + ExpandConstant('{cm:extFODT}')            + ':' + '35';
   ExtensionRegistryInfo[25] := prefix + 'Vsdx:'         + ExpandConstant('{cm:extVSDX}')            + ':' + '36';
   ExtensionRegistryInfo[26] := prefix + 'Xlsm:'         + ExpandConstant('{cm:extXLSM}')            + ':' + '37';
-#ifdef _ONLYOFFICE
+#ifdef _Euro-Office
   ExtensionRegistryInfo[27] := prefix + 'Docxf:'        + ExpandConstant('{cm:extDOCXF}')           + ':' + '13';
 #endif
 end;
@@ -485,7 +485,7 @@ begin
   args := ['new.docx:.docx:.Document.12:7:1000:1100',
            'new.pptx:.pptx:.Show.12:9:1002:1102',
            'new.xlsx:.xlsx:.Sheet.12:10:1001:1101'
-#ifdef _ONLYOFFICE
+#ifdef _Euro-Office
            ,'new.pdf:.pdf:.Pdf:5:1003:1103'
 #endif
            ];
@@ -586,7 +586,7 @@ begin
   AddToDefaultPrograms;
   AddContextMenuNewItems;
 
-#ifndef _ONLYOFFICE
+#ifndef _Euro-Office
   //TODO: for bug 55795. remove for ver 7.3
   SetArrayLength(cleanExts, 1);
   SetArrayLength(extensionInfo, 1);
@@ -674,7 +674,7 @@ begin
   RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.docx\{#ASCC_REG_PREFIX}.Document.12'));
   RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.pptx\{#ASCC_REG_PREFIX}.Show.12'));
   RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.xlsx\{#ASCC_REG_PREFIX}.Sheet.12'));
-#ifdef _ONLYOFFICE
+#ifdef _Euro-Office
   RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.pdf\{#ASCC_REG_PREFIX}.Pdf'));
 #endif
 end;

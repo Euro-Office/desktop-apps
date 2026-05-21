@@ -65,9 +65,9 @@ DESKTOP_FILES += build/main/usr/share/applications/$(DESKTOPEDITORS_EXEC).deskto
 LINUX_DEPS += $(BIN_FILES)
 LINUX_DEPS += $(DESKTOP_FILES)
 LINUX_DEPS += $(CHANGELOG_RPM)
-LINUX_DEPS += $(patsubst $(BRANDING_DIR)/common/linux/icons/%.png, \
+LINUX_DEPS += $(patsubst $(BRANDING_DIR)/common/linux/icons-eo/%.png, \
 	build/main/usr/share/icons/hicolor/%/apps/$(DESKTOPEDITORS_EXEC).png, \
-	$(wildcard $(BRANDING_DIR)/common/linux/icons/*.png))
+	$(wildcard $(BRANDING_DIR)/common/linux/icons-eo/*.png))
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/3DPARTYLICENSE
 
@@ -192,7 +192,7 @@ $(RPM) : build rpm/$(PACKAGE_NAME).spec
 		$(RPM_PARAMS) \
 		$(PACKAGE_NAME).spec
 
-build/main/usr/share/icons/hicolor/%/apps/$(DESKTOPEDITORS_EXEC).png : $(BRANDING_DIR)/common/linux/icons/%.png
+build/main/usr/share/icons/hicolor/%/apps/$(DESKTOPEDITORS_EXEC).png : $(BRANDING_DIR)/common/linux/icons-eo/%.png
 	install -m 644 -D $< $@
 
 build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE : $(BRANDING_DIR)/common/license/$(PACKAGE_EDITION)/LICENSE.txt
