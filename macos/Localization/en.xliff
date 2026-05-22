@@ -2,7 +2,7 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
   <file original="ONLYOFFICE/Base.lproj/Document-Sign.storyboard" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="1Fy-mg-aq9.title" xml:space="preserve">
@@ -74,7 +74,7 @@
   </file>
   <file original="ONLYOFFICE/Base.lproj/Localizable.strings" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="%@ Help" xml:space="preserve">
@@ -102,6 +102,11 @@
         <target>Cancel</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="Canceled" xml:space="preserve">
+        <source>Canceled</source>
+        <target>Canceled</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="Cannot open file of Digital Signature" xml:space="preserve">
         <source>Cannot open file of Digital Signature</source>
         <target>Cannot open file of Digital Signature</target>
@@ -117,9 +122,44 @@
         <target>Cannot open folder of the file location.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="Clear" xml:space="preserve">
+        <source>Clear</source>
+        <target>Clear</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Close" xml:space="preserve">
+        <source>Close</source>
+        <target>Close</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Close all" xml:space="preserve">
+        <source>Close all</source>
+        <target>Close all</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Close saved" xml:space="preserve">
+        <source>Close saved</source>
+        <target>Close saved</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="Comma-Separated Values" xml:space="preserve">
         <source>Comma-Separated Values</source>
-        <target state="translated">Comma Separated Values</target>
+        <target>Comma Separated Values (*.csv)</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Community version %@" xml:space="preserve">
+        <source>Community version %@</source>
+        <target>Community version %@</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Community version %@ (%@-%@)" xml:space="preserve">
+        <source>Community version %1$@ (%2$@-%3$@)</source>
+        <target>Community version %1$@ (%2$@-%3$@)</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Create new" xml:space="preserve">
+        <source>Create new</source>
+        <target>Create new</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Create portal" xml:space="preserve">
@@ -134,7 +174,7 @@
       </trans-unit>
       <trans-unit id="DjVu File" xml:space="preserve">
         <source>DjVu File</source>
-        <target state="translated">Digital Document</target>
+        <target>Digital Document (*.djvu)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Do you want to save the changes made to the document &quot;%@&quot;?" xml:space="preserve">
@@ -154,7 +194,7 @@
       </trans-unit>
       <trans-unit id="Document template" xml:space="preserve">
         <source>Document template</source>
-        <target state="translated">Word Open XML Document Template</target>
+        <target>Word Open XML Document Template (*.dotx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Don't Save" xml:space="preserve">
@@ -162,29 +202,44 @@
         <target>Don't Save</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="Electronic Publication" xml:space="preserve">
-        <source>Electronic Publication</source>
-        <target state="translated">Electronic Publication File</target>
+      <trans-unit id="Downloads" xml:space="preserve">
+        <source>Downloads</source>
+        <target>Downloads</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Enterprise version %@" xml:space="preserve">
+        <source>Enterprise version %@</source>
+        <target>Enterprise version %@</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Enterprise version %@ (%@-%@)" xml:space="preserve">
+        <source>Enterprise version %1$@ (%2$@-%3$@)</source>
+        <target>Enterprise version %1$@ (%2$@-%3$@)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Excel 97-2003 Spreadsheet" xml:space="preserve">
         <source>Excel 97-2003 Spreadsheet</source>
-        <target state="translated">Excel 97-2003 Spreadsheet</target>
+        <target>Excel 97-2003 Spreadsheet (*.xls)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Excel 2007 Spreadsheet" xml:space="preserve">
         <source>Excel 2007 Spreadsheet</source>
-        <target state="translated">Office Open XML Spreadsheet</target>
+        <target>Office Open XML Spreadsheet (*.xlsx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="Macro-enabled spreadsheet template" xml:space="preserve">
-        <source>Macro-enabled spreadsheet template</source>
-        <target state="translated">Macro-enabled Spreadsheet template</target>
+      <trans-unit id="Excel Binary Workbook" xml:space="preserve">
+        <source>Excel Binary Workbook</source>
+        <target>Excel Binary Workbook</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Failed to install theme" xml:space="preserve">
+        <source>Failed to install theme</source>
+        <target>Failed to install theme</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="FictionBook File" xml:space="preserve">
         <source>FictionBook File</source>
-        <target state="translated">FictionBook 2 File</target>
+        <target>FictionBook 2 File (*.fb2)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="File &quot;%@&quot; can not be open or not exist." xml:space="preserve">
@@ -202,11 +257,6 @@
         <target>File can not be open.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="HTML File" xml:space="preserve">
-        <source>HTML File</source>
-        <target state="translated">HyperText Markup Language File</target>
-        <note>No comment provided by engineer.</note>
-      </trans-unit>
       <trans-unit id="Hide %@" xml:space="preserve">
         <source>Hide %@</source>
         <target>Hide %@</target>
@@ -214,7 +264,7 @@
       </trans-unit>
       <trans-unit id="If you don't review your documents, all your changeses will be lost." xml:space="preserve">
         <source>If you don't review your documents, all your changeses will be lost.</source>
-        <target state="translated">If you don't review your documents, all your changes will be lost.</target>
+        <target>If you don't review your documents, all your changes will be lost.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="If you have already purchased %@, you should find your activation key in an email confirmation." xml:space="preserve">
@@ -222,19 +272,44 @@
         <target>If you have already purchased %@, you should find your activation key in an email confirmation.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="JPG Image" xml:space="preserve">
+        <source>JPG Image</source>
+        <target>JPG Image</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="License Agreement" xml:space="preserve">
         <source>License Agreement</source>
         <target>License Agreement</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="MHT File" xml:space="preserve">
-        <source>MHT File</source>
-        <target state="translated">Web Page Archive File</target>
+      <trans-unit id="Macro-enabled Presentation" xml:space="preserve">
+        <source>Macro-enabled Presentation</source>
+        <target>Macro-enabled Presentation (*.pptm)</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Macro-enabled spreadsheet template" xml:space="preserve">
+        <source>Macro-enabled spreadsheet template</source>
+        <target>Macro-enabled Spreadsheet template (*.xltm)</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Markdown File" xml:space="preserve">
+        <source>Markdown File</source>
+        <target>Markdown File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Mobipocket e-book" xml:space="preserve">
         <source>Mobipocket e-book</source>
-        <target state="translated">Mobipocket File</target>
+        <target>Mobipocket File (*.mobi)</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Move to end" xml:space="preserve">
+        <source>Move to end</source>
+        <target>Move to end</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Move to start" xml:space="preserve">
+        <source>Move to start</source>
+        <target>Move to start</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="No" xml:space="preserve">
@@ -247,6 +322,21 @@
         <target>OK</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="ONLYOFFICE Document Form Template" xml:space="preserve">
+        <source>ONLYOFFICE Document Form Template</source>
+        <target>ONLYOFFICE Document Form Template</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="ONLYOFFICE Fillable Online Form" xml:space="preserve">
+        <source>ONLYOFFICE Fillable Online Form</source>
+        <target>ONLYOFFICE Fillable Online Form</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="ONLYOFFICE Form Document" xml:space="preserve">
+        <source>ONLYOFFICE Form Document</source>
+        <target>ONLYOFFICE Form Document</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="ONLYOFFICE can not open the Digital Signature file. Try opening another file." xml:space="preserve">
         <source>ONLYOFFICE can not open the Digital Signature file. Try opening another file.</source>
         <target>ONLYOFFICE can not open the Digital Signature file. Try opening another file.</target>
@@ -257,34 +347,39 @@
         <target>ONLYOFFICE can not open the Private Key. Try opening another file.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="Open" xml:space="preserve">
+        <source>Open</source>
+        <target>Open</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="OpenDocument Document Template" xml:space="preserve">
         <source>OpenDocument Document Template</source>
-        <target state="translated">OpenDocument Document Template</target>
+        <target>OpenDocument Document Template (*.ott)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Presentation Template" xml:space="preserve">
         <source>OpenDocument Presentation Template</source>
-        <target state="translated">OpenDocument Presentation Template</target>
+        <target>OpenDocument Presentation Template (*.otp)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Spreadsheet Template" xml:space="preserve">
         <source>OpenDocument Spreadsheet Template</source>
-        <target state="translated">OpenDocument Spreadsheet Template</target>
+        <target>OpenDocument Spreadsheet Template (*.ots)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Document" xml:space="preserve">
         <source>OpenOffice Document</source>
-        <target state="translated">OpenDocument Text File</target>
+        <target>OpenDocument Text File (*.odt)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Presentation" xml:space="preserve">
         <source>OpenOffice Presentation</source>
-        <target state="translated">OpenDocument Presentation</target>
+        <target>OpenDocument Presentation (*.odp)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Spreadsheet" xml:space="preserve">
         <source>OpenOffice Spreadsheet</source>
-        <target state="translated">OpenDocument Spreadsheet</target>
+        <target>OpenDocument Spreadsheet (*.ods)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Opening" xml:space="preserve">
@@ -294,37 +389,37 @@
       </trans-unit>
       <trans-unit id="PDF File" xml:space="preserve">
         <source>PDF File</source>
-        <target state="translated">Portable Document</target>
+        <target>Portable Document (*.pdf)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PDF/A File" xml:space="preserve">
         <source>PDF/A File</source>
-        <target state="translated">Portable Document /A</target>
+        <target>Portable Document /A (*.pdf)</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="PNG Image" xml:space="preserve">
+        <source>PNG Image</source>
+        <target>PNG Image</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Plain Text" xml:space="preserve">
         <source>Plain Text</source>
-        <target state="translated">Plain Text File</target>
+        <target>Plain Text File (*.txt)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint 97-2003 Presentation" xml:space="preserve">
         <source>PowerPoint 97-2003 Presentation</source>
-        <target state="translated">PowerPoint 97-2003 Presentation</target>
+        <target>PowerPoint 97-2003 Presentation (*.ppt)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint 2007 Presentation" xml:space="preserve">
         <source>PowerPoint 2007 Presentation</source>
-        <target state="translated">Office Open XML Presentation</target>
-        <note>No comment provided by engineer.</note>
-      </trans-unit>
-      <trans-unit id="Macro-enabled Presentation" xml:space="preserve">
-        <source>Macro-enabled Presentation</source>
-        <target state="translated">Macro-enabled Presentation</target>
+        <target>Office Open XML Presentation (*.pptx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint Slide Show" xml:space="preserve">
         <source>PowerPoint Slide Show</source>
-        <target state="translated">Office Open XML Slide Show</target>
+        <target>Office Open XML Slide Show (*.ppsx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Preparing..." xml:space="preserve">
@@ -339,7 +434,7 @@
       </trans-unit>
       <trans-unit id="Presentation template" xml:space="preserve">
         <source>Presentation template</source>
-        <target state="translated">PowerPoint Open XML Presentation Template</target>
+        <target>PowerPoint Open XML Presentation Template (*.potx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Presenter View" xml:space="preserve">
@@ -352,6 +447,11 @@
         <target>Quit %@</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="Replace" xml:space="preserve">
+        <source>Replace</source>
+        <target>Replace</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="Review Changes..." xml:space="preserve">
         <source>Review Changes...</source>
         <target>Review Changes...</target>
@@ -359,7 +459,7 @@
       </trans-unit>
       <trans-unit id="Rich Text Document" xml:space="preserve">
         <source>Rich Text Document</source>
-        <target state="translated">Rich Text Format File</target>
+        <target>Rich Text Format File (*.rtf)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Save" xml:space="preserve">
@@ -370,6 +470,26 @@
       <trans-unit id="Save the document?" xml:space="preserve">
         <source>Save the document?</source>
         <target>Save the document?</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Select theme file" xml:space="preserve">
+        <source>Select theme file</source>
+        <target>Select theme file</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Selected theme isn't valid" xml:space="preserve">
+        <source>Selected theme isn't valid</source>
+        <target>Selected theme isn't valid</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Show in folder" xml:space="preserve">
+        <source>Show in folder</source>
+        <target>Show in folder</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Show main window" xml:space="preserve">
+        <source>Show main window</source>
+        <target>Show main window</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Signature Details" xml:space="preserve">
@@ -384,7 +504,7 @@
       </trans-unit>
       <trans-unit id="Spreadsheet template" xml:space="preserve">
         <source>Spreadsheet template</source>
-        <target state="translated">Excel Open XML Spreadsheet Template</target>
+        <target>Excel Open XML Spreadsheet Template (*.xltx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Thank you for evaluating %@!" xml:space="preserve">
@@ -397,6 +517,21 @@
         <target>The document "%@" must be built. Continue?</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="Theme already exists. Replace it?" xml:space="preserve">
+        <source>Theme already exists. Replace it?</source>
+        <target>Theme already exists. Replace it?</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="This file doesn't contain theme" xml:space="preserve">
+        <source>This file doesn't contain theme</source>
+        <target>This file doesn't contain theme</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="This theme file is not valid" xml:space="preserve">
+        <source>This theme file is not valid</source>
+        <target>This theme file is not valid</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="To open the file location, it must be saved." xml:space="preserve">
         <source>To open the file location, it must be saved.</source>
         <target>To open the file location, it must be saved.</target>
@@ -407,14 +542,19 @@
         <target>Unconfirmed</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="Unpin tab" xml:space="preserve">
+        <source>Unpin tab</source>
+        <target>Unpin tab</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="Untitled" xml:space="preserve">
         <source>Untitled</source>
         <target>Untitled</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="Version %@ (%@)" xml:space="preserve">
-        <source>Version %1$@ (%2$@)</source>
-        <target>Version %1$@ (%2$@)</target>
+      <trans-unit id="VSDX File" xml:space="preserve">
+        <source>VSDX File</source>
+        <target>VSDX File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Web Page" xml:space="preserve">
@@ -429,17 +569,17 @@
       </trans-unit>
       <trans-unit id="Word 97-2003 Document" xml:space="preserve">
         <source>Word 97-2003 Document</source>
-        <target state="translated">Word 97-2003 Document</target>
+        <target>Word 97-2003 Document (*.doc)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Word 2007 Document" xml:space="preserve">
         <source>Word 2007 Document</source>
-        <target state="translated">Office Open XML Document</target>
+        <target>Office Open XML Document (*.docx)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="XML Paper Specification" xml:space="preserve">
         <source>XML Paper Specification</source>
-        <target state="translated">OpenXPS Document</target>
+        <target>OpenXPS Document (*.xps)</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Yes" xml:space="preserve">
@@ -447,14 +587,19 @@
         <target>Yes</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?" xml:space="preserve">
+      <trans-unit id="You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?" translate="no" xml:space="preserve">
         <source>You have %1$ld %2$@ documents with unconfirmed changes. Do you want to review these changes before quitting?</source>
         <target>You have %1$ld %2$@ documents with unconfirmed changes. Do you want to review these changes before quitting?</target>
-        <note>No comment provided by engineer.</note>
+        <note>No comment provided by engineer. (Key in .stringsdict)</note>
       </trans-unit>
       <trans-unit id="You have successfully activated %@." xml:space="preserve">
         <source>You have successfully activated %@.</source>
         <target>You have successfully activated %@.</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Your changes will be lost if you don't save them." xml:space="preserve">
+        <source>Your changes will be lost if you don't save them.</source>
+        <target>Your changes will be lost if you don't save them.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Your changes will be lost if you don’t save them." xml:space="preserve">
@@ -486,9 +631,19 @@ We have a special offer for you.</source>
 We have a special offer for you.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
+      <trans-unit id="kBps" xml:space="preserve">
+        <source>kBps</source>
+        <target>kBps</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
       <trans-unit id="new-document" xml:space="preserve">
         <source>New Document</source>
         <target>New document</target>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="new-pdfform" xml:space="preserve">
+        <source>New PDF Form</source>
+        <target>New PDF</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="new-presentation" xml:space="preserve">
@@ -501,16 +656,11 @@ We have a special offer for you.</target>
         <target>New spreadsheet</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
-      <trans-unit id="new-pdfform" xml:space="preserve">
-        <source>New PDF Form</source>
-        <target>New PDF</target>
-        <note>No comment provided by engineer.</note>
-      </trans-unit>
     </body>
   </file>
   <file original="ONLYOFFICE/Base.lproj/Localizable.stringsdict" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="/%d days are left until the license expiration.:dict/NSStringLocalizedFormatKey:dict/:string" xml:space="preserve">
@@ -550,23 +700,23 @@ The trial period will end in %d days, after that you will not be able to create 
       <trans-unit id="/You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?:dict/NSStringLocalizedFormatKey:dict/:string" xml:space="preserve">
         <source>%#@documents@</source>
         <target>%#@documents@</target>
-        <note/>
+        <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="/You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?:dict/documents:dict/one:dict/:string" xml:space="preserve">
         <source>You have %ld %@ document with unconfirmed changes. Do you want to review these changes before quitting?</source>
         <target>You have %ld %@ document with unconfirmed changes. Do you want to review these changes before quitting?</target>
-        <note/>
+        <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="/You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?:dict/documents:dict/other:dict/:string" xml:space="preserve">
         <source>You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?</source>
         <target>You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?</target>
-        <note/>
+        <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
   </file>
   <file original="ONLYOFFICE/Base.lproj/Main.storyboard" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="1UK-8n-QPP.title" xml:space="preserve">
@@ -598,6 +748,11 @@ The trial period will end in %d days, after that you will not be able to create 
         <source>Transformations</source>
         <target>Transformations</target>
         <note>Class = "NSMenuItem"; title = "Transformations"; ObjectID = "2oI-Rn-ZJC";</note>
+      </trans-unit>
+      <trans-unit id="3FX-nT-Klk.title" xml:space="preserve">
+        <source>Close</source>
+        <target>Close</target>
+        <note>Class = "NSButtonCell"; title = "Close"; ObjectID = "3FX-nT-Klk";</note>
       </trans-unit>
       <trans-unit id="3IN-sU-3Bg.title" xml:space="preserve">
         <source>Spelling</source>
@@ -663,11 +818,6 @@ The trial period will end in %d days, after that you will not be able to create 
         <source>New</source>
         <target>New</target>
         <note>Class = "NSMenuItem"; title = "New"; ObjectID = "9aQ-wl-gjS";</note>
-      </trans-unit>
-      <trans-unit id="9i7-kj-42B.title" xml:space="preserve">
-        <source>none</source>
-        <target>none</target>
-        <note>Class = "NSTextFieldCell"; title = "none"; ObjectID = "9i7-kj-42B";</note>
       </trans-unit>
       <trans-unit id="9ic-FL-obx.title" xml:space="preserve">
         <source>Substitutions</source>
@@ -748,11 +898,6 @@ The trial period will end in %d days, after that you will not be able to create 
         <source>Substitutions</source>
         <target>Substitutions</target>
         <note>Class = "NSMenu"; title = "Substitutions"; ObjectID = "FeM-D8-WVr";</note>
-      </trans-unit>
-      <trans-unit id="FoF-wl-Dxi.title" xml:space="preserve">
-        <source>User Name</source>
-        <target>User Name</target>
-        <note>Class = "NSTextFieldCell"; title = "User Name"; ObjectID = "FoF-wl-Dxi";</note>
       </trans-unit>
       <trans-unit id="GB9-OM-e27.title" xml:space="preserve">
         <source>Bold</source>
@@ -909,21 +1054,6 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>	Right to Left</target>
         <note>Class = "NSMenuItem"; title = "\tRight to Left"; ObjectID = "RB4-Sm-HuC";</note>
       </trans-unit>
-      <trans-unit id="Riu-oE-8dj.title" xml:space="preserve">
-        <source>Close</source>
-        <target>Close</target>
-        <note>Class = "NSButtonCell"; title = "Close"; ObjectID = "Riu-oE-8dj";</note>
-      </trans-unit>
-      <trans-unit id="Rkd-xb-FRJ.title" xml:space="preserve">
-        <source>none</source>
-        <target>none</target>
-        <note>Class = "NSTextFieldCell"; title = "none"; ObjectID = "Rkd-xb-FRJ";</note>
-      </trans-unit>
-      <trans-unit id="RmO-tv-UKh.title" xml:space="preserve">
-        <source>Logout</source>
-        <target>Logout</target>
-        <note>Class = "NSButtonCell"; title = "Logout"; ObjectID = "RmO-tv-UKh";</note>
-      </trans-unit>
       <trans-unit id="Rqc-34-cIF.title" xml:space="preserve">
         <source>Superscript</source>
         <target>Superscript</target>
@@ -1014,11 +1144,6 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>Version</target>
         <note>Class = "NSTextFieldCell"; title = "Version"; ObjectID = "ZbA-hc-8PE";</note>
       </trans-unit>
-      <trans-unit id="Zsi-3o-ASl.title" xml:space="preserve">
-        <source>Email:</source>
-        <target>Email:</target>
-        <note>Class = "NSTextFieldCell"; title = "Email:"; ObjectID = "Zsi-3o-ASl";</note>
-      </trans-unit>
       <trans-unit id="ZvO-Gk-QUH.title" xml:space="preserve">
         <source>Paragraph</source>
         <target>Paragraph</target>
@@ -1068,6 +1193,11 @@ The trial period will end in %d days, after that you will not be able to create 
         <source>Use None</source>
         <target>Use None</target>
         <note>Class = "NSMenuItem"; title = "Use None"; ObjectID = "cDB-IK-hbR";</note>
+      </trans-unit>
+      <trans-unit id="clr-Cl-d05.title" xml:space="preserve">
+        <source>Clear</source>
+        <target>Clear</target>
+        <note>Class = "NSButtonCell"; title = "Clear"; ObjectID = "clr-Cl-d05";</note>
       </trans-unit>
       <trans-unit id="cqv-fj-IhA.title" xml:space="preserve">
         <source>Selection</source>
@@ -1174,6 +1304,11 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>Check Grammar With Spelling</target>
         <note>Class = "NSMenuItem"; title = "Check Grammar With Spelling"; ObjectID = "mK6-2p-4JG";</note>
       </trans-unit>
+      <trans-unit id="ne5-Gy-5by.title" xml:space="preserve">
+        <source>PDF Form</source>
+        <target>PDF Form</target>
+        <note>Class = "NSMenuItem"; title = "PDF Form"; ObjectID = "ne5-Gy-5by";</note>
+      </trans-unit>
       <trans-unit id="o6e-r0-MWq.title" xml:space="preserve">
         <source>Ligatures</source>
         <target>Ligatures</target>
@@ -1184,10 +1319,20 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>Open Recent</target>
         <note>Class = "NSMenu"; title = "Open Recent"; ObjectID = "oas-Oc-fiZ";</note>
       </trans-unit>
+      <trans-unit id="ofn-Cl-d04.title" xml:space="preserve">
+        <source>Show in folder</source>
+        <target>Show in folder</target>
+        <note>Class = "NSButtonCell"; title = "Show in folder"; ObjectID = "ofn-Cl-d04";</note>
+      </trans-unit>
       <trans-unit id="ogc-rX-tC1.title" xml:space="preserve">
         <source>Loosen</source>
         <target>Loosen</target>
         <note>Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1";</note>
+      </trans-unit>
+      <trans-unit id="opn-Cl-d03.title" xml:space="preserve">
+        <source>Open</source>
+        <target>Open</target>
+        <note>Class = "NSButtonCell"; title = "Open"; ObjectID = "opn-Cl-d03";</note>
       </trans-unit>
       <trans-unit id="pa3-QI-u2k.title" xml:space="preserve">
         <source>Delete</source>
@@ -1243,6 +1388,11 @@ The trial period will end in %d days, after that you will not be able to create 
         <source>Kern</source>
         <target>Kern</target>
         <note>Class = "NSMenu"; title = "Kern"; ObjectID = "tlD-Oa-oAM";</note>
+      </trans-unit>
+      <trans-unit id="ttl-Cl-d03.title" xml:space="preserve">
+        <source>Downloads</source>
+        <target>Downloads</target>
+        <note>Class = "NSTextFieldCell"; title = "Downloads"; ObjectID = "ttl-Cl-d03";</note>
       </trans-unit>
       <trans-unit id="uQy-DD-JDr.title" xml:space="preserve">
         <source>ONLYOFFICE</source>
@@ -1324,16 +1474,11 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>Show Substitutions</target>
         <note>Class = "NSMenuItem"; title = "Show Substitutions"; ObjectID = "z6F-FW-3nz";</note>
       </trans-unit>
-      <trans-unit id="zwS-9G-S0N.title" xml:space="preserve">
-        <source>Portal:</source>
-        <target>Portal:</target>
-        <note>Class = "NSTextFieldCell"; title = "Portal:"; ObjectID = "zwS-9G-S0N";</note>
-      </trans-unit>
     </body>
   </file>
   <file original="ONLYOFFICE/Base.lproj/MoveApplication.strings" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="Could not move to Applications folder" xml:space="preserve">
@@ -1380,7 +1525,7 @@ The trial period will end in %d days, after that you will not be able to create 
   </file>
   <file original="ONLYOFFICE/Base.lproj/Presentation-Reporter.storyboard" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="Ygx-5K-Hn8.title" xml:space="preserve">
@@ -1390,9 +1535,21 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
     </body>
   </file>
+  <file original="ONLYOFFICE/Base.lproj/Separate-Editor.storyboard" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
+    </header>
+    <body>
+      <trans-unit id="cAh-Jm-QUj.title" xml:space="preserve">
+        <source>Editor Window</source>
+        <target>Editor Window</target>
+        <note>Class = "NSWindow"; title = "Editor Window"; ObjectID = "cAh-Jm-QUj";</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="ONLYOFFICE/Resources/ONLYOFFICE-arm/Base.lproj/InfoPlist.strings" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="CFBundleName" xml:space="preserve">
@@ -1400,16 +1557,36 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>ONLYOFFICE</target>
         <note>Bundle name</note>
       </trans-unit>
+      <trans-unit id="NSBluetoothAlwaysUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Bluetooth Always Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSBluetoothPeripheralUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Bluetooth Peripheral Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
         <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
         <target>Copyright © 2026 Ascensio System SIA. All rights reserved.</target>
         <note>Copyright (human-readable)</note>
+      </trans-unit>
+      <trans-unit id="NSMicrophoneUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Microphone Usage Description</note>
       </trans-unit>
     </body>
   </file>
   <file original="ONLYOFFICE/Resources/ONLYOFFICE-v8/Base.lproj/InfoPlist.strings" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="CFBundleName" xml:space="preserve">
@@ -1417,16 +1594,36 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>ONLYOFFICE</target>
         <note>Bundle name</note>
       </trans-unit>
+      <trans-unit id="NSBluetoothAlwaysUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Bluetooth Always Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSBluetoothPeripheralUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Bluetooth Peripheral Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
         <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
         <target>Copyright © 2026 Ascensio System SIA. All rights reserved.</target>
         <note>Copyright (human-readable)</note>
+      </trans-unit>
+      <trans-unit id="NSMicrophoneUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Microphone Usage Description</note>
       </trans-unit>
     </body>
   </file>
   <file original="ONLYOFFICE/Resources/ONLYOFFICE-x86_64/Base.lproj/InfoPlist.strings" source-language="en" target-language="en" datatype="plaintext">
     <header>
-      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="13.1" build-num="13A1030d"/>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="14.2" build-num="14C18"/>
     </header>
     <body>
       <trans-unit id="CFBundleName" xml:space="preserve">
@@ -1434,10 +1631,30 @@ The trial period will end in %d days, after that you will not be able to create 
         <target>ONLYOFFICE</target>
         <note>Bundle name</note>
       </trans-unit>
+      <trans-unit id="NSBluetoothAlwaysUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Bluetooth Always Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSBluetoothPeripheralUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Bluetooth Peripheral Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
       <trans-unit id="NSHumanReadableCopyright" xml:space="preserve">
         <source>Copyright © 2026 Ascensio System SIA. All rights reserved.</source>
         <target>Copyright © 2026 Ascensio System SIA. All rights reserved.</target>
         <note>Copyright (human-readable)</note>
+      </trans-unit>
+      <trans-unit id="NSMicrophoneUsageDescription" xml:space="preserve">
+        <source>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</source>
+        <target>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</target>
+        <note>Privacy - Microphone Usage Description</note>
       </trans-unit>
     </body>
   </file>
