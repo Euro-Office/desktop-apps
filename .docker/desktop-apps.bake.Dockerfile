@@ -12,7 +12,8 @@
 #### DESKTOP-APPS
 FROM core-base AS desktop-builder
     ARG PRODUCT_VERSION
-    ARG CACHE_BUST
+    ARG BUILD_NUMBER
+    ARG CACHE_BUST=1
     ARG BUILD_ROOT
     ARG COMPANY_NAME
     ARG PRODUCT_NAME
@@ -71,11 +72,9 @@ FROM core-base AS desktop-builder
     COPY --from=desktop-js /app/loginpage/deploy /desktop-apps/common/loginpage/deploy
     #COPY gcc_64 /qt5
 
-    ARG CACHE_BUST=1
-
-    ARG PRODUCT_VERSION
-
     ENV PRODUCT_VERSION=${PRODUCT_VERSION}
+    ENV BUILD_NUMBER=${BUILD_NUMBER}
+    
     ENV ABOUT_PAGE_APP_NAME="${COMPANY_NAME} ${PRODUCT_NAME}"
 
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
