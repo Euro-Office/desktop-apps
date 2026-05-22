@@ -144,5 +144,6 @@ l10n.en = {
     settUseAI: 'Use AI functions',
     dropZoneTitle: 'No files yet',
     dropZoneText: 'Drag & drop files here or open one',
-    dropZoneOpenAction: 'Open file'
+    dropZoneOpenAction: 'Open file',
+    settingsGeneral: "General",
 }

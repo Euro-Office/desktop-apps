@@ -1,0 +1,45 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  margin-top: calc(52px - 20px);
+
+  > h1 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--text-normal);
+    margin: 0;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  width: 560px;
+  height: 36px;
+  gap: 64px;
+}
+
+.field-label {
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--text-normal);
+}
+
+.field-control {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}

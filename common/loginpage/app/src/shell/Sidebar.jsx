@@ -32,7 +32,7 @@ export default function Sidebar() {
       <div id="idx-sidebar-portals" class="connect" />
       <li class="menu-item devider" />
       <li class="menu-item">
-        <A href="/settings" activeClass="selected">
+        <A href="/settings/general" activeClass="selected">
           <svg class="icon">
             <use href="#settings" />
           </svg>
