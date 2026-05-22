@@ -1,0 +1,30 @@
+.root {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.input {
+  height: 32px;
+  width: 100%;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-regular-control);
+  background: transparent;
+  color: var(--text-normal);
+  font-size: 14px;
+  line-height: 18px;
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  &:focus {
+    border-color: var(--border-control-focus);
+  }
+
+  &[data-disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
