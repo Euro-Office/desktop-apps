@@ -418,6 +418,10 @@ target_link_libraries(DesktopEditors PRIVATE
     z
 )
 
+if(ABOUT_PAGE_APP_NAME)
+    add_compile_definitions(ABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}")
+endif()
+
 if(UNIX)
     target_link_libraries(DesktopEditors PRIVATE
         Qt${QT_VERSION_MAJOR}::DBus

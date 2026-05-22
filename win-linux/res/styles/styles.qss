@@ -61,7 +61,7 @@ QPushButton#toolButtonClose[class=normal][unix=false]:pressed {image: url(:/clos
 
 QPushButton#toolButtonMain {
     background: %5;
-    font-size: 5px;
+    font-size: 10px;
     font-family: 'Open Sans',sans-serif;
     font-weight: bold;
     border-left: 0px;
