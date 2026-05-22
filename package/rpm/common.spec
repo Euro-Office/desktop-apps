@@ -75,8 +75,8 @@ rm -rf "%{buildroot}"
 %attr(-, root, root) %{_bindir}/desktopeditors
 %exclude /opt/%{_desktopeditors_prefix}/editors/web-apps/apps/*/main/resources/help
 %else
-%attr(755, root, root) %{_bindir}/%{_imageviewer_exec}
-%attr(755, root, root) %{_bindir}/%{_videoplayer_exec}
+#%attr(755, root, root) %{_bindir}/%{_imageviewer_exec}
+#%attr(755, root, root) %{_bindir}/%{_videoplayer_exec}
 %attr(-, root, root) %{_bindir}/%{_package_name}
 %attr(777, root, root) %{_sysconfdir}/%{_package_name}
 %endif

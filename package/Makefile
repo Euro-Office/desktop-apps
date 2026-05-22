@@ -1,10 +1,10 @@
 PWD := $(shell pwd)
 
-COMPANY_NAME ?= euro-office
+COMPANY_NAME ?= Euro-Office
 PRODUCT_NAME ?= Desktop Editors
 PRODUCT_NAME_SHORT ?= $(subst $(empty) $(empty),,$(PRODUCT_NAME))
 
-COMPANY_NAME_LOW = $(shell echo $(COMPANY_NAME) | tr A-Z a-z)
+COMPANY_NAME_LOW = $(shell echo $(COMPANY_NAME) | tr A-Z a-z | tr -s ' ' '-')
 PRODUCT_NAME_LOW = $(shell echo $(PRODUCT_NAME_SHORT) | tr A-Z a-z)
 
 PUBLISHER_NAME ?= Ascensio System SIA

@@ -14,7 +14,8 @@ FROM core-base AS desktop-builder
     ARG PRODUCT_VERSION
     ARG CACHE_BUST
     ARG BUILD_ROOT
-    ARG ABOUT_PAGE_APP_NAME
+    ARG COMPANY_NAME
+    ARG PRODUCT_NAME
     ARG BRANDING_DIR
 
     RUN apt-get -y update && \
@@ -75,7 +76,7 @@ FROM core-base AS desktop-builder
     ARG PRODUCT_VERSION
 
     ENV PRODUCT_VERSION=${PRODUCT_VERSION}
-    ENV ABOUT_PAGE_APP_NAME=${ABOUT_PAGE_APP_NAME}
+    ENV ABOUT_PAGE_APP_NAME="${COMPANY_NAME} ${PRODUCT_NAME}"
 
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
