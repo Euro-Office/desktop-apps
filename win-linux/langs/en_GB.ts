@@ -648,6 +648,11 @@
         <source>Licensed under</source>
         <translation>Licensed under</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Licence Agreement</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

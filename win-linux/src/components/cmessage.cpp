@@ -1,34 +1,37 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2019
+ * Copyright (C) Ascensio System SIA, 2009-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
- * version 3 as published by the Free Software Foundation. In accordance with
- * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement
- * of any third-party rights.
+ * version 3 as published by the Free Software Foundation, together with the
+ * additional terms provided in the LICENSE file.
  *
  * This program is distributed WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For
+ * details, see the GNU AGPL at: https://www.gnu.org/licenses/agpl-3.0.html
  *
- * You can contact Ascensio System SIA at 20A-12 Ernesta Birznieka-Upisha
- * street, Riga, Latvia, EU, LV-1050.
+ * You can contact Ascensio System SIA by email at info@onlyoffice.com
+ * or by postal mail at 20A-6 Ernesta Birznieka-Upisha Street, Riga,
+ * LV-1050, Latvia, European Union.
  *
- * The  interactive user interfaces in modified source and object code versions
- * of the Program must display Appropriate Legal Notices, as required under
+ * The interactive user interfaces in modified versions of the Program
+ * are required to display Appropriate Legal Notices in accordance with
  * Section 5 of the GNU AGPL version 3.
  *
- * Pursuant to Section 7(b) of the License you must retain the original Product
- * logo when distributing the program. Pursuant to Section 7(e) we decline to
- * grant you any rights under trademark law for use of our trademarks.
+ * No trademark rights are granted under this License.
  *
- * All the Product's GUI elements, including illustrations and icon sets, as
- * well as technical writing content are licensed under the terms of the
- * Creative Commons Attribution-ShareAlike 4.0 International. See the License
- * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ * All non-code elements of the Product, including illustrations,
+ * icon sets, and technical writing content, are licensed under the
+ * Creative Commons Attribution-ShareAlike 4.0 International License:
+ * https://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
-*/
+ * This license applies only to such non-code elements and does not
+ * modify or replace the licensing terms applicable to the Program's
+ * source code, which remains licensed under the GNU Affero General
+ * Public License v3.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 
 #include "components/cmessage.h"
 #include <QTextDocumentFragment>
@@ -465,17 +468,39 @@ void QtMsg::setContent( const QString& t)
 
 #ifdef _WIN32
 # ifndef __OS_WIN_XP
+#  include "platform_win/taskdialogtheme.h"
+
+struct TaskDialogContext {
+    TASKDIALOGCONFIG *pConfig;
+    HICON hIcon;
+    bool useDark;
+};
+
 static HRESULT CALLBACK Pftaskdialogcallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam, LONG_PTR lpRefData)
 {
+    TaskDialogContext *pCtx = (TaskDialogContext*)lpRefData;
+
     switch (msg) {
+    case TDN_CREATED: {
+        if (pCtx->useDark)
+            TaskDialogTheme::AllowForTaskDialog(hwnd, pCtx->pConfig, TaskDialogTheme::Theme::Dark);
+
+        SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)pCtx->hIcon);
+        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)pCtx->hIcon);
+        break;
+    }
+    case TDN_NAVIGATED:
+        if (pCtx->useDark)
+            TaskDialogTheme::AllowForTaskDialog(hwnd, (TASKDIALOGCONFIG*)lParam, TaskDialogTheme::Theme::Dark);
+        break;
+    case TDN_DESTROYED:
+        if (pCtx->useDark)
+            TaskDialogTheme::RemoveFromTaskDialog(hwnd);
+        break;
     case TDN_HYPERLINK_CLICKED:
         ShellExecute(NULL, L"open", (PCWSTR)lParam, NULL, NULL, SW_SHOWNORMAL);
         break;
     case TDN_DIALOG_CONSTRUCTED: {
-        QTimer::singleShot(0, [=]() {
-            if (hwnd)
-                WindowHelper::bringToTop(hwnd);
-        });
         break;
     }
     default:
@@ -507,7 +532,7 @@ namespace WinMsg
 {
 int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns msgBtns, const CMessageOpts &opts)
 {
-    std::wstring lpCaption = QString("  %1").arg(WINDOW_TITLE).toStdWString();
+    std::wstring lpCaption = QString("%1").arg(WINDOW_TITLE).toStdWString();
     std::wstring lpText = QTextDocumentFragment::fromHtml(msg).toPlainText().toStdWString();
     std::wstring lpContent = opts.contentText.toStdWString();
     if (!lpContent.empty() && !opts.linkText.isEmpty())
@@ -631,7 +656,13 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     default:                        nDefltBtn = IDOK; break;
     }
 
+    HMODULE hInstance = GetModuleHandle(nullptr);
     BOOL chkState = (opts.checkBoxState) ? (BOOL)*opts.checkBoxState : FALSE;
+
+    TaskDialogContext ctx;
+    ctx.useDark = (Utils::getWinVersion() >= Utils::WinVer::Win10 && GetCurrentTheme().isDark());
+    ctx.hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_MAINICON), IMAGE_ICON,
+                                  GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
 
     TASKDIALOGCONFIG config = {0};
     ZeroMemory(&config, sizeof(config));
@@ -642,8 +673,10 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     if (AscAppManager::isRtlEnabled())
         config.dwFlags |= TDF_RTL_LAYOUT;
     config.hwndParent         = parent_hwnd;
-    config.hInstance          = GetModuleHandle(NULL);
+    config.hInstance          = hInstance;
     config.pfCallback         = (PFTASKDIALOGCALLBACK)Pftaskdialogcallback;
+    ctx.pConfig = &config;
+    config.lpCallbackData     = (LONG_PTR)&ctx;
     config.pButtons           = pButtons;
     config.cButtons           = cButtons;
     config.nDefaultButton     = nDefltBtn;
@@ -662,6 +695,9 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     TaskDialogIndirect(&config, &msgboxID, NULL, (opts.checkBoxState != nullptr) ? &chkState : NULL);
     if (opts.checkBoxState != nullptr)
         *opts.checkBoxState = (chkState == TRUE);
+
+    if (ctx.hIcon)
+        DestroyIcon(ctx.hIcon);
 
     for (int i = 0; i < (int)cButtons; i++)
         free((void*)pButtons[i].pszButtonText);

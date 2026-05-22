@@ -38,19 +38,26 @@
 //
 
 #import "ASCHeaderButton.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface ASCHeaderButton()
 @property (nonatomic) NSTrackingArea *hoverTrackingArea;
 @property (nonatomic) BOOL isHovered;
+@property (nonatomic, strong) NSImage * spinBaseImage;
+@property (nonatomic, strong) NSTimer * spinTimer;
+@property (nonatomic, assign) CFTimeInterval spinStartTime;
+@property (nonatomic, assign) BOOL isSettingSpinFrame;
 @end
 
 @implementation ASCHeaderButton
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.bgHoverColor = [NSColor colorWithWhite:0.0 alpha:0.15];
-    }
+- (instancetype)initWithFrame:(NSRect)frameRect {
+    self = [super initWithFrame:frameRect];
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
     return self;
 }
 
@@ -85,28 +92,126 @@
 - (void)windowDidResignKey:(NSNotification *)note {
     if (_isHovered) {
         _isHovered = NO;
-        [self setNeedsDisplay:YES];
+        [self p_applyHoverState];
     }
 }
 
 - (void)mouseEntered:(NSEvent *)event {
-    [super mouseEntered:event];
     _isHovered = YES;
-    [self setNeedsDisplay:YES];
+    [self p_applyHoverState];
 }
 
 - (void)mouseExited:(NSEvent *)event {
-    [super mouseExited:event];
     _isHovered = NO;
+    [self p_applyHoverState];
+}
+
+- (void)p_applyHoverState {
+    [self p_updateTitleColor];
     [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-    if (_isHovered) {
+    if (_isHovered && _bgHoverColor) {
         [_bgHoverColor set];
         NSRectFillUsingOperation(self.bounds, NSCompositingOperationSourceOver);
     }
     [super drawRect:dirtyRect];
+}
+
+- (void)p_updateTitleColor {
+    if (self.title.length == 0) return;
+
+    NSColor *color = _isHovered ? _textHoverColor : _textColor;
+    if (!color) return;
+
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedTitle];
+    NSRange all = NSMakeRange(0, attr.length);
+    [attr addAttribute:NSForegroundColorAttributeName value:color range:all];
+    if (self.font) {
+        [attr addAttribute:NSFontAttributeName value:self.font range:all];
+    }
+    self.attributedTitle = attr;
+}
+
+- (void)setTextColor:(NSColor *)textColor {
+    _textColor = textColor;
+    [self p_updateTitleColor];
+}
+
+- (void)setTextHoverColor:(NSColor *)textHoverColor {
+    _textHoverColor = textHoverColor;
+    [self p_updateTitleColor];
+}
+
+- (void)setTitle:(NSString *)title {
+    [super setTitle:title];
+    [self p_updateTitleColor];
+}
+
+- (void)setFont:(NSFont *)font {
+    [super setFont:font];
+    [self p_updateTitleColor];
+}
+
+- (void)setImage:(NSImage *)image {
+    if (!_isSettingSpinFrame) {
+        _spinBaseImage = image;
+    }
+    [super setImage:image];
+}
+
+- (void)p_tickSpinAnimation {
+    NSImage *base = self.spinBaseImage;
+    if (!base) return;
+
+    const CGFloat w = base.size.width;
+    const CGFloat h = base.size.height;
+    const CFTimeInterval period = 1.5; // seconds per full clockwise revolution
+
+    CFTimeInterval elapsed = CACurrentMediaTime() - self.spinStartTime;
+    CGFloat angle = -fmod(elapsed / period, 1.0) * 360.0;
+
+    NSImage *frame = [[NSImage alloc] initWithSize:NSMakeSize(w, h)];
+    [frame lockFocus];
+    NSAffineTransform *t = [NSAffineTransform transform];
+    [t translateXBy:w / 2.0 yBy:h / 2.0];
+    [t rotateByDegrees:angle];
+    [t translateXBy:-w / 2.0 yBy:-h / 2.0];
+    [t concat];
+    [base drawInRect:NSMakeRect(0, 0, w, h)
+            fromRect:NSZeroRect
+           operation:NSCompositingOperationSourceOver
+            fraction:1.0];
+    [frame unlockFocus];
+
+    _isSettingSpinFrame = YES;
+    [self setImage:frame];
+    _isSettingSpinFrame = NO;
+}
+
+- (BOOL)isSpinning {
+    return self.spinTimer != nil;
+}
+
+- (void)startAnimation {
+    if (self.spinTimer) return; // already running
+    self.spinBaseImage = self.image;
+    self.spinStartTime = CACurrentMediaTime();
+    self.spinTimer = [NSTimer timerWithTimeInterval:1.0 / 60.0
+                                            target:self
+                                          selector:@selector(p_tickSpinAnimation)
+                                          userInfo:nil
+                                           repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:self.spinTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)stopAnimation {
+    if (self.spinTimer) {
+        [self.spinTimer invalidate];
+        self.spinTimer = nil;
+    }
+    self.spinBaseImage = nil;
 }
 
 @end

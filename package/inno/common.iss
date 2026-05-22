@@ -210,7 +210,7 @@ Source: "{#BRANDING_DIR}\..\common\license\commercial\LICENSE.txt"; DestDir: {ap
 #else
 Source: "{#BRANDING_DIR}\..\common\license\opensource\LICENSE.txt"; DestDir: {app};
 #endif
-Source: "{#BRANDING_DIR}\..\common\license\3dparty\3DPARTYLICENSE"; DestDir: {app};
+Source: "{#BRANDING_DIR}\..\common\license\3dparty\3DPARTYLICENSE"; DestDir: {app}; DestName: "3DPARTYLICENSE.txt";
 
 [InstallDelete]
 Type: filesandordirs; Name: {app}\editors\sdkjs-plugins
@@ -281,6 +281,7 @@ Root: HKLM; Subkey: "Software\Classes\{#ASSOC_PROG_ID}\shell\open\command"; Valu
 #define iExt FA_ARR[i]
 #define iProgID ASCC_REG_PREFIX + "." + ReadFileData(iExt, "ProgID")
 Root: HKLM; Subkey: "Software\Classes\{#iProgID}"; ValueType: string; ValueData: "{#ReadFileData(iExt,'TypeName')}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "Software\Classes\{#iProgID}"; ValueType: string; ValueName: "FriendlyTypeName"; ValueData: "@{app}\{#iconsExe},-{#ReadFileData(iExt,'FriendlyTypeNameResource')}"; Flags: uninsdeletekey
 Root: HKLM; Subkey: "Software\Classes\{#iProgID}"; ValueType: string; ValueName: "AppUserModelID"; ValueData: "{#APP_USER_MODEL_ID}"
 Root: HKLM; Subkey: "Software\Classes\{#iProgID}\Application"; ValueType: string; ValueName: "ApplicationName"; ValueData: "{#sAppName}"
 Root: HKLM; Subkey: "Software\Classes\{#iProgID}\Application"; ValueType: string; ValueName: "ApplicationIcon"; ValueData: "{app}\{#iconsExe},33"; MinVersion: 10.0; OnlyBelowVersion: 10.0.22000

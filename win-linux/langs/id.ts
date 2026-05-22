@@ -691,6 +691,11 @@
         <source>Licensed under</source>
         <translation>Lisensi di bawah</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Perjanjian Lisensi</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

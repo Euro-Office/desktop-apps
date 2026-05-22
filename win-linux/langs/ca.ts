@@ -691,6 +691,11 @@
         <source>Licensed under</source>
         <translation>Amb llicència</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Acord de llicència</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>
