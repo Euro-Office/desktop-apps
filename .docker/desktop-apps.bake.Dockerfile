@@ -12,6 +12,8 @@
 ARG PRODUCT_VERSION
 ARG CACHE_BUST
 ARG BUILD_ROOT
+ARG ABOUT_PAGE_APP_NAME
+ARG BRANDING_DIR
 
 #### DESKTOP-APPS
 FROM core-base AS desktop-builder
@@ -62,6 +64,10 @@ FROM core-base AS desktop-builder
     COPY desktop-apps /desktop-apps
     COPY core-fonts /core-fonts
 
+    ### Branding
+    COPY ${BRANDING_DIR}/desktop-apps /desktop-apps
+    ###
+
     COPY --from=desktop-js /app/loginpage/deploy /desktop-apps/common/loginpage/deploy
     #COPY gcc_64 /qt5
 
@@ -79,6 +85,7 @@ FROM core-base AS desktop-builder
               -DVCPKG_MANIFEST_MODE=ON \
               -DVCPKG_MANIFEST_DIR="/core" \
               -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
+              -DABOUT_PAGE_APP_NAME=${ABOUT_PAGE_APP_NAME} \
               /desktop-apps/win-linux/ && \
         cmake --build . && \
         cmake --install . && \
