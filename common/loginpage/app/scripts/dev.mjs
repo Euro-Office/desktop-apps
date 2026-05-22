@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const _dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(_dirname, "..");
 const outDir = join(root, "..", "build", "dist-solid");
-const port = 5173;
+const port = 3000;
 
 function injectSprites(html) {
   const spritesDir = join(_dirname, "..", "..", "res", "img", "generated");
