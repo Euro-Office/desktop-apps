@@ -47,7 +47,7 @@
 
 #define DEFAULT_LICENSE_NAME    "GNU AGPL v3"
 #define DEFAULT_LICENSE_URL     URL_AGPL
-#define LICENSE_FILE_NAME       "/EULA.txt"
+
 
 CMainWindowImpl::CMainWindowImpl(const QRect &rect) :
     CMainWindow(rect)
@@ -59,49 +59,54 @@ void CMainWindowImpl::refreshAboutVersion()
 {
     QJsonObject _json_obj;
 
-    auto _read_license_name = [](QString& path) -> QString {
-        QFileInfo fi(path);
-        QDir dir = fi.dir();
-        QStringList files = dir.entryList(QStringList() << fi.fileName(),
+    auto _read_license_name = [](const QString& path) -> QString {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+            return {};
+
+        QTextStream stream(&f);
+        QString firstNonEmptyLine;
+        bool previousLineWasAgpl = false;
+
+        while (!stream.atEnd()) {
+            const QString line = stream.readLine().trimmed();
+            if (line.isEmpty())
+                continue;
+
+            if (firstNonEmptyLine.isEmpty())
+                firstNonEmptyLine = line;
+
+            if (previousLineWasAgpl && line.startsWith("Version 3"))
+                return DEFAULT_LICENSE_NAME;
+
+            previousLineWasAgpl = line.contains("GNU AFFERO GENERAL PUBLIC LICENSE");
+        }
+
+        return firstNonEmptyLine;
+    };
+
+    auto resolveFilePathCaseInsensitive = [](const QString& dirPath, const QString &fileName) -> QString {
+        QDir dir(dirPath);
+        QStringList files = dir.entryList(QStringList{fileName},
                                           QDir::Files, QDir::Name | QDir::IgnoreCase);
         if (files.isEmpty())
             return QString();
 
-        path = dir.filePath(files.first());
-        QFile f(path);
-        QString n;
-        if ( f.exists() ) {
-            if ( f.open(QIODevice::ReadOnly | QIODevice::Text )) {
-                QTextStream stream(&f);
-                n = stream.readLine().trimmed();
-                f.close();
-            }
-        }
-
-        return n;
+        return dir.filePath(files.first());
     };
 
-    QString _lic_path = QCoreApplication::applicationDirPath() + LICENSE_FILE_NAME;
-    QString _lic_name = _read_license_name(_lic_path),
-            _lic_url;
+    QString _lic_url;
+    QString _lic_dir = QCoreApplication::applicationDirPath();
+    QString _lic_path = resolveFilePathCaseInsensitive(_lic_dir, "EULA.txt");
+    QString _lic_name = _read_license_name(_lic_path);
+
     if ( _lic_name.isEmpty() ) {
-        _lic_path = QCoreApplication::applicationDirPath() + "/License.txt";
-        if ( (_lic_name = _read_license_name(_lic_path)).isEmpty() ) {
+        _lic_path = resolveFilePathCaseInsensitive(_lic_dir, "LICENSE.txt");
+        _lic_name = _read_license_name(_lic_path);
+
+        if ( _lic_name.isEmpty() ) {
             _lic_name = DEFAULT_LICENSE_NAME;
             _lic_url = DEFAULT_LICENSE_URL;
-        } else if (_lic_name == "GNU AFFERO GENERAL PUBLIC LICENSE") {
-            QFile f(_lic_path);
-            if ( f.exists() ) {
-                if ( f.open(QIODevice::ReadOnly | QIODevice::Text )) {
-                    QTextStream stream(&f);
-                    QString n = stream.readLine();
-                    n = stream.readLine().trimmed();
-                    if (n.contains("Version 3")) {
-                        _lic_name = DEFAULT_LICENSE_NAME;
-                    }
-                    f.close();
-                }
-            }
         }
     } else if (_lic_name == "ONLYOFFICE Desktop Enterprise") {
         _lic_name = tr("License Agreement");
@@ -114,10 +119,13 @@ void CMainWindowImpl::refreshAboutVersion()
         _lic_url = QUrl::fromLocalFile(_lic_path).toString();
     }
 
-    QString _license;
-    if ( !(_lic_name.count() > 15) )
-        _license = tr("Licensed under") + " &lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + _lic_name + "&lt;/a&gt;";
-    else _license = "&lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + _lic_name + "&lt;/a&gt;";
+    auto makeLink = [&](const QString& name) {
+        return "&lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + name + "&lt;/a&gt;";
+    };
+
+    QString _license = makeLink(_lic_name);
+    if (_lic_name.length() <= 15)
+        _license.prepend(tr("Licensed under") + " ");
 
 
     _json_obj["version"]    = VER_FILEVERSION_STR;
