@@ -711,6 +711,11 @@
         <source>Licensed under</source>
         <translation>许可证：</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>许可协议</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

@@ -687,6 +687,11 @@
         <source>Licensed under</source>
         <translation> के तहत लाइसेंसीकृत</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>लाइसेंस अनुबंध</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

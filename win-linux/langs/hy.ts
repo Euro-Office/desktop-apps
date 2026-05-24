@@ -695,6 +695,11 @@
         <source>Licensed under</source>
         <translation>Հավաստագրված ըստ</translation>
     </message>
+    <message>
+        <location filename="../src/prop/cmainwindowimpl.cpp" line="104"/>
+        <source>License Agreement</source>
+        <translation>Արտոնագրային համաձայնագիր</translation>
+    </message>
 </context>
 <context>
     <name>CMenu</name>

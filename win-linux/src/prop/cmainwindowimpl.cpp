@@ -1,34 +1,37 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2019
+ * Copyright (C) Ascensio System SIA, 2009-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
- * version 3 as published by the Free Software Foundation. In accordance with
- * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement
- * of any third-party rights.
+ * version 3 as published by the Free Software Foundation, together with the
+ * additional terms provided in the LICENSE file.
  *
  * This program is distributed WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For
+ * details, see the GNU AGPL at: https://www.gnu.org/licenses/agpl-3.0.html
  *
- * You can contact Ascensio System SIA at 20A-12 Ernesta Birznieka-Upisha
- * street, Riga, Latvia, EU, LV-1050.
+ * You can contact Ascensio System SIA by email at info@onlyoffice.com
+ * or by postal mail at 20A-6 Ernesta Birznieka-Upisha Street, Riga,
+ * LV-1050, Latvia, European Union.
  *
- * The  interactive user interfaces in modified source and object code versions
- * of the Program must display Appropriate Legal Notices, as required under
+ * The interactive user interfaces in modified versions of the Program
+ * are required to display Appropriate Legal Notices in accordance with
  * Section 5 of the GNU AGPL version 3.
  *
- * Pursuant to Section 7(b) of the License you must retain the original Product
- * logo when distributing the program. Pursuant to Section 7(e) we decline to
- * grant you any rights under trademark law for use of our trademarks.
+ * No trademark rights are granted under this License.
  *
- * All the Product's GUI elements, including illustrations and icon sets, as
- * well as technical writing content are licensed under the terms of the
- * Creative Commons Attribution-ShareAlike 4.0 International. See the License
- * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ * All non-code elements of the Product, including illustrations,
+ * icon sets, and technical writing content, are licensed under the
+ * Creative Commons Attribution-ShareAlike 4.0 International License:
+ * https://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
-*/
+ * This license applies only to such non-code elements and does not
+ * modify or replace the licensing terms applicable to the Program's
+ * source code, which remains licensed under the GNU Affero General
+ * Public License v3.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 
 #include "cmainwindowimpl.h"
 #include "cascapplicationmanagerwrapper.h"
@@ -44,7 +47,7 @@
 
 #define DEFAULT_LICENSE_NAME    "GNU AGPL v3"
 #define DEFAULT_LICENSE_URL     URL_AGPL
-#define LICENSE_FILE_NAME       "/EULA.txt"
+
 
 CMainWindowImpl::CMainWindowImpl(const QRect &rect) :
     CMainWindow(rect)
@@ -56,37 +59,58 @@ void CMainWindowImpl::refreshAboutVersion()
 {
     QJsonObject _json_obj;
 
-    auto _read_license_name = [](QString& path) -> QString {
-        QFileInfo fi(path);
-        QDir dir = fi.dir();
-        QStringList files = dir.entryList(QStringList() << fi.fileName(),
+    auto _read_license_name = [](const QString& path) -> QString {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+            return {};
+
+        QTextStream stream(&f);
+        QString firstNonEmptyLine;
+        bool previousLineWasAgpl = false;
+
+        while (!stream.atEnd()) {
+            const QString line = stream.readLine().trimmed();
+            if (line.isEmpty())
+                continue;
+
+            if (firstNonEmptyLine.isEmpty())
+                firstNonEmptyLine = line;
+
+            if (previousLineWasAgpl && line.startsWith("Version 3"))
+                return DEFAULT_LICENSE_NAME;
+
+            previousLineWasAgpl = line.contains("GNU AFFERO GENERAL PUBLIC LICENSE");
+        }
+
+        return firstNonEmptyLine;
+    };
+
+    auto resolveFilePathCaseInsensitive = [](const QString& dirPath, const QString &fileName) -> QString {
+        QDir dir(dirPath);
+        QStringList files = dir.entryList(QStringList{fileName},
                                           QDir::Files, QDir::Name | QDir::IgnoreCase);
         if (files.isEmpty())
             return QString();
 
-        path = dir.filePath(files.first());
-        QFile f(path);
-        QString n;
-        if ( f.exists() ) {
-            if ( f.open(QIODevice::ReadOnly | QIODevice::Text )) {
-                QTextStream stream(&f);
-                n = stream.readLine().trimmed();
-                f.close();
-            }
-        }
-
-        return n;
+        return dir.filePath(files.first());
     };
 
-    QString _lic_path = QCoreApplication::applicationDirPath() + LICENSE_FILE_NAME;
-    QString _lic_name = _read_license_name(_lic_path),
-            _lic_url;
+    QString _lic_url;
+    QString _lic_dir = QCoreApplication::applicationDirPath();
+    QString _lic_path = resolveFilePathCaseInsensitive(_lic_dir, "EULA.txt");
+    QString _lic_name = _read_license_name(_lic_path);
+
     if ( _lic_name.isEmpty() ) {
-        _lic_path = QCoreApplication::applicationDirPath() + "/License.txt";
-        if ( (_lic_name = _read_license_name(_lic_path)).isEmpty() ) {
+        _lic_path = resolveFilePathCaseInsensitive(_lic_dir, "LICENSE.txt");
+        _lic_name = _read_license_name(_lic_path);
+
+        if ( _lic_name.isEmpty() ) {
             _lic_name = DEFAULT_LICENSE_NAME;
             _lic_url = DEFAULT_LICENSE_URL;
         }
+    } else if (_lic_name == "ONLYOFFICE Desktop Enterprise") {
+        _lic_name = tr("License Agreement");
+        _json_obj["commercial"] = true;
     } else {
         _json_obj["commercial"] = _lic_name != DEFAULT_LICENSE_NAME;
     }
@@ -95,10 +119,13 @@ void CMainWindowImpl::refreshAboutVersion()
         _lic_url = QUrl::fromLocalFile(_lic_path).toString();
     }
 
-    QString _license;
-    if ( !(_lic_name.count() > 15) )
-        _license = tr("Licensed under") + " &lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + _lic_name + "&lt;/a&gt;";
-    else _license = "&lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + _lic_name + "&lt;/a&gt;";
+    auto makeLink = [&](const QString& name) {
+        return "&lt;a class=\"link\" onclick=\"window.open('" + _lic_url + "')\" draggable=\"false\" href=\"#\"&gt;" + name + "&lt;/a&gt;";
+    };
+
+    QString _license = makeLink(_lic_name);
+    if (_lic_name.length() <= 15)
+        _license.prepend(tr("Licensed under") + " ");
 
 
     _json_obj["version"]    = VER_FILEVERSION_STR;
