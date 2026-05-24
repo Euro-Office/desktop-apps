@@ -1554,8 +1554,9 @@ void CMainWindow::onAddUserTemplates()
             templatesUpdated = true;
     }
 
-    if (templatesUpdated)
-        AscAppManager::getInstance().UpdateTemplates();
+    // if (templatesUpdated)
+    //     AscAppManager::getInstance().UpdateTemplates();
+    AscAppManager::sendCommandTo(SEND_TO_ALL_START_PAGE, L"templates", L"update:local");
 }
 
 void CMainWindow::updateScalingFactor(double dpiratio)

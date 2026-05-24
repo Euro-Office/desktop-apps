@@ -498,6 +498,12 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
 
             return true;
         } else
+        if ( !(cmd.find(L"add:templates") == std::wstring::npos) ) {
+            if ( pData->get_Param() == L"local" ) {
+                mainWindow()->onAddUserTemplates();
+            }
+            // else if ( pData->get_Param() == L"local:folder" ) {}
+        } else
         if ( !(cmd.find(L"quickaccess:changed") == std::wstring::npos) ) {
             int sid = event->get_SenderId();
             map<int, CCefEventsGate *>::const_iterator it = m_receivers.find(sid);
