@@ -64,6 +64,10 @@
 
 .listbox {
   outline: none;
+  padding: 0;
+  margin: 0;
+  max-height: min(320px, calc(var(--kb-popper-available-height, 9999px) - 8px));
+  overflow-y: auto;
 }
 
 .item {

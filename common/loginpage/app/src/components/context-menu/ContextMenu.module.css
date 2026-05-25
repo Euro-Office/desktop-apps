@@ -11,7 +11,7 @@
   box-shadow: 0 8px 16px 0 #040f1b14, 0 0 4px 0 #040f1b0a;
 }
 
-.menu-item {
+.menuItem {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -33,11 +33,11 @@
   }
 }
 
-.menu:has(.menu-icon) .menu-item:not(:has(.menu-icon)) {
+.menu:has(.menuIcon) .menu-item:not(:has(.menuIcon)) {
   padding-left: calc(8px + 20px + 4px);
 }
 
-.menu-icon {
+.menuIcon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
@@ -45,7 +45,7 @@
   color: var(--text-normal-pressed);
 }
 
-.menu-separator {
+.menuSeparator {
   height: 1px;
   margin: 0;
   border-color: var(--border-color);

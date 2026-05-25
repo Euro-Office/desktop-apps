@@ -7,7 +7,7 @@
   padding: 3px 12px 4px;
 }
 
-.btn-default {
+.btnDefault {
   &:hover {
     background-color: var(--highlight-button-hover);
   }
@@ -17,7 +17,7 @@
   }
 }
 
-.btn-primary {
+.btnPrimary {
   color: var(--text-inverse);
   background-color: var(--background-primary-button);
 
@@ -30,7 +30,7 @@
   }
 }
 
-.btn-accent {
+.btnAccent {
   color: var(--text-inverse);
   background-color: var(--background-accent-button);
 
