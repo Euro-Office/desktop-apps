@@ -53,6 +53,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMimeData>
+#include <QDirIterator>
 
 #include <qtcomp/qpalette.h>
 
@@ -1532,20 +1533,14 @@ void CMainWindow::onErrorPage(int id, const std::wstring& action)
     }
 }
 
-void CMainWindow::onAddUserTemplates()
+void CMainWindow::importUserTemplates(const QStringList &filePaths)
 {
     const QString templatesDir = QString::fromStdWString(AscAppManager::getInstance().m_oSettings.user_templates_path);
-
-    CFileDialogWrapper dlg(this);
-    const QStringList selectedFiles = dlg.modalOpenTemplates(Utils::lastPath(LOCAL_PATH_OPEN));
-
-    if (selectedFiles.isEmpty())
-        return;
 
     Utils::makepath(templatesDir);
     bool templatesUpdated = false;
 
-    for (const QString &srcFilePath : selectedFiles) {
+    for (const QString &srcFilePath : filePaths) {
         QFileInfo fi(srcFilePath);
         const QString dstFilePath = templatesDir + "/" + fi.fileName();
 
@@ -1564,6 +1559,34 @@ void CMainWindow::onAddUserTemplates()
     if (templatesUpdated)
     //     AscAppManager::getInstance().UpdateTemplates();
         AscAppManager::sendCommandTo(SEND_TO_ALL_START_PAGE, L"templates", L"update:local");
+}
+
+void CMainWindow::onAddUserTemplateFiles()
+{
+    CFileDialogWrapper dlg(this);
+    const QStringList selectedFiles = dlg.modalOpenTemplates(Utils::lastPath(LOCAL_PATH_OPEN));
+
+    if (!selectedFiles.isEmpty())
+        importUserTemplates(selectedFiles);
+}
+
+void CMainWindow::onAddUserTemplateFolder()
+{
+    CFileDialogWrapper dlg(this);
+    const QString selectedFolder = dlg.selectFolder(Utils::lastPath(LOCAL_PATH_OPEN));
+
+    if (selectedFolder.isEmpty())
+        return;
+
+    QStringList filePaths;
+    QStringList filters{"*.dotx", "*.xltx", "*.potx", "*.pdf"};
+    QDirIterator it(selectedFolder, filters, QDir::Files, QDirIterator::Subdirectories);
+
+    while (it.hasNext())
+        filePaths << it.next();
+
+    if (!filePaths.isEmpty())
+        importUserTemplates(filePaths);
 }
 
 void CMainWindow::updateScalingFactor(double dpiratio)

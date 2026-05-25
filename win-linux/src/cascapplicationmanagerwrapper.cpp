@@ -535,9 +535,11 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
         } else
         if ( !(cmd.find(L"add:templates") == std::wstring::npos) ) {
             if ( pData->get_Param() == L"local" ) {
-                mainWindow()->onAddUserTemplates();
+                mainWindow()->onAddUserTemplateFiles();
             }
-            // else if ( pData->get_Param() == L"local:folder" ) {}
+            else if ( pData->get_Param() == L"local:folder" ) {
+                mainWindow()->onAddUserTemplateFolder();
+            }
         } else
         if ( !(cmd.find(L"quickaccess:changed") == std::wstring::npos) ) {
             int sid = event->get_SenderId();
