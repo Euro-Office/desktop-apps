@@ -103,7 +103,7 @@ function applyScaling(scaling) {
 }
 
 function nativeScalingToStore(raw) {
-  return raw == null ? "auto" : String(raw);
+  return raw == null || raw === 0 ? "auto" : String(raw);
 }
 
 function htmlDecode(str) {
@@ -171,8 +171,7 @@ export function initSettingsSync() {
       restart,
     };
 
-    const nativeScaling = scaling === "auto" ? undefined : parseInt(scaling, 10);
-    if (nativeScaling !== undefined) payload.uiscaling = nativeScaling;
+    payload.uiscaling = scaling === "auto" ? "0" : scaling;
 
     cmd("settings:apply", JSON.stringify(payload));
   });
@@ -197,7 +196,7 @@ export function initSettingsSync() {
 
       batch(() => {
         if (payload.locale?.current) setSettings("lang", payload.locale.current);
-        if (payload.uiscaling != null) setSettings("scaling", nativeScalingToStore(payload.uiscaling));
+        if ("uiscaling" in payload) setSettings("scaling", nativeScalingToStore(payload.uiscaling));
         if (payload.uitheme) setSettings("theme", NATIVE_TO_STORE[payload.uitheme] ?? payload.uitheme);
         if (payload.autoupdatemode) setSettings("checkUpdates", payload.autoupdatemode);
         if (payload.docopenmode) setSettings("launchMode", payload.docopenmode);
