@@ -58,6 +58,7 @@ public:
     QStringList modalOpenImages(const QString&);
     QStringList modalOpenPlugin(const QString&);
     QStringList modalOpenPlugins(const QString&);
+    QStringList modalOpenTemplates(const QString&);
     QStringList modalOpenAny(const QString&, bool multi = false);
     QStringList modalOpenDocuments(const QString&, bool multi = false);
     QStringList modalOpenSpreadsheets(const QString&, bool multi = false);

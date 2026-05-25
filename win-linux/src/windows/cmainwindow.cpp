@@ -53,6 +53,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMimeData>
+#include <QDirIterator>
 
 #include <qtcomp/qpalette.h>
 
@@ -1530,6 +1531,62 @@ void CMainWindow::onErrorPage(int id, const std::wstring& action)
         m_pTabs->panel(ind)->data()->setHasError();
         m_pTabs->tabBar()->setTabLoading(ind, false);
     }
+}
+
+void CMainWindow::importUserTemplates(const QStringList &filePaths)
+{
+    const QString templatesDir = QString::fromStdWString(AscAppManager::getInstance().m_oSettings.user_templates_path);
+
+    Utils::makepath(templatesDir);
+    bool templatesUpdated = false;
+
+    for (const QString &srcFilePath : filePaths) {
+        QFileInfo fi(srcFilePath);
+        const QString dstFilePath = templatesDir + "/" + fi.fileName();
+
+        if (QFile::exists(dstFilePath)) {
+            int res = CMessage::showMessage(this, tr("%1 already exists.<br>Do you want to replace it?").arg(fi.fileName().toHtmlEscaped()),
+                                            MsgType::MSG_WARN, MsgBtns::mbYesDefNo);
+            if (res != MODAL_RESULT_YES)
+                continue;
+        }
+
+        QFile::copy(srcFilePath, dstFilePath);
+        if (!templatesUpdated)
+            templatesUpdated = true;
+    }
+
+    if (templatesUpdated)
+    //     AscAppManager::getInstance().UpdateTemplates();
+        AscAppManager::sendCommandTo(SEND_TO_ALL_START_PAGE, L"templates", L"update:local");
+}
+
+void CMainWindow::onAddUserTemplateFiles()
+{
+    CFileDialogWrapper dlg(this);
+    const QStringList selectedFiles = dlg.modalOpenTemplates(Utils::lastPath(LOCAL_PATH_OPEN));
+
+    if (!selectedFiles.isEmpty())
+        importUserTemplates(selectedFiles);
+}
+
+void CMainWindow::onAddUserTemplateFolder()
+{
+    CFileDialogWrapper dlg(this);
+    const QString selectedFolder = dlg.selectFolder(Utils::lastPath(LOCAL_PATH_OPEN));
+
+    if (selectedFolder.isEmpty())
+        return;
+
+    QStringList filePaths;
+    QStringList filters{"*.dotx", "*.xltx", "*.potx", "*.pdf"};
+    QDirIterator it(selectedFolder, filters, QDir::Files, QDirIterator::Subdirectories);
+
+    while (it.hasNext())
+        filePaths << it.next();
+
+    if (!filePaths.isEmpty())
+        importUserTemplates(filePaths);
 }
 
 void CMainWindow::updateScalingFactor(double dpiratio)

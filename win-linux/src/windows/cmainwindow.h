@@ -156,12 +156,15 @@ public slots:
     void onDocumentPrint(void *);
     void onReporterMode(int, bool);
     void onErrorPage(int, const std::wstring&);
+    void onAddUserTemplateFiles();
+    void onAddUserTemplateFolder();
     virtual void onDocumentReady(int);
 
 private:
     QWidget * createMainPanel(QWidget *parent);
     int  trySaveDocument(int);
     void setTabMenu(int index, const QPoint &pos);
+    void importUserTemplates(const QStringList &filePaths);
 
     CAscTabWidget *  m_pTabs = nullptr;
     CSVGPushButton*  m_pButtonMain = nullptr;

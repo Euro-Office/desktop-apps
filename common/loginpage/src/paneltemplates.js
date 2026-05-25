@@ -425,6 +425,19 @@
             
         };
     
+        const _on_native_message = function (cmd, params) {
+            if (cmd == 'templates') {
+                if (params == "update:local") {
+                    let ls = [utils.Lang.id];
+                    if (utils.Lang.id.length > 2) {
+                        ls.push(utils.Lang.id.substring(0,2));
+                    }
+                    ls.push("en-US","en_US","en");
+                    window.sdk.LocalFileTemplates(ls);
+                }
+            }
+        };
+
         return {
             init: function() {
                 baseController.prototype.init.apply(this, arguments);
@@ -476,6 +489,8 @@
                     _loadTemplates.call(this, nl);
                     $('#template-search', this.view.$panel).attr('placeholder', utils.Lang.tplSearch);
                 });
+
+                window.sdk.on('on_native_message', _on_native_message);
 
                 _reload_templates(utils.Lang.id);
                 _loadTemplates.call(this, utils.Lang.id);
