@@ -121,6 +121,8 @@
     addObserverFor(CEFEventNameEditorOpenFolder, @selector(onCEFEditorOpenFolder:));
     addObserverFor(CEFEventNameDocumentFragmentBuild, @selector(onCEFDocumentFragmentBuild:));
     addObserverFor(CEFEventNameDocumentFragmented, @selector(onCEFDocumentFragmented:));
+    addObserverFor(CEFEventNameAddUserTemplateFiles, @selector(onAddUserTemplateFiles:));
+    addObserverFor(CEFEventNameAddUserTemplateFolder, @selector(onAddUserTemplateFolder:));
     
     if (_externalDelegate && [_externalDelegate respondsToSelector:@selector(onCommonViewDidLoad:)]) {
         [_externalDelegate onCommonViewDidLoad:self];
@@ -1724,6 +1726,106 @@
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(nullable NSTabViewItem *)tabViewItem {
     [self tabView:tabView dimTabViewItem:tabViewItem delay:0.1];
     return true;
+}
+
+#pragma mark -
+#pragma mark User Templates
+
+- (void)importUserTemplates:(NSArray<NSString *> *)filePaths {
+    CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
+    NSString * templatesDir = [NSString stringWithstdwstring:appManager->m_oSettings.user_templates_path];
+
+    NSError * error = nil;
+    [[NSFileManager defaultManager] createDirectoryAtPath:templatesDir
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:&error];
+
+    BOOL templatesUpdated = NO;
+
+    for (NSString * srcFilePath in filePaths) {
+        NSString * fileName = [srcFilePath lastPathComponent];
+        NSString * dstFilePath = [templatesDir stringByAppendingPathComponent:fileName];
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:dstFilePath]) {
+            NSAlert * alert = [[NSAlert alloc] init];
+            [alert addButtonWithTitle:NSLocalizedString(@"Replace", nil)];
+            [[alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)] setKeyEquivalent:@"\e"];
+            [alert setMessageText:[NSString stringWithFormat:NSLocalizedString(@"%@ already exists.\nDo you want to replace it?", nil), fileName]];
+            [alert setAlertStyle:NSAlertStyleWarning];
+
+            if ([alert runModal] != NSAlertFirstButtonReturn)
+                continue;
+
+            [[NSFileManager defaultManager] removeItemAtPath:dstFilePath error:nil];
+        }
+
+        [[NSFileManager defaultManager] copyItemAtPath:srcFilePath toPath:dstFilePath error:nil];
+        if (!templatesUpdated)
+            templatesUpdated = YES;
+    }
+
+    if (templatesUpdated) {
+        NSEditorApi::CAscExecCommandJS * pCommand = new NSEditorApi::CAscExecCommandJS;
+        pCommand->put_Command(L"templates");
+        pCommand->put_Param(L"update:local");
+
+        NSEditorApi::CAscMenuEvent * pEvent = new NSEditorApi::CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_EXECUTE_COMMAND_JS);
+        pEvent->m_pData = pCommand;
+
+        CAscApplicationManager * pAppManager = [NSAscApplicationWorker getAppManager];
+        pAppManager->SetEventToAllMainWindows(pEvent);
+    }
+}
+
+- (void)onAddUserTemplateFiles:(NSNotification *)notification {
+    NSOpenPanel * openPanel = [NSOpenPanel openPanel];
+    openPanel.canChooseFiles = YES;
+    openPanel.canChooseDirectories = NO;
+    openPanel.allowsMultipleSelection = YES;
+    openPanel.allowedFileTypes = @[@"dotx", @"xltx", @"potx", @"pdf"];
+
+    if ([openPanel runModal] != NSModalResponseOK)
+        return;
+
+    NSArray<NSURL *> * selectedURLs = openPanel.URLs;
+    if (selectedURLs.count == 0)
+        return;
+
+    NSMutableArray<NSString *> * filePaths = [NSMutableArray array];
+    for (NSURL * url in selectedURLs) {
+        [filePaths addObject:url.path];
+    }
+
+    [self importUserTemplates:filePaths];
+}
+
+- (void)onAddUserTemplateFolder:(NSNotification *)notification {
+    NSOpenPanel * openPanel = [NSOpenPanel openPanel];
+    openPanel.canChooseFiles = NO;
+    openPanel.canChooseDirectories = YES;
+    openPanel.allowsMultipleSelection = NO;
+
+    if ([openPanel runModal] != NSModalResponseOK)
+        return;
+
+    NSString * selectedFolder = openPanel.URL.path;
+    if (!selectedFolder || selectedFolder.length == 0)
+        return;
+
+    NSArray<NSString *> * extensions = @[@"dotx", @"xltx", @"potx", @"pdf"];
+    NSMutableArray<NSString *> * filePaths = [NSMutableArray array];
+
+    NSDirectoryEnumerator<NSString *> * enumerator = [[NSFileManager defaultManager] enumeratorAtPath:selectedFolder];
+    for (NSString * relativePath in enumerator) {
+        NSString * ext = relativePath.pathExtension.lowercaseString;
+        if ([extensions containsObject:ext]) {
+            [filePaths addObject:[selectedFolder stringByAppendingPathComponent:relativePath]];
+        }
+    }
+
+    if (filePaths.count > 0)
+        [self importUserTemplates:filePaths];
 }
 
 #pragma mark -

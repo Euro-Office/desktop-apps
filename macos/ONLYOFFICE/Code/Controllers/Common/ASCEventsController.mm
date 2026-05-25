@@ -923,6 +923,16 @@ public:
 //                                    }
 //                                }
 //                            }
+                        } else if (cmd.find(L"add:templates") != std::wstring::npos) {
+                            if ( param == L"local" ) {
+                                [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameAddUserTemplateFiles
+                                                                                    object:nil
+                                                                                  userInfo:nil];
+                            } else if ( param == L"local:folder" ) {
+                                [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameAddUserTemplateFolder
+                                                                                    object:nil
+                                                                                  userInfo:nil];
+                            }
                         } else if (cmd.find(L"uitheme:add") != std::wstring::npos) {
                             NSOpenPanel *panel = [NSOpenPanel openPanel];
                             panel.canChooseFiles = YES;
