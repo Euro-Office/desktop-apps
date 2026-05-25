@@ -61,6 +61,10 @@
 - (void)openEULA;
 - (void)openPreferences;
 
+- (void)importUserTemplates:(NSArray<NSString *> *)filePaths;
+- (void)onAddUserTemplateFiles:(NSNotification *)notification;
+- (void)onAddUserTemplateFolder:(NSNotification *)notification;
+
 @property (weak) ASCTabsControl *tabsControl;
 @property (weak) IBOutlet NSTabView *tabView;
 @property (nonatomic) NSMutableArray<ASCTabView *> * tabsWithChanges;

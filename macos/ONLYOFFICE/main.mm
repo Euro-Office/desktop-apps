@@ -71,7 +71,9 @@ int main(int argc, const char * argv[]) {
     CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
 
     // setup common user directory
-    appManager->m_oSettings.SetUserDataPath([[ASCHelper applicationDataPath] stdwstring]);
+    NSString * userDataPath = [ASCHelper applicationDataPath];
+    appManager->m_oSettings.SetUserDataPath([userDataPath stdwstring]);
+    appManager->m_oSettings.user_templates_path = [[userDataPath stringByAppendingPathComponent:@"templates"] stdwstring];
     
     NSString * resourcePath = [[NSBundle mainBundle] resourcePath];
     // setup Editors directory
