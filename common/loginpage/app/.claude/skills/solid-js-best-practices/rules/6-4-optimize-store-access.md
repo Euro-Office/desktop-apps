@@ -26,15 +26,11 @@ function UserList() {
   const [state] = createStore({
     users: [
       { id: 1, name: "Alice", email: "alice@example.com", lastLogin: "..." },
-      { id: 2, name: "Bob", email: "bob@example.com", lastLogin: "..." }
-    ]
+      { id: 2, name: "Bob", email: "bob@example.com", lastLogin: "..." },
+    ],
   });
 
-  return (
-    <For each={state.users}>
-      {(user) => <UserCard user={user} />}
-    </For>
-  );
+  return <For each={state.users}>{(user) => <UserCard user={user} />}</For>;
 }
 ```
 
@@ -45,7 +41,7 @@ function UserName(props) {
 
   // Even though we only display name,
   // we've accessed the entire user object
-  console.log(user);  // Tracks all properties
+  console.log(user); // Tracks all properties
 
   return <span>{user.name}</span>;
 }
@@ -72,15 +68,11 @@ function UserList() {
   const [state] = createStore({
     users: [
       { id: 1, name: "Alice", email: "alice@example.com", lastLogin: "..." },
-      { id: 2, name: "Bob", email: "bob@example.com", lastLogin: "..." }
-    ]
+      { id: 2, name: "Bob", email: "bob@example.com", lastLogin: "..." },
+    ],
   });
 
-  return (
-    <For each={state.users}>
-      {(user) => <UserCard user={user} />}
-    </For>
-  );
+  return <For each={state.users}>{(user) => <UserCard user={user} />}</For>;
 }
 ```
 
@@ -106,17 +98,14 @@ function ParentComponent() {
     user: {
       profile: { name: "Alice", avatar: "..." },
       settings: { theme: "dark", notifications: true },
-      activity: { lastLogin: "...", actions: [] }
-    }
+      activity: { lastLogin: "...", actions: [] },
+    },
   });
 
   return (
     <>
       {/* AvatarDisplay only re-renders when avatar changes */}
-      <AvatarDisplay
-        name={state.user.profile.name}
-        avatar={state.user.profile.avatar}
-      />
+      <AvatarDisplay name={state.user.profile.name} avatar={state.user.profile.avatar} />
 
       {/* SettingsPanel only re-renders when settings change */}
       <SettingsPanel settings={state.user.settings} />
@@ -163,9 +152,9 @@ function Dashboard() {
     metrics: {
       daily: { visits: 100, sales: 50, revenue: 1000 },
       weekly: { visits: 700, sales: 350, revenue: 7000 },
-      monthly: { visits: 3000, sales: 1500, revenue: 30000 }
+      monthly: { visits: 3000, sales: 1500, revenue: 30000 },
     },
-    period: "daily"
+    period: "daily",
   });
 
   // ✅ CORRECT: Selector memo for current period
@@ -173,10 +162,7 @@ function Dashboard() {
 
   return (
     <div>
-      <MetricsCard
-        visits={currentMetrics().visits}
-        sales={currentMetrics().sales}
-      />
+      <MetricsCard visits={currentMetrics().visits} sales={currentMetrics().sales} />
     </div>
   );
 }
@@ -184,13 +170,13 @@ function Dashboard() {
 
 ## Tracking Rules
 
-| Access Pattern | Creates Subscription |
-| -------------- | ------------------- |
-| `store.prop` in JSX | Yes, to `prop` |
-| `store.nested.prop` in JSX | Yes, to `nested.prop` |
-| `{...store}` spread | Yes, to all current properties |
-| `console.log(store)` | No (not in reactive context) |
-| `untrack(() => store.prop)` | No |
+| Access Pattern              | Creates Subscription           |
+| --------------------------- | ------------------------------ |
+| `store.prop` in JSX         | Yes, to `prop`                 |
+| `store.nested.prop` in JSX  | Yes, to `nested.prop`          |
+| `{...store}` spread         | Yes, to all current properties |
+| `console.log(store)`        | No (not in reactive context)   |
+| `untrack(() => store.prop)` | No                             |
 
 ## Why It Matters
 
@@ -210,7 +196,7 @@ import { createEffect } from "solid-js";
 
 createEffect(() => {
   console.log("This effect tracks:", {
-    name: state.user.name,  // Tracked
+    name: state.user.name, // Tracked
     // email: state.user.email  // Not tracked (commented)
   });
 });

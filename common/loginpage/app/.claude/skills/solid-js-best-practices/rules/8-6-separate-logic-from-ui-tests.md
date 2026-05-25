@@ -58,9 +58,7 @@ import { usePagination } from "./usePagination";
 
 // ✅ CORRECT: Test the primitive directly -- fast, precise
 test("pagination clamps to last page", () => {
-  const { result } = renderHook(() =>
-    usePagination({ total: 50, pageSize: 10 })
-  );
+  const { result } = renderHook(() => usePagination({ total: 50, pageSize: 10 }));
 
   expect(result.page()).toBe(1);
   expect(result.totalPages()).toBe(5);
@@ -149,8 +147,12 @@ vi.mock("./authStore", () => {
   const [user, setUser] = createSignal<string | null>(null);
   return {
     authStore: {
-      get user() { return user(); },         // Getter, not static value
-      get isLoggedIn() { return user() !== null; },
+      get user() {
+        return user();
+      }, // Getter, not static value
+      get isLoggedIn() {
+        return user() !== null;
+      },
       login: (name: string) => setUser(name),
       logout: () => setUser(null),
     },
@@ -173,13 +175,13 @@ test("shows username when logged in", async () => {
 
 ## Test Pyramid for Solid Apps
 
-| Layer | What to Test | Tool | Speed |
-| ----- | ------------ | ---- | ----- |
-| Unit | Pure functions (validators, formatters) | Direct function calls | Fastest |
-| Primitive | Reactive hooks (signals, memos, effects) | `renderHook` / `createRoot` | Fast |
-| Directive | Reusable DOM behaviors | `renderDirective` / bare element | Fast |
-| Component | UI integration (rendering, interaction) | `render` + queries | Slower |
-| Integration | Full page flows with routing/context | `render` + providers | Slowest |
+| Layer       | What to Test                             | Tool                             | Speed   |
+| ----------- | ---------------------------------------- | -------------------------------- | ------- |
+| Unit        | Pure functions (validators, formatters)  | Direct function calls            | Fastest |
+| Primitive   | Reactive hooks (signals, memos, effects) | `renderHook` / `createRoot`      | Fast    |
+| Directive   | Reusable DOM behaviors                   | `renderDirective` / bare element | Fast    |
+| Component   | UI integration (rendering, interaction)  | `render` + queries               | Slower  |
+| Integration | Full page flows with routing/context     | `render` + providers             | Slowest |
 
 ## Why It Matters
 

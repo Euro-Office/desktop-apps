@@ -112,9 +112,7 @@ import ThemedButton from "./ThemedButton";
 // ✅ CORRECT: wrapper option for reusable context
 test("renders with theme", () => {
   render(() => <ThemedButton>Click me</ThemedButton>, {
-    wrapper: (props) => (
-      <ThemeProvider theme="dark">{props.children}</ThemeProvider>
-    ),
+    wrapper: (props) => <ThemeProvider theme="dark">{props.children}</ThemeProvider>,
   });
 
   expect(screen.getByRole("button")).toHaveClass("dark");

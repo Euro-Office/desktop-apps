@@ -1,14 +1,7 @@
 import { Show, createSignal, onCleanup, onMount } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 import { t } from "@/services/l10n.js";
-import {
-  listRecents,
-  onRecentsChanged,
-  parseRecent,
-  pinRecent,
-  removeRecent,
-  clearRecents,
-} from "@/sdk";
+import { listRecents, onRecentsChanged, parseRecent, pinRecent, removeRecent, clearRecents } from "@/sdk";
 import { DocTypeGrid } from "./components/DocTypeGrid.jsx";
 import { RecentList } from "./components/RecentList.jsx";
 import { FileDropZone } from "./components/FileDropZone.jsx";
@@ -93,12 +86,7 @@ export default function Index() {
       </Show>
 
       <section class="file-list-section">
-        <RecentList
-          recents={recents}
-          onTogglePin={togglePin}
-          onRemove={markFileRemoved}
-          onClear={clearAll}
-        />
+        <RecentList recents={recents} onTogglePin={togglePin} onRemove={markFileRemoved} onClear={clearAll} />
       </section>
     </div>
   );

@@ -21,8 +21,10 @@ function Counter() {
   // ❌ WRONG: Passing the getter function, not the value
   return (
     <div>
-      <p>Count: {count}</p>  {/* Displays "[Function]" or nothing */}
-      <button onClick={() => setCount(count + 1)}>  {/* NaN result */}
+      <p>Count: {count}</p> {/* Displays "[Function]" or nothing */}
+      <button onClick={() => setCount(count + 1)}>
+        {" "}
+        {/* NaN result */}
         Increment
       </button>
     </div>
@@ -42,9 +44,7 @@ function Counter() {
   return (
     <div>
       <p>Count: {count()}</p>
-      <button onClick={() => setCount(count() + 1)}>
-        Increment
-      </button>
+      <button onClick={() => setCount(count() + 1)}>Increment</button>
     </div>
   );
 }
@@ -54,9 +54,7 @@ function Counter() {
 
 ```tsx
 // ✅ CORRECT: Functional update pattern
-<button onClick={() => setCount(prev => prev + 1)}>
-  Increment
-</button>
+<button onClick={() => setCount((prev) => prev + 1)}>Increment</button>
 ```
 
 ## Why It Matters

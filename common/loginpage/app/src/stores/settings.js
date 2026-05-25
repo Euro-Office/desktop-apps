@@ -14,9 +14,6 @@ const defaultSettings = {
   useai: true,
 };
 
-const [settings, setSettings] = makePersisted(
-  createStore(defaultSettings),
-  { name: "settings" },
-);
+const [settings, setSettings] = makePersisted(createStore(defaultSettings), { name: "settings" });
 
 export { settings, setSettings, defaultSettings };

@@ -16,17 +16,21 @@ When rendering different content based on multiple conditions, nested `<Show>` c
 // ❌ WRONG: Nested Show components
 function StatusBadge(props) {
   return (
-    <Show when={props.status === "success"} fallback={
-      <Show when={props.status === "error"} fallback={
-        <Show when={props.status === "loading"} fallback={
-          <span class="badge-unknown">Unknown</span>
-        }>
-          <span class="badge-loading">Loading...</span>
+    <Show
+      when={props.status === "success"}
+      fallback={
+        <Show
+          when={props.status === "error"}
+          fallback={
+            <Show when={props.status === "loading"} fallback={<span class="badge-unknown">Unknown</span>}>
+              <span class="badge-loading">Loading...</span>
+            </Show>
+          }
+        >
+          <span class="badge-error">Error</span>
         </Show>
-      }>
-        <span class="badge-error">Error</span>
-      </Show>
-    }>
+      }
+    >
       <span class="badge-success">Success</span>
     </Show>
   );
@@ -80,15 +84,9 @@ import { Switch, Match } from "solid-js";
 function UserStatus(props) {
   return (
     <Switch>
-      <Match when={props.user?.isAdmin}>
-        {(isAdmin) => <AdminBadge verified={isAdmin()} />}
-      </Match>
-      <Match when={props.user?.role}>
-        {(role) => <RoleBadge role={role()} />}
-      </Match>
-      <Match when={props.user}>
-        {(user) => <span>Welcome, {user().name}</span>}
-      </Match>
+      <Match when={props.user?.isAdmin}>{(isAdmin) => <AdminBadge verified={isAdmin()} />}</Match>
+      <Match when={props.user?.role}>{(role) => <RoleBadge role={role()} />}</Match>
+      <Match when={props.user}>{(user) => <span>Welcome, {user().name}</span>}</Match>
     </Switch>
   );
 }
@@ -129,15 +127,11 @@ function ContentRenderer(props) {
       <Match when={props.loading}>
         <Skeleton />
       </Match>
-      <Match when={props.error}>
-        {(error) => <ErrorDisplay message={error().message} />}
-      </Match>
+      <Match when={props.error}>{(error) => <ErrorDisplay message={error().message} />}</Match>
       <Match when={props.data?.length === 0}>
         <EmptyState />
       </Match>
-      <Match when={props.data}>
-        {(data) => <DataList items={data()} />}
-      </Match>
+      <Match when={props.data}>{(data) => <DataList items={data()} />}</Match>
     </Switch>
   );
 }
@@ -148,11 +142,7 @@ function ContentRenderer(props) {
 ```tsx
 import { Switch, Match } from "solid-js";
 
-type State =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: string }
-  | { status: "error"; error: Error };
+type State = { status: "idle" } | { status: "loading" } | { status: "success"; data: string } | { status: "error"; error: Error };
 
 function AsyncContent(props: { state: State }) {
   return (
@@ -188,26 +178,26 @@ function AsyncContent(props: { state: State }) {
 
 ### Switch
 
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
+| Prop       | Type          | Description                                |
+| ---------- | ------------- | ------------------------------------------ |
 | `fallback` | `JSX.Element` | Rendered when no Match conditions are true |
 
 ### Match
 
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
-| `when` | `T \| undefined \| null \| false` | Condition to evaluate |
-| `keyed` | `boolean` | Rerender when reference changes |
-| `children` | `JSX.Element \| (item: T) => JSX.Element` | Content or render function |
+| Prop       | Type                                      | Description                     |
+| ---------- | ----------------------------------------- | ------------------------------- |
+| `when`     | `T \| undefined \| null \| false`         | Condition to evaluate           |
+| `keyed`    | `boolean`                                 | Rerender when reference changes |
+| `children` | `JSX.Element \| (item: T) => JSX.Element` | Content or render function      |
 
 ## When to Use Switch vs Show
 
-| Scenario | Recommended |
-| -------- | ----------- |
-| Simple true/false | `<Show>` |
-| Two conditions (if/else) | `<Show>` with `fallback` |
-| Three or more conditions | `<Switch>/<Match>` |
-| Enum or union type matching | `<Switch>/<Match>` |
+| Scenario                    | Recommended              |
+| --------------------------- | ------------------------ |
+| Simple true/false           | `<Show>`                 |
+| Two conditions (if/else)    | `<Show>` with `fallback` |
+| Three or more conditions    | `<Switch>/<Match>`       |
+| Enum or union type matching | `<Switch>/<Match>`       |
 
 ## Related Rules
 

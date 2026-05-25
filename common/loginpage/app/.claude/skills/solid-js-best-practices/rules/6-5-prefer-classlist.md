@@ -17,12 +17,7 @@ When toggling CSS classes conditionally, developers often resort to string conca
 function Button(props) {
   return (
     <button
-      class={
-        "btn" +
-        (props.primary ? " btn-primary" : "") +
-        (props.large ? " btn-lg" : "") +
-        (props.disabled ? " btn-disabled" : "")
-      }
+      class={"btn" + (props.primary ? " btn-primary" : "") + (props.large ? " btn-lg" : "") + (props.disabled ? " btn-disabled" : "")}
     >
       {props.children}
     </button>
@@ -33,11 +28,7 @@ function Button(props) {
 ```tsx
 // ❌ WRONG: Template literal with conditionals
 function NavItem(props) {
-  return (
-    <a class={`nav-item ${props.active ? "active" : ""} ${props.highlighted ? "highlighted" : ""}`}>
-      {props.label}
-    </a>
-  );
+  return <a class={`nav-item ${props.active ? "active" : ""} ${props.highlighted ? "highlighted" : ""}`}>{props.label}</a>;
 }
 ```
 
@@ -46,11 +37,7 @@ function NavItem(props) {
 import clsx from "clsx";
 
 function Card(props) {
-  return (
-    <div class={clsx("card", { "card-elevated": props.elevated, "card-bordered": props.bordered })}>
-      {props.children}
-    </div>
-  );
+  return <div class={clsx("card", { "card-elevated": props.elevated, "card-bordered": props.bordered })}>{props.children}</div>;
 }
 ```
 
@@ -165,13 +152,13 @@ function PasswordStrength(props) {
 
 ## classList vs class
 
-| Feature | `class` | `classList` |
-| ------- | ------- | ----------- |
-| Static classes | Yes | Not recommended |
-| Conditional classes | Possible (string concat) | Yes (cleaner) |
-| DOM update | Replaces entire `className` | Toggles individual classes |
-| Reactive granularity | Entire string recalculated | Per-class toggle |
-| Combinable | Yes, use together | Yes, use together |
+| Feature              | `class`                     | `classList`                |
+| -------------------- | --------------------------- | -------------------------- |
+| Static classes       | Yes                         | Not recommended            |
+| Conditional classes  | Possible (string concat)    | Yes (cleaner)              |
+| DOM update           | Replaces entire `className` | Toggles individual classes |
+| Reactive granularity | Entire string recalculated  | Per-class toggle           |
+| Combinable           | Yes, use together           | Yes, use together          |
 
 ## Why It Matters
 

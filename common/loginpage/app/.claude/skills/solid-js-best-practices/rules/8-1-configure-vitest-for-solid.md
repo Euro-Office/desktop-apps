@@ -194,15 +194,15 @@ Key notes:
 
 ## Symptom Diagnosis
 
-| Symptom | Likely Cause | Fix |
-| ------- | ------------ | --- |
-| Effects never fire | Missing `resolve.conditions` | Add `['development', 'browser']` |
-| `createSignal` updates don't reach DOM | Wrong Solid build (server) | Add `vite-plugin-solid` and conditions |
-| `document is not defined` | Missing jsdom environment | Add `environment: 'jsdom'` |
-| Module resolution errors for solid-js | Missing deps optimizer | Add `solid-js` to `deps.optimizer.web.include` |
-| `toBeInTheDocument` not found | Missing setup file | Create `vitest.setup.ts` with jest-dom import |
-| TypeScript errors in test files | Missing globals config | Add `globals: true` or import from `vitest` |
-| Browser window opens in CI | Missing `headless` config | Add `browser.headless: true` to the browser project |
+| Symptom                                | Likely Cause                 | Fix                                                 |
+| -------------------------------------- | ---------------------------- | --------------------------------------------------- |
+| Effects never fire                     | Missing `resolve.conditions` | Add `['development', 'browser']`                    |
+| `createSignal` updates don't reach DOM | Wrong Solid build (server)   | Add `vite-plugin-solid` and conditions              |
+| `document is not defined`              | Missing jsdom environment    | Add `environment: 'jsdom'`                          |
+| Module resolution errors for solid-js  | Missing deps optimizer       | Add `solid-js` to `deps.optimizer.web.include`      |
+| `toBeInTheDocument` not found          | Missing setup file           | Create `vitest.setup.ts` with jest-dom import       |
+| TypeScript errors in test files        | Missing globals config       | Add `globals: true` or import from `vitest`         |
+| Browser window opens in CI             | Missing `headless` config    | Add `browser.headless: true` to the browser project |
 
 ## Why It Matters
 

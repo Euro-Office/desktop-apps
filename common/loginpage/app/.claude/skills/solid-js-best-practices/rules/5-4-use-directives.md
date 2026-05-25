@@ -149,9 +149,7 @@ declare module "solid-js" {
 }
 
 // Usage
-<button use:tooltip={{ text: "Click to save", position: "bottom" }}>
-  Save
-</button>
+<button use:tooltip={{ text: "Click to save", position: "bottom" }}>Save</button>;
 ```
 
 ### Intersection Observer Directive
@@ -159,10 +157,7 @@ declare module "solid-js" {
 ```tsx
 import { Accessor, onCleanup } from "solid-js";
 
-function inView(
-  el: HTMLElement,
-  accessor: Accessor<(visible: boolean) => void>
-) {
+function inView(el: HTMLElement, accessor: Accessor<(visible: boolean) => void>) {
   const observer = new IntersectionObserver(([entry]) => {
     accessor()(entry.isIntersecting);
   });
@@ -197,22 +192,18 @@ function LazyImage(props) {
 
 ```tsx
 // ✅ CORRECT: Multiple directives on one element
-<input
-  use:autofocus
-  use:validate={validationRules}
-  use:mask="phone"
-/>
+<input use:autofocus use:validate={validationRules} use:mask="phone" />
 ```
 
 ## Directive Signature
 
 ```tsx
 function directiveName(
-  el: HTMLElement,                    // The DOM element
-  accessor: Accessor<ValueType>       // Function returning the directive value
+  el: HTMLElement, // The DOM element
+  accessor: Accessor<ValueType>, // Function returning the directive value
 ) {
   // Setup code
-  const value = accessor();  // Get the value
+  const value = accessor(); // Get the value
 
   // Optional cleanup
   onCleanup(() => {
@@ -223,12 +214,12 @@ function directiveName(
 
 ## When to Use Directives
 
-| Use Case | Directive? |
-| -------- | ---------- |
-| Reusable DOM behavior | Yes |
-| One-off DOM manipulation | `onMount` + ref |
-| Reactive DOM updates | `createEffect` |
-| Component-level logic | Regular component |
+| Use Case                 | Directive?        |
+| ------------------------ | ----------------- |
+| Reusable DOM behavior    | Yes               |
+| One-off DOM manipulation | `onMount` + ref   |
+| Reactive DOM updates     | `createEffect`    |
+| Component-level logic    | Regular component |
 
 ## Why It Matters
 

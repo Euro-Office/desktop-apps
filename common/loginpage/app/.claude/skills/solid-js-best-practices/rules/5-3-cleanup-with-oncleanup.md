@@ -32,15 +32,20 @@ function WindowSize() {
   const [size, setSize] = createSignal({ w: 0, h: 0 });
 
   onMount(() => {
-    const update = () => setSize({
-      w: window.innerWidth,
-      h: window.innerHeight
-    });
+    const update = () =>
+      setSize({
+        w: window.innerWidth,
+        h: window.innerHeight,
+      });
     window.addEventListener("resize", update);
     // Listener stays attached forever!
   });
 
-  return <span>{size().w} x {size().h}</span>;
+  return (
+    <span>
+      {size().w} x {size().h}
+    </span>
+  );
 }
 ```
 
@@ -82,10 +87,11 @@ function WindowSize() {
   const [size, setSize] = createSignal({ w: 0, h: 0 });
 
   onMount(() => {
-    const update = () => setSize({
-      w: window.innerWidth,
-      h: window.innerHeight
-    });
+    const update = () =>
+      setSize({
+        w: window.innerWidth,
+        h: window.innerHeight,
+      });
 
     window.addEventListener("resize", update);
     onCleanup(() => window.removeEventListener("resize", update));
@@ -93,7 +99,11 @@ function WindowSize() {
     update(); // Initial value
   });
 
-  return <span>{size().w} x {size().h}</span>;
+  return (
+    <span>
+      {size().w} x {size().h}
+    </span>
+  );
 }
 ```
 
@@ -121,10 +131,10 @@ function WebSocketComponent(props) {
   const [messages, setMessages] = createSignal([]);
 
   createEffect(() => {
-    const ws = new WebSocket(props.url);  // Tracks props.url
+    const ws = new WebSocket(props.url); // Tracks props.url
 
     ws.onmessage = (e) => {
-      setMessages(msgs => [...msgs, e.data]);
+      setMessages((msgs) => [...msgs, e.data]);
     };
 
     // Cleanup runs when:
@@ -135,7 +145,7 @@ function WebSocketComponent(props) {
 
   return (
     <ul>
-      <For each={messages()}>{msg => <li>{msg}</li>}</For>
+      <For each={messages()}>{(msg) => <li>{msg}</li>}</For>
     </ul>
   );
 }
@@ -151,7 +161,7 @@ function Chart(props) {
   onMount(() => {
     const chart = new ChartJS(canvasRef, {
       type: props.type,
-      data: props.data
+      data: props.data,
     });
 
     onCleanup(() => chart.destroy());
@@ -172,33 +182,33 @@ function DataFetcher(props) {
     const controller = new AbortController();
 
     fetch(props.url, { signal: controller.signal })
-      .then(r => r.json())
+      .then((r) => r.json())
       .then(setData)
-      .catch(e => {
+      .catch((e) => {
         if (e.name !== "AbortError") throw e;
       });
 
     onCleanup(() => controller.abort());
   });
 
-  return <Show when={data()}>{d => <pre>{JSON.stringify(d)}</pre>}</Show>;
+  return <Show when={data()}>{(d) => <pre>{JSON.stringify(d)}</pre>}</Show>;
 }
 ```
 
 ## What to Clean Up
 
-| Resource | Cleanup Method |
-| -------- | -------------- |
-| `setInterval` | `clearInterval(id)` |
-| `setTimeout` | `clearTimeout(id)` |
-| `addEventListener` | `removeEventListener(...)` |
-| `WebSocket` | `ws.close()` |
-| `fetch` | `controller.abort()` |
-| `MutationObserver` | `observer.disconnect()` |
-| `ResizeObserver` | `observer.disconnect()` |
-| `IntersectionObserver` | `observer.disconnect()` |
-| Custom subscriptions | `subscription.unsubscribe()` |
-| Chart.js, Map libraries | `instance.destroy()` |
+| Resource                | Cleanup Method               |
+| ----------------------- | ---------------------------- |
+| `setInterval`           | `clearInterval(id)`          |
+| `setTimeout`            | `clearTimeout(id)`           |
+| `addEventListener`      | `removeEventListener(...)`   |
+| `WebSocket`             | `ws.close()`                 |
+| `fetch`                 | `controller.abort()`         |
+| `MutationObserver`      | `observer.disconnect()`      |
+| `ResizeObserver`        | `observer.disconnect()`      |
+| `IntersectionObserver`  | `observer.disconnect()`      |
+| Custom subscriptions    | `subscription.unsubscribe()` |
+| Chart.js, Map libraries | `instance.destroy()`         |
 
 ## Why It Matters
 

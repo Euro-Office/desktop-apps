@@ -30,9 +30,9 @@ createEffect(() => {
 
 ```tsx
 // ✅ Call hooks once at component initialization level
-const matchRoute = Router.useMatch(() => path);        // called once
+const matchRoute = Router.useMatch(() => path); // called once
 const isMobile = createMemo(() => windowWidth() < 960);
-const isRoot   = createMemo(() => Boolean(matchRoute()));
+const isRoot = createMemo(() => Boolean(matchRoute()));
 
 // ✅ Derive values with createMemo instead of effects
 const adjusted = createMemo(() => props.value + 1);

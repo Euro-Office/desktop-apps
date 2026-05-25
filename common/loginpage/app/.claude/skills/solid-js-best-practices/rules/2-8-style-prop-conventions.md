@@ -95,13 +95,13 @@ function Alert(props) {
 
 ## React to Solid Style Comparison
 
-| React | Solid | Notes |
-| ----- | ----- | ----- |
-| `fontSize: 16` | `"font-size": "16px"` | Kebab-case, explicit units |
-| `backgroundColor: "red"` | `"background-color": "red"` | Kebab-case |
-| `marginTop: "10px"` | `"margin-top": "10px"` | Kebab-case |
-| `style="color: red"` | `style={{ color: "red" }}` | Must be an object |
-| `zIndex: 10` | `"z-index": "10"` | String values for numbers |
+| React                    | Solid                       | Notes                      |
+| ------------------------ | --------------------------- | -------------------------- |
+| `fontSize: 16`           | `"font-size": "16px"`       | Kebab-case, explicit units |
+| `backgroundColor: "red"` | `"background-color": "red"` | Kebab-case                 |
+| `marginTop: "10px"`      | `"margin-top": "10px"`      | Kebab-case                 |
+| `style="color: red"`     | `style={{ color: "red" }}`  | Must be an object          |
+| `zIndex: 10`             | `"z-index": "10"`           | String values for numbers  |
 
 ## CSS Custom Properties
 

@@ -14,16 +14,16 @@ Vitest browser mode runs tests inside a real Chromium instance via Playwright, g
 
 ## When to Use Browser Mode vs jsdom
 
-| Use case | jsdom | Browser mode |
-| -------- | :---: | :----------: |
-| Standard Solid components | ✅ | ✅ |
-| TanStack Query / async data | ✅ | ✅ |
-| Custom elements / Web Components | ❌ | ✅ |
-| Shadow DOM | ❌ | ✅ |
-| IndexedDB (real, not shimmed) | ❌ | ✅ |
-| `crypto.subtle` / SubtleCrypto | ❌ | ✅ |
-| ServiceWorker registration | ❌ | ✅ |
-| CSS `getComputedStyle` (real layout) | ❌ | ✅ |
+| Use case                             | jsdom | Browser mode |
+| ------------------------------------ | :---: | :----------: |
+| Standard Solid components            |  ✅   |      ✅      |
+| TanStack Query / async data          |  ✅   |      ✅      |
+| Custom elements / Web Components     |  ❌   |      ✅      |
+| Shadow DOM                           |  ❌   |      ✅      |
+| IndexedDB (real, not shimmed)        |  ❌   |      ✅      |
+| `crypto.subtle` / SubtleCrypto       |  ❌   |      ✅      |
+| ServiceWorker registration           |  ❌   |      ✅      |
+| CSS `getComputedStyle` (real layout) |  ❌   |      ✅      |
 
 ## Incorrect
 
@@ -107,13 +107,13 @@ APIs available natively in browser mode (no polyfills needed):
 
 ## jsdom Limitations for Custom Elements (Detail)
 
-| Failure mode | Cause |
-| ------------ | ----- |
-| `connectedCallback` not called | jsdom doesn't trigger lifecycle callbacks on insert |
-| Element stays `HTMLUnknownElement` | Custom element upgrade doesn't run on existing nodes |
-| `shadowRoot` is null | `attachShadow()` creates a node but it doesn't participate in rendering |
-| Slot assignment doesn't work | Light DOM / slot distribution not implemented |
-| CSS custom properties not resolved | jsdom doesn't compute layout or cascade |
+| Failure mode                       | Cause                                                                   |
+| ---------------------------------- | ----------------------------------------------------------------------- |
+| `connectedCallback` not called     | jsdom doesn't trigger lifecycle callbacks on insert                     |
+| Element stays `HTMLUnknownElement` | Custom element upgrade doesn't run on existing nodes                    |
+| `shadowRoot` is null               | `attachShadow()` creates a node but it doesn't participate in rendering |
+| Slot assignment doesn't work       | Light DOM / slot distribution not implemented                           |
+| CSS custom properties not resolved | jsdom doesn't compute layout or cascade                                 |
 
 ## Why It Matters
 

@@ -26,7 +26,7 @@ function Logger() {
 
   return (
     <div>
-      <button onClick={() => setValue(v => v + 1)}>Increment</button>
+      <button onClick={() => setValue((v) => v + 1)}>Increment</button>
       <select onChange={(e) => setLogLevel(e.currentTarget.value)}>
         <option value="info">Info</option>
         <option value="debug">Debug</option>
@@ -52,7 +52,7 @@ function Logger() {
 
   return (
     <div>
-      <button onClick={() => setValue(v => v + 1)}>Increment</button>
+      <button onClick={() => setValue((v) => v + 1)}>Increment</button>
       <select onChange={(e) => setLogLevel(e.currentTarget.value)}>
         <option value="info">Info</option>
         <option value="debug">Debug</option>
@@ -73,7 +73,7 @@ function FormWithValidation() {
 
   createEffect(() => {
     const value = input();
-    const currentErrors = untrack(errors);  // Read without tracking
+    const currentErrors = untrack(errors); // Read without tracking
 
     const newErrors: string[] = [];
     if (value.length < 3) newErrors.push("Too short");
@@ -88,7 +88,7 @@ function FormWithValidation() {
   return (
     <div>
       <input value={input()} onInput={(e) => setInput(e.currentTarget.value)} />
-      <For each={errors()}>{error => <p class="error">{error}</p>}</For>
+      <For each={errors()}>{(error) => <p class="error">{error}</p>}</For>
     </div>
   );
 }
@@ -111,8 +111,8 @@ function DataFetcher() {
     }
 
     fetch(`/api/data/${currentId}`)
-      .then(r => r.json())
-      .then(data => setCache(c => ({ ...c, [currentId]: data })));
+      .then((r) => r.json())
+      .then((data) => setCache((c) => ({ ...c, [currentId]: data })));
   });
 
   return <div>{/* ... */}</div>;
@@ -129,10 +129,12 @@ function Logger() {
   const [logLevel, setLogLevel] = createSignal("info");
 
   // ✅ ALTERNATIVE: on() makes tracked dependencies explicit
-  createEffect(on(value, (v) => {
-    console.log(`[${logLevel()}] Value changed to: ${v}`);
-    // logLevel is accessed but not in a tracking context here
-  }));
+  createEffect(
+    on(value, (v) => {
+      console.log(`[${logLevel()}] Value changed to: ${v}`);
+      // logLevel is accessed but not in a tracking context here
+    }),
+  );
 
   return <div>{/* ... */}</div>;
 }
@@ -150,12 +152,12 @@ function Logger() {
 
 ## Common Use Cases
 
-| Use Case | Pattern |
-| -------- | ------- |
-| Read config/settings without tracking | `untrack(config)` |
-| Compare before updating | `if (newVal !== untrack(signal))` |
-| Use value for logging/debugging | `console.log(untrack(state))` |
-| Access previous value | `const prev = untrack(signal)` |
+| Use Case                              | Pattern                           |
+| ------------------------------------- | --------------------------------- |
+| Read config/settings without tracking | `untrack(config)`                 |
+| Compare before updating               | `if (newVal !== untrack(signal))` |
+| Use value for logging/debugging       | `console.log(untrack(state))`     |
+| Access previous value                 | `const prev = untrack(signal)`    |
 
 ## Related Rules
 

@@ -137,8 +137,7 @@ test("derived value updates", () =>
     });
 
     setCount(5);
-  })
-);
+  }));
 ```
 
 ### Synchronous Tests with createRoot

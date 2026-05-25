@@ -20,14 +20,10 @@ This bug is subtle: the component appears to work on first render but silently r
 
 ```tsx
 // ❌ Compiled into a reactive memo — tracks MyComp's internal signal reads as parent deps
-const Layout = () => (
-  <div>{override.component?.(layoutProps)}</div>
-);
+const Layout = () => <div>{override.component?.(layoutProps)}</div>;
 
 // ❌ Same problem in a Switch fallback
-<Switch fallback={<main>{MyComp(props)}</main>}>
-  ...
-</Switch>
+<Switch fallback={<main>{MyComp(props)}</main>}>...</Switch>;
 ```
 
 ## Correct

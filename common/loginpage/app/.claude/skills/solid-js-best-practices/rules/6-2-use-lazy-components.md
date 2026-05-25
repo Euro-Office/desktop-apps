@@ -89,11 +89,7 @@ function Navigation() {
 
   return (
     <nav>
-      <a
-        href="/settings"
-        onMouseEnter={preloadSettings}
-        onFocus={preloadSettings}
-      >
+      <a href="/settings" onMouseEnter={preloadSettings} onFocus={preloadSettings}>
         Settings
       </a>
     </nav>
@@ -142,9 +138,9 @@ function Dashboard() {
 import { lazy, Suspense, Show } from "solid-js";
 
 // ✅ CORRECT: Lazy load heavy third-party components
-const Chart = lazy(() => import("./Chart"));       // ChartJS
-const Editor = lazy(() => import("./Editor"));     // Monaco/CodeMirror
-const Map = lazy(() => import("./Map"));           // Mapbox/Leaflet
+const Chart = lazy(() => import("./Chart")); // ChartJS
+const Editor = lazy(() => import("./Editor")); // Monaco/CodeMirror
+const Map = lazy(() => import("./Map")); // Mapbox/Leaflet
 
 function DataVisualization(props) {
   return (
@@ -194,15 +190,15 @@ function UserArea(props) {
 
 ## What to Lazy Load
 
-| Component Type | Lazy Load? |
-| -------------- | ---------- |
-| Route pages | Yes |
-| Admin-only features | Yes |
-| Heavy visualizations (charts, maps) | Yes |
-| Modals/dialogs | Often yes |
-| Core UI components | No |
-| Frequently used components | No |
-| Above-the-fold content | No |
+| Component Type                      | Lazy Load? |
+| ----------------------------------- | ---------- |
+| Route pages                         | Yes        |
+| Admin-only features                 | Yes        |
+| Heavy visualizations (charts, maps) | Yes        |
+| Modals/dialogs                      | Often yes  |
+| Core UI components                  | No         |
+| Frequently used components          | No         |
+| Above-the-fold content              | No         |
 
 ## Why It Matters
 

@@ -19,16 +19,16 @@ function FormEditor() {
   const [form, setForm] = createStore({
     fields: {
       name: { value: "", touched: false, error: null },
-      email: { value: "", touched: false, error: null }
+      email: { value: "", touched: false, error: null },
     },
     isSubmitting: false,
-    submitCount: 0
+    submitCount: 0,
   });
 
   // ❌ WRONG: Verbose multi-property update
   const submitForm = async () => {
     setForm("isSubmitting", true);
-    setForm("submitCount", c => c + 1);
+    setForm("submitCount", (c) => c + 1);
     setForm("fields", "name", "touched", true);
     setForm("fields", "email", "touched", true);
     // ... many more updates
@@ -39,10 +39,10 @@ function FormEditor() {
     setForm({
       fields: {
         name: { value: "", touched: false, error: null },
-        email: { value: "", touched: false, error: null }
+        email: { value: "", touched: false, error: null },
       },
       isSubmitting: false,
-      submitCount: 0
+      submitCount: 0,
     });
   };
 }
@@ -57,33 +57,37 @@ function FormEditor() {
   const [form, setForm] = createStore({
     fields: {
       name: { value: "", touched: false, error: null },
-      email: { value: "", touched: false, error: null }
+      email: { value: "", touched: false, error: null },
     },
     isSubmitting: false,
-    submitCount: 0
+    submitCount: 0,
   });
 
   // ✅ CORRECT: produce for multiple mutations
   const submitForm = async () => {
-    setForm(produce(draft => {
-      draft.isSubmitting = true;
-      draft.submitCount++;
-      draft.fields.name.touched = true;
-      draft.fields.email.touched = true;
-    }));
+    setForm(
+      produce((draft) => {
+        draft.isSubmitting = true;
+        draft.submitCount++;
+        draft.fields.name.touched = true;
+        draft.fields.email.touched = true;
+      }),
+    );
   };
 
   // ✅ CORRECT: produce for complex reset
   const resetForm = () => {
-    setForm(produce(draft => {
-      draft.isSubmitting = false;
-      draft.submitCount = 0;
-      for (const key in draft.fields) {
-        draft.fields[key].value = "";
-        draft.fields[key].touched = false;
-        draft.fields[key].error = null;
-      }
-    }));
+    setForm(
+      produce((draft) => {
+        draft.isSubmitting = false;
+        draft.submitCount = 0;
+        for (const key in draft.fields) {
+          draft.fields[key].value = "";
+          draft.fields[key].touched = false;
+          draft.fields[key].error = null;
+        }
+      }),
+    );
   };
 }
 ```
@@ -97,25 +101,33 @@ function UserEditor() {
   const [state, setState] = createStore({
     users: [
       { id: 1, name: "Alice", roles: ["admin"], active: true },
-      { id: 2, name: "Bob", roles: ["user"], active: false }
-    ]
+      { id: 2, name: "Bob", roles: ["user"], active: false },
+    ],
   });
 
   // ✅ CORRECT: Combine path with produce
   const updateUser = (index: number) => {
-    setState("users", index, produce(user => {
-      user.name = user.name.toUpperCase();
-      user.roles.push("verified");
-      user.active = true;
-    }));
+    setState(
+      "users",
+      index,
+      produce((user) => {
+        user.name = user.name.toUpperCase();
+        user.roles.push("verified");
+        user.active = true;
+      }),
+    );
   };
 
   // ✅ CORRECT: Update matching items
   const activateAll = () => {
-    setState("users", user => !user.active, produce(user => {
-      user.active = true;
-      user.roles.push("activated");
-    }));
+    setState(
+      "users",
+      (user) => !user.active,
+      produce((user) => {
+        user.active = true;
+        user.roles.push("activated");
+      }),
+    );
   };
 }
 ```
@@ -129,51 +141,63 @@ function PlaylistManager() {
   const [state, setState] = createStore({
     playlists: [
       { id: 1, name: "Favorites", songs: ["song1", "song2"] },
-      { id: 2, name: "Workout", songs: ["song3"] }
-    ]
+      { id: 2, name: "Workout", songs: ["song3"] },
+    ],
   });
 
   // ✅ CORRECT: Array mutations with produce
   const addSong = (playlistId: number, songId: string) => {
-    setState("playlists", p => p.id === playlistId, produce(playlist => {
-      playlist.songs.push(songId);
-    }));
+    setState(
+      "playlists",
+      (p) => p.id === playlistId,
+      produce((playlist) => {
+        playlist.songs.push(songId);
+      }),
+    );
   };
 
   const removeSong = (playlistId: number, songId: string) => {
-    setState("playlists", p => p.id === playlistId, produce(playlist => {
-      const index = playlist.songs.indexOf(songId);
-      if (index > -1) {
-        playlist.songs.splice(index, 1);
-      }
-    }));
+    setState(
+      "playlists",
+      (p) => p.id === playlistId,
+      produce((playlist) => {
+        const index = playlist.songs.indexOf(songId);
+        if (index > -1) {
+          playlist.songs.splice(index, 1);
+        }
+      }),
+    );
   };
 
   const reorderSongs = (playlistId: number, from: number, to: number) => {
-    setState("playlists", p => p.id === playlistId, produce(playlist => {
-      const [song] = playlist.songs.splice(from, 1);
-      playlist.songs.splice(to, 0, song);
-    }));
+    setState(
+      "playlists",
+      (p) => p.id === playlistId,
+      produce((playlist) => {
+        const [song] = playlist.songs.splice(from, 1);
+        playlist.songs.splice(to, 0, song);
+      }),
+    );
   };
 }
 ```
 
 ## When to Use produce vs Path Syntax
 
-| Scenario | Recommended |
-| -------- | ----------- |
-| Single property update | Path syntax |
-| Multiple related updates | `produce` |
-| Conditional mutations | `produce` |
-| Array push/splice/sort | `produce` |
-| Loop-based updates | `produce` |
-| Simple increment/toggle | Path syntax with function |
+| Scenario                 | Recommended               |
+| ------------------------ | ------------------------- |
+| Single property update   | Path syntax               |
+| Multiple related updates | `produce`                 |
+| Conditional mutations    | `produce`                 |
+| Array push/splice/sort   | `produce`                 |
+| Loop-based updates       | `produce`                 |
+| Simple increment/toggle  | Path syntax with function |
 
 ## How produce Works
 
 ```tsx
 // produce takes a mutator function and returns an updater
-const updater = produce(draft => {
+const updater = produce((draft) => {
   // Mutations to draft are tracked
   draft.count++;
   draft.items.push(newItem);

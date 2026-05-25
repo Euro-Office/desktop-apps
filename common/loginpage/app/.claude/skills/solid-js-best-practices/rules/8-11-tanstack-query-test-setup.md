@@ -80,11 +80,7 @@ import { QueryClientProvider } from "@tanstack/solid-query";
 import { makeTestQueryClient } from "./queryHelpers";
 
 export function renderWithProviders(ui: Component) {
-  return render(() => (
-    <QueryClientProvider client={makeTestQueryClient()}>
-      {/* ... */}
-    </QueryClientProvider>
-  ));
+  return render(() => <QueryClientProvider client={makeTestQueryClient()}>{/* ... */}</QueryClientProvider>);
 }
 ```
 
@@ -105,12 +101,12 @@ it("shows error state when fetch fails", async () => {
 
 ## Configuration Options Explained
 
-| Option | Default | Test value | Why |
-| ------ | ------- | ---------- | --- |
-| `queries.retry` | `3` | `false` | Errors surface on first failure; no 3× slow retry loop |
-| `queries.staleTime` | `0` | `0` | (Already 0 by default) Re-fetch on mount; no stale cache masking writes |
-| `queries.gcTime` | `5 min` | `0` | Cache cleared immediately after unsubscribe; no cross-test leakage |
-| `mutations.retry` | `0` | `false` | Consistent with query setting; explicit is better |
+| Option              | Default | Test value | Why                                                                     |
+| ------------------- | ------- | ---------- | ----------------------------------------------------------------------- |
+| `queries.retry`     | `3`     | `false`    | Errors surface on first failure; no 3× slow retry loop                  |
+| `queries.staleTime` | `0`     | `0`        | (Already 0 by default) Re-fetch on mount; no stale cache masking writes |
+| `queries.gcTime`    | `5 min` | `0`        | Cache cleared immediately after unsubscribe; no cross-test leakage      |
+| `mutations.retry`   | `0`     | `false`    | Consistent with query setting; explicit is better                       |
 
 ## Why It Matters
 

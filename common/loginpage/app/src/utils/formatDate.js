@@ -2,11 +2,11 @@ const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
 const dtf = new Intl.DateTimeFormat(undefined, {
   year: "numeric",
   month: "short",
-  day: "numeric"
+  day: "numeric",
 });
 const dtfTime = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
-  minute: "2-digit"
+  minute: "2-digit",
 });
 
 const SDK_DATE_RE = /^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})(?::(\d{2}))?$/;
@@ -32,10 +32,8 @@ export function formatDate(input) {
 
   if (Math.abs(diffSec) < 60) return rtf.format(diffSec, "second");
   if (Math.abs(diffMin) < 60) return rtf.format(diffMin, "minute");
-  if (diffDay === 0)          return rtf.format(diffHour, "hour");
-  if (Math.abs(diffDay) < 7)  return rtf.format(diffDay, "day");
+  if (diffDay === 0) return rtf.format(diffHour, "hour");
+  if (Math.abs(diffDay) < 7) return rtf.format(diffDay, "day");
 
-  return date.getFullYear() === now.getFullYear()
-    ? `${dtf.format(date)} ${dtfTime.format(date)}`
-    : dtf.format(date);
+  return date.getFullYear() === now.getFullYear() ? `${dtf.format(date)} ${dtfTime.format(date)}` : dtf.format(date);
 }

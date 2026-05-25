@@ -18,18 +18,10 @@ function LoginForm() {
   return (
     <form className="login-form">
       <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        className="input"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <input id="email" className="input" onChange={(e) => setEmail(e.target.value)} />
 
       <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        className="input"
-      />
+      <input id="password" type="password" className="input" />
 
       <button className="btn btn-primary" type="submit">
         Log In
@@ -53,18 +45,10 @@ function LoginForm() {
   return (
     <form class="login-form">
       <label for="email">Email</label>
-      <input
-        id="email"
-        class="input"
-        onInput={(e) => setEmail(e.currentTarget.value)}
-      />
+      <input id="email" class="input" onInput={(e) => setEmail(e.currentTarget.value)} />
 
       <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        class="input"
-      />
+      <input id="password" type="password" class="input" />
 
       <button class="btn btn-primary" type="submit">
         Log In
@@ -82,17 +66,17 @@ function LoginForm() {
 
 ## React to Solid Prop Mapping
 
-| React Prop | Solid Prop | Notes |
-| ---------- | ---------- | ----- |
-| `className` | `class` | Standard HTML attribute |
-| `htmlFor` | `for` | Standard HTML attribute |
-| `onChange` (input) | `onInput` | `onChange` fires on blur in Solid (native behavior) |
-| `tabIndex` | `tabindex` | Lowercase HTML attribute |
-| `encType` | `enctype` | Lowercase HTML attribute |
-| `crossOrigin` | `crossorigin` | Lowercase HTML attribute |
-| `dateTime` | `datetime` | Lowercase HTML attribute |
-| `readOnly` | `readonly` | Lowercase HTML attribute |
-| `maxLength` | `maxlength` | Lowercase HTML attribute |
+| React Prop         | Solid Prop    | Notes                                               |
+| ------------------ | ------------- | --------------------------------------------------- |
+| `className`        | `class`       | Standard HTML attribute                             |
+| `htmlFor`          | `for`         | Standard HTML attribute                             |
+| `onChange` (input) | `onInput`     | `onChange` fires on blur in Solid (native behavior) |
+| `tabIndex`         | `tabindex`    | Lowercase HTML attribute                            |
+| `encType`          | `enctype`     | Lowercase HTML attribute                            |
+| `crossOrigin`      | `crossorigin` | Lowercase HTML attribute                            |
+| `dateTime`         | `datetime`    | Lowercase HTML attribute                            |
+| `readOnly`         | `readonly`    | Lowercase HTML attribute                            |
+| `maxLength`        | `maxlength`   | Lowercase HTML attribute                            |
 
 ## Event Target Differences
 

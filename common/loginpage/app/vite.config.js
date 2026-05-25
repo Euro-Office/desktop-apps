@@ -41,16 +41,16 @@ function writeDevHtml(port) {
         try {
           const files = readdirSync(spritesDir).filter((f) => f.endsWith(".svg"));
           for (const file of files) svgContent += readFileSync(join(spritesDir, file), "utf-8");
-        } catch { /* ok */ }
+        } catch {
+          /* ok */
+        }
 
-        const withSprites = svgContent
-          ? html.replace('<div id="root"></div>', `${svgContent}\n<div id="root"></div>`)
-          : html;
+        const withSprites = svgContent ? html.replace('<div id="root"></div>', `${svgContent}\n<div id="root"></div>`) : html;
 
         const devHtml = withSprites.replace(
           '<script type="module" src="./src/main.jsx"></script>',
           `<script type="module" src="http://localhost:${port}/@vite/client"></script>\n` +
-          `<script type="module" src="http://localhost:${port}/src/main.jsx"></script>`,
+            `<script type="module" src="http://localhost:${port}/src/main.jsx"></script>`,
         );
 
         mkdirSync(outDir, { recursive: true });

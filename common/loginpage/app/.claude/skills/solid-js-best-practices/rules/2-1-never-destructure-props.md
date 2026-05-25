@@ -25,7 +25,7 @@ function Greeting({ name, age }) {
 
 // ❌ WRONG: Destructuring in function body
 function Greeting(props) {
-  const { name, age } = props;  // Still breaks reactivity
+  const { name, age } = props; // Still breaks reactivity
 
   return (
     <div>
@@ -109,7 +109,7 @@ function Button(props) {
 Solid.js achieves its performance by running component functions only once. Reactivity happens at the signal/prop access level, not the component level. When you destructure:
 
 ```tsx
-const { name } = props;  // 'name' is now a static string value
+const { name } = props; // 'name' is now a static string value
 ```
 
 The variable `name` holds the value at render time. If the parent component updates the `name` prop, your component won't see the change because it never runs again.
@@ -139,11 +139,7 @@ function Input(props) {
 ```tsx
 // ✅ CORRECT: Access in expression
 function Alert(props) {
-  return (
-    <div class={props.type === "error" ? "alert-error" : "alert-info"}>
-      {props.message}
-    </div>
-  );
+  return <div class={props.type === "error" ? "alert-error" : "alert-info"}>{props.message}</div>;
 }
 ```
 

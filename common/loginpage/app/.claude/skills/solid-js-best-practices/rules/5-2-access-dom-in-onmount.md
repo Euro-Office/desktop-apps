@@ -79,7 +79,7 @@ function ResponsiveComponent() {
     setWidth(containerRef.offsetWidth);
 
     // Optional: update on resize
-    const observer = new ResizeObserver(entries => {
+    const observer = new ResizeObserver((entries) => {
       setWidth(entries[0].contentRect.width);
     });
     observer.observe(containerRef);
@@ -106,9 +106,11 @@ function Scrollable() {
     onCleanup(() => scrollRef.removeEventListener("scroll", handleScroll));
   });
 
-  return <div ref={scrollRef} style={{ overflow: "auto", height: "200px" }}>
-    {/* Long content */}
-  </div>;
+  return (
+    <div ref={scrollRef} style={{ overflow: "auto", height: "200px" }}>
+      {/* Long content */}
+    </div>
+  );
 }
 ```
 
@@ -124,7 +126,7 @@ function MapComponent(props) {
   onMount(() => {
     const map = new MapLibrary(mapContainer, {
       center: props.center,
-      zoom: props.zoom
+      zoom: props.zoom,
     });
 
     // Cleanup handled by onCleanup inside onMount
@@ -178,11 +180,11 @@ function Component() {
 
 ## onMount vs createEffect
 
-| Aspect | onMount | createEffect |
-| ------ | ------- | ------------ |
-| Runs | Once on mount | On mount + when deps change |
-| Tracking | None (not reactive) | Auto-tracks signal access |
-| Use for | DOM setup, fetch, libraries | Reactive side effects |
+| Aspect   | onMount                     | createEffect                |
+| -------- | --------------------------- | --------------------------- |
+| Runs     | Once on mount               | On mount + when deps change |
+| Tracking | None (not reactive)         | Auto-tracks signal access   |
+| Use for  | DOM setup, fetch, libraries | Reactive side effects       |
 
 ```tsx
 // Use onMount for one-time setup

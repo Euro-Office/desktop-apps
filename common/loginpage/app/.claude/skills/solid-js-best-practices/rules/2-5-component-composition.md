@@ -65,14 +65,10 @@ const UserProvider: ParentComponent = (props) => {
   const value: UserContextValue = {
     user,
     setUser,
-    logout: () => setUser(null)
+    logout: () => setUser(null),
   };
 
-  return (
-    <UserContext.Provider value={value}>
-      {props.children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{props.children}</UserContext.Provider>;
 };
 
 // Hook for consuming context
@@ -124,7 +120,11 @@ function App() {
 
   return (
     <Layout
-      header={<Header><UserMenu user={user()} onLogout={() => setUser(null)} /></Header>}
+      header={
+        <Header>
+          <UserMenu user={user()} onLogout={() => setUser(null)} />
+        </Header>
+      }
       footer={<Footer userName={user().name} />}
     >
       <Main user={user()} />
@@ -147,10 +147,7 @@ function Layout(props) {
 
 ```tsx
 // ✅ CORRECT: Render prop pattern for flexible composition
-function DataFetcher<T>(props: {
-  url: string;
-  children: (data: T, loading: boolean) => JSX.Element;
-}) {
+function DataFetcher<T>(props: { url: string; children: (data: T, loading: boolean) => JSX.Element }) {
   const [data] = createResource(() => props.url, fetchData);
 
   return props.children(data(), data.loading);
@@ -163,17 +160,17 @@ function DataFetcher<T>(props: {
       <UserList users={users} />
     </Show>
   )}
-</DataFetcher>
+</DataFetcher>;
 ```
 
 ## When to Use Each Pattern
 
-| Pattern | Use Case |
-| ------- | -------- |
-| Props | Direct parent-child relationships, 1-2 levels |
-| Context | Global/shared state (auth, theme, i18n) |
-| Composition/Slots | Layout components, structural flexibility |
-| Render Props | Sharing logic with flexible rendering |
+| Pattern           | Use Case                                      |
+| ----------------- | --------------------------------------------- |
+| Props             | Direct parent-child relationships, 1-2 levels |
+| Context           | Global/shared state (auth, theme, i18n)       |
+| Composition/Slots | Layout components, structural flexibility     |
+| Render Props      | Sharing logic with flexible rendering         |
 
 ## Context Best Practices
 
@@ -190,9 +187,9 @@ function useTheme() {
 
 // 3. Keep context values stable (use signals, not objects)
 const value = {
-  theme,      // Signal getter
-  setTheme,   // Signal setter
-  toggle      // Stable function
+  theme, // Signal getter
+  setTheme, // Signal setter
+  toggle, // Stable function
 };
 
 // 4. Split large contexts by concern
@@ -202,7 +199,7 @@ const value = {
       <App />
     </I18nProvider>
   </ThemeProvider>
-</AuthProvider>
+</AuthProvider>;
 ```
 
 ## Why It Matters

@@ -15,9 +15,7 @@ Using JavaScript ternary operators or logical AND (`&&`) for conditional renderi
 ```tsx
 // ❌ WRONG: Ternary operator
 function UserGreeting(props) {
-  return props.user
-    ? <WelcomeMessage user={props.user} />
-    : <LoginPrompt />;
+  return props.user ? <WelcomeMessage user={props.user} /> : <LoginPrompt />;
 }
 ```
 
@@ -122,19 +120,19 @@ function Dashboard(props) {
 
 ## Show Props
 
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
-| `when` | `T \| undefined \| null \| false` | Condition to evaluate |
-| `fallback` | `JSX.Element` | Rendered when `when` is falsy |
-| `keyed` | `boolean` | Rerender when `when` reference changes |
+| Prop       | Type                              | Description                            |
+| ---------- | --------------------------------- | -------------------------------------- |
+| `when`     | `T \| undefined \| null \| false` | Condition to evaluate                  |
+| `fallback` | `JSX.Element`                     | Rendered when `when` is falsy          |
+| `keyed`    | `boolean`                         | Rerender when `when` reference changes |
 
 ## Pattern Comparison
 
-| Pattern | Performance | Type Safe | Falsy Safe |
-| ------- | ----------- | --------- | ---------- |
-| `condition ? <A/> : <B/>` | ⚠️ May recreate | ❌ No narrowing | ✅ Yes |
-| `condition && <A/>` | ⚠️ May recreate | ❌ No narrowing | ❌ Renders "0" |
-| `<Show when={condition}>` | ✅ Optimized | ✅ With callback | ✅ Yes |
+| Pattern                   | Performance     | Type Safe        | Falsy Safe     |
+| ------------------------- | --------------- | ---------------- | -------------- |
+| `condition ? <A/> : <B/>` | ⚠️ May recreate | ❌ No narrowing  | ✅ Yes         |
+| `condition && <A/>`       | ⚠️ May recreate | ❌ No narrowing  | ❌ Renders "0" |
+| `<Show when={condition}>` | ✅ Optimized    | ✅ With callback | ✅ Yes         |
 
 ## When to Use Ternaries
 

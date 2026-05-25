@@ -8,7 +8,9 @@
   flex-direction: column;
   gap: 4px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 8px 16px 0 #040f1b14, 0 0 4px 0 #040f1b0a;
+  box-shadow:
+    0 8px 16px 0 #040f1b14,
+    0 0 4px 0 #040f1b0a;
 }
 
 .menuItem {

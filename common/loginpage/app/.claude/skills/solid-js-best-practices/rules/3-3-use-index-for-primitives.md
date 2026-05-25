@@ -21,9 +21,7 @@ function NumberGrid() {
 
   return (
     <div>
-      <For each={numbers()}>
-        {(num) => <Cell value={num} />}
-      </For>
+      <For each={numbers()}>{(num) => <Cell value={num} />}</For>
     </div>
   );
 }
@@ -34,11 +32,7 @@ function NumberGrid() {
 function TagList() {
   const [tags, setTags] = createSignal(["react", "solid", "react"]); // duplicate
 
-  return (
-    <For each={tags()}>
-      {(tag) => <Tag name={tag} />}
-    </For>
-  );
+  return <For each={tags()}>{(tag) => <Tag name={tag} />}</For>;
 }
 ```
 
@@ -53,9 +47,7 @@ function NumberGrid() {
 
   return (
     <div>
-      <Index each={numbers()}>
-        {(num, i) => <Cell value={num()} position={i} />}
-      </Index>
+      <Index each={numbers()}>{(num, i) => <Cell value={num()} position={i} />}</Index>
     </div>
   );
 }
@@ -66,11 +58,7 @@ function NumberGrid() {
 function TagList() {
   const [tags, setTags] = createSignal(["react", "solid", "react"]);
 
-  return (
-    <Index each={tags()}>
-      {(tag, i) => <Tag name={tag()} key={i} />}
-    </Index>
-  );
+  return <Index each={tags()}>{(tag, i) => <Tag name={tag()} key={i} />}</Index>;
 }
 ```
 
@@ -108,35 +96,26 @@ function EditableGrid() {
   const [values, setValues] = createSignal(["a", "b", "c"]);
 
   const updateValue = (index: number, newValue: string) => {
-    setValues(prev => {
+    setValues((prev) => {
       const next = [...prev];
       next[index] = newValue;
       return next;
     });
   };
 
-  return (
-    <Index each={values()}>
-      {(value, i) => (
-        <input
-          value={value()}
-          onInput={(e) => updateValue(i, e.currentTarget.value)}
-        />
-      )}
-    </Index>
-  );
+  return <Index each={values()}>{(value, i) => <input value={value()} onInput={(e) => updateValue(i, e.currentTarget.value)} />}</Index>;
 }
 ```
 
 ## For vs Index Comparison
 
-| Aspect | `<For>` | `<Index>` |
-| ------ | ------- | --------- |
-| Tracks by | Reference | Index |
-| Item param | Direct value | Accessor function |
-| Index param | Accessor function | Static number |
-| Best for | Objects | Primitives |
-| On reorder | Moves DOM nodes | Updates content |
+| Aspect      | `<For>`           | `<Index>`         |
+| ----------- | ----------------- | ----------------- |
+| Tracks by   | Reference         | Index             |
+| Item param  | Direct value      | Accessor function |
+| Index param | Accessor function | Static number     |
+| Best for    | Objects           | Primitives        |
+| On reorder  | Moves DOM nodes   | Updates content   |
 
 ### Behavior Difference
 
@@ -152,13 +131,13 @@ function EditableGrid() {
 
 ## When to Use Each
 
-| Data Type | Recommended |
-| --------- | ----------- |
-| Array of objects with IDs | `<For>` |
-| Array of primitives (numbers, strings) | `<Index>` |
-| Fixed-size grid or matrix | `<Index>` |
-| List where items move/reorder | `<For>` |
-| List where values change in place | `<Index>` |
+| Data Type                              | Recommended |
+| -------------------------------------- | ----------- |
+| Array of objects with IDs              | `<For>`     |
+| Array of primitives (numbers, strings) | `<Index>`   |
+| Fixed-size grid or matrix              | `<Index>`   |
+| List where items move/reorder          | `<For>`     |
+| List where values change in place      | `<Index>`   |
 
 ## Common Patterns
 

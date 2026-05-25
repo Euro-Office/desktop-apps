@@ -27,10 +27,12 @@ function ClickCounter() {
   });
 
   return (
-    <button onClick={() => {
-      setCount(c => c + 1);
-      setClicks(c => c + 1);
-    }}>
+    <button
+      onClick={() => {
+        setCount((c) => c + 1);
+        setClicks((c) => c + 1);
+      }}
+    >
       {count()}
     </button>
   );
@@ -64,17 +66,21 @@ function ClickCounter() {
   const [count, setCount] = createSignal(0);
   const [clicks, setClicks] = createSignal(0);
 
-  createEffect(on(count, (c) => {
-    // Only runs when count changes
-    console.log(`Count: ${c}, Total clicks: ${clicks()}`);
-    // clicks() is accessed but not tracked because we're in on()'s callback
-  }));
+  createEffect(
+    on(count, (c) => {
+      // Only runs when count changes
+      console.log(`Count: ${c}, Total clicks: ${clicks()}`);
+      // clicks() is accessed but not tracked because we're in on()'s callback
+    }),
+  );
 
   return (
-    <button onClick={() => {
-      setCount(c => c + 1);
-      setClicks(c => c + 1);
-    }}>
+    <button
+      onClick={() => {
+        setCount((c) => c + 1);
+        setClicks((c) => c + 1);
+      }}
+    >
       {count()}
     </button>
   );
@@ -88,8 +94,9 @@ function Form() {
   const [isValid, setIsValid] = createSignal(false);
 
   createEffect(() => {
-    if (isValid()) {  // Track this
-      console.log("Form is valid:", untrack(formData));  // Don't track this
+    if (isValid()) {
+      // Track this
+      console.log("Form is valid:", untrack(formData)); // Don't track this
     }
   });
 
@@ -108,7 +115,7 @@ function Counter() {
   // onClick is not a reactive context, so this is fine
   const handleClick = () => {
     console.log("Current multiplier:", multiplier());
-    setCount(c => c * multiplier());
+    setCount((c) => c * multiplier());
   };
 
   return <button onClick={handleClick}>{count()}</button>;
@@ -127,14 +134,13 @@ function DataSync() {
   const [config, setConfig] = createSignal({ debug: false });
 
   // Only re-run when userId OR timestamp change, not config
-  createEffect(on(
-    [userId, timestamp],
-    ([id, ts]) => {
-      const cfg = config();  // Read without tracking
+  createEffect(
+    on([userId, timestamp], ([id, ts]) => {
+      const cfg = config(); // Read without tracking
       if (cfg.debug) console.log(`Syncing user ${id} at ${ts}`);
       syncData(id, ts);
-    }
-  ));
+    }),
+  );
 }
 ```
 
@@ -150,16 +156,10 @@ function FilteredList() {
   const [sortOrder, setSortOrder] = createSignal("asc");
 
   // Each memo only tracks what it accesses
-  const filtered = createMemo(() =>
-    items().filter(item =>
-      item.name.includes(searchTerm())
-    )
-  );
+  const filtered = createMemo(() => items().filter((item) => item.name.includes(searchTerm())));
 
   const sorted = createMemo(() =>
-    [...filtered()].sort((a, b) =>
-      sortOrder() === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
-    )
+    [...filtered()].sort((a, b) => (sortOrder() === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name))),
   );
 
   // Components using sorted() only re-render when sorted changes
@@ -169,16 +169,16 @@ function FilteredList() {
 
 ## Tracking Contexts
 
-| Context | Tracks Dependencies? |
-| ------- | ------------------- |
-| JSX expressions `{signal()}` | Yes |
-| `createEffect(() => ...)` | Yes |
-| `createMemo(() => ...)` | Yes |
-| `createComputed(() => ...)` | Yes |
-| Event handlers `onClick={...}` | No |
-| `onMount(() => ...)` | No |
-| `untrack(() => ...)` | No |
-| `on(deps, callback)` callback | Only explicit deps |
+| Context                        | Tracks Dependencies? |
+| ------------------------------ | -------------------- |
+| JSX expressions `{signal()}`   | Yes                  |
+| `createEffect(() => ...)`      | Yes                  |
+| `createMemo(() => ...)`        | Yes                  |
+| `createComputed(() => ...)`    | Yes                  |
+| Event handlers `onClick={...}` | No                   |
+| `onMount(() => ...)`           | No                   |
+| `untrack(() => ...)`           | No                   |
+| `on(deps, callback)` callback  | Only explicit deps   |
 
 ## Why It Matters
 

@@ -116,18 +116,18 @@ function SafeHtml(props: { html: string; class?: string }) {
 }
 
 // Usage
-<SafeHtml html={article().body} class="prose" />
+<SafeHtml html={article().body} class="prose" />;
 ```
 
 ## When innerHTML Is Acceptable
 
-| Scenario | Safe? | Notes |
-| -------- | ----- | ----- |
-| User-generated content | No | Always sanitize |
-| CMS/Markdown output | Sanitize first | Use DOMPurify or similar |
-| Static HTML from build tools | Generally safe | Content is trusted |
-| SVG icons from trusted source | Generally safe | No user input involved |
-| Any string with interpolation | No | Injection risk |
+| Scenario                      | Safe?          | Notes                    |
+| ----------------------------- | -------------- | ------------------------ |
+| User-generated content        | No             | Always sanitize          |
+| CMS/Markdown output           | Sanitize first | Use DOMPurify or similar |
+| Static HTML from build tools  | Generally safe | Content is trusted       |
+| SVG icons from trusted source | Generally safe | No user input involved   |
+| Any string with interpolation | No             | Injection risk           |
 
 ## Why It Matters
 

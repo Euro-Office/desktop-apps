@@ -67,9 +67,7 @@ function List(props) {
 
   return (
     <ul>
-      <For each={resolved.toArray()}>
-        {(child) => <li>{child}</li>}
-      </For>
+      <For each={resolved.toArray()}>{(child) => <li>{child}</li>}</For>
     </ul>
   );
 }
@@ -103,7 +101,7 @@ function Card(props) {
 // Usage
 <Card header={<h2>Title</h2>} footer={<button>Submit</button>}>
   <p>Card content here</p>
-</Card>
+</Card>;
 ```
 
 ### Counting and Accessing Children
@@ -118,12 +116,8 @@ function Tabs(props) {
 
   return (
     <div class="tabs">
-      <div class="tab-count">
-        {tabCount()} tabs
-      </div>
-      <div class="tab-content">
-        {tabs()}
-      </div>
+      <div class="tab-count">{tabCount()} tabs</div>
+      <div class="tab-content">{tabs()}</div>
     </div>
   );
 }
@@ -145,24 +139,24 @@ function Tabs(props) {
 const resolved = children(() => props.children);
 
 // Access as a whole
-resolved()  // Returns resolved children
+resolved(); // Returns resolved children
 
 // Convert to array for iteration
-resolved.toArray()  // Returns JSX.Element[]
+resolved.toArray(); // Returns JSX.Element[]
 
 // Both are reactive and can be used in JSX or effects
 ```
 
 ## When to Use children()
 
-| Scenario | Use children()? |
-| -------- | --------------- |
-| Render children once | No, just use `{props.children}` |
-| Render children multiple times | Yes |
-| Iterate/map over children | Yes |
-| Check if children exist | Yes |
-| Transform children | Yes |
-| Pass children to multiple slots | Yes |
+| Scenario                        | Use children()?                 |
+| ------------------------------- | ------------------------------- |
+| Render children once            | No, just use `{props.children}` |
+| Render children multiple times  | Yes                             |
+| Iterate/map over children       | Yes                             |
+| Check if children exist         | Yes                             |
+| Transform children              | Yes                             |
+| Pass children to multiple slots | Yes                             |
 
 ## Related Rules
 

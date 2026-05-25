@@ -58,7 +58,9 @@
   border-radius: 8px;
   padding: 4px 0;
   border: 1px solid #0000001a;
-  box-shadow: 0 8px 16px 0 #040f1b14, 0 0 4px 0 #040f1b0a;
+  box-shadow:
+    0 8px 16px 0 #040f1b14,
+    0 0 4px 0 #040f1b0a;
   min-width: var(--kb-popper-anchor-width);
 }
 

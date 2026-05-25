@@ -24,7 +24,9 @@ function renderWithProviders(ui: Component) {
   return render(() => (
     <MemoryRouter>
       <QueryClientProvider client={makeTestQueryClient()}>
-        <PageContextProvider>   {/* calls useLocation() — throws here */}
+        <PageContextProvider>
+          {" "}
+          {/* calls useLocation() — throws here */}
           {ui({})}
         </PageContextProvider>
       </QueryClientProvider>
@@ -46,12 +48,7 @@ render(<RecipesListPage />);
 
 ```tsx
 // src/test-helpers/renderHelpers.tsx
-import {
-  MemoryRouter,
-  Route,
-  createMemoryHistory,
-  RouteSectionProps,
-} from "@solidjs/router";
+import { MemoryRouter, Route, createMemoryHistory, RouteSectionProps } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { render } from "@solidjs/testing-library";
 import { Component } from "solid-js";
@@ -66,10 +63,10 @@ import { ActionMenuContext, createActionMenu } from "../context/ActionMenu";
 function makeLayout(): Component<RouteSectionProps> {
   const actionMenu = createActionMenu();
   return (props) => (
-    <PageContextProvider>            {/* calls useLocation() — safe inside root */}
-      <ActionMenuContext.Provider value={actionMenu}>
-        {props.children}
-      </ActionMenuContext.Provider>
+    <PageContextProvider>
+      {" "}
+      {/* calls useLocation() — safe inside root */}
+      <ActionMenuContext.Provider value={actionMenu}>{props.children}</ActionMenuContext.Provider>
     </PageContextProvider>
   );
 }
@@ -89,11 +86,7 @@ export function renderWithProviders(ui: Component) {
 }
 
 /** Render a page component at a specific URL (supports useParams). */
-export function renderRoute(
-  Page: Component,
-  pathPattern: string,
-  url: string,
-) {
+export function renderRoute(Page: Component, pathPattern: string, url: string) {
   const history = createMemoryHistory();
   history.set({ value: url, replace: true }); // set URL before render
 
@@ -133,10 +126,10 @@ All imports are from `@solidjs/router`:
 
 ```typescript
 import {
-  MemoryRouter,        // Router component backed by in-memory history
-  Route,               // Route definition component
+  MemoryRouter, // Router component backed by in-memory history
+  Route, // Route definition component
   createMemoryHistory, // Creates a controllable in-memory history object
-  RouteSectionProps,   // Props type for components used as route sections / root
+  RouteSectionProps, // Props type for components used as route sections / root
 } from "@solidjs/router";
 ```
 
@@ -155,12 +148,12 @@ history.listen(callback)                // register navigation listener
 
 ### `MemoryRouter` Props
 
-| Prop | Type | Purpose |
-| ---- | ---- | ------- |
-| `history` | `MemoryHistory` | Pre-configured history (required for test URL control) |
-| `root` | `Component<RouteSectionProps>` | Layout component rendered inside router context |
-| `base` | `string` | Base URL prefix for route matching |
-| `preload` | `boolean` | Enable/disable route preloading (default: `true`) |
+| Prop      | Type                           | Purpose                                                |
+| --------- | ------------------------------ | ------------------------------------------------------ |
+| `history` | `MemoryHistory`                | Pre-configured history (required for test URL control) |
+| `root`    | `Component<RouteSectionProps>` | Layout component rendered inside router context        |
+| `base`    | `string`                       | Base URL prefix for route matching                     |
+| `preload` | `boolean`                      | Enable/disable route preloading (default: `true`)      |
 
 ## Why It Matters
 

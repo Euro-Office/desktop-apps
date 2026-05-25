@@ -10,7 +10,7 @@ const variantClass = {
 
 const defaultProps = {
   variant: "default",
-}
+};
 
 export function Button(props) {
   const merged = mergeProps(defaultProps, props);

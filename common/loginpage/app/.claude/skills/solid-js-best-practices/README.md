@@ -14,16 +14,16 @@ An [Agent Skill](https://platform.claude.com/docs/en/agents-and-tools/agent-skil
 
 ## Categories
 
-| Category | Rules | Focus Area |
-| -------- | ----- | ---------- |
-| [Reactivity](rules/1-1-use-signals-correctly.md) | 6 | Signals, effects, memos, batching |
-| [Components](rules/2-1-never-destructure-props.md) | 8 | Props, composition, children, return-once, style |
-| [Control Flow](rules/3-1-use-show-for-conditionals.md) | 5 | Show, For, Switch, Index |
-| [State Management](rules/4-1-signals-vs-stores.md) | 5 | Stores, context, reconcile |
-| [Refs & DOM](rules/5-1-use-refs-correctly.md) | 6 | Refs, lifecycle, directives, events, security |
-| [Performance](rules/6-1-avoid-unnecessary-tracking.md) | 5 | Lazy loading, Suspense, optimization, classList |
-| [Accessibility](rules/7-1-semantic-html.md) | 3 | Semantic HTML, ARIA, keyboard |
-| [Testing](rules/8-1-configure-vitest-for-solid.md) | 6 | Vitest setup, render patterns, async, queries |
+| Category                                               | Rules | Focus Area                                       |
+| ------------------------------------------------------ | ----- | ------------------------------------------------ |
+| [Reactivity](rules/1-1-use-signals-correctly.md)       | 6     | Signals, effects, memos, batching                |
+| [Components](rules/2-1-never-destructure-props.md)     | 8     | Props, composition, children, return-once, style |
+| [Control Flow](rules/3-1-use-show-for-conditionals.md) | 5     | Show, For, Switch, Index                         |
+| [State Management](rules/4-1-signals-vs-stores.md)     | 5     | Stores, context, reconcile                       |
+| [Refs & DOM](rules/5-1-use-refs-correctly.md)          | 6     | Refs, lifecycle, directives, events, security    |
+| [Performance](rules/6-1-avoid-unnecessary-tracking.md) | 5     | Lazy loading, Suspense, optimization, classList  |
+| [Accessibility](rules/7-1-semantic-html.md)            | 3     | Semantic HTML, ARIA, keyboard                    |
+| [Testing](rules/8-1-configure-vitest-for-solid.md)     | 6     | Vitest setup, render patterns, async, queries    |
 
 ## Installation
 
@@ -47,12 +47,12 @@ The skill automatically activates when Claude detects tasks involving Solid.js.
 
 Rules are categorized by impact:
 
-| Priority | Description | Action |
-| -------- | ----------- | ------ |
-| CRITICAL | Major performance or correctness issues | Fix immediately |
-| HIGH | Significant impact on maintainability/performance | Address in current PR |
-| MEDIUM | Best practice violations | Address when touching related code |
-| LOW | Style preferences and micro-optimizations | Consider during refactoring |
+| Priority | Description                                       | Action                             |
+| -------- | ------------------------------------------------- | ---------------------------------- |
+| CRITICAL | Major performance or correctness issues           | Fix immediately                    |
+| HIGH     | Significant impact on maintainability/performance | Address in current PR              |
+| MEDIUM   | Best practice violations                          | Address when touching related code |
+| LOW      | Style preferences and micro-optimizations         | Consider during refactoring        |
 
 ### For AI Agents
 

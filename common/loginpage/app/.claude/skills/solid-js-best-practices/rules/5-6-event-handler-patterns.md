@@ -20,15 +20,7 @@ function TodoList() {
     { id: 2, text: "Walk dog" },
   ]);
 
-  return (
-    <For each={todos()}>
-      {(todo) => (
-        <button onClick={() => handleDelete(todo.id)}>
-          Delete {todo.text}
-        </button>
-      )}
-    </For>
-  );
+  return <For each={todos()}>{(todo) => <button onClick={() => handleDelete(todo.id)}>Delete {todo.text}</button>}</For>;
 }
 ```
 
@@ -59,15 +51,7 @@ function TodoList() {
     { id: 2, text: "Walk dog" },
   ]);
 
-  return (
-    <For each={todos()}>
-      {(todo) => (
-        <button onClick={[handleDelete, todo.id]}>
-          Delete {todo.text}
-        </button>
-      )}
-    </For>
-  );
+  return <For each={todos()}>{(todo) => <button onClick={[handleDelete, todo.id]}>Delete {todo.text}</button>}</For>;
 }
 ```
 
@@ -90,12 +74,14 @@ function TodoList() {
 
 ```tsx
 // ✅ CORRECT: Capture phase event handling
-<div oncapture:click={(e) => {
-  // Fires during capture phase, before the target element's handler
-  if (shouldBlock()) {
-    e.stopPropagation();
-  }
-}}>
+<div
+  oncapture:click={(e) => {
+    // Fires during capture phase, before the target element's handler
+    if (shouldBlock()) {
+      e.stopPropagation();
+    }
+  }}
+>
   <ChildComponent />
 </div>
 ```
@@ -113,20 +99,14 @@ function EventExample() {
   return (
     <div>
       {/* Delegated: Solid attaches one listener on document */}
-      <button onClick={() => addLog("delegated click")}>
-        Delegated
-      </button>
+      <button onClick={() => addLog("delegated click")}>Delegated</button>
 
       {/* Native: listener directly on the element */}
-      <button on:click={() => addLog("native click")}>
-        Native
-      </button>
+      <button on:click={() => addLog("native click")}>Native</button>
 
       {/* Capture: fires before the target's handler */}
       <div oncapture:click={() => addLog("capture phase")}>
-        <button onClick={() => addLog("target click")}>
-          Capture Example
-        </button>
+        <button onClick={() => addLog("target click")}>Capture Example</button>
       </div>
     </div>
   );
@@ -135,12 +115,12 @@ function EventExample() {
 
 ## Event System Reference
 
-| Syntax | Type | Use Case |
-| ------ | ---- | -------- |
-| `onClick={handler}` | Delegated | Common events (click, input, keydown, etc.) |
-| `on:click={handler}` | Native | Non-bubbling events, custom elements, Web Components |
-| `oncapture:click={handler}` | Capture | Intercept events before they reach target |
-| `onClick={[handler, data]}` | Delegated + data | Pass data without creating a closure |
+| Syntax                      | Type             | Use Case                                             |
+| --------------------------- | ---------------- | ---------------------------------------------------- |
+| `onClick={handler}`         | Delegated        | Common events (click, input, keydown, etc.)          |
+| `on:click={handler}`        | Native           | Non-bubbling events, custom elements, Web Components |
+| `oncapture:click={handler}` | Capture          | Intercept events before they reach target            |
+| `onClick={[handler, data]}` | Delegated + data | Pass data without creating a closure                 |
 
 ## Delegated Events in Solid
 

@@ -42,7 +42,7 @@ const HeavyComponent = lazy(() => import("./HeavyComponent"));
 function App() {
   return (
     <div>
-      <HeavyComponent />  {/* No Suspense boundary! */}
+      <HeavyComponent /> {/* No Suspense boundary! */}
     </div>
   );
 }
@@ -180,28 +180,28 @@ function DataSection() {
 
 ## Suspense Props
 
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
+| Prop       | Type          | Description                              |
+| ---------- | ------------- | ---------------------------------------- |
 | `fallback` | `JSX.Element` | Content shown while children are loading |
 
 ## SuspenseList Props
 
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
-| `revealOrder` | `"forwards" \| "backwards" \| "together"` | Order to reveal children |
-| `tail` | `"collapsed" \| "hidden"` | How to show loading placeholders |
+| Prop          | Type                                      | Description                      |
+| ------------- | ----------------------------------------- | -------------------------------- |
+| `revealOrder` | `"forwards" \| "backwards" \| "together"` | Order to reveal children         |
+| `tail`        | `"collapsed" \| "hidden"`                 | How to show loading placeholders |
 
 ## createResource Return Value
 
 ```tsx
 const [data, { mutate, refetch }] = createResource(source, fetcher);
 
-data()          // The data (or undefined while loading)
-data.loading    // Boolean loading state
-data.error      // Error if fetch failed
-data.state      // "unresolved" | "pending" | "ready" | "refreshing" | "errored"
-mutate(newData) // Manually update the data
-refetch()       // Re-run the fetcher
+data(); // The data (or undefined while loading)
+data.loading; // Boolean loading state
+data.error; // Error if fetch failed
+data.state; // "unresolved" | "pending" | "ready" | "refreshing" | "errored"
+mutate(newData); // Manually update the data
+refetch(); // Re-run the fetcher
 ```
 
 ## Why It Matters

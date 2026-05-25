@@ -65,7 +65,7 @@ export function getDb(): Promise<IDBDatabase> {
 export async function _resetDbForTest(): Promise<void> {
   if (dbPromise) {
     const db = await dbPromise;
-    db.close();       // Must close before deleteDatabase or the request blocks
+    db.close(); // Must close before deleteDatabase or the request blocks
     dbPromise = null; // Allow getDb() to re-open on next call
   }
 }

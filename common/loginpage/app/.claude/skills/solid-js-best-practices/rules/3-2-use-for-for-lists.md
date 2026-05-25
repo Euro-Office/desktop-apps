@@ -47,9 +47,7 @@ import { For } from "solid-js";
 function TodoList(props) {
   return (
     <ul>
-      <For each={props.items}>
-        {(item) => <li>{item.text}</li>}
-      </For>
+      <For each={props.items}>{(item) => <li>{item.text}</li>}</For>
     </ul>
   );
 }
@@ -86,12 +84,7 @@ function ProductList(props) {
   return (
     <div>
       <For each={props.products} fallback={<p>No products found</p>}>
-        {(product) => (
-          <ProductCard
-            name={product.name}
-            price={product.price}
-          />
-        )}
+        {(product) => <ProductCard name={product.name} price={product.price} />}
       </For>
     </div>
   );
@@ -110,9 +103,7 @@ function CategoryList(props) {
         {(category) => (
           <section>
             <h2>{category.name}</h2>
-            <For each={category.items}>
-              {(item) => <ItemCard item={item} />}
-            </For>
+            <For each={category.items}>{(item) => <ItemCard item={item} />}</For>
           </section>
         )}
       </For>
@@ -130,7 +121,7 @@ import { createStore } from "solid-js/store";
 function EditableList() {
   const [items, setItems] = createStore([
     { id: 1, text: "First", done: false },
-    { id: 2, text: "Second", done: true }
+    { id: 2, text: "Second", done: true },
   ]);
 
   return (
@@ -138,11 +129,7 @@ function EditableList() {
       <For each={items}>
         {(item, i) => (
           <li>
-            <input
-              type="checkbox"
-              checked={item.done}
-              onChange={() => setItems(i(), "done", d => !d)}
-            />
+            <input type="checkbox" checked={item.done} onChange={() => setItems(i(), "done", (d) => !d)} />
             {item.text}
           </li>
         )}
@@ -164,10 +151,10 @@ function EditableList() {
 
 ## For vs Index
 
-| Component | Keys By | Best For |
-| --------- | ------- | -------- |
-| `<For>` | Object reference | Objects, database records |
-| `<Index>` | Array index | Primitives, fixed-position data |
+| Component | Keys By          | Best For                        |
+| --------- | ---------------- | ------------------------------- |
+| `<For>`   | Object reference | Objects, database records       |
+| `<Index>` | Array index      | Primitives, fixed-position data |
 
 ```tsx
 // For: item identity matters
@@ -179,11 +166,11 @@ function EditableList() {
 
 ## For Props
 
-| Prop | Type | Description |
-| ---- | ---- | ----------- |
-| `each` | `T[]` | Array to iterate over |
-| `fallback` | `JSX.Element` | Rendered when array is empty |
-| `children` | `(item: T, index: () => number) => JSX.Element` | Render function |
+| Prop       | Type                                            | Description                  |
+| ---------- | ----------------------------------------------- | ---------------------------- |
+| `each`     | `T[]`                                           | Array to iterate over        |
+| `fallback` | `JSX.Element`                                   | Rendered when array is empty |
+| `children` | `(item: T, index: () => number) => JSX.Element` | Render function              |
 
 ## Related Rules
 

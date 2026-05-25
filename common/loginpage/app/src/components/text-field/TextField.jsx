@@ -5,16 +5,12 @@ import styles from "./TextField.module.css";
 
 function Root(props) {
   const [local, rest] = splitProps(props, ["class"]);
-  return (
-    <TextFieldPrimitive classList={mergeClass(styles.root, local.class)} {...rest} />
-  );
+  return <TextFieldPrimitive classList={mergeClass(styles.root, local.class)} {...rest} />;
 }
 
 function Input(props) {
   const [local, rest] = splitProps(props, ["class"]);
-  return (
-    <TextFieldPrimitive.Input classList={mergeClass(styles.input, local.class)} {...rest} />
-  );
+  return <TextFieldPrimitive.Input classList={mergeClass(styles.input, local.class)} {...rest} />;
 }
 
 export const TextField = Object.assign(Root, { Input });

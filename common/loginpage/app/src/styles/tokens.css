@@ -1,4 +1,5 @@
-:root, .theme-light-modern {
+:root,
+.theme-light-modern {
   /* background */
   --background-action-panel: #ffffff;
   --background-normal-element: #f3f3f3;

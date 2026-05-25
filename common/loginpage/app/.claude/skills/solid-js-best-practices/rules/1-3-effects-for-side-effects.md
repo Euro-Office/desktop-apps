@@ -39,7 +39,7 @@ function ItemList() {
     setSortedItems([...items()].sort((a, b) => a.name.localeCompare(b.name)));
   });
 
-  return <For each={sortedItems()}>{item => <div>{item.name}</div>}</For>;
+  return <For each={sortedItems()}>{(item) => <div>{item.name}</div>}</For>;
 }
 ```
 
@@ -64,11 +64,9 @@ function UserProfile() {
 function ItemList() {
   const [items, setItems] = createSignal([]);
 
-  const sortedItems = createMemo(() =>
-    [...items()].sort((a, b) => a.name.localeCompare(b.name))
-  );
+  const sortedItems = createMemo(() => [...items()].sort((a, b) => a.name.localeCompare(b.name)));
 
-  return <For each={sortedItems()}>{item => <div>{item.name}</div>}</For>;
+  return <For each={sortedItems()}>{(item) => <div>{item.name}</div>}</For>;
 }
 ```
 
@@ -88,8 +86,8 @@ function DataLogger() {
   // ✅ CORRECT: API call is a side effect
   createEffect(() => {
     fetch(`/api/data/${data()?.id}`)
-      .then(res => res.json())
-      .then(result => console.log(result));
+      .then((res) => res.json())
+      .then((result) => console.log(result));
   });
 
   // ✅ CORRECT: DOM manipulation is a side effect
@@ -121,7 +119,7 @@ function Dashboard() {
     setData(await response.json());
   });
 
-  return <Show when={data()}>{d => <DashboardView data={d} />}</Show>;
+  return <Show when={data()}>{(d) => <DashboardView data={d} />}</Show>;
 }
 ```
 

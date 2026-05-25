@@ -19,17 +19,8 @@ function App() {
   const [user, setUser] = createSignal(null);
 
   return (
-    <Layout
-      theme={theme()}
-      setTheme={setTheme}
-      user={user()}
-      setUser={setUser}
-    >
-      <MainContent
-        theme={theme()}
-        user={user()}
-        setUser={setUser}
-      />
+    <Layout theme={theme()} setTheme={setTheme} user={user()} setUser={setUser}>
+      <MainContent theme={theme()} user={user()} setUser={setUser} />
     </Layout>
   );
 }
@@ -37,11 +28,7 @@ function App() {
 function Layout(props) {
   return (
     <div class={props.theme}>
-      <Header
-        theme={props.theme}
-        setTheme={props.setTheme}
-        user={props.user}
-      />
+      <Header theme={props.theme} setTheme={props.setTheme} user={props.user} />
       {props.children}
     </div>
   );
@@ -70,14 +57,10 @@ const ThemeProvider: ParentComponent = (props) => {
   const value: ThemeContextValue = {
     theme,
     setTheme,
-    toggleTheme: () => setTheme(t => t === "light" ? "dark" : "light")
+    toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")),
   };
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {props.children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{props.children}</ThemeContext.Provider>;
 };
 
 // ✅ CORRECT: Custom hook with error handling
@@ -103,11 +86,7 @@ function App() {
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
-  return (
-    <button onClick={toggleTheme}>
-      Current: {theme()}
-    </button>
-  );
+  return <button onClick={toggleTheme}>Current: {theme()}</button>;
 }
 ```
 
@@ -136,7 +115,7 @@ const AuthProvider: ParentComponent = (props) => {
   const [state, setState] = createStore<AuthState>({
     user: null,
     isAuthenticated: false,
-    permissions: []
+    permissions: [],
   });
 
   const login = async (credentials: Credentials) => {
@@ -144,7 +123,7 @@ const AuthProvider: ParentComponent = (props) => {
     setState({
       user: response.user,
       isAuthenticated: true,
-      permissions: response.permissions
+      permissions: response.permissions,
     });
   };
 
@@ -152,7 +131,7 @@ const AuthProvider: ParentComponent = (props) => {
     setState({
       user: null,
       isAuthenticated: false,
-      permissions: []
+      permissions: [],
     });
   };
 
@@ -160,11 +139,7 @@ const AuthProvider: ParentComponent = (props) => {
     return state.permissions.includes(permission);
   };
 
-  return (
-    <AuthContext.Provider value={{ state, login, logout, hasPermission }}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ state, login, logout, hasPermission }}>{props.children}</AuthContext.Provider>;
 };
 
 function useAuth() {
@@ -196,9 +171,7 @@ function App() {
 const Providers: ParentComponent = (props) => (
   <AuthProvider>
     <ThemeProvider>
-      <I18nProvider>
-        {props.children}
-      </I18nProvider>
+      <I18nProvider>{props.children}</I18nProvider>
     </ThemeProvider>
   </AuthProvider>
 );
@@ -208,19 +181,19 @@ const Providers: ParentComponent = (props) => (
 
 ```tsx
 // Option 1: Undefined context (require provider)
-const StrictContext = createContext<Value>();  // undefined if no provider
+const StrictContext = createContext<Value>(); // undefined if no provider
 
 // Option 2: Default value (works without provider)
 const OptionalContext = createContext<Value>({
   theme: "light",
-  setTheme: () => {}  // no-op default
+  setTheme: () => {}, // no-op default
 });
 
 // Usage depends on whether provider is optional
 function Component() {
-  const ctx = useContext(OptionalContext);  // Always defined
+  const ctx = useContext(OptionalContext); // Always defined
   // vs
-  const ctx = useContext(StrictContext);    // May be undefined
+  const ctx = useContext(StrictContext); // May be undefined
 }
 ```
 
@@ -238,13 +211,13 @@ function Component() {
 
 ## When to Use Context
 
-| Scenario | Use Context? |
-| -------- | ------------ |
-| Theme, locale, auth state | Yes |
-| Form state in multi-step wizard | Yes |
-| Global UI state (modals, toasts) | Yes |
-| Local component state | No |
-| Parent-child (1-2 levels) | Props often simpler |
+| Scenario                         | Use Context?        |
+| -------------------------------- | ------------------- |
+| Theme, locale, auth state        | Yes                 |
+| Form state in multi-step wizard  | Yes                 |
+| Global UI state (modals, toasts) | Yes                 |
+| Local component state            | No                  |
+| Parent-child (1-2 levels)        | Props often simpler |
 
 ## Related Rules
 

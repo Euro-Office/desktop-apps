@@ -103,7 +103,7 @@ function FilteredList() {
 // ✅ CORRECT: Memos can depend on other memos
 const [items, setItems] = createSignal([1, 2, 3, 4, 5]);
 
-const evenItems = createMemo(() => items().filter(n => n % 2 === 0));
+const evenItems = createMemo(() => items().filter((n) => n % 2 === 0));
 const sumOfEvens = createMemo(() => evenItems().reduce((a, b) => a + b, 0));
 const averageOfEvens = createMemo(() => sumOfEvens() / evenItems().length);
 ```
@@ -118,13 +118,13 @@ const averageOfEvens = createMemo(() => sumOfEvens() / evenItems().length);
 
 ## When to Use What
 
-| Use Case | Solution |
-| -------- | -------- |
+| Use Case                            | Solution                         |
+| ----------------------------------- | -------------------------------- |
 | Simple, cheap computation used once | Plain function `() => a() + b()` |
-| Computation used multiple times | `createMemo` |
-| Expensive computation | `createMemo` |
-| Derived value passed as prop | `createMemo` |
-| Side effects (API, DOM, logging) | `createEffect` |
+| Computation used multiple times     | `createMemo`                     |
+| Expensive computation               | `createMemo`                     |
+| Derived value passed as prop        | `createMemo`                     |
+| Side effects (API, DOM, logging)    | `createEffect`                   |
 
 ## Related Rules
 

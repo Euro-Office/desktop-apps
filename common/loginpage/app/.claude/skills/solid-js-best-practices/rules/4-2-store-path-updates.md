@@ -21,12 +21,12 @@ function Settings() {
     notifications: {
       email: true,
       push: false,
-      frequency: "daily"
+      frequency: "daily",
     },
     privacy: {
       shareData: false,
-      analytics: true
-    }
+      analytics: true,
+    },
   });
 
   // ❌ WRONG: Replacing entire object
@@ -35,8 +35,8 @@ function Settings() {
       ...settings,
       notifications: {
         ...settings.notifications,
-        push: !settings.notifications.push
-      }
+        push: !settings.notifications.push,
+      },
     });
   };
 
@@ -44,7 +44,7 @@ function Settings() {
   const updateNotifications = (key: string, value: boolean) => {
     setSettings("notifications", {
       ...settings.notifications,
-      [key]: value
+      [key]: value,
     });
   };
 
@@ -63,17 +63,17 @@ function Settings() {
     notifications: {
       email: true,
       push: false,
-      frequency: "daily"
+      frequency: "daily",
     },
     privacy: {
       shareData: false,
-      analytics: true
-    }
+      analytics: true,
+    },
   });
 
   // ✅ CORRECT: Path syntax for granular update
   const togglePush = () => {
-    setSettings("notifications", "push", p => !p);
+    setSettings("notifications", "push", (p) => !p);
   };
 
   // ✅ CORRECT: Dynamic path
@@ -94,13 +94,13 @@ function TodoApp() {
   const [state, setState] = createStore({
     todos: [
       { id: 1, text: "Learn Solid", done: false },
-      { id: 2, text: "Build app", done: false }
-    ]
+      { id: 2, text: "Build app", done: false },
+    ],
   });
 
   // ✅ CORRECT: Update by index
   const toggleTodo = (index: number) => {
-    setState("todos", index, "done", d => !d);
+    setState("todos", index, "done", (d) => !d);
   };
 
   // ✅ CORRECT: Append to array
@@ -108,18 +108,18 @@ function TodoApp() {
     setState("todos", state.todos.length, {
       id: Date.now(),
       text,
-      done: false
+      done: false,
     });
   };
 
   // ✅ CORRECT: Update multiple items with filter
   const markAllDone = () => {
-    setState("todos", todo => !todo.done, "done", true);
+    setState("todos", (todo) => !todo.done, "done", true);
   };
 
   // ✅ CORRECT: Update range of items
   const toggleRange = (from: number, to: number) => {
-    setState("todos", { from, to }, "done", d => !d);
+    setState("todos", { from, to }, "done", (d) => !d);
   };
 
   return <div>{/* ... */}</div>;
@@ -130,15 +130,13 @@ function TodoApp() {
 
 ```tsx
 // ✅ CORRECT: Functional update for current value
-setSettings("notifications", "frequency", freq =>
-  freq === "daily" ? "weekly" : "daily"
-);
+setSettings("notifications", "frequency", (freq) => (freq === "daily" ? "weekly" : "daily"));
 
 // ✅ CORRECT: Increment a counter
-setState("stats", "views", v => v + 1);
+setState("stats", "views", (v) => v + 1);
 
 // ✅ CORRECT: Toggle boolean
-setState("ui", "sidebar", "open", open => !open);
+setState("ui", "sidebar", "open", (open) => !open);
 ```
 
 ### Complex Path Operations
@@ -147,22 +145,22 @@ setState("ui", "sidebar", "open", open => !open);
 const [data, setData] = createStore({
   users: [
     { id: 1, name: "Alice", roles: ["admin"] },
-    { id: 2, name: "Bob", roles: ["user"] }
-  ]
+    { id: 2, name: "Bob", roles: ["user"] },
+  ],
 });
 
 // Update user by ID (using filter function)
 const updateUserName = (id: number, name: string) => {
-  setData("users", user => user.id === id, "name", name);
+  setData("users", (user) => user.id === id, "name", name);
 };
 
 // Add role to specific user
 const addRole = (userId: number, role: string) => {
   setData(
     "users",
-    user => user.id === userId,
+    (user) => user.id === userId,
     "roles",
-    roles => [...roles, role]
+    (roles) => [...roles, role],
   );
 };
 ```
@@ -180,7 +178,7 @@ setStore("items", 0, value);
 setStore("items", 0, "prop", value);
 
 // Filter function (updates all matching)
-setStore("items", item => item.active, "prop", value);
+setStore("items", (item) => item.active, "prop", value);
 
 // Range object
 setStore("items", { from: 0, to: 5 }, "prop", value);
@@ -190,8 +188,8 @@ setStore("items", { from: 0, to: 10, by: 2 }, "prop", value);
 setStore("items", [0, 2, 4], "prop", value);
 
 // Functional update (receives current value)
-setStore("key", current => newValue);
-setStore("key1", "key2", current => current + 1);
+setStore("key", (current) => newValue);
+setStore("key1", "key2", (current) => current + 1);
 ```
 
 ## Why It Matters

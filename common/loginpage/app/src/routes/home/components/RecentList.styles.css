@@ -144,7 +144,8 @@
 }
 
 .col-actions {
-  .pin, .more {
+  .pin,
+  .more {
     opacity: 0;
   }
 }
@@ -154,7 +155,8 @@
 }
 
 .file-list-body .row:hover .col-actions {
-  .pin, .more {
+  .pin,
+  .more {
     opacity: 1;
   }
 }

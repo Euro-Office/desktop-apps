@@ -28,9 +28,7 @@ function UserProfile(props) {
 function ProductList(props) {
   return (
     <ul>
-      <For each={props.products}>
-        {(product) => <ProductItem product={product} />}
-      </For>
+      <For each={props.products}>{(product) => <ProductItem product={product} />}</For>
     </ul>
   );
 }
@@ -55,10 +53,7 @@ import { Show } from "solid-js";
 // ✅ CORRECT: Loading state fallback
 function UserProfile(props) {
   return (
-    <Show
-      when={props.user}
-      fallback={<ProfileSkeleton />}
-    >
+    <Show when={props.user} fallback={<ProfileSkeleton />}>
       <ProfileCard user={props.user} />
     </Show>
   );
@@ -72,10 +67,7 @@ import { For } from "solid-js";
 function ProductList(props) {
   return (
     <ul>
-      <For
-        each={props.products}
-        fallback={<li class="empty">No products found</li>}
-      >
+      <For each={props.products} fallback={<li class="empty">No products found</li>}>
         {(product) => <ProductItem product={product} />}
       </For>
     </ul>
@@ -157,9 +149,7 @@ function DataTable(props) {
     <table>
       <thead>
         <tr>
-          <For each={props.columns}>
-            {(col) => <th>{col.header}</th>}
-          </For>
+          <For each={props.columns}>{(col) => <th>{col.header}</th>}</For>
         </tr>
       </thead>
       <tbody>
@@ -204,13 +194,13 @@ function DataTable(props) {
 
 ## Fallback Checklist
 
-| Component | Needs Fallback For |
-| --------- | ----------------- |
-| `<Show>` | Loading, unauthorized, null data |
-| `<For>` | Empty arrays |
-| `<Switch>` | Unhandled cases |
-| `<Suspense>` | Async loading |
-| `<ErrorBoundary>` | Runtime errors |
+| Component         | Needs Fallback For               |
+| ----------------- | -------------------------------- |
+| `<Show>`          | Loading, unauthorized, null data |
+| `<For>`           | Empty arrays                     |
+| `<Switch>`        | Unhandled cases                  |
+| `<Suspense>`      | Async loading                    |
+| `<ErrorBoundary>` | Runtime errors                   |
 
 ## Best Practices
 

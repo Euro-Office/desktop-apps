@@ -53,10 +53,7 @@ test("submits form", async () => {
   const user = userEvent.setup();
   render(() => <LoginForm />);
 
-  await user.type(
-    screen.getByRole("textbox", { name: /email/i }),
-    "user@test.com"
-  );
+  await user.type(screen.getByRole("textbox", { name: /email/i }), "user@test.com");
   await user.type(screen.getByLabelText(/password/i), "secret");
   await user.click(screen.getByRole("button", { name: /sign in/i }));
 
@@ -76,31 +73,31 @@ test("shows items", () => {
 
 ### Query Priority Decision Table
 
-| Content Type | Best Query | Example |
-| ------------ | ---------- | ------- |
-| Buttons, links, headings | `getByRole` | `getByRole('button', { name: /save/i })` |
-| Form fields with labels | `getByLabelText` | `getByLabelText(/email/i)` |
-| Form field placeholders | `getByPlaceholderText` | `getByPlaceholderText(/search/i)` |
-| Static display text | `getByText` | `getByText(/no results/i)` |
-| Form values | `getByDisplayValue` | `getByDisplayValue(/draft/i)` |
-| Images | `getByAltText` | `getByAltText(/profile photo/i)` |
-| Tooltips, titles | `getByTitle` | `getByTitle(/close/i)` |
-| Last resort only | `getByTestId` | `getByTestId('complex-canvas')` |
+| Content Type             | Best Query             | Example                                  |
+| ------------------------ | ---------------------- | ---------------------------------------- |
+| Buttons, links, headings | `getByRole`            | `getByRole('button', { name: /save/i })` |
+| Form fields with labels  | `getByLabelText`       | `getByLabelText(/email/i)`               |
+| Form field placeholders  | `getByPlaceholderText` | `getByPlaceholderText(/search/i)`        |
+| Static display text      | `getByText`            | `getByText(/no results/i)`               |
+| Form values              | `getByDisplayValue`    | `getByDisplayValue(/draft/i)`            |
+| Images                   | `getByAltText`         | `getByAltText(/profile photo/i)`         |
+| Tooltips, titles         | `getByTitle`           | `getByTitle(/close/i)`                   |
+| Last resort only         | `getByTestId`          | `getByTestId('complex-canvas')`          |
 
 ### Common ARIA Roles for Solid Components
 
 ```tsx
 // ✅ CORRECT: Query by semantic role
-screen.getByRole("button", { name: /submit/i });      // <button>
-screen.getByRole("textbox", { name: /email/i });       // <input type="text">
-screen.getByRole("checkbox", { name: /agree/i });      // <input type="checkbox">
-screen.getByRole("heading", { level: 2 });             // <h2>
-screen.getByRole("navigation");                         // <nav>
-screen.getByRole("list");                               // <ul> or <ol>
-screen.getByRole("listitem");                           // <li>
-screen.getByRole("dialog");                             // Portal modal with role="dialog"
-screen.getByRole("alert");                              // <div role="alert">
-screen.getByRole("tab", { name: /settings/i });        // Tab panels
+screen.getByRole("button", { name: /submit/i }); // <button>
+screen.getByRole("textbox", { name: /email/i }); // <input type="text">
+screen.getByRole("checkbox", { name: /agree/i }); // <input type="checkbox">
+screen.getByRole("heading", { level: 2 }); // <h2>
+screen.getByRole("navigation"); // <nav>
+screen.getByRole("list"); // <ul> or <ol>
+screen.getByRole("listitem"); // <li>
+screen.getByRole("dialog"); // Portal modal with role="dialog"
+screen.getByRole("alert"); // <div role="alert">
+screen.getByRole("tab", { name: /settings/i }); // Tab panels
 ```
 
 ### When TestId Is Acceptable

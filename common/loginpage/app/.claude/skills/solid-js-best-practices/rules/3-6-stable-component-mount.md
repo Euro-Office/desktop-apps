@@ -15,11 +15,15 @@ Rendering the same component in multiple branches of `<Switch>` or `<Show>` caus
 ```tsx
 // ❌ List appears in both fallback AND Match — unmounts on every nav between branches
 <Switch
-  fallback={<main><List /></main>}     // branch A
+  fallback={
+    <main>
+      <List />
+    </main>
+  } // branch A
 >
   <Match when={!isRoot()}>
     <div class="grid">
-      <List />                          // branch B — new instance!
+      <List /> // branch B — new instance!
       <Detail />
     </div>
   </Match>
@@ -37,7 +41,7 @@ Rendering the same component in multiple branches of `<Switch>` or `<Show>` caus
     [styles.withDetail]: !isRoot(),
   }}
 >
-  <List />                              {/* always mounted */}
+  <List /> {/* always mounted */}
   <Show when={!isRoot()}>
     <Detail />
   </Show>
@@ -46,7 +50,9 @@ Rendering the same component in multiple branches of `<Switch>` or `<Show>` caus
 
 ```css
 /* CSS for hiding without unmounting (when display:none is needed) */
-.hidden { display: none; }
+.hidden {
+  display: none;
+}
 ```
 
 ## Why It Matters

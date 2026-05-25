@@ -90,8 +90,8 @@ async function fetchUserData(userId: string) {
 
   try {
     const [userData, userPosts] = await Promise.all([
-      fetch(`/api/users/${userId}`).then(r => r.json()),
-      fetch(`/api/users/${userId}/posts`).then(r => r.json())
+      fetch(`/api/users/${userId}`).then((r) => r.json()),
+      fetch(`/api/users/${userId}/posts`).then((r) => r.json()),
     ]);
 
     // ✅ Batch the state updates after async operations
@@ -119,7 +119,7 @@ function Form() {
   const [form, setForm] = createStore({
     firstName: "",
     lastName: "",
-    email: ""
+    email: "",
   });
 
   const resetForm = () => {
@@ -127,7 +127,7 @@ function Form() {
     setForm({
       firstName: "",
       lastName: "",
-      email: ""
+      email: "",
     });
   };
 
@@ -145,13 +145,13 @@ function Form() {
 
 ## When to Use Batch
 
-| Scenario | Use Batch? |
-| -------- | ---------- |
-| Event handlers updating multiple signals | Yes |
-| After async operations (fetch, timers) | Yes |
-| Store updates via setStore | No (auto-batched) |
-| Single signal update | No |
-| Inside effects | Usually not needed |
+| Scenario                                 | Use Batch?         |
+| ---------------------------------------- | ------------------ |
+| Event handlers updating multiple signals | Yes                |
+| After async operations (fetch, timers)   | Yes                |
+| Store updates via setStore               | No (auto-batched)  |
+| Single signal update                     | No                 |
+| Inside effects                           | Usually not needed |
 
 ## Note on Automatic Batching
 

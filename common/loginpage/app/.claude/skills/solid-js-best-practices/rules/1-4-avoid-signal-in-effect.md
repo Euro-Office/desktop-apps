@@ -34,14 +34,18 @@ function Temperature() {
   const [fahrenheit, setFahrenheit] = createSignal(32);
 
   createEffect(() => {
-    setFahrenheit(celsius() * 9/5 + 32);
+    setFahrenheit((celsius() * 9) / 5 + 32);
   });
 
   createEffect(() => {
-    setCelsius((fahrenheit() - 32) * 5/9);
+    setCelsius(((fahrenheit() - 32) * 5) / 9);
   });
 
-  return <div>{celsius()}°C = {fahrenheit()}°F</div>;
+  return (
+    <div>
+      {celsius()}°C = {fahrenheit()}°F
+    </div>
+  );
 }
 ```
 
@@ -56,9 +60,13 @@ function Temperature() {
   const [celsius, setCelsius] = createSignal(0);
 
   // ✅ CORRECT: Derived value, no signal setting
-  const fahrenheit = createMemo(() => celsius() * 9/5 + 32);
+  const fahrenheit = createMemo(() => (celsius() * 9) / 5 + 32);
 
-  return <div>{celsius()}°C = {fahrenheit()}°F</div>;
+  return (
+    <div>
+      {celsius()}°C = {fahrenheit()}°F
+    </div>
+  );
 }
 ```
 
@@ -72,15 +80,21 @@ function LogChanges() {
   const [log, setLog] = createSignal<string[]>([]);
 
   // ✅ CORRECT: on() makes dependencies explicit, defers: true prevents immediate run
-  createEffect(on(value, (v, prev) => {
-    setLog(logs => [...logs, `Changed from ${prev} to ${v}`]);
-  }, { defer: true }));
+  createEffect(
+    on(
+      value,
+      (v, prev) => {
+        setLog((logs) => [...logs, `Changed from ${prev} to ${v}`]);
+      },
+      { defer: true },
+    ),
+  );
 
   return (
     <div>
-      <button onClick={() => setValue(v => v + 1)}>Increment</button>
+      <button onClick={() => setValue((v) => v + 1)}>Increment</button>
       <ul>
-        <For each={log()}>{msg => <li>{msg}</li>}</For>
+        <For each={log()}>{(msg) => <li>{msg}</li>}</For>
       </ul>
     </div>
   );
@@ -104,7 +118,11 @@ function Synced() {
     }
   });
 
-  return <div>{source()} → {derived()}</div>;
+  return (
+    <div>
+      {source()} → {derived()}
+    </div>
+  );
 }
 ```
 
@@ -117,12 +135,12 @@ function AutoSave() {
   const [saved, setSaved] = createSignal(false);
 
   createEffect(() => {
-    const text = content();  // Track content changes
+    const text = content(); // Track content changes
     // Don't read 'saved' here - would create dependency
 
     fetch("/api/save", {
       method: "POST",
-      body: JSON.stringify({ content: text })
+      body: JSON.stringify({ content: text }),
     }).then(() => setSaved(true));
   });
 
@@ -131,7 +149,7 @@ function AutoSave() {
       value={content()}
       onInput={(e) => {
         setContent(e.currentTarget.value);
-        setSaved(false);  // Set from event, not effect
+        setSaved(false); // Set from event, not effect
       }}
     />
   );
@@ -150,13 +168,13 @@ function AutoSave() {
 
 ## Safe Patterns
 
-| Pattern | Use Case |
-| ------- | -------- |
-| `createMemo` | Derive values from other signals |
+| Pattern           | Use Case                                          |
+| ----------------- | ------------------------------------------------- |
+| `createMemo`      | Derive values from other signals                  |
 | `on()` with defer | React to specific changes without creating cycles |
-| `untrack()` | Read a signal without tracking it |
-| Event handlers | Set signals from user interactions |
-| `onMount` | One-time initialization |
+| `untrack()`       | Read a signal without tracking it                 |
+| Event handlers    | Set signals from user interactions                |
+| `onMount`         | One-time initialization                           |
 
 ## Related Rules
 

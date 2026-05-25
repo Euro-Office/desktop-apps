@@ -66,7 +66,9 @@
   color: var(--text-link);
   cursor: pointer;
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .divider {

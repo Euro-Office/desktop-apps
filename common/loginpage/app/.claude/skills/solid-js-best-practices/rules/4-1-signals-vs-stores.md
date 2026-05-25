@@ -23,23 +23,23 @@ function UserManager() {
       email: "john@example.com",
       preferences: {
         theme: "dark",
-        notifications: true
-      }
+        notifications: true,
+      },
     },
-    posts: []
+    posts: [],
   });
 
   // Updating nested values is verbose and replaces entire object
   const updateTheme = (theme: string) => {
-    setUser(prev => ({
+    setUser((prev) => ({
       ...prev,
       profile: {
         ...prev.profile,
         preferences: {
           ...prev.profile.preferences,
-          theme
-        }
-      }
+          theme,
+        },
+      },
     }));
   };
 
@@ -55,11 +55,7 @@ function Counter() {
   const [state, setState] = createStore({ count: 0 });
 
   // Overkill for a single value
-  return (
-    <button onClick={() => setState("count", c => c + 1)}>
-      {state.count}
-    </button>
-  );
+  return <button onClick={() => setState("count", (c) => c + 1)}>{state.count}</button>;
 }
 ```
 
@@ -72,11 +68,7 @@ import { createSignal } from "solid-js";
 function Counter() {
   const [count, setCount] = createSignal(0);
 
-  return (
-    <button onClick={() => setCount(c => c + 1)}>
-      {count()}
-    </button>
-  );
+  return <button onClick={() => setCount((c) => c + 1)}>{count()}</button>;
 }
 ```
 
@@ -91,10 +83,10 @@ function UserManager() {
       email: "john@example.com",
       preferences: {
         theme: "dark",
-        notifications: true
-      }
+        notifications: true,
+      },
     },
-    posts: []
+    posts: [],
   });
 
   // Granular update with path syntax
@@ -120,12 +112,12 @@ function Dashboard() {
     users: [],
     stats: {
       daily: { views: 0, clicks: 0 },
-      weekly: { views: 0, clicks: 0 }
+      weekly: { views: 0, clicks: 0 },
     },
     filters: {
       dateRange: "week",
-      category: "all"
-    }
+      category: "all",
+    },
   });
 
   return (
@@ -140,24 +132,24 @@ function Dashboard() {
 
 ## Decision Guide
 
-| Data Type | Use | Example |
-| --------- | --- | ------- |
-| Primitive (number, string, boolean) | `createSignal` | `count`, `isOpen`, `userName` |
-| Simple object (flat, rarely updated) | `createSignal` | `{ x: 0, y: 0 }` |
-| Array of primitives | Either | `[1, 2, 3]` |
-| Nested object | `createStore` | User profile, form state |
-| Array of objects | `createStore` | Todo list, data table |
-| Object with frequent partial updates | `createStore` | Settings, filters |
+| Data Type                            | Use            | Example                       |
+| ------------------------------------ | -------------- | ----------------------------- |
+| Primitive (number, string, boolean)  | `createSignal` | `count`, `isOpen`, `userName` |
+| Simple object (flat, rarely updated) | `createSignal` | `{ x: 0, y: 0 }`              |
+| Array of primitives                  | Either         | `[1, 2, 3]`                   |
+| Nested object                        | `createStore`  | User profile, form state      |
+| Array of objects                     | `createStore`  | Todo list, data table         |
+| Object with frequent partial updates | `createStore`  | Settings, filters             |
 
 ## Key Differences
 
-| Aspect | Signal | Store |
-| ------ | ------ | ----- |
-| Access | `signal()` | `store.prop` |
-| Update | `setSignal(newValue)` | `setStore("path", value)` |
-| Reactivity | Whole value | Per-property |
-| Nested updates | Replace entire object | Path-based granular |
-| Best for | Primitives, simple values | Complex nested state |
+| Aspect         | Signal                    | Store                     |
+| -------------- | ------------------------- | ------------------------- |
+| Access         | `signal()`                | `store.prop`              |
+| Update         | `setSignal(newValue)`     | `setStore("path", value)` |
+| Reactivity     | Whole value               | Per-property              |
+| Nested updates | Replace entire object     | Path-based granular       |
+| Best for       | Primitives, simple values | Complex nested state      |
 
 ## Store Advantages for Complex State
 
@@ -165,16 +157,16 @@ function Dashboard() {
 const [form, setForm] = createStore({
   fields: {
     name: { value: "", error: null },
-    email: { value: "", error: null }
+    email: { value: "", error: null },
   },
-  isValid: false
+  isValid: false,
 });
 
 // Granular update - only the name field re-renders
 setForm("fields", "name", "value", "John");
 
 // Accessing a value only subscribes to that value
-<input value={form.fields.name.value} />
+<input value={form.fields.name.value} />;
 // This won't re-render when email changes
 ```
 

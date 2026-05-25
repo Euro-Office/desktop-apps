@@ -88,20 +88,20 @@ When `getByRole` fails unexpectedly, use `screen.debug()` to print the rendered 
 
 ```tsx
 await screen.findByRole("group"); // wait for component to render
-screen.debug();                   // prints full ARIA tree to console
+screen.debug(); // prints full ARIA tree to console
 ```
 
 Or inspect via browser DevTools: open the **Accessibility** panel, navigate to the component, and read the computed role and accessible name.
 
 ## Common ARIA Structure Differences
 
-| Component type | Native HTML role | Kobalte role |
-| -------------- | ---------------- | ------------ |
-| Select | `combobox` | `group` (with `aria-label`) |
-| Select trigger | (part of combobox) | `button` inside group |
-| Select option | `option` | `option` ✅ (correct) |
-| Dialog | `dialog` | `dialog` ✅ (correct) |
-| Tooltip content | `tooltip` | renders in portal at `document.body` |
+| Component type  | Native HTML role   | Kobalte role                         |
+| --------------- | ------------------ | ------------------------------------ |
+| Select          | `combobox`         | `group` (with `aria-label`)          |
+| Select trigger  | (part of combobox) | `button` inside group                |
+| Select option   | `option`           | `option` ✅ (correct)                |
+| Dialog          | `dialog`           | `dialog` ✅ (correct)                |
+| Tooltip content | `tooltip`          | renders in portal at `document.body` |
 
 Other libraries will differ — always verify against the actual output.
 

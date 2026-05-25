@@ -75,17 +75,12 @@ function Button(props) {
   // Split into three groups
   const [local, styleProps, buttonProps] = splitProps(
     props,
-    ["loading", "icon"],           // Local props
-    ["class", "style"]             // Style-related props
+    ["loading", "icon"], // Local props
+    ["class", "style"], // Style-related props
   );
 
   return (
-    <button
-      class={`btn ${styleProps.class ?? ""}`}
-      style={styleProps.style}
-      disabled={local.loading}
-      {...buttonProps}
-    >
+    <button class={`btn ${styleProps.class ?? ""}`} style={styleProps.style} disabled={local.loading} {...buttonProps}>
       <Show when={local.loading}>
         <Spinner />
       </Show>
@@ -105,10 +100,7 @@ import { mergeProps, splitProps } from "solid-js";
 
 function Input(props) {
   // Merge defaults first
-  const merged = mergeProps(
-    { type: "text", variant: "outlined" },
-    props
-  );
+  const merged = mergeProps({ type: "text", variant: "outlined" }, props);
 
   // Then split
   const [local, inputProps] = splitProps(merged, ["label", "error", "variant"]);
@@ -134,12 +126,7 @@ interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: Component<ButtonProps> = (props) => {
-  const [local, buttonProps] = splitProps(props, [
-    "variant",
-    "size",
-    "loading",
-    "children"
-  ]);
+  const [local, buttonProps] = splitProps(props, ["variant", "size", "loading", "children"]);
 
   return (
     <button
@@ -167,11 +154,11 @@ const Button: Component<ButtonProps> = (props) => {
 
 ## Pattern Comparison
 
-| Pattern | Reactivity | Type Safety | Use Case |
-| ------- | ---------- | ----------- | -------- |
-| Destructuring | ❌ Broken | ✅ Good | Never in Solid |
-| Manual picking | ❌ Broken | ⚠️ Manual | Never in Solid |
-| `splitProps` | ✅ Preserved | ✅ Good | Wrapper components |
+| Pattern        | Reactivity   | Type Safety | Use Case           |
+| -------------- | ------------ | ----------- | ------------------ |
+| Destructuring  | ❌ Broken    | ✅ Good     | Never in Solid     |
+| Manual picking | ❌ Broken    | ⚠️ Manual   | Never in Solid     |
+| `splitProps`   | ✅ Preserved | ✅ Good     | Wrapper components |
 
 ## Common Split Patterns
 
@@ -180,11 +167,7 @@ const Button: Component<ButtonProps> = (props) => {
 const [local, rest] = splitProps(props, ["onChange", "label"]);
 
 // Split by concern
-const [handlers, styles, rest] = splitProps(
-  props,
-  ["onClick", "onFocus", "onBlur"],
-  ["class", "style", "classList"]
-);
+const [handlers, styles, rest] = splitProps(props, ["onClick", "onFocus", "onBlur"], ["class", "style", "classList"]);
 
 // Split everything except a few
 // (Solid doesn't have this built-in, but you can list what you want)

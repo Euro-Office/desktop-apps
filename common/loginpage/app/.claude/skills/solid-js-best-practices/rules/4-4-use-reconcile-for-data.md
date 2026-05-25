@@ -18,7 +18,7 @@ import { createStore } from "solid-js/store";
 function UserDashboard() {
   const [data, setData] = createStore({
     users: [],
-    lastUpdated: null
+    lastUpdated: null,
   });
 
   const fetchUsers = async () => {
@@ -36,7 +36,7 @@ function UserDashboard() {
     // ❌ WRONG: Even unchanged users trigger updates
     setData({
       users: newUsers,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     });
   };
 }
@@ -50,7 +50,7 @@ import { createStore, reconcile } from "solid-js/store";
 function UserDashboard() {
   const [data, setData] = createStore({
     users: [],
-    lastUpdated: null
+    lastUpdated: null,
   });
 
   const fetchUsers = async () => {
@@ -79,7 +79,7 @@ import { createStore, reconcile } from "solid-js/store";
 
 function OrderList() {
   const [state, setState] = createStore({
-    orders: []
+    orders: [],
   });
 
   const refreshOrders = async () => {
@@ -100,8 +100,8 @@ function RealTimeData() {
   const [state, setState] = createStore({
     stocks: {
       AAPL: { price: 150, change: 0 },
-      GOOGL: { price: 2800, change: 0 }
-    }
+      GOOGL: { price: 2800, change: 0 },
+    },
   });
 
   // WebSocket update with partial data
@@ -109,10 +109,7 @@ function RealTimeData() {
     const update = JSON.parse(event.data);
 
     // ✅ CORRECT: Merge partial update, preserve unchanged
-    setState("stocks", reconcile(
-      { ...state.stocks, ...update },
-      { merge: true }
-    ));
+    setState("stocks", reconcile({ ...state.stocks, ...update }, { merge: true }));
   };
 }
 ```
@@ -130,30 +127,26 @@ function ComplexDashboard() {
         name: "Engineering",
         employees: [
           { id: 101, name: "Alice", role: "Lead" },
-          { id: 102, name: "Bob", role: "Developer" }
-        ]
-      }
-    ]
+          { id: 102, name: "Bob", role: "Developer" },
+        ],
+      },
+    ],
   });
 
   const refreshDepartment = async (deptId: number) => {
     const dept = await fetchDepartment(deptId);
 
     // ✅ CORRECT: Reconcile nested data
-    setState(
-      "departments",
-      d => d.id === deptId,
-      reconcile(dept, { key: "id" })
-    );
+    setState("departments", (d) => d.id === deptId, reconcile(dept, { key: "id" }));
   };
 }
 ```
 
 ## reconcile Options
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `key` | `string` | `"id"` | Property to match array items |
+| Option  | Type      | Default | Description                            |
+| ------- | --------- | ------- | -------------------------------------- |
+| `key`   | `string`  | `"id"`  | Property to match array items          |
 | `merge` | `boolean` | `false` | Merge with existing instead of replace |
 
 ## How reconcile Works
@@ -181,14 +174,14 @@ setData("users", reconcile(new, { key: "id" }));
 
 ## When to Use reconcile
 
-| Scenario | Use reconcile? |
-| -------- | -------------- |
-| Initial data fetch | Optional (no previous data to diff) |
-| Polling/refresh | Yes |
-| WebSocket updates | Yes |
-| User-triggered refresh | Yes |
-| Complete data replacement | Yes (minimizes re-renders) |
-| Known single-item update | Path syntax may be simpler |
+| Scenario                  | Use reconcile?                      |
+| ------------------------- | ----------------------------------- |
+| Initial data fetch        | Optional (no previous data to diff) |
+| Polling/refresh           | Yes                                 |
+| WebSocket updates         | Yes                                 |
+| User-triggered refresh    | Yes                                 |
+| Complete data replacement | Yes (minimizes re-renders)          |
+| Known single-item update  | Path syntax may be simpler          |
 
 ## Why It Matters
 

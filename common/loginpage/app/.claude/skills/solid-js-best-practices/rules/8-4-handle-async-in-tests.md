@@ -126,8 +126,7 @@ test("renders user page", async () => {
   });
 
   // findBy required because router resolves asynchronously
-  expect(await screen.findByRole("heading", { name: /user/i }))
-    .toBeInTheDocument();
+  expect(await screen.findByRole("heading", { name: /user/i })).toBeInTheDocument();
 });
 ```
 
@@ -163,9 +162,7 @@ Testing that something is **not** present is subtle. The naive pattern fails sil
 ```tsx
 // ❌ WRONG: passes immediately before data even loads
 // Initial render (before fetch) is also empty — this assertion is vacuously true
-await waitFor(() =>
-  expect(screen.queryAllByRole("listitem")).toHaveLength(0),
-);
+await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(0));
 ```
 
 The problem: the component starts empty (no data yet), so the assertion passes before the query settles. You're not testing "loaded and found nothing" — you're testing "hasn't loaded yet."
@@ -177,7 +174,7 @@ The problem: the component starts empty (no data yet), so the assertion passes b
 // The categories filter renders once queries settle, even when the list is empty.
 // With <Suspense>, anything from the component tree indicates queries have settled.
 await screen.findByRole("group", { name: /categories/i }); // settled anchor
-expect(screen.queryAllByRole("listitem")).toHaveLength(0);  // synchronous
+expect(screen.queryAllByRole("listitem")).toHaveLength(0); // synchronous
 ```
 
 Choosing a settled anchor:
@@ -188,12 +185,12 @@ Choosing a settled anchor:
 
 ## Query Selection Guide
 
-| Scenario | Query | Why |
-| -------- | ----- | --- |
-| Element present on render | `getBy` | Synchronous, throws if absent |
-| Element appears after async load | `findBy` | Polls with timeout |
-| Element should NOT exist | `queryBy` | Returns null instead of throwing |
-| Multiple elements expected | `getAllBy` / `findAllBy` | Returns arrays |
+| Scenario                         | Query                    | Why                              |
+| -------------------------------- | ------------------------ | -------------------------------- |
+| Element present on render        | `getBy`                  | Synchronous, throws if absent    |
+| Element appears after async load | `findBy`                 | Polls with timeout               |
+| Element should NOT exist         | `queryBy`                | Returns null instead of throwing |
+| Multiple elements expected       | `getAllBy` / `findAllBy` | Returns arrays                   |
 
 ## Why It Matters
 

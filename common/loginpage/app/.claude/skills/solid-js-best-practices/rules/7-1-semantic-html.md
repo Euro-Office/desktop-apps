@@ -59,29 +59,29 @@ function ClickableCard(props) {
 ```tsx
 // ✅ CORRECT: Semantic HTML elements
 function ArticlePage() {
-    return (
-        <div class="page">
-            <header>
-                <h1 class="logo">Site Name</h1>
-                <nav>
-                    <a href="/">Home</a>
-                    <a href="/about">About</a>
-                </nav>
-            </header>
+  return (
+    <div class="page">
+      <header>
+        <h1 class="logo">Site Name</h1>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+        </nav>
+      </header>
 
-            <main>
-                <article>
-                    <h2>Article Title</h2>
-                    <p>First paragraph...</p>
-                    <p>Second paragraph...</p>
-                </article>
-            </main>
+      <main>
+        <article>
+          <h2>Article Title</h2>
+          <p>First paragraph...</p>
+          <p>Second paragraph...</p>
+        </article>
+      </main>
 
-            <footer>
-                <p>© 2024</p>
-            </footer>
-        </div>
-    );
+      <footer>
+        <p>© 2024</p>
+      </footer>
+    </div>
+  );
 }
 ```
 
@@ -91,9 +91,7 @@ function ClickableCard(props) {
   return (
     <article class="card">
       <h3 class="card-title">{props.title}</h3>
-      <button onClick={props.onClick}>
-        View Details
-      </button>
+      <button onClick={props.onClick}>View Details</button>
     </article>
   );
 }
@@ -204,24 +202,24 @@ function ClickableCard(props) {
 
 ## Semantic Element Reference
 
-| Content Type | Use Element |
-| ------------ | ----------- |
-| Page header | `<header>` |
-| Navigation | `<nav>` |
-| Main content | `<main>` |
-| Article/post | `<article>` |
-| Sidebar | `<aside>` |
-| Page footer | `<footer>` |
-| Section | `<section>` (with heading) |
-| Headings | `<h1>` - `<h6>` (in order) |
-| Paragraphs | `<p>` |
-| Lists | `<ul>`, `<ol>`, `<dl>` |
-| Interactive | `<button>`, `<a>`, `<input>` |
-| Time/dates | `<time datetime="...">` |
-| Figures | `<figure>` + `<figcaption>` |
-| Code | `<code>`, `<pre>` |
-| Quotes | `<blockquote>`, `<q>` |
-| Emphasis | `<strong>`, `<em>` |
+| Content Type | Use Element                  |
+| ------------ | ---------------------------- |
+| Page header  | `<header>`                   |
+| Navigation   | `<nav>`                      |
+| Main content | `<main>`                     |
+| Article/post | `<article>`                  |
+| Sidebar      | `<aside>`                    |
+| Page footer  | `<footer>`                   |
+| Section      | `<section>` (with heading)   |
+| Headings     | `<h1>` - `<h6>` (in order)   |
+| Paragraphs   | `<p>`                        |
+| Lists        | `<ul>`, `<ol>`, `<dl>`       |
+| Interactive  | `<button>`, `<a>`, `<input>` |
+| Time/dates   | `<time datetime="...">`      |
+| Figures      | `<figure>` + `<figcaption>`  |
+| Code         | `<code>`, `<pre>`            |
+| Quotes       | `<blockquote>`, `<q>`        |
+| Emphasis     | `<strong>`, `<em>`           |
 
 ## Why It Matters
 

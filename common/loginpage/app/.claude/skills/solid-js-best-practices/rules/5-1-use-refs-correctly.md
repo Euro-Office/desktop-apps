@@ -30,7 +30,7 @@ function ConditionalInput(props) {
   let inputRef: HTMLInputElement;
 
   const focusInput = () => {
-    inputRef.focus();  // Error if Show is false
+    inputRef.focus(); // Error if Show is false
   };
 
   return (
@@ -51,7 +51,7 @@ function AutoFocus() {
   let inputRef: HTMLInputElement;
 
   onMount(() => {
-    inputRef.focus();  // Element is mounted here
+    inputRef.focus(); // Element is mounted here
   });
 
   return <input ref={inputRef} />;
@@ -62,10 +62,12 @@ function AutoFocus() {
 // ✅ CORRECT: Callback ref for immediate access
 function AutoFocus() {
   return (
-    <input ref={(el) => {
-      // el is the DOM element, already mounted
-      el.focus();
-    }} />
+    <input
+      ref={(el) => {
+        // el is the DOM element, already mounted
+        el.focus();
+      }}
+    />
   );
 }
 ```
@@ -98,7 +100,7 @@ function ConditionalInput(props) {
 ```tsx
 // ✅ CORRECT: Use definite assignment assertion
 function Component() {
-  let divRef!: HTMLDivElement;  // ! tells TS it will be assigned
+  let divRef!: HTMLDivElement; // ! tells TS it will be assigned
 
   onMount(() => {
     console.log(divRef.offsetWidth);
@@ -116,7 +118,7 @@ function FancyInput(props) {
   return (
     <div class="fancy-wrapper">
       <input
-        ref={props.ref}  // Forward to parent
+        ref={props.ref} // Forward to parent
         class="fancy-input"
       />
     </div>
@@ -145,27 +147,20 @@ function DynamicInputs() {
   };
 
   return (
-    <For each={inputs()}>
-      {(_, i) => (
-        <input
-          ref={(el) => refs[i()] = el}
-          onKeyDown={(e) => e.key === "Enter" && focusNext(i())}
-        />
-      )}
-    </For>
+    <For each={inputs()}>{(_, i) => <input ref={(el) => (refs[i()] = el)} onKeyDown={(e) => e.key === "Enter" && focusNext(i())} />}</For>
   );
 }
 ```
 
 ## Ref Patterns
 
-| Pattern | Use Case |
-| ------- | -------- |
-| Variable ref (`let ref`) | Always-rendered elements |
+| Pattern                            | Use Case                  |
+| ---------------------------------- | ------------------------- |
+| Variable ref (`let ref`)           | Always-rendered elements  |
 | Callback ref (`ref={(el) => ...}`) | Immediate access on mount |
-| Signal ref (`createSignal`) | Conditional elements |
-| Array of refs | Lists/dynamic elements |
-| Forwarding refs | Wrapper components |
+| Signal ref (`createSignal`)        | Conditional elements      |
+| Array of refs                      | Lists/dynamic elements    |
+| Forwarding refs                    | Wrapper components        |
 
 ## Why It Matters
 

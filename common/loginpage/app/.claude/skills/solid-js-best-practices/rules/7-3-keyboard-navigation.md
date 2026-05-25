@@ -37,7 +37,7 @@ function CustomSelect(props) {
       <Show when={open()}>
         <div class="options">
           <For each={props.options}>
-            {option => (
+            {(option) => (
               <div
                 class="option"
                 onClick={() => {
@@ -94,12 +94,12 @@ function CustomSelect(props) {
         if (!open()) {
           setOpen(true);
         } else {
-          setActiveIndex(i => Math.min(i + 1, props.options.length - 1));
+          setActiveIndex((i) => Math.min(i + 1, props.options.length - 1));
         }
         break;
       case "ArrowUp":
         e.preventDefault();
-        setActiveIndex(i => Math.max(i - 1, 0));
+        setActiveIndex((i) => Math.max(i - 1, 0));
         break;
       case "Enter":
       case " ":
@@ -124,22 +124,12 @@ function CustomSelect(props) {
 
   return (
     <div class="select" onKeyDown={handleKeyDown}>
-      <button
-        ref={triggerRef}
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded={open()}
-        onClick={() => setOpen(!open())}
-      >
+      <button ref={triggerRef} type="button" aria-haspopup="listbox" aria-expanded={open()} onClick={() => setOpen(!open())}>
         {selected()?.label || "Select..."}
       </button>
 
       <Show when={open()}>
-        <ul
-          ref={listRef}
-          role="listbox"
-          tabindex="-1"
-        >
+        <ul ref={listRef} role="listbox" tabindex="-1">
           <For each={props.options}>
             {(option, index) => (
               <li
@@ -187,9 +177,7 @@ function Modal(props) {
     }
 
     if (e.key === "Tab") {
-      const focusable = dialogRef.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
+      const focusable = dialogRef.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
       const first = focusable[0] as HTMLElement;
       const last = focusable[focusable.length - 1] as HTMLElement;
 
@@ -206,13 +194,7 @@ function Modal(props) {
   return (
     <Show when={props.open}>
       <div class="modal-backdrop" aria-hidden="true" />
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        tabindex="-1"
-        onKeyDown={handleKeyDown}
-      >
+      <div ref={dialogRef} role="dialog" aria-modal="true" tabindex="-1" onKeyDown={handleKeyDown}>
         {props.children}
         <button onClick={props.onClose}>Close</button>
       </div>
@@ -266,24 +248,24 @@ function Layout(props) {
 
 ## Keyboard Patterns
 
-| Key | Common Action |
-| --- | ------------- |
-| Tab | Move to next focusable element |
-| Shift+Tab | Move to previous focusable |
-| Enter/Space | Activate button/link |
-| Escape | Close modal/dropdown |
-| Arrow keys | Navigate within widgets |
-| Home/End | First/last item in list |
+| Key         | Common Action                  |
+| ----------- | ------------------------------ |
+| Tab         | Move to next focusable element |
+| Shift+Tab   | Move to previous focusable     |
+| Enter/Space | Activate button/link           |
+| Escape      | Close modal/dropdown           |
+| Arrow keys  | Navigate within widgets        |
+| Home/End    | First/last item in list        |
 
 ## Focus Management
 
-| Scenario | Action |
-| -------- | ------ |
-| Modal opens | Focus first focusable or dialog |
-| Modal closes | Restore previous focus |
-| Dropdown opens | Focus first option |
-| Delete item | Focus next/previous item |
-| Form error | Focus first invalid field |
+| Scenario       | Action                          |
+| -------------- | ------------------------------- |
+| Modal opens    | Focus first focusable or dialog |
+| Modal closes   | Restore previous focus          |
+| Dropdown opens | Focus first option              |
+| Delete item    | Focus next/previous item        |
+| Form error     | Focus first invalid field       |
 
 ## Why It Matters
 

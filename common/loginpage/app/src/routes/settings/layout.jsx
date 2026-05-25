@@ -1,6 +1,6 @@
 import styles from "./layout.module.css";
 import { t } from "@/services/l10n.js";
-import {A} from "@solidjs/router";
+import { A } from "@solidjs/router";
 
 export default function SettingsLayout(props) {
   return (

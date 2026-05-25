@@ -35,9 +35,7 @@ function Dropdown(props) {
       </div>
       <Show when={open()}>
         <div class="menu">
-          <For each={props.items}>
-            {item => <div onClick={item.onClick}>{item.label}</div>}
-          </For>
+          <For each={props.items}>{(item) => <div onClick={item.onClick}>{item.label}</div>}</For>
         </div>
       </Show>
     </div>
@@ -51,19 +49,14 @@ function Dropdown(props) {
 // ✅ CORRECT: Accessible icon button
 function IconButton(props) {
   return (
-    <button
-      class="icon-button"
-      onClick={props.onClick}
-      aria-label={props.label}
-      type="button"
-    >
+    <button class="icon-button" onClick={props.onClick} aria-label={props.label} type="button">
       <Icon name={props.icon} aria-hidden="true" />
     </button>
   );
 }
 
 // Usage
-<IconButton icon="close" label="Close dialog" onClick={handleClose} />
+<IconButton icon="close" label="Close dialog" onClick={handleClose} />;
 ```
 
 ```tsx
@@ -74,25 +67,15 @@ function Dropdown(props) {
 
   return (
     <div class="dropdown">
-      <button
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded={open()}
-        aria-controls={menuId}
-        onClick={() => setOpen(!open())}
-      >
+      <button type="button" aria-haspopup="listbox" aria-expanded={open()} aria-controls={menuId} onClick={() => setOpen(!open())}>
         {props.label}
         <Icon name="chevron-down" aria-hidden="true" />
       </button>
 
       <Show when={open()}>
-        <ul
-          id={menuId}
-          role="listbox"
-          aria-label={props.label}
-        >
+        <ul id={menuId} role="listbox" aria-label={props.label}>
           <For each={props.items}>
-            {item => (
+            {(item) => (
               <li role="option" onClick={item.onClick}>
                 {item.label}
               </li>
@@ -120,19 +103,8 @@ function Modal(props) {
 
   return (
     <Show when={props.open}>
-      <div
-        class="modal-backdrop"
-        onClick={props.onClose}
-        aria-hidden="true"
-      />
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        aria-describedby={descId}
-        tabindex="-1"
-      >
+      <div class="modal-backdrop" onClick={props.onClose} aria-hidden="true" />
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={descId} tabindex="-1">
         <h2 id={titleId}>{props.title}</h2>
         <p id={descId}>{props.description}</p>
         {props.children}
@@ -171,13 +143,7 @@ function Tabs(props) {
 
       <For each={props.tabs}>
         {(tab, index) => (
-          <div
-            role="tabpanel"
-            id={`panel-${index()}`}
-            aria-labelledby={`tab-${index()}`}
-            hidden={activeTab() !== index()}
-            tabindex="0"
-          >
+          <div role="tabpanel" id={`panel-${index()}`} aria-labelledby={`tab-${index()}`} hidden={activeTab() !== index()} tabindex="0">
             {tab.content}
           </div>
         )}
@@ -195,11 +161,7 @@ function Notifications() {
   const [message, setMessage] = createSignal("");
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    >
+    <div role="status" aria-live="polite" aria-atomic="true">
       {message()}
     </div>
   );
@@ -270,17 +232,17 @@ function FormField(props) {
 
 ## Common ARIA Patterns
 
-| Component | Key ARIA Attributes |
-| --------- | ----------------- |
-| Modal | `role="dialog"`, `aria-modal`, `aria-labelledby` |
-| Dropdown | `aria-haspopup`, `aria-expanded`, `aria-controls` |
-| Tabs | `role="tablist/tab/tabpanel"`, `aria-selected` |
-| Menu | `role="menu/menuitem"`, `aria-activedescendant` |
-| Alert | `role="alert"`, `aria-live="assertive"` |
-| Status | `role="status"`, `aria-live="polite"` |
-| Toggle | `aria-pressed` or `aria-checked` |
-| Loading | `aria-busy="true"` |
-| Form | `aria-label` or `aria-labelledby` (required for `role="form"` exposure) |
+| Component | Key ARIA Attributes                                                     |
+| --------- | ----------------------------------------------------------------------- |
+| Modal     | `role="dialog"`, `aria-modal`, `aria-labelledby`                        |
+| Dropdown  | `aria-haspopup`, `aria-expanded`, `aria-controls`                       |
+| Tabs      | `role="tablist/tab/tabpanel"`, `aria-selected`                          |
+| Menu      | `role="menu/menuitem"`, `aria-activedescendant`                         |
+| Alert     | `role="alert"`, `aria-live="assertive"`                                 |
+| Status    | `role="status"`, `aria-live="polite"`                                   |
+| Toggle    | `aria-pressed` or `aria-checked`                                        |
+| Loading   | `aria-busy="true"`                                                      |
+| Form      | `aria-label` or `aria-labelledby` (required for `role="form"` exposure) |
 
 ## ARIA Rules
 

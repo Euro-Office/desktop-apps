@@ -15,17 +15,25 @@ When setting default values for props, you can't use destructuring with defaults
 ```tsx
 // ❌ WRONG: Destructuring with defaults breaks reactivity
 function Greeting({ name = "Guest", age = 0 }) {
-  return <p>Hello {name}, you are {age} years old</p>;
+  return (
+    <p>
+      Hello {name}, you are {age} years old
+    </p>
+  );
 }
 ```
 
 ```tsx
 // ❌ WRONG: Conditional assignment also breaks reactivity
 function Greeting(props) {
-  const name = props.name || "Guest";  // Captured once
-  const age = props.age ?? 0;  // Captured once
+  const name = props.name || "Guest"; // Captured once
+  const age = props.age ?? 0; // Captured once
 
-  return <p>Hello {name}, you are {age} years old</p>;
+  return (
+    <p>
+      Hello {name}, you are {age} years old
+    </p>
+  );
 }
 ```
 
@@ -38,7 +46,11 @@ import { mergeProps } from "solid-js";
 function Greeting(props) {
   const merged = mergeProps({ name: "Guest", age: 0 }, props);
 
-  return <p>Hello {merged.name}, you are {merged.age} years old</p>;
+  return (
+    <p>
+      Hello {merged.name}, you are {merged.age} years old
+    </p>
+  );
 }
 ```
 
@@ -49,16 +61,12 @@ import { mergeProps } from "solid-js";
 
 function Button(props) {
   const defaultProps = { variant: "primary", size: "medium" };
-  const themeProps = { variant: "secondary" };  // From theme context
+  const themeProps = { variant: "secondary" }; // From theme context
 
   // Later sources override earlier ones
   const merged = mergeProps(defaultProps, themeProps, props);
 
-  return (
-    <button class={`btn-${merged.variant} btn-${merged.size}`}>
-      {merged.children}
-    </button>
-  );
+  return <button class={`btn-${merged.variant} btn-${merged.size}`}>{merged.children}</button>;
 }
 ```
 
@@ -75,10 +83,7 @@ interface CardProps {
 }
 
 const Card: Component<CardProps> = (props) => {
-  const merged = mergeProps(
-    { subtitle: "", elevation: 1 },
-    props
-  );
+  const merged = mergeProps({ subtitle: "", elevation: 1 }, props);
 
   return (
     <div class="card" style={{ "box-shadow": `0 ${merged.elevation * 2}px ${merged.elevation * 4}px rgba(0,0,0,0.1)` }}>
@@ -99,10 +104,7 @@ import { mergeProps, splitProps } from "solid-js";
 
 function Input(props) {
   // First merge defaults
-  const merged = mergeProps(
-    { type: "text", placeholder: "" },
-    props
-  );
+  const merged = mergeProps({ type: "text", placeholder: "" }, props);
 
   // Then split local from pass-through props
   const [local, others] = splitProps(merged, ["label", "error"]);
@@ -135,14 +137,17 @@ function Input(props) {
 
 ```tsx
 // Conceptually similar to:
-const merged = new Proxy({}, {
-  get(_, key) {
-    // Check sources in reverse order (last wins)
-    for (let i = sources.length - 1; i >= 0; i--) {
-      if (key in sources[i]) return sources[i][key];
-    }
-  }
-});
+const merged = new Proxy(
+  {},
+  {
+    get(_, key) {
+      // Check sources in reverse order (last wins)
+      for (let i = sources.length - 1; i >= 0; i--) {
+        if (key in sources[i]) return sources[i][key];
+      }
+    },
+  },
+);
 ```
 
 The returned object is reactive because property access goes through the proxy, which accesses the original reactive props.

@@ -11,52 +11,50 @@ export default function GeneralSettings() {
     { value: "US", label: "United States" },
   ]);
 
-  const languageOptions = createMemo(() =>
-    availableLangs().map((l) => ({ value: l.code, label: l.name }))
-  );
+  const languageOptions = createMemo(() => availableLangs().map((l) => ({ value: l.code, label: l.name })));
 
   const scalingOptions = createMemo(() => [
     { value: "auto", label: t("settOptScalingAuto") },
-    { value: "100",  label: "100%" },
-    { value: "125",  label: "125%" },
-    { value: "150",  label: "150%" },
-    { value: "175",  label: "175%" },
-    { value: "200",  label: "200%" },
-    { value: "225",  label: "225%" },
-    { value: "250",  label: "250%" },
-    { value: "275",  label: "275%" },
-    { value: "300",  label: "300%" },
-    { value: "350",  label: "350%" },
-    { value: "400",  label: "400%" },
-    { value: "450",  label: "450%" },
-    { value: "500",  label: "500%" },
+    { value: "100", label: "100%" },
+    { value: "125", label: "125%" },
+    { value: "150", label: "150%" },
+    { value: "175", label: "175%" },
+    { value: "200", label: "200%" },
+    { value: "225", label: "225%" },
+    { value: "250", label: "250%" },
+    { value: "275", label: "275%" },
+    { value: "300", label: "300%" },
+    { value: "350", label: "350%" },
+    { value: "400", label: "400%" },
+    { value: "450", label: "450%" },
+    { value: "500", label: "500%" },
   ]);
 
   const updatesOptions = createMemo(() => [
-    { value: "ask",      label: t("settOptAUpdateAsk") },
-    { value: "silent",   label: t("settOptAUpdateSilent") },
+    { value: "ask", label: t("settOptAUpdateAsk") },
+    { value: "silent", label: t("settOptAUpdateSilent") },
     { value: "disabled", label: t("settOptAUpdateDisabled") },
   ]);
 
   const themeOptions = createMemo(() => [
-    { value: "modern-light",  label: t("settOptThemeWhite") },
-    { value: "modern-dark",   label: t("settOptThemeNight") },
-    { value: "light",         label: t("settOptThemeLight") },
+    { value: "modern-light", label: t("settOptThemeWhite") },
+    { value: "modern-dark", label: t("settOptThemeNight") },
+    { value: "light", label: t("settOptThemeLight") },
     { value: "classic-light", label: t("settOptThemeClassicLight") },
-    { value: "dark",          label: t("settOptThemeDark") },
-    { value: "gray",          label: t("settOptThemeGray") },
-    { value: "system",        label: t("settOptThemeSystem") },
+    { value: "dark", label: t("settOptThemeDark") },
+    { value: "gray", label: t("settOptThemeGray") },
+    { value: "system", label: t("settOptThemeSystem") },
     { value: "contrast-dark", label: t("settOptThemeContrastDark") },
   ]);
 
   const openFileOptions = createMemo(() => [
-    { value: "tab",    label: t("settOptLaunchInTab") },
+    { value: "tab", label: t("settOptLaunchInTab") },
     { value: "window", label: t("settOptLaunchInWindow") },
   ]);
 
   const spellOptions = createMemo(() => [
-    { value: "auto",     label: t("settOptScalingAuto") },
-    { value: "enabled",  label: t("settOptEnabled") },
+    { value: "auto", label: t("settOptScalingAuto") },
+    { value: "enabled", label: t("settOptEnabled") },
     { value: "disabled", label: t("settOptDisabled") },
   ]);
 
@@ -126,7 +124,12 @@ export default function GeneralSettings() {
         <div class={styles.fieldRow}>
           <span class={styles.fieldLabel}>{t("settAUpdateMode")}</span>
           <div class={styles.fieldControl}>
-            <Select options={updatesOptions()} value={settings.checkUpdates} onChange={(v) => setSettings("checkUpdates", v)} disallowEmptySelection>
+            <Select
+              options={updatesOptions()}
+              value={settings.checkUpdates}
+              onChange={(v) => setSettings("checkUpdates", v)}
+              disallowEmptySelection
+            >
               <Select.Trigger class={styles.fullWidth} />
               <Select.Content />
             </Select>
@@ -146,7 +149,12 @@ export default function GeneralSettings() {
         <div class={styles.fieldRow}>
           <span class={styles.fieldLabel}>{t("settOptLaunchMode")}</span>
           <div class={styles.fieldControl}>
-            <Select options={openFileOptions()} value={settings.launchMode} onChange={(v) => setSettings("launchMode", v)} disallowEmptySelection>
+            <Select
+              options={openFileOptions()}
+              value={settings.launchMode}
+              onChange={(v) => setSettings("launchMode", v)}
+              disallowEmptySelection
+            >
               <Select.Trigger class={styles.fullWidth} />
               <Select.Content />
             </Select>
@@ -156,7 +164,12 @@ export default function GeneralSettings() {
         <div class={styles.fieldRow}>
           <span class={styles.fieldLabel}>{t("settSpellcheckDetection")}</span>
           <div class={styles.fieldControl}>
-            <Select options={spellOptions()} value={settings.spellCheck} onChange={(v) => setSettings("spellCheck", v)} disallowEmptySelection>
+            <Select
+              options={spellOptions()}
+              value={settings.spellCheck}
+              onChange={(v) => setSettings("spellCheck", v)}
+              disallowEmptySelection
+            >
               <Select.Trigger class={styles.fullWidth} />
               <Select.Content />
             </Select>
@@ -176,12 +189,8 @@ export default function GeneralSettings() {
 
         <div class={styles.fieldRowAuto}>
           <div class={styles.fieldLabelBlock}>
-            <span class={styles.fieldLabel}>
-              {t(settings.useai ? "settingsDisableAI" : "settingsEnableAI")}
-            </span>
-            <span class={styles.fieldDescription}>
-              {t(settings.useai ? "settingsDisableAIDescr" : "settingsEnableAIDescr")}
-            </span>
+            <span class={styles.fieldLabel}>{t(settings.useai ? "settingsDisableAI" : "settingsEnableAI")}</span>
+            <span class={styles.fieldDescription}>{t(settings.useai ? "settingsDisableAIDescr" : "settingsEnableAIDescr")}</span>
           </div>
           <div class={styles.fieldControlEnd}>
             <Button variant="accent" onClick={toggleAI}>

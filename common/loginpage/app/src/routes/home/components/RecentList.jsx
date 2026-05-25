@@ -11,10 +11,7 @@ function FileMenuItems(props) {
       <Menu.Item icon="#gofolder" onSelect={() => exploreFile(props.model)}>
         {t("menuFileExplore")}
       </Menu.Item>
-      <Menu.Item
-        icon={props.model.pinned ? "#unpin20" : "#pin20"}
-        onSelect={() => props.onTogglePin(props.model.fileid)}
-      >
+      <Menu.Item icon={props.model.pinned ? "#unpin20" : "#pin20"} onSelect={() => props.onTogglePin(props.model.fileid)}>
         {t(props.model.pinned ? "menuFileUnpin" : "menuFilePin")}
       </Menu.Item>
       <Menu.Item icon="#remove" onSelect={() => props.onRemove(props.model.fileid)}>
@@ -33,10 +30,10 @@ function RecentRow(props) {
     <ContextMenu>
       <ContextMenu.Trigger
         as="div"
-        class='row text-normal'
+        class="row text-normal"
         classList={{
-          "pinned": props.model.pinned,
-          "lost": !props.model.exist,
+          pinned: props.model.pinned,
+          lost: !props.model.exist,
         }}
         onClick={() => openRecentFile(props.model)}
       >
@@ -78,10 +75,7 @@ function RecentRow(props) {
           </button>
           <Show when={props.model.type !== "folder"}>
             <DropdownMenu>
-              <DropdownMenu.Trigger
-                class="more"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <DropdownMenu.Trigger class="more" onClick={(e) => e.stopPropagation()}>
                 <svg class="icon">
                   <use href="#more" />
                 </svg>
@@ -126,14 +120,7 @@ export function RecentList(props) {
         </div>
         <div class="file-list-body scrollable">
           <For each={recents()}>
-            {(model) => (
-              <RecentRow
-                model={model}
-                onTogglePin={props.onTogglePin}
-                onRemove={props.onRemove}
-                onClear={props.onClear}
-              />
-            )}
+            {(model) => <RecentRow model={model} onTogglePin={props.onTogglePin} onRemove={props.onRemove} onClear={props.onClear} />}
           </For>
         </div>
       </div>
