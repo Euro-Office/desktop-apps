@@ -103,7 +103,10 @@ function applyScaling(scaling) {
 }
 
 function nativeScalingToStore(raw) {
-  return raw == null || raw === 0 ? "auto" : String(raw);
+  if (raw == null) return "auto";
+
+  const value = String(raw).trim();
+  return value === "" || value === "0" ? "auto" : value;
 }
 
 function htmlDecode(str) {

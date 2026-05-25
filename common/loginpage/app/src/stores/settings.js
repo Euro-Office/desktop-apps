@@ -1,7 +1,7 @@
 import { createStore } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
 
-const defaultSettings = {
+const defaultSettings = Object.freeze({
   userName: "",
   country: "GB",
   lang: "en",
@@ -12,8 +12,8 @@ const defaultSettings = {
   spellCheck: "auto",
   gpuMode: true,
   useai: true,
-};
+});
 
-const [settings, setSettings] = makePersisted(createStore(defaultSettings), { name: "settings" });
+const [settings, setSettings] = makePersisted(createStore({ ...defaultSettings }), { name: "settings" });
 
 export { settings, setSettings, defaultSettings };

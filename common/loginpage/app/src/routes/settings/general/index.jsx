@@ -81,12 +81,8 @@ export default function GeneralSettings() {
         <div class={styles.fieldRow}>
           <span class={styles.fieldLabel}>{t("settUserName")}</span>
           <div class={styles.fieldControl}>
-            <TextField class={styles.fullWidth}>
-              <TextField.Input
-                placeholder={t("settingsUserNamePlaceholder")}
-                value={settings.userName}
-                onInput={(e) => setSettings("userName", e.currentTarget.value)}
-              />
+            <TextField class={styles.fullWidth} value={settings.userName} onChange={(v) => setSettings("userName", v)}>
+              <TextField.Input placeholder={t("settingsUserNamePlaceholder")} />
             </TextField>
           </div>
         </div>

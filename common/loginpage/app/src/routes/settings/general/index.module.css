@@ -7,8 +7,6 @@
 }
 
 .title {
-  margin-top: calc(52px - 28px);
-
   > h1 {
     font-weight: 700;
     font-size: 20px;
