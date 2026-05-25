@@ -12,7 +12,7 @@ export function initLocale() {
 }
 
 export function t(key) {
-  return translations()[key] || key;
+  return translations()[key] ?? key;
 }
 
 export function applyLocale(locale) {
@@ -32,10 +32,6 @@ export function applyLocale(locale) {
   }
 
   if (table) setTranslations((prev) => ({ ...prev, ...table }));
-}
-
-export function changeLocale(newLocale) {
-  applyLocale(newLocale);
 }
 
 export function isRTL(code) {

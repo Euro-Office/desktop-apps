@@ -2,10 +2,12 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  max-width: 560px;
+  margin-inline: auto;
 }
 
 .title {
-  margin-top: calc(52px - 20px);
+  margin-top: calc(52px - 28px);
 
   > h1 {
     font-weight: 700;
@@ -20,17 +22,18 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  position: relative;
 }
 
-.field-row {
-  display: flex;
+.fieldRow {
+  display: grid;
+  grid-template-columns: 180px 1fr;
   align-items: center;
-  width: 560px;
   height: 36px;
   gap: 64px;
 }
 
-.field-label {
+.fieldLabel {
   font-family: Arial, sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -38,8 +41,68 @@
   color: var(--text-normal);
 }
 
-.field-control {
+.fieldControl {
+  > * {
+    width: 100%;
+  }
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.formHeader {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resetLink {
+  position: absolute;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--text-link);
+  cursor: pointer;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.divider {
+  width: 560px;
+  height: 1px;
+  background: var(--border-divider);
+  flex-shrink: 0;
+}
+
+.fieldRowAuto {
+  display: flex;
+  align-items: flex-start;
+  width: 560px;
+  gap: 64px;
+}
+
+.fieldLabelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.fieldDescription {
+  color: var(--text-secondary);
+}
+
+.fieldControlEnd {
   flex: 1;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.switchLabel {
+  display: flex;
+  flex-direction: column;
 }

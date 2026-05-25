@@ -1,4 +1,4 @@
-import { Show, onCleanup, onMount } from "solid-js";
+import { Show, createSignal, onCleanup, onMount } from "solid-js";
 import { createStore, reconcile } from "solid-js/store";
 import { t } from "@/services/l10n.js";
 import {
@@ -23,6 +23,7 @@ function sortByPin(arr) {
 
 export default function Index() {
   const [recents, setRecents] = createStore([]);
+  const [loaded, setLoaded] = createSignal(false);
 
   const hasFiles = () => recents.length > 0;
 
@@ -59,10 +60,16 @@ export default function Index() {
 
   onMount(() => {
     listRecents()
-      .then(loadRecents)
-      .catch(() => {});
+      .then((raw) => {
+        loadRecents(raw);
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
 
-    const unsubRecents = onRecentsChanged((p) => loadRecents(p));
+    const unsubRecents = onRecentsChanged((p) => {
+      loadRecents(p);
+      if (!loaded()) setLoaded(true);
+    });
 
     onCleanup(() => {
       unsubRecents();
@@ -79,7 +86,7 @@ export default function Index() {
         <DocTypeGrid />
       </section>
 
-      <Show when={!hasFiles()}>
+      <Show when={loaded() && !hasFiles()}>
         <section class="file-drop-section">
           <FileDropZone />
         </section>

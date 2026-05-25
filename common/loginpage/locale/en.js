@@ -146,4 +146,13 @@ l10n.en = {
     dropZoneText: 'Drag & drop files here or open one',
     dropZoneOpenAction: 'Open file',
     settingsGeneral: "General",
+    settingsCountry: 'Country',
+    settingsUserNamePlaceholder: 'Username',
+    settingsGpuUseModeDescr: 'Improves performance on most devices. Disable if you experience display issues.',
+    settingsDisableAI: 'Disable AI features',
+    settingsDisableAIDescr: 'Disable AI in application, remove all configured AI models and associated data.',
+    settingsDisableAIButton: 'Disable AI',
+    settingsEnableAI: 'Enable AI features',
+    settingsEnableAIDescr: 'Enable AI in the application to add models and use AI-powered functionality',
+    settingsEnableAIButton: 'Enable AI',
 }
