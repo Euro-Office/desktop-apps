@@ -144,7 +144,7 @@
       </trans-unit>
       <trans-unit id="Comma-Separated Values" xml:space="preserve">
         <source>Comma-Separated Values</source>
-        <target>Comma Separated Values (*.csv)</target>
+        <target>Comma Separated Values</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Community version %@" xml:space="preserve">
@@ -174,7 +174,7 @@
       </trans-unit>
       <trans-unit id="DjVu File" xml:space="preserve">
         <source>DjVu File</source>
-        <target>Digital Document (*.djvu)</target>
+        <target>Digital Document</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Do you want to save the changes made to the document &quot;%@&quot;?" xml:space="preserve">
@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="Document template" xml:space="preserve">
         <source>Document template</source>
-        <target>Word Open XML Document Template (*.dotx)</target>
+        <target>Word Open XML Document Template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Don't Save" xml:space="preserve">
@@ -219,12 +219,12 @@
       </trans-unit>
       <trans-unit id="Excel 97-2003 Spreadsheet" xml:space="preserve">
         <source>Excel 97-2003 Spreadsheet</source>
-        <target>Excel 97-2003 Spreadsheet (*.xls)</target>
+        <target>Excel 97-2003 Spreadsheet</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Excel 2007 Spreadsheet" xml:space="preserve">
         <source>Excel 2007 Spreadsheet</source>
-        <target>Office Open XML Spreadsheet (*.xlsx)</target>
+        <target>Office Open XML Spreadsheet</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Excel Binary Workbook" xml:space="preserve">
@@ -239,7 +239,7 @@
       </trans-unit>
       <trans-unit id="FictionBook File" xml:space="preserve">
         <source>FictionBook File</source>
-        <target>FictionBook 2 File (*.fb2)</target>
+        <target>FictionBook 2 File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="File &quot;%@&quot; can not be open or not exist." xml:space="preserve">
@@ -284,12 +284,12 @@
       </trans-unit>
       <trans-unit id="Macro-enabled Presentation" xml:space="preserve">
         <source>Macro-enabled Presentation</source>
-        <target>Macro-enabled Presentation (*.pptm)</target>
+        <target>Macro-enabled Presentation</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Macro-enabled spreadsheet template" xml:space="preserve">
         <source>Macro-enabled spreadsheet template</source>
-        <target>Macro-enabled Spreadsheet template (*.xltm)</target>
+        <target>Macro-enabled Spreadsheet template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Markdown File" xml:space="preserve">
@@ -299,7 +299,7 @@
       </trans-unit>
       <trans-unit id="Mobipocket e-book" xml:space="preserve">
         <source>Mobipocket e-book</source>
-        <target>Mobipocket File (*.mobi)</target>
+        <target>Mobipocket File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to end" xml:space="preserve">
@@ -354,32 +354,32 @@
       </trans-unit>
       <trans-unit id="OpenDocument Document Template" xml:space="preserve">
         <source>OpenDocument Document Template</source>
-        <target>OpenDocument Document Template (*.ott)</target>
+        <target>OpenDocument Document Template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Presentation Template" xml:space="preserve">
         <source>OpenDocument Presentation Template</source>
-        <target>OpenDocument Presentation Template (*.otp)</target>
+        <target>OpenDocument Presentation Template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Spreadsheet Template" xml:space="preserve">
         <source>OpenDocument Spreadsheet Template</source>
-        <target>OpenDocument Spreadsheet Template (*.ots)</target>
+        <target>OpenDocument Spreadsheet Template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Document" xml:space="preserve">
         <source>OpenOffice Document</source>
-        <target>OpenDocument Text File (*.odt)</target>
+        <target>OpenDocument Text File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Presentation" xml:space="preserve">
         <source>OpenOffice Presentation</source>
-        <target>OpenDocument Presentation (*.odp)</target>
+        <target>OpenDocument Presentation</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Spreadsheet" xml:space="preserve">
         <source>OpenOffice Spreadsheet</source>
-        <target>OpenDocument Spreadsheet (*.ods)</target>
+        <target>OpenDocument Spreadsheet</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Opening" xml:space="preserve">
@@ -389,12 +389,12 @@
       </trans-unit>
       <trans-unit id="PDF File" xml:space="preserve">
         <source>PDF File</source>
-        <target>Portable Document (*.pdf)</target>
+        <target>Portable Document</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PDF/A File" xml:space="preserve">
         <source>PDF/A File</source>
-        <target>Portable Document /A (*.pdf)</target>
+        <target>Portable Document /A</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PNG Image" xml:space="preserve">
@@ -404,22 +404,22 @@
       </trans-unit>
       <trans-unit id="Plain Text" xml:space="preserve">
         <source>Plain Text</source>
-        <target>Plain Text File (*.txt)</target>
+        <target>Plain Text File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint 97-2003 Presentation" xml:space="preserve">
         <source>PowerPoint 97-2003 Presentation</source>
-        <target>PowerPoint 97-2003 Presentation (*.ppt)</target>
+        <target>PowerPoint 97-2003 Presentation</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint 2007 Presentation" xml:space="preserve">
         <source>PowerPoint 2007 Presentation</source>
-        <target>Office Open XML Presentation (*.pptx)</target>
+        <target>Office Open XML Presentation</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint Slide Show" xml:space="preserve">
         <source>PowerPoint Slide Show</source>
-        <target>Office Open XML Slide Show (*.ppsx)</target>
+        <target>Office Open XML Slide Show</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Preparing..." xml:space="preserve">
@@ -434,7 +434,7 @@
       </trans-unit>
       <trans-unit id="Presentation template" xml:space="preserve">
         <source>Presentation template</source>
-        <target>PowerPoint Open XML Presentation Template (*.potx)</target>
+        <target>PowerPoint Open XML Presentation Template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Presenter View" xml:space="preserve">
@@ -459,7 +459,7 @@
       </trans-unit>
       <trans-unit id="Rich Text Document" xml:space="preserve">
         <source>Rich Text Document</source>
-        <target>Rich Text Format File (*.rtf)</target>
+        <target>Rich Text Format File</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Save" xml:space="preserve">
@@ -504,7 +504,7 @@
       </trans-unit>
       <trans-unit id="Spreadsheet template" xml:space="preserve">
         <source>Spreadsheet template</source>
-        <target>Excel Open XML Spreadsheet Template (*.xltx)</target>
+        <target>Excel Open XML Spreadsheet Template</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Thank you for evaluating %@!" xml:space="preserve">
@@ -569,17 +569,17 @@
       </trans-unit>
       <trans-unit id="Word 97-2003 Document" xml:space="preserve">
         <source>Word 97-2003 Document</source>
-        <target>Word 97-2003 Document (*.doc)</target>
+        <target>Word 97-2003 Document</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Word 2007 Document" xml:space="preserve">
         <source>Word 2007 Document</source>
-        <target>Office Open XML Document (*.docx)</target>
+        <target>Office Open XML Document</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="XML Paper Specification" xml:space="preserve">
         <source>XML Paper Specification</source>
-        <target>OpenXPS Document (*.xps)</target>
+        <target>OpenXPS Document</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Yes" xml:space="preserve">
