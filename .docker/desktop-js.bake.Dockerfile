@@ -15,9 +15,11 @@ FROM ubuntu:24.04 AS web-base
 
 #### DESKTOP-JS
 FROM web-base AS desktop-js
+    ARG COMPANY_NAME
 
     COPY desktop-apps/common app
 
+    ENV COMPANY_NAME=${COMPANY_NAME}
     RUN cd app/loginpage/build && \
         npm install && \
         grunt

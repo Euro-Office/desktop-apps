@@ -39,6 +39,16 @@ module.exports = function(grunt) {
                 force: true
             },
             common: ['../src/*.js']
+        },
+        replace: {
+            brand: {
+                src: ['../locale/*.js', '../src/locale.js'],  // adjust globs
+                overwrite: true,
+                replacements: [{
+                    from: /__COMPANY_NAME__/g,
+                    to: process.env.COMPANY_NAME || 'Euro-Office'
+                }]
+            }
         }
     });
 
@@ -264,5 +274,5 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy-connection-error', ['connection-error', 'terser:noconnect', 'copy', 'htmlmin', /*'svgmin',*/ 'compile-html:noconnect']);
     grunt.registerTask('deploy-desktop-startpage', ['prebuild-svg-sprites', 'desktop-app-extra', 'copy', 'less', 'terser:dialogconnect', 'terser:noconnect',
         'concat', 'clean', 'inline', 'terser:core', 'terser:langs', 'htmlmin', 'compile-html']);
-    grunt.registerTask('default', ['init-build-startpage','deploy-desktop-startpage','deploy-connection-error']);
+    grunt.registerTask('default', ['replace:brand','init-build-startpage','deploy-desktop-startpage','deploy-connection-error']);
 };

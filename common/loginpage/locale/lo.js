@@ -1,6 +1,6 @@
 l10n.lo = {
-    welWelcome: 'ຍິນດີຕ້ອນຮັບເຂົ້າສູ່ Euro-Office!',
-    welDescr: 'ໃຊ້ໄດ້ໂດຍບໍ່ມີເນັດ ຫຼືເຊື່ອມຕໍ່ເຂົ້າຄຣາວຂອງ: Euro-Office, ownCloud, Nextcloud.',
+    welWelcome: 'ຍິນດີຕ້ອນຮັບເຂົ້າສູ່ __COMPANY_NAME__!',
+    welDescr: 'ໃຊ້ໄດ້ໂດຍບໍ່ມີເນັດ ຫຼືເຊື່ອມຕໍ່ເຂົ້າຄຣາວຂອງ: ownCloud, Nextcloud and more.',
     welNeedHelp: 'ຕ້ອງການຄວາມຊ່ວຍເຫຼືອບໍ? ເຂົ້າເບິ່ງ $1 ຂອງພວກເຮົາ.',
     textHelpCenter: 'ສູນຊ່ວຍເຫຼືອ',
     btnConnect: 'ເຊື່ອມຕໍ່ເລີຍ',
@@ -73,7 +73,7 @@ l10n.lo = {
     emptySlide2Title: 'ບິ່ງຫຼືຟື້ນຟູລຸ້ນກ່ອນ',
     emptySlide2Text: 'ຟື້ນຟູຫຼືພຽງແຕ່ເບິ່ງສະບັບກ່ອນຂອງເອກະສານຂອງທ່ານ, ຕິດຕາມການປ່ຽນແປງແລະຜູ້ຂຽນຂອງພວກເຂົາ.',
     emptySlide3Title: 'ເກັບໄວ້ໃນ cloud',
-    emptySlide3Text: 'ເກັບຮັກສາເອກະສານຂອງທ່ານໃນ Euro-Office cloud ແລະເຂົ້າເຖິງໄດ້ທຸກເວລາ, ຈາກທຸກບ່ອນ.',
+    emptySlide3Text: 'ເກັບຮັກສາເອກະສານຂອງທ່ານໃນ __COMPANY_NAME__ cloud ແລະເຂົ້າເຖິງໄດ້ທຸກເວລາ, ຈາກທຸກບ່ອນ.',
     settUserName: 'ຊື່ຜູ້ໃຊ້',
     settResetUserName: 'ຕັ້ງຄ່າເປັນຄ່າເລີ່ມຕົ້ນ',
     settOpenMode: 'ເປີດເອກະສານໃນຮູບແບບການສະແດງຕົວຢ່າງ',
