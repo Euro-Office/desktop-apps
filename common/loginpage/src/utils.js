@@ -228,14 +228,15 @@ utils.defines.FileFormat = {
 
 utils.defines.DBLCLICK_LOCK_TIMEOUT = 800;
 utils.defines.links = {
-    regnew: 'https://www.onlyoffice.com/registration.aspx?app=desktop',
-    restorepass: 'https://www.onlyoffice.com/signin.aspx'
+    regnew: 'https://github.com/Euro-Office',
+    restorepass: 'https://github.com/Euro-Office'
 };
 
 utils.formatToEditor = function(f) {
+    if ( f > FILE_DRAW ) return 'draw'; else
     if ( f > FILE_PRESENTATION && f < FILE_SPREADSHEET ) return 'slide'; else
     if ( f > FILE_SPREADSHEET && f < FILE_CROSSPLATFORM ) return 'cell'; else
-    if ( f > FILE_CROSSPLATFORM || f === utils.defines.FileFormat.FILE_DOCUMENT_OFORM_PDF ) return 'pdf'; 
+    if ( (f > FILE_CROSSPLATFORM && f < FILE_DRAW) || f === utils.defines.FileFormat.FILE_DOCUMENT_OFORM_PDF ) return 'pdf'; 
     else return 'word';
 }
 
@@ -356,6 +357,13 @@ utils.fileExtensionToFileFormat = function(extension) {
     case 'djvu':    return utils.defines.FileFormat.FILE_CROSSPLATFORM_DJVU;
     case 'xps':     return utils.defines.FileFormat.FILE_CROSSPLATFORM_XPS;
 
+    case 'vsdx':    return utils.defines.FileFormat.FILE_DRAW_VSDX;
+    case 'vssx':    return utils.defines.FileFormat.FILE_DRAW_VSSX;
+    case 'vstx':    return utils.defines.FileFormat.FILE_DRAW_VSTX;
+    case 'vsdm':    return utils.defines.FileFormat.FILE_DRAW_VSDM;
+    case 'vssm':    return utils.defines.FileFormat.FILE_DRAW_VSSM;
+    case 'vstm':    return utils.defines.FileFormat.FILE_DRAW_VSTM;
+
     default: return utils.defines.FileFormat.FILE_UNKNOWN;
     }
 
@@ -398,6 +406,8 @@ utils.fn.parseRecent = function(arr, out = 'files') {
     const _is_win = /Win/.test(navigator.platform);
     const _re_name = !_is_win ? /([^/]+\.[a-zA-Z0-9]{1,})$/ : /([^\\/]+\.[a-zA-Z0-9]{1,})$/;
     for (let _f_ of arr) {
+        if (out == 'files' && !utils.isProductComponentEnabled(utils.formatToEditor(_f_.type))) continue;
+
         if ( _is_win && /^\w:[\\\/]/.test(_f_.path) && /(?:\\{2,})+/.test(_f_.path) )
             _f_.path = _f_.path.replace(/(?:\\{2,})+/g,"\\");
 
@@ -543,6 +553,44 @@ function getUrlParams() {
 }
 
 utils.inParams = getUrlParams();
+utils.productComponent = function() {
+    const value = (utils.inParams.app_component || utils.inParams.product_component || '').toLowerCase();
+    const aliases = {
+        text: 'text',
+        document: 'text',
+        documents: 'text',
+        word: 'text',
+        spreadsheet: 'spreadsheet',
+        spreadsheets: 'spreadsheet',
+        sheet: 'spreadsheet',
+        cell: 'spreadsheet',
+        presentation: 'presentation',
+        presentations: 'presentation',
+        slide: 'presentation',
+        pdf: 'pdf',
+        form: 'pdf',
+        visio: 'visio',
+        draw: 'visio',
+        drawing: 'visio',
+        drawings: 'visio'
+    };
+
+    return aliases[value] || '';
+};
+utils.isProductComponentEnabled = function(editor) {
+    const component = utils.productComponent();
+    if (!component) return true;
+
+    const editorsByComponent = {
+        text: ['word', 'Documents'],
+        spreadsheet: ['cell', 'Spreadsheets'],
+        presentation: ['slide', 'Presentations'],
+        pdf: ['form', 'pdf', 'PDFs'],
+        visio: ['draw', 'Drawings']
+    };
+
+    return (editorsByComponent[component] || []).indexOf(editor) >= 0;
+};
 utils.brandCheck = opts => false;
 utils.isWinXp = utils.inParams.osver == 'winxp' || /windows nt 5/i.test(navigator.appVersion);
 utils.isMacOS = /mac os/i.test(navigator.userAgent);

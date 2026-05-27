@@ -92,10 +92,10 @@
 "OK" = "好";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "無法開啟數位簽章的檔案，嘗試開啟另一個檔案。";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "無法開啟數位簽章的檔案，嘗試開啟另一個檔案。";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE無法開啟私密金鑰的檔案，嘗試開啟另一個檔案。";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office無法開啟私密金鑰的檔案，嘗試開啟另一個檔案。";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument 文件範本(*.ott)";

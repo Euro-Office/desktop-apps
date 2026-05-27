@@ -95,10 +95,10 @@
 "OK" = "D'ACORD";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE no pot obrir el fitxer de Signatura Digital. Prova d'obrir un altre fitxer.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office no pot obrir el fitxer de Signatura Digital. Prova d'obrir un altre fitxer.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE no pot obrir la clau privada. Prova d'obrir un altre fitxer.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office no pot obrir la clau privada. Prova d'obrir un altre fitxer.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Plantilla de document OpenDocument (*.ott)";

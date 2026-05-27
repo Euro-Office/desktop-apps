@@ -497,6 +497,11 @@
     [self.updateMenuItem setHidden:YES];
     [self.eulaMenuItem setHidden:YES];
 #endif
+    if ([item action] == @selector(checkForUpdates:)) {
+        NSString *feedURL = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SUFeedURL"];
+        [self.updateMenuItem setHidden:(feedURL.length == 0)];
+        return feedURL.length > 0;
+    }
     NSWindow *keyWindow = [NSApp keyWindow];
     ASCTabView * tab = [[ASCSharedSettings sharedInstance] settingByKey:kSettingsCurrentTab];
     BOOL hasKeyWindow = (keyWindow != nil && ([keyWindow isKindOfClass:[ASCTitleWindow class]] || [keyWindow isKindOfClass:[ASCEditorWindow class]]));
@@ -1003,6 +1008,7 @@
                         if ([param isEqualToString:@"cell"]) docType = AscEditorType::etSpreadsheet;
                         else if ([param isEqualToString:@"slide"]) docType = AscEditorType::etPresentation;
                         else if ([param isEqualToString:@"form"]) docType = AscEditorType::etDocumentMasterForm;
+                        else if ([param isEqualToString:@"draw"]) docType = AscEditorType::etDraw;
 //                        else /*if ([param isEqualToString:@"word"])*/ docType = AscEditorType::etDocument;
                     } else docType = (AscEditorType)[params[@"type"] intValue];
                     
@@ -1021,6 +1027,9 @@
                         case AscEditorType::etDocumentMasterOForm:
                         case AscEditorType::etDocumentMasterForm:
                             docName = [NSString stringWithFormat:NSLocalizedString(@"Document %ld.pdf", nil), ++self.pdfNameCounter];
+                            break;
+                        case AscEditorType::etDraw:
+                            docName = [NSString stringWithFormat:NSLocalizedString(@"Drawing %ld.vsdx", nil), ++self.drawNameCounter];
                             break;
                         default: break;
                     }

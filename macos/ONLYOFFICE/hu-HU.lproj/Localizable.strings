@@ -92,10 +92,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "Az ONLYOFFICE nem tudja megnyitni a Digitális Aláírás fájlját. Próbáljon meg megnyitni egy másik fájlt.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Az Euro-Office nem tudja megnyitni a Digitális Aláírás fájlját. Próbáljon meg megnyitni egy másik fájlt.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "Az ONLYOFFICE nem tudja megnyitni a Privát Kulcsot.. Próbáljon meg megnyitni egy másik fájlt.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Az Euro-Office nem tudja megnyitni a Privát Kulcsot.. Próbáljon meg megnyitni egy másik fájlt.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument dokumentumsablon (*.ott)";

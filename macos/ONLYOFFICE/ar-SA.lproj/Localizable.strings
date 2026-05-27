@@ -107,10 +107,10 @@
 "OK" = "حسنًا";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE غير قادر على فتح ملف التوقيع الرقمي. جرّب ملفًّا آخر.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office غير قادر على فتح ملف التوقيع الرقمي. جرّب ملفًّا آخر.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE غير قادر على فتح المفتاح الخاص، حاول فتح ملف آخر.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office غير قادر على فتح المفتاح الخاص، حاول فتح ملف آخر.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "مستند ليبري أوفس (*.ott)";

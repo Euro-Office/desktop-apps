@@ -7,7 +7,7 @@
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP"; */
 "1UK-8n-QPP.title" = "टूलबार को कस्टमाइज करें…";
 
-/* Class = "NSMenuItem"; title = "ONLYOFFICE"; ObjectID = "1Xt-HY-uBw"; */
+/* Class = "NSMenuItem"; title = "Euro-Office"; ObjectID = "1Xt-HY-uBw"; */
 "1Xt-HY-uBw.title" = "ओनलीऑफिस";
 
 /* Class = "NSMenuItem"; title = "Raise"; ObjectID = "2h7-ER-AoG"; */
@@ -31,10 +31,10 @@
 /* Class = "NSMenuItem"; title = "License Agreement"; ObjectID = "4et-TX-a4m"; */
 "4et-TX-a4m.title" = "लाइसेंस अनुबंध";
 
-/* Class = "NSMenuItem"; title = "Quit ONLYOFFICE"; ObjectID = "4sb-4s-VLi"; */
+/* Class = "NSMenuItem"; title = "Quit Euro-Office"; ObjectID = "4sb-4s-VLi"; */
 "4sb-4s-VLi.title" = "ओनलीऑफिस से बाहर आएँ";
 
-/* Class = "NSMenuItem"; title = "About ONLYOFFICE"; ObjectID = "5kV-Vb-QxS"; */
+/* Class = "NSMenuItem"; title = "About Euro-Office"; ObjectID = "5kV-Vb-QxS"; */
 "5kV-Vb-QxS.title" = "ओनलीऑफिस के बारे में";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "5QF-Oa-p0T"; */
@@ -214,7 +214,7 @@
 /* Class = "NSMenu"; title = "Baseline"; ObjectID = "ijk-EB-dga"; */
 "ijk-EB-dga.title" = "आधार रेखा";
 
-/* Class = "NSWindow"; title = "ONLYOFFICE"; ObjectID = "IQv-IB-iLA"; */
+/* Class = "NSWindow"; title = "Euro-Office"; ObjectID = "IQv-IB-iLA"; */
 "IQv-IB-iLA.title" = "ओनलीऑफिस";
 
 /* Class = "NSMenuItem"; title = "Justify"; ObjectID = "J5U-5w-g23"; */
@@ -235,7 +235,7 @@
 /* Class = "NSMenuItem"; title = "Revert to Saved"; ObjectID = "KaW-ft-85H"; */
 "KaW-ft-85H.title" = "सहेजें  पर वापस लौटाएँ";
 
-/* Class = "NSTabViewItem"; label = "ONLYOFFICE"; ObjectID = "kcg-El-49G"; */
+/* Class = "NSTabViewItem"; label = "Euro-Office"; ObjectID = "kcg-El-49G"; */
 "kcg-El-49G.label" = "ओनलीऑफिस";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
@@ -277,7 +277,7 @@
 /* Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1"; */
 "ogc-rX-tC1.title" = "ढीला करें";
 
-/* Class = "NSMenuItem"; title = "Hide ONLYOFFICE"; ObjectID = "Olw-nP-bQN"; */
+/* Class = "NSMenuItem"; title = "Hide Euro-Office"; ObjectID = "Olw-nP-bQN"; */
 "Olw-nP-bQN.title" = "ओनलीऑफिस को छिपाएँ";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
@@ -364,7 +364,7 @@
 /* Class = "NSMenuItem"; title = "Capitalize"; ObjectID = "UEZ-Bs-lqG"; */
 "UEZ-Bs-lqG.title" = "बड़े अक्षर करें";
 
-/* Class = "NSMenu"; title = "ONLYOFFICE"; ObjectID = "uQy-DD-JDr"; */
+/* Class = "NSMenu"; title = "Euro-Office"; ObjectID = "uQy-DD-JDr"; */
 "uQy-DD-JDr.title" = "ओनलीऑफिस";
 
 /* Class = "NSMenuItem"; title = "Cut"; ObjectID = "uRl-iY-unG"; */

@@ -70,6 +70,7 @@
 @property (nonatomic) NSCefView * cefStartPageView;
 @property (nonatomic) BOOL shouldLogoutPortal;
 @property (nonatomic) BOOL waitingForClose;
+@property (nonatomic) BOOL didOpenProductEditorOnLaunch;
 @property (nonatomic, assign) id <ASCExternalDelegate> externalDelegate;
 @property (nonatomic) ASCTouchBarController *touchBarController;
 @end
@@ -134,6 +135,7 @@
         [self setupTabControl];
         [self createStartPage];
         [self loadStartPage];
+        [self openProductEditorOnLaunchIfNeeded];
         [self setupTouchBar];
         
         // External handle
@@ -190,12 +192,80 @@
         if (externalDelegate && [externalDelegate respondsToSelector:@selector(onAppPreferredLanguage)]) {
             countryCode = [NSURLQueryItem queryItemWithName:@"lang" value:[externalDelegate onAppPreferredLanguage]];
         }
-        
-        loginPage.queryItems            = @[countryCode, portalAddress];
+
+        NSMutableArray *queryItems = [@[countryCode, portalAddress] mutableCopy];
+        NSString *productComponent = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"EOProductComponent"];
+        if ([productComponent isKindOfClass:[NSString class]] && [productComponent length] > 0) {
+            [queryItems addObject:[NSURLQueryItem queryItemWithName:@"app_component" value:productComponent]];
+        }
+
+        loginPage.queryItems            = queryItems;
         loginPage.scheme                = NSURLFileScheme;
         
         [self.cefStartPageView loadWithUrl:[loginPage string]];
     }
+}
+
+- (NSString *)productComponent {
+    NSString *component = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"EOProductComponent"];
+    if ([component isKindOfClass:[NSString class]] && component.length > 0) {
+        return component;
+    }
+
+    return nil;
+}
+
+- (AscEditorType)startupEditorTypeForProductComponent:(NSString *)component {
+    if ([component isEqualToString:@"text"]) {
+        return AscEditorType::etDocument;
+    } else if ([component isEqualToString:@"spreadsheet"]) {
+        return AscEditorType::etSpreadsheet;
+    } else if ([component isEqualToString:@"presentation"]) {
+        return AscEditorType::etPresentation;
+    } else if ([component isEqualToString:@"pdf"]) {
+        return AscEditorType::etDocumentMasterForm;
+    } else if ([component isEqualToString:@"visio"] || [component isEqualToString:@"draw"]) {
+        return AscEditorType::etDraw;
+    }
+
+    return AscEditorType::etUndefined;
+}
+
+- (BOOL)hasLaunchDocumentOrLink {
+    if ([[ASCSharedSettings sharedInstance] settingByKey:kSettingsOpenAppLinks]) {
+        return YES;
+    }
+
+    id appDelegate = [NSApp delegate];
+    if ([appDelegate respondsToSelector:@selector(hasFilesToOpenOnLaunch)]) {
+        return [[appDelegate valueForKey:@"hasFilesToOpenOnLaunch"] boolValue];
+    }
+
+    return NO;
+}
+
+- (void)openProductEditorOnLaunchIfNeeded {
+    if (self.didOpenProductEditorOnLaunch || [self hasLaunchDocumentOrLink]) {
+        return;
+    }
+
+    AscEditorType docType = [self startupEditorTypeForProductComponent:[self productComponent]];
+    if (docType == AscEditorType::etUndefined) {
+        return;
+    }
+
+    self.didOpenProductEditorOnLaunch = YES;
+
+    ASCTabView *tab = [[ASCTabView alloc] initWithFrame:CGRectZero];
+    tab.title       = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Opening", nil)];
+    tab.type        = ASCTabViewTypeOpening;
+    tab.params      = [@{
+        @"action" : @(ASCTabActionCreateLocalFile),
+        @"type"   : @((int)docType),
+        @"active" : @(YES)
+    } mutableCopy];
+
+    [self.tabsControl addTab:tab selected:YES];
 }
 
 - (void)openLocalPage:(NSString *)path title:(NSString *)title {
@@ -1347,6 +1417,7 @@
                     if ([param isEqualToString:@"cell"]) docType = AscEditorType::etSpreadsheet;
                     else if ([param isEqualToString:@"slide"]) docType = AscEditorType::etPresentation;
                     else if ([param isEqualToString:@"form"]) docType = AscEditorType::etDocumentMasterForm;
+                    else if ([param isEqualToString:@"draw"]) docType = AscEditorType::etDraw;
                     //                    else /*if ([param isEqualToString:@"word"])*/ docType = AscEditorType::etDocument;
                 } else docType = (AscEditorType)[tab.params[@"type"] intValue];
                 
@@ -1366,6 +1437,9 @@
                     case AscEditorType::etDocumentMasterOForm:
                     case AscEditorType::etDocumentMasterForm:
                         docName = [NSString stringWithFormat:NSLocalizedString(@"Document %ld.pdf", nil), ++app.pdfNameCounter];
+                        break;
+                    case AscEditorType::etDraw:
+                        docName = [NSString stringWithFormat:NSLocalizedString(@"Drawing %ld.vsdx", nil), ++app.drawNameCounter];
                         break;
                     default: break;
                 }

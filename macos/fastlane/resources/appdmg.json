@@ -1,12 +1,9 @@
 {
-  "title": "ONLYOFFICE",
+  "title": "Euro-Office",
   "background": "background.png",
   "icon-size": 128,
-  "code-sign": {
-    "signing-identity": "Developer ID Application: Ascensio System SIA (2WH24U26GJ)"
-  },
   "contents": [
-    { "x": 193, "y": 210, "type": "file", "path": "../../build/ONLYOFFICE.app" },
+    { "x": 193, "y": 210, "type": "file", "path": "../../build/Euro-Office.app" },
     { "x": 445, "y": 212, "type": "link", "path": "/Applications" }
   ]
 }

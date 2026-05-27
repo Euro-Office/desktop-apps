@@ -18,6 +18,7 @@
 fastlane_version "2.3.1"
 
 fastlane_require 'dotenv'
+require 'json'
 Dotenv.load '.env.secret'
 
 default_platform :mac
@@ -26,10 +27,12 @@ platform :mac do
   lane :common_release do |options|
     build = "build"
     scheme = options[:scheme]
-    app_name = "ONLYOFFICE"
+    app_name = ENV.fetch("APP_NAME", "Euro-Office")
     app = "#{build}/#{app_name}.app"
     git_suffix = options[:git_suffix]
     edition = options[:edition]
+    codesigning_identity = ENV["CODESIGNING_IDENTITY"]
+    skip_notarization = options[:skip_notarization] || ENV["SKIP_NOTARIZATION"] == "1" || codesigning_identity.to_s.empty?
 
     desc 'Cleanup'
     sh("rm -rf ../#{build} && rm -rf ../Vendor/ONLYOFFICE")
@@ -63,24 +66,33 @@ platform :mac do
       configuration: 'Release',
       clean: true,
       output_directory: build,
-      codesigning_identity: ENV["CODESIGNING_IDENTITY"],
+      codesigning_identity: codesigning_identity,
       export_method: 'developer-id',
-      xcargs: "URL_WEBAPPS_HELP=https://download.onlyoffice.com/install/desktop/editors/help/v7.2.0-1/apps",
+      xcargs: "URL_WEBAPPS_HELP=#{ENV.fetch('URL_WEBAPPS_HELP', 'https://github.com/Euro-Office')}",
       skip_package_pkg: true
     )
 
-    notarize(
-      package: app,
-      print_log: true,
-      # verbose: true
-    )
+    unless skip_notarization
+      notarize(
+        package: app,
+        print_log: true,
+        # verbose: true
+      )
+    end
 
     desc 'Prepare zip for delta update'
     sh("ditto -c -k --sequesterRsrc --keepParent #{ENV['PWD']}/#{app} #{ENV['PWD']}/#{build}/#{scheme}-#{version_number}.zip")
 
     desc 'Create DMG image'
     sh("npm install appdmg")
-    sh("npx appdmg resources/appdmg.json ../#{build}/#{package_name}.dmg")
+    dmg_config = JSON.parse(File.read("resources/appdmg.json"))
+    if codesigning_identity && !codesigning_identity.empty?
+      dmg_config["code-sign"] = { "signing-identity" => codesigning_identity }
+    else
+      dmg_config.delete("code-sign")
+    end
+    File.write("resources/appdmg.generated.json", JSON.pretty_generate(dmg_config))
+    sh("npx appdmg resources/appdmg.generated.json ../#{build}/#{package_name}.dmg")
 
     if options[:skip_git_bump]
       next

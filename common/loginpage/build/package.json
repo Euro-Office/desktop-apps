@@ -1,7 +1,7 @@
 {
   "name": "common",
   "version": "0.2.8",
-  "homepage": "http://www.onlyoffice.com",
+  "homepage": "https://github.com/Euro-Office",
   "private": true,
   "dependencies": {
     "grunt": "^1.6.1",

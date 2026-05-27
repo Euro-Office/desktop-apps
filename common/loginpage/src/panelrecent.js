@@ -50,7 +50,7 @@
 
 
 		//language=HTML
-        const helpLink = `<a l10n class="link" href="https://helpcenter.onlyoffice.com/" target="popup">${_lang.textHelpCenter}</a>`;
+        const helpLink = `<a l10n class="link" href="https://github.com/Euro-Office" target="popup">${_lang.textHelpCenter}</a>`;
 		const welcomeBannerTemplate = !localStorage.getItem('welcome') ? `
             <div id="area-welcome">
                 <h2 l10n>${_lang.welWelcome}</h2>
@@ -674,65 +674,71 @@
                 this.dndZone = new DnDFileZone();
                 this.dndZone.render(this.view.$panel.find("#area-dnd-file"));
 
-                const docGrid = new DocumentCreationGrid({
-                    documentTypes: [
-                        {
-                            id: 'word',
-                            title: utils.Lang.newDoc,
-                            langKey: 'newDoc',
-                            formatLabel: {
-                                value: 'DOCX',
-                                gradientColorStart: '#4298C5',
-                                gradientColorEnd: '#2D84B2',
-                                bgColorWinXP: '#287ca9',
-                            },
-                            icon: '#docx-big',
+                const documentTypes = [
+                    {
+                        id: 'word',
+                        title: utils.Lang.newDoc,
+                        langKey: 'newDoc',
+                        formatLabel: {
+                            value: 'DOCX',
+                            gradientColorStart: '#4298C5',
+                            gradientColorEnd: '#2D84B2',
+                            bgColorWinXP: '#287ca9',
                         },
-                        {
-                            id: 'cell',
-                            title: utils.Lang.newXlsx,
-                            langKey: 'newXlsx',
-                            formatLabel: {
-                                value: 'XLSX',
-                                gradientColorStart: '#5BB514',
-                                gradientColorEnd: '#318C2B',
-                                bgColorWinXP: '#3aa133',
-                            },
-                            icon: '#xlsx-big',
+                        icon: '#docx-big',
+                    },
+                    {
+                        id: 'cell',
+                        title: utils.Lang.newXlsx,
+                        langKey: 'newXlsx',
+                        formatLabel: {
+                            value: 'XLSX',
+                            gradientColorStart: '#5BB514',
+                            gradientColorEnd: '#318C2B',
+                            bgColorWinXP: '#3aa133',
                         },
-                        {
-                            id: 'slide',
-                            title: utils.Lang.newPptx,
-                            langKey: 'newPptx',
-                            formatLabel: {
-                                value: 'PPTX',
-                                gradientColorStart: '#F4893A',
-                                gradientColorEnd: '#DE7341',
-                                bgColorWinXP: '#f36700',
-                            },
-                            icon: '#pptx-big',
+                        icon: '#xlsx-big',
+                    },
+                    {
+                        id: 'slide',
+                        title: utils.Lang.newPptx,
+                        langKey: 'newPptx',
+                        formatLabel: {
+                            value: 'PPTX',
+                            gradientColorStart: '#F4893A',
+                            gradientColorEnd: '#DE7341',
+                            bgColorWinXP: '#f36700',
                         },
-                        {
-                            id: 'form',
-                            title: utils.Lang.newForm,
-                            langKey: 'newForm',
-                            formatLabel: {
-                                value: 'PDF',
-                                gradientColorStart: '#F36653',
-                                gradientColorEnd: '#D2402D',
-                                bgColorWinXP: '#e54d39',
-                            },
-                            icon: '#pdf-big',
-                        }
-                    ],
-                    onDocumentSelect: (docType) => {
-                        window.sdk.command("create:new", docType);
+                        icon: '#pptx-big',
+                    },
+                    {
+                        id: 'form',
+                        title: utils.Lang.newForm,
+                        langKey: 'newForm',
+                        formatLabel: {
+                            value: 'PDF',
+                            gradientColorStart: '#F36653',
+                            gradientColorEnd: '#D2402D',
+                            bgColorWinXP: '#e54d39',
+                        },
+                        icon: '#pdf-big',
                     }
-                });
+                ].filter(doc => utils.isProductComponentEnabled(doc.id));
 
                 CommonEvents.on('lang:changed', _init_ppmenu.bind(this));
 
-                docGrid.render(this.view.$panel.find("#area-document-creation-grid"));
+                if (documentTypes.length) {
+                    const docGrid = new DocumentCreationGrid({
+                        documentTypes,
+                        onDocumentSelect: (docType) => {
+                            window.sdk.command("create:new", docType);
+                        }
+                    });
+
+                    docGrid.render(this.view.$panel.find("#area-document-creation-grid"));
+                } else {
+                    this.view.$panel.find("#area-document-creation-grid").hide();
+                }
 
                 $('#idx-recent-filter', this.view.$panel).on('input', _on_filter_recents.bind(this));
 

@@ -12,11 +12,11 @@
                 <application id="hnw-xV-0zn" sceneMemberID="viewController">
                     <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
                         <items>
-                            <menuItem title="ONLYOFFICE" id="1Xt-HY-uBw">
+                            <menuItem title="Euro-Office" id="1Xt-HY-uBw">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="ONLYOFFICE" systemMenu="apple" id="uQy-DD-JDr">
+                                <menu key="submenu" title="Euro-Office" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About ONLYOFFICE" id="5kV-Vb-QxS">
+                                        <menuItem title="About Euro-Office" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="onMenuAbout:" target="Voe-Tx-rLC" id="xuH-Yz-ETx"/>
@@ -39,7 +39,7 @@
                                             <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                                        <menuItem title="Hide ONLYOFFICE" keyEquivalent="h" id="Olw-nP-bQN">
+                                        <menuItem title="Hide Euro-Office" keyEquivalent="h" id="Olw-nP-bQN">
                                             <connections>
                                                 <action selector="onMenuHide:" target="Voe-Tx-rLC" id="hC1-e4-RJq"/>
                                             </connections>
@@ -57,7 +57,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                                        <menuItem title="Quit ONLYOFFICE" keyEquivalent="q" id="4sb-4s-VLi">
+                                        <menuItem title="Quit Euro-Office" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="onMenuQuit:" target="Voe-Tx-rLC" id="YXV-9l-jlp"/>
                                             </connections>
@@ -709,7 +709,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="ASCTitleWindowControllerId" id="B8D-0N-5wS" customClass="ASCTitleWindowController" sceneMemberID="viewController">
-                    <window key="window" title="ONLYOFFICE" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="ASCTitleWindow">
+                    <window key="window" title="Euro-Office" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="ASCTitleWindow">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
                         <rect key="contentRect" x="0.0" y="0.0" width="1024" height="540"/>
@@ -1116,7 +1116,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="790"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
-                                    <tabViewItem label="ONLYOFFICE" identifier="1CEF624D-9FF3-432B-9967-61361B5BFE8B" id="kcg-El-49G">
+                                    <tabViewItem label="Euro-Office" identifier="1CEF624D-9FF3-432B-9967-61361B5BFE8B" id="kcg-El-49G">
                                         <view key="view" id="PUE-XO-znT">
                                             <rect key="frame" x="0.0" y="0.0" width="1024" height="790"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

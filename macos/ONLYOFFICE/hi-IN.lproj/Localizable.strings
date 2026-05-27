@@ -89,10 +89,10 @@
 "OK" = "ठीक है";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ओनलीऑफिस डिजिटल हस्ताक्षर की फ़ाइल को नहीं खोल सकता है। किसी अन्य फ़ाइल को खोलने का प्रयास करें।";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "ओनलीऑफिस डिजिटल हस्ताक्षर की फ़ाइल को नहीं खोल सकता है। किसी अन्य फ़ाइल को खोलने का प्रयास करें।";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ओनलीऑफिस निजी कुंजी को नहीं खोल सकता है। किसी अन्य फ़ाइल को खोलने का प्रयास करें।";
+"Euro-Office can not open the Private Key. Try opening another file." = "ओनलीऑफिस निजी कुंजी को नहीं खोल सकता है। किसी अन्य फ़ाइल को खोलने का प्रयास करें।";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "ओपनडॉक्यूमेंट दस्तावेज़ टेम्पलेट (*.ott)";

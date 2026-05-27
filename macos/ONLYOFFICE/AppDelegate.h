@@ -47,5 +47,5 @@
 @property (nonatomic) NSUInteger spreadsheetNameCounter;
 @property (nonatomic) NSUInteger presentationNameCounter;
 @property (nonatomic) NSUInteger pdfNameCounter;
+@property (nonatomic) NSUInteger drawNameCounter;
 @end
-

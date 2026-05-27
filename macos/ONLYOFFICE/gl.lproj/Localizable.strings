@@ -98,10 +98,10 @@
 "OK" = "Vale";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE non pode abrir o ficheiro de Sinaturas Dixitais. Intenta abrir outro ficheiro.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office non pode abrir o ficheiro de Sinaturas Dixitais. Intenta abrir outro ficheiro.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE non pode abrir a Clave Privada. Intenta abrir outro ficheiro.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office non pode abrir a Clave Privada. Intenta abrir outro ficheiro.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Modelo do documento de OpenDocument (*.ott)";

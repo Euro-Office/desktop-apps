@@ -92,10 +92,10 @@
 "OK" = "확인";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE에서 해당 디지털 서명 파일을 열 수 없습니다. 다른 파일을 열어보십시오.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office에서 해당 디지털 서명 파일을 열 수 없습니다. 다른 파일을 열어보십시오.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE에서 해당 개인 키를 열 수 없습니다. 다른 파일을 열어보십시오.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office에서 해당 개인 키를 열 수 없습니다. 다른 파일을 열어보십시오.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument 문서 템플릿(*.ott)";

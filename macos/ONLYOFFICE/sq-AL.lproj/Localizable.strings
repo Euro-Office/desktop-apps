@@ -107,10 +107,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE nuk mund të hapë skedarin e nënshkrimit dixhital. Provoni të hapni një skedar tjetër.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office nuk mund të hapë skedarin e nënshkrimit dixhital. Provoni të hapni një skedar tjetër.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE nuk mund të hapë çelësin privat. Provoni të hapni një skedar tjetër.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office nuk mund të hapë çelësin privat. Provoni të hapni një skedar tjetër.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Shabllon dokumenti OpenDocument";

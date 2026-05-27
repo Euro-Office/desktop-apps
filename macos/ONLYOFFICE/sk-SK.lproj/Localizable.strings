@@ -95,10 +95,10 @@
 "OK" = "Áno";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE nemôže otvoriť súbor digitálneho podpisu. Skúste otvoriť iný súbor.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office nemôže otvoriť súbor digitálneho podpisu. Skúste otvoriť iný súbor.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE nemôže otvoriť súkromný kľúč. Skúste otvoriť iný súbor.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office nemôže otvoriť súkromný kľúč. Skúste otvoriť iný súbor.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Šablóna dokumentu OpenDocument (*.ott)";

@@ -57,6 +57,16 @@
 
         const msg = 'Oops! Something went wrong :(<br>Check internet connection';
         this.emptyPanelContent = `<div id="frame"></div>`;
+        const navItems = [
+            { value: 'Documents', editor: 'word', title: _lang.tplDocument },
+            { value: 'Spreadsheets', editor: 'cell', title: _lang.tplSpreadsheet },
+            { value: 'Presentations', editor: 'slide', title: _lang.tplPresentation },
+            { value: 'PDFs', editor: 'pdf', title: _lang.tplPDF },
+            { value: 'Drawings', editor: 'draw', title: _lang.tplDrawing }
+        ].filter(item => utils.isProductComponentEnabled(item.editor));
+        const navItemsHtml = navItems.map((item, index) =>
+            `<a data-value='${item.value}' class='nav-item${index === 0 ? ' selected' : ''}' l10n>${item.title}</a>`
+        ).join('');
 
         const _html = `<div class='action-panel ${args.action}'>
                             <div class='flexbox content-box'>
@@ -73,10 +83,7 @@
                                     </div>
                                 </div>
                                 <div id='idx-nav-templates'>
-                                    <a data-value='Documents' class='nav-item selected' l10n>${_lang.tplDocument}</a>
-                                    <a data-value='Spreadsheets' class='nav-item' l10n>${_lang.tplSpreadsheet}</a>
-                                    <a data-value='Presentations' class='nav-item' l10n>${_lang.tplPresentation}</a>
-                                    <a data-value='PDFs' class='nav-item' l10n>${_lang.tplPDF}</a>
+                                    ${navItemsHtml}
                                 </div>
                                 <div id="search-result" class="search-result" style="display: none;"></div>
                                     <div id="search-no-results" class="search-no-results" style="display: none;">
@@ -155,7 +162,7 @@
 
             const panel = $item.data('value');
 
-            this.view.$panel.removeClass('Documents Spreadsheets Presentations PDFs').addClass(panel);
+            this.view.$panel.removeClass('Documents Spreadsheets Presentations PDFs Drawings').addClass(panel);
 
             applyFilter(this.view.$panel);
             $('.themed-sroll', this.view.$panel).scrollTop(0);
@@ -262,7 +269,7 @@
                 (this.tmpls || tmpls)
                     .forEach(item => {
                         const type = utils.formatToEditor(item.type);
-                        if (['word', 'cell', 'slide', 'pdf'].includes(type)) {
+                        if (['word', 'cell', 'slide', 'pdf', 'draw'].includes(type) && utils.isProductComponentEnabled(type)) {
                             // this.templates.add(new FileTemplateModel(item));
 
                             const m = this.templates.find('path', item.path);
@@ -302,6 +309,8 @@
 
                 const file_ext = info['form_exts']['data'][0]['attributes']['ext'],
                     id = i.id;
+                if (!utils.isProductComponentEnabled(utils.formatToEditor(utils.fileExtensionToFileFormat(file_ext)))) return;
+
                 if (!this.templates.items.some(t => t.uid === id)) {
 
                     const m = new FileTemplateModel({
@@ -331,7 +340,8 @@
                 'Documents': 'word',
                 'Spreadsheets': 'cell',
                 'Presentations': 'slide',
-                'PDFs': 'pdf'
+                'PDFs': 'pdf',
+                'Drawings': 'draw'
             }[$('.nav-item.selected', $panel).data('value')];
 
             const search = $('#template-search').val() || '';
@@ -350,7 +360,7 @@
             });
 
             $('#search-result', $panel).toggle(!!searchСomparison).text(`${utils.Lang.tplSearchResult} "${search}"`);
-            $('#idx-nav-templates', $panel).toggle(!searchСomparison);
+            $('#idx-nav-templates', $panel).toggle(!utils.productComponent() && !searchСomparison);
             $('#search-no-results', $panel).toggle(matchCount === 0);
         };
         
@@ -422,7 +432,7 @@
 
                 _init_collection.call(this);
 
-                if ( window.utils.isWinXp ) {
+                if ( window.utils.isWinXp || utils.productComponent() ) {
                     $('#idx-nav-templates', this.view.$panel).hide();
                 } 
 

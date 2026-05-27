@@ -98,10 +98,10 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE tidak dapat membuka file Tanda Tangan Digital. Coba buka file lain.";
+"Euro-Office can not open the Digital Signature file. Try opening another file." = "Euro-Office tidak dapat membuka file Tanda Tangan Digital. Coba buka file lain.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE tidak dapat membuka Kunci Pribadi. Coba buka file lain.";
+"Euro-Office can not open the Private Key. Try opening another file." = "Euro-Office tidak dapat membuka Kunci Pribadi. Coba buka file lain.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "Templat Dokumen OpenDocument (*.ott)";
