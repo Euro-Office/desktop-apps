@@ -437,7 +437,7 @@ void CSvcManager::onCompleteUnzip(const int error)
 {
     __UNLOCK
     if (error == UNZIP_OK) {
-        // Сreate a file about successful unpacking for use in subsequent launches
+        // Write a marker for the successful unpack so subsequent launches can continue from it.
         const tstring updPath = NS_File::parentPath(NS_File::appPath()) + UPDATE_PATH;
         list<tstring> successList{m_newVersion};
         if (!NS_File::writeToFile(updPath + SUCCES_UNPACKED, successList)) {

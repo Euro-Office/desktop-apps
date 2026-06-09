@@ -66,7 +66,7 @@ namespace QtComp
 		#endif
 			}
 
-			   // Неявные конверсии — позволяют использовать в QString::contains()
+			   // Implicit conversions let this wrapper be used with QString::contains().
 		#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 			operator QRegExp() const { return m_re; }
 		#else
