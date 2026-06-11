@@ -11,6 +11,9 @@
 
 #### DESKTOP-APPS
 FROM core-base AS desktop-builder
+    ARG NEXTCLOUD_USER
+    ARG NEXTCLOUD_PASS
+
     ARG PRODUCT_VERSION
     ARG BUILD_NUMBER
     ARG CACHE_BUST=1
@@ -72,6 +75,9 @@ FROM core-base AS desktop-builder
     COPY --from=desktop-js /app/loginpage/deploy /desktop-apps/common/loginpage/deploy
     #COPY gcc_64 /qt5
 
+    ENV NEXTCLOUD_USER=${NEXTCLOUD_USER}
+    ENV NEXTCLOUD_PASS=${NEXTCLOUD_PASS}
+
     ENV PRODUCT_VERSION=${PRODUCT_VERSION}
     ENV BUILD_NUMBER=${BUILD_NUMBER}
     
@@ -79,12 +85,13 @@ FROM core-base AS desktop-builder
 
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
+        --mount=type=bind,from=third-party,source=/third_party,target=/third_party_src \
+        cp -a /third_party_src/. /build-cache-desktop/third_party && \
         cd /build-cache-desktop && \
         cmake -GNinja -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic \
               -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
               -DVCPKG_MANIFEST_MODE=ON \
               -DVCPKG_MANIFEST_DIR="/core" \
-              -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
               -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
               /desktop-apps/win-linux/ && \
         cmake --build . && \

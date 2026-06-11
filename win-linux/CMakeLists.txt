@@ -17,20 +17,8 @@ set(CMAKE_AUTOUIC ON)
 set(CORE_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../../core")
 set(DESKTOP_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../desktop-sdk")
 
+set(BUILD_DESKTOP TRUE CACHE INTERNAL "tell common to prepare third party for desktop")
 include(${CORE_ROOT_DIR}/common.cmake)
-
-message( "Fetch and build icu (DESKTOPEDITOR VERSION 60)" )
-set(ICU_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/icu")
-set(ICU_INSTALL_DIR "${EO_CORE_3RD_PARTY_INSTALL_DIR}/icu60")
-set(ICU_MAJOR_VER "60")
-set(ICU_MINOR_VER "3")
-get_filename_component(ICU_3RDPARTY_DIR_ABS "${ICU_3RDPARTY_DIR}" ABSOLUTE)
-get_filename_component(ICU_INSTALL_DIR_ABS "${ICU_INSTALL_DIR}" ABSOLUTE)
-execute_process(
-    COMMAND_ECHO STDOUT
-    COMMAND ./nc-build.sh "${EO_CORE_3RD_PARTY_WORK_DIR}/icu60" "${ICU_INSTALL_DIR}" ${ICU_MAJOR_VER} ${ICU_MINOR_VER}
-    WORKING_DIRECTORY ${ICU_3RDPARTY_DIR_ABS}
-)
 
 
 if(NOT TARGET hunspell-wrapper)
@@ -121,32 +109,10 @@ if(NOT TARGET allthemesgen)
     add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/allthemesgen" allthemesgen )
 endif()
 
-message( "Fetch and build OpenSSL" )
-set(OPENSSL_3RDPARTY_DIR "${CORE_ROOT_DIR}/Common/3dParty/openssl")
-set(OPENSSL_INSTALL_DIR "${EO_CORE_3RD_PARTY_INSTALL_DIR}/openssl_build_linux_64")
-get_filename_component(OPENSSL_3RDPARTY_DIR_ABS "${OPENSSL_3RDPARTY_DIR}" ABSOLUTE)
-get_filename_component(OPENSSL_INSTALL_DIR_ABS "${OPENSSL_INSTALL_DIR}" ABSOLUTE)
-execute_process(
-    COMMAND_ECHO STDOUT
-    COMMAND ./nc-build.sh "${EO_CORE_3RD_PARTY_WORK_DIR}/openssl" "${OPENSSL_INSTALL_DIR}"
-    WORKING_DIRECTORY ${OPENSSL_3RDPARTY_DIR_ABS}
-)
-
-# 2. Find Qt Packages
-set(QT_ROOT "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/qt/Qt-5.9.9/gcc_64/")
-set(QT_DIR "${QT_ROOT}/lib/cmake/Qt5")
-set(Qt5_DIR "${QT_ROOT}/lib/cmake/Qt5")
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
-
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus X11Extras)
     add_definitions(-DLINUX -D_LINUX -D_X11)
 endif()
-
-set(CEF_ROOT "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/cef")
-list(APPEND CMAKE_MODULE_PATH "${CEF_ROOT}/cmake")
-find_package(CEF REQUIRED)
 
 # 3. Definitions & Global Config
 add_definitions(-D__DONT_WRITE_IN_APP_TITLE)
@@ -368,7 +334,7 @@ target_include_directories(DesktopEditors PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../core/DesktopEditor
     ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common
     ${CMAKE_CURRENT_SOURCE_DIR}/extras/update-daemon/src/classes
-    ${OPENSSL_INSTALL_DIR}/include
+    ${OPENSSL_INSTALL_DIR_ABS}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
     ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
 )
@@ -376,7 +342,7 @@ target_include_directories(DesktopEditors PRIVATE
 target_link_directories(DesktopEditors PRIVATE
     $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
     $<$<CONFIG:Release>:${CEF_ROOT}/Release>
-    ${ICU_INSTALL_DIR}/include
+    ${ICU_DESKTOP_INSTALL_DIR}/include
 )
 
 target_link_libraries(DesktopEditors PRIVATE
@@ -401,8 +367,8 @@ target_link_libraries(DesktopEditors PRIVATE
         PdfFile
         DjVuFile
         XpsFile
-        ${OPENSSL_INSTALL_DIR_ABS}/lib/libssl.a
-        ${OPENSSL_INSTALL_DIR_ABS}/lib/libcrypto.a
+        ${OPENSSL_LIBSSL}
+        ${OPENSSL_LIBCRYPTO}
     -Wl,--end-group
 
     # --- Main CEF Binary ---
@@ -426,9 +392,9 @@ if(UNIX)
     target_link_libraries(DesktopEditors PRIVATE
         Qt${QT_VERSION_MAJOR}::DBus
         Qt${QT_VERSION_MAJOR}::X11Extras
-        ${ICU_INSTALL_DIR_ABS}/lib/libicuuc.so.${ICU_MAJOR_VER}
-        ${ICU_INSTALL_DIR_ABS}/lib/libicudata.so.${ICU_MAJOR_VER}
-        ${ICU_INSTALL_DIR_ABS}/lib/libicui18n.so.${ICU_MAJOR_VER}
+        ${LIBICUUC_DESKTOP}
+        ${LIBICUDATA_DESKTOP}
+        ${LIBICUI_DESKTOP}
     )
 
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")
@@ -473,7 +439,7 @@ install(DIRECTORY "${CEF_RESOURCES_PATH}/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(DIRECTORY "${ICU_INSTALL_DIR_ABS}/lib/"
+install(DIRECTORY "${ICU_DESKTOP_INSTALL_DIR_ABS}/lib/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
     FILES_MATCHING PATTERN "lib*.so*"
 )
@@ -519,7 +485,7 @@ install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64
     FILES_MATCHING PATTERN "lib*.so*"
 )
 
-install(DIRECTORY "${EO_CORE_3RD_PARTY_INSTALL_DIR}/icu/lib/"
+install(DIRECTORY "${ICU_INSTALL_DIR_ABS}/lib/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
     FILES_MATCHING PATTERN "lib*.so*"
 )
