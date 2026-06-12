@@ -397,6 +397,8 @@ if(ABOUT_PAGE_APP_NAME)
     add_compile_definitions(ABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}")
 endif()
 
+target_compile_definitions(DesktopEditors PRIVATE COMMON_OPENSSL_BUILDING_INTERNAL)
+
 if(WIN32)
     target_compile_definitions(DesktopEditors PRIVATE UNICODE _UNICODE)
 endif()
@@ -411,6 +413,19 @@ if(UNIX)
     )
 
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")
+endif()
+
+if(WIN32)
+    foreach(_t DesktopEditors editors_helper
+            doctrenderer DocxRenderer kernel kernel_network graphics
+            UnicodeConverter PdfFile DjVuFile XpsFile ooxmlsignature
+            Fb2File EpubFile HtmlFile2 OFDFile IWorkFile HWPFile
+            StarMathConverter)
+        target_link_options(${_t} PRIVATE
+            "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='amd64'")
+    endforeach()
+    target_link_options(DesktopEditors PRIVATE
+        "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'")
 endif()
 
 # 10. Translations

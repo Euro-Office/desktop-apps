@@ -71,6 +71,10 @@ int main( int argc, char *argv[] )
     QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
 #endif
     QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
+#ifdef _WIN32
+    QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);   // avoid Qt's ANGLE colliding with CEF's libEGL/libGLESv2
+#endif
+
     QCoreApplication::setApplicationName(QString::fromUtf8(WINDOW_NAME));
     QApplication::setApplicationDisplayName(QString::fromUtf8(WINDOW_NAME));
 
