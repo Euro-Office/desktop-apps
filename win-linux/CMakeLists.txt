@@ -261,6 +261,8 @@ if(WIN32)
         list(APPEND COMMON_SOURCES src/platform_win/wintoastlib.cpp src/components/cnotification.cpp)
     endif()
 
+
+
 elseif(UNIX AND NOT APPLE)
     # Linux Resource Compiler (GResource)
 
@@ -320,8 +322,10 @@ add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 
 set_default_options(DesktopEditors) 
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(DBUS REQUIRED dbus-1)
+if(NOT WIN32)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(DBUS REQUIRED dbus-1)
+endif()
 
 # 8. Include Paths
 target_include_directories(DesktopEditors PRIVATE
@@ -338,6 +342,13 @@ target_include_directories(DesktopEditors PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
     ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
 )
+
+if(WIN32)
+    target_include_directories(DesktopEditors PRIVATE
+        ${Qt5PrintSupport_PRIVATE_INCLUDE_DIRS}
+        ${Qt5Core_PRIVATE_INCLUDE_DIRS}
+        ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+endif()
 
 target_link_directories(DesktopEditors PRIVATE
     $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
@@ -369,23 +380,25 @@ target_link_libraries(DesktopEditors PRIVATE
         XpsFile
         ${OPENSSL_LIBSSL}
         ${OPENSSL_LIBCRYPTO}
-    -Wl,--end-group
-
-    # --- Main CEF Binary ---
-    cef                                 
+    -Wl,--end-group                               
 
     # --- System Essentials ---
     hunspell_wrapper
     ooxmlsignature
-    X11
-    dl
-    pthread
-    rt
-    z
 )
+
+if(WIN32)
+    target_link_libraries(DesktopEditors PRIVATE libcef)
+else()
+    target_link_libraries(DesktopEditors PRIVATE cef X11 dl pthread rt z)
+endif()
 
 if(ABOUT_PAGE_APP_NAME)
     add_compile_definitions(ABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}")
+endif()
+
+if(WIN32)
+    target_compile_definitions(DesktopEditors PRIVATE UNICODE _UNICODE)
 endif()
 
 if(UNIX)
@@ -408,86 +421,94 @@ qt5_create_translation(DesktopEditors TS_FILES ${TS_FILES})
 set(CEF_LIB_PATH "${CEF_ROOT}/Release")
 set(CEF_RESOURCES_PATH "${CEF_ROOT}/Resources")
 
-
-
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/desktopeditors" CACHE PATH "Default install path" FORCE)
 set(CMAKE_INSTALL_BINDIR ".")
 
-# 2. Main Target Installation
-install(TARGETS 
+# 2. Main Target Installation  (RUNTIME = .exe/.dll on Windows, LIBRARY = .so on Linux)
+install(TARGETS
     editors_helper
     DesktopEditors
     ascdocumentscore
     qtascdocumentscore
-    #ooxmlsignature
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# CEF Binaries
-install(DIRECTORY "${CEF_LIB_PATH}/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-    FILES_MATCHING
-    PATTERN "*.so"
-    PATTERN "*.so.*"
-    PATTERN "*.bin"
-    PATTERN "*.json"
-)
+# CEF binaries
+if(WIN32)
+    install(DIRECTORY "${CEF_LIB_PATH}/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING
+        PATTERN "*.dll"
+        PATTERN "*.bin"
+        PATTERN "*.json"
+    )
+else()
+    install(DIRECTORY "${CEF_LIB_PATH}/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING
+        PATTERN "*.so"
+        PATTERN "*.so.*"
+        PATTERN "*.bin"
+        PATTERN "*.json"
+    )
+endif()
 
-# CEF Resources (pak files, locales, icudtl.dat)
+# CEF Resources (pak files, locales, icudtl.dat) — identical layout on both platforms
 install(DIRECTORY "${CEF_RESOURCES_PATH}/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(DIRECTORY "${ICU_DESKTOP_INSTALL_DIR_ABS}/lib/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-    FILES_MATCHING PATTERN "lib*.so*"
-)
+# ICU runtime for the main app
+if(WIN32)
+    install(DIRECTORY "${ICU_DESKTOP_INSTALL_DIR_ABS}/lib/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "icu*.dll"
+    )
+else()
+    install(DIRECTORY "${ICU_DESKTOP_INSTALL_DIR_ABS}/lib/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "lib*.so*"
+    )
+endif()
 
-install(DIRECTORY "${QT_ROOT}/lib/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-    FILES_MATCHING PATTERN "lib*.so*"
-)
+# Qt runtime
+if(WIN32)
+    install(DIRECTORY "${QT_ROOT}/bin/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "Qt5*.dll"
+    )
+    install(DIRECTORY "${QT_ROOT}/plugins/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "*.dll"
+    )
+else()
+    install(DIRECTORY "${QT_ROOT}/lib/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "lib*.so*"
+    )
+    install(DIRECTORY "${QT_ROOT}/plugins/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()
 
-install(DIRECTORY "${QT_ROOT}/plugins/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+# vcpkg runtime DLLs (hunspell, etc. — x64-windows triplet is dynamic)
+if(WIN32)
+    install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FILES_MATCHING PATTERN "*.dll"
+    )
+endif()
 
-#Install Core dependencies
-install(TARGETS 
-    UnicodeConverter
-    kernel
-    kernel_network
-    Fb2File
-    PdfFile
-    HtmlFile2
-    EpubFile
-    XpsFile
-    OFDFile
-    DjVuFile
-    DocxRenderer
-    doctrenderer
-    IWorkFile
-    HWPFile
-    graphics
-    x2tlib
-    allfontsgen
-    allthemesgen
-    StarMathConverter
-    ooxmlsignature
-    x2t
-    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
-)
-
-install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
+# Core dependencies → converter/
+install(DIRECTORY "${EO_CORE_OUTPUT_DIR}/"
     DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
-    FILES_MATCHING PATTERN "lib*.so*"
 )
 
-install(DIRECTORY "${ICU_INSTALL_DIR_ABS}/lib/"
-    DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
-    FILES_MATCHING PATTERN "lib*.so*"
-)
-
-#qt6: qt_add_translations...
+# Boost: on Windows it's static (linked into the binaries) — nothing to install
+if(NOT WIN32)
+    install(DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/boost/linux_64/lib/"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
+        FILES_MATCHING PATTERN "lib*.so*"
+    )
+endif()
