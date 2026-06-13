@@ -11,7 +11,6 @@
 ### macOS Libraries
 
 * Sparkle 2.0.0 ([MIT License](https://github.com/sparkle-project/Sparkle/blob/2.0.0/LICENSE))
-* CocoaAnalytics ([MIT License](https://github.com/stephenlind/CocoaAnalytics))
 * KSNavigationController ([MIT License](https://github.com/kstenerud/KSNavigationController))
 * PFMoveApplication / LetsMove 1.19 ([Public Domain](https://github.com/potionfactory/LetsMove/blob/v1.19/LICENSE))
 * PureLayout ([MIT License](https://github.com/PureLayout/PureLayout/blob/master/LICENSE))

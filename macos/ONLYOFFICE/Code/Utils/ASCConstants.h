@@ -69,9 +69,6 @@ static NSString * const uiThemeNight                      = @"theme-night";
 // Custom schemes
 static NSString * const kSchemeApp                          = @"oo-office";
 
-// Analitics
-static NSString * const ASCAnalyticsCategoryApplication     = @"Application";
-
 // Storyboard
 static NSString * const StoryboardNameMain                  = @"Main";
 static NSString * const StoryboardNameEditor                = @"Separate-Editor";
