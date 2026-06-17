@@ -105,16 +105,15 @@ FROM core-base AS desktop-builder
 FROM core-base AS allgen-builder
     ARG NUGET_SOURCE_PATH
     ARG TARGETARCH
-    ARG NEXTCLOUD_USER
-    ARG NEXTCLOUD_PASS
-
-    ENV NEXTCLOUD_USER=${NEXTCLOUD_USER}
-    ENV NEXTCLOUD_PASS=${NEXTCLOUD_PASS}
 
     COPY core-fonts /core-fonts
 
     RUN --mount=type=cache,target=/build-cache-allgen-1 \
         --mount=type=bind,source=${NUGET_SOURCE_PATH},target=/nuget-cache,rw \
+        --mount=type=secret,id=nextcloud_user \
+        --mount=type=secret,id=nextcloud_pass \
+        export NEXTCLOUD_USER="$(cat /run/secrets/nextcloud_user)" && \
+        export NEXTCLOUD_PASS="$(cat /run/secrets/nextcloud_pass)" && \
         mkdir -p ${BUILD_ROOT} /tmp/allgen && \
         printf '%s\n' \
                'cmake_minimum_required(VERSION 3.16)' \
