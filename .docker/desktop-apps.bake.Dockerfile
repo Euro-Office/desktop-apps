@@ -70,7 +70,8 @@ FROM core-base AS desktop-builder
     COPY ${BRANDING_DIR}/desktop-apps /desktop-apps
     ###
 
-    COPY --from=desktop-js /app/loginpage/deploy /desktop-apps/common/loginpage/deploy
+    COPY --from=desktop-common /index.html /desktop-apps/common/loginpage/deploy/index.html
+    COPY --from=desktop-common /editors/webext/noconnect.html /desktop-apps/common/loginpage/deploy/noconnect.html
     #COPY gcc_64 /qt5
 
     ENV PRODUCT_VERSION=${PRODUCT_VERSION}
@@ -87,7 +88,7 @@ FROM core-base AS desktop-builder
         export NEXTCLOUD_PASS="$(cat /run/secrets/nextcloud_pass)" && \
         cp -a /third_party_src/. /build-cache-desktop/third_party && \
         cd /build-cache-desktop && \
-        cmake -GNinja -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic \
+        cmake -GNinja \
               -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
               -DVCPKG_MANIFEST_MODE=ON \
               -DVCPKG_MANIFEST_DIR="/core" \
@@ -97,3 +98,40 @@ FROM core-base AS desktop-builder
         cmake --install . && \
         cp -a desktopeditors /desktopeditors
 
+    COPY --from=desktop-common / /desktopeditors/
+
+
+#### ALLFONTSGEN / ALLTHEMESGEN ####
+FROM core-base AS allgen-builder
+    ARG NUGET_SOURCE_PATH
+    ARG TARGETARCH
+    ARG NEXTCLOUD_USER
+    ARG NEXTCLOUD_PASS
+
+    ENV NEXTCLOUD_USER=${NEXTCLOUD_USER}
+    ENV NEXTCLOUD_PASS=${NEXTCLOUD_PASS}
+
+    COPY core-fonts /core-fonts
+
+    RUN --mount=type=cache,target=/build-cache-allgen-1 \
+        --mount=type=bind,source=${NUGET_SOURCE_PATH},target=/nuget-cache,rw \
+        mkdir -p ${BUILD_ROOT} /tmp/allgen && \
+        printf '%s\n' \
+               'cmake_minimum_required(VERSION 3.16)' \
+               'project(allgen)' \
+               'set(CORE_ROOT_DIR "/core")' \
+               'include(${CORE_ROOT_DIR}/common.cmake)' \
+               'add_subdirectory(${CORE_ROOT_DIR}/DesktopEditor/AllFontsGen AllFontsGen)' \
+               'add_subdirectory(${CORE_ROOT_DIR}/DesktopEditor/allthemesgen allthemesgen)' \
+               'add_subdirectory(${CORE_ROOT_DIR}/X2tConverter/build/cmake x2t )' \
+               > /tmp/allgen/CMakeLists.txt && \
+        cd /build-cache-allgen-1 && \
+        cmake -GNinja \
+              -DVCPKG_MANIFEST_MODE=ON \
+              -DVCPKG_MANIFEST_DIR=/core \
+              -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+              -DEO_CORE_OUTPUT_DIR=/build-cache-allgen-1/package \
+              -DEO_CORE_TOOLS_DIR=/build-cache-allgen-1/package \
+              /tmp/allgen && \
+        cmake --build . && \
+        cp -r package/* ${BUILD_ROOT}
