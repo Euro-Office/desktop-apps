@@ -10,7 +10,7 @@
 # ==============================================================================
 
 #### DESKTOP-APPS
-FROM core-base AS desktop-builder
+FROM core-base AS desktop-linux
 
     ARG PRODUCT_VERSION
     ARG BUILD_NUMBER
