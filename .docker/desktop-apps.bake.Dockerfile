@@ -81,21 +81,26 @@ FROM core-base AS desktop-linux
 
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
+        --mount=type=cache,target=/ccache,id=ccache \
         --mount=type=bind,from=third-party,source=/third_party,target=/third_party_src \
         --mount=type=secret,id=nextcloud_user \
         --mount=type=secret,id=nextcloud_pass \
         export NEXTCLOUD_USER="$(cat /run/secrets/nextcloud_user)" && \
         export NEXTCLOUD_PASS="$(cat /run/secrets/nextcloud_pass)" && \
+        export CCACHE_DIR=/ccache && \
         cp -a /third_party_src/. /build-cache-desktop/third_party && \
         cd /build-cache-desktop && \
         cmake -GNinja \
-              -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
-              -DVCPKG_MANIFEST_MODE=ON \
-              -DVCPKG_MANIFEST_DIR="/core" \
-              -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
-              /desktop-apps/win-linux/ && \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -DVCPKG_MANIFEST_MODE=ON \
+            -DVCPKG_MANIFEST_DIR="/core" \
+            -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
+            /desktop-apps/win-linux/ && \
         cmake --build . && \
         cmake --install . && \
+        ccache --show-stats && \
         cp -a desktopeditors /desktopeditors
 
     COPY --from=desktop-common / /desktopeditors/
