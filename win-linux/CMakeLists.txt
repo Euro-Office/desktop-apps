@@ -101,6 +101,14 @@ if(NOT TARGET x2t)
     add_subdirectory( "${CORE_ROOT_DIR}/X2tConverter/build/cmake" x2t )
 endif()
 
+if(NOT TARGET allfontsgen)
+    add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/AllFontsGen" allfontsgen )
+endif()
+
+if(NOT TARGET allthemesgen)
+    add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/allthemesgen" allthemesgen )
+endif()
+
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus X11Extras)
     add_definitions(-DLINUX -D_LINUX -D_X11)
