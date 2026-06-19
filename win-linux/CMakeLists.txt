@@ -400,7 +400,7 @@ endif()
 target_compile_definitions(DesktopEditors PRIVATE COMMON_OPENSSL_BUILDING_INTERNAL)
 
 if(WIN32)
-    target_compile_definitions(DesktopEditors PRIVATE UNICODE _UNICODE)
+    target_compile_definitions(DesktopEditors PRIVATE UNICODE _UNICODE WIN32 _WINDOWS)
 endif()
 
 if(UNIX)
