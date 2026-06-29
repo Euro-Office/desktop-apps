@@ -4,6 +4,7 @@
 #include "defines.h"
 #include "cefview.h"
 #include <QHBoxLayout>
+#include "cmessage.h"
 
 
 using namespace NSEditorApi;
@@ -112,6 +113,10 @@ void CTabPanel::initAsSimple()
 
 void CTabPanel::openLocalFile(const std::wstring& path, int format, const std::wstring& params)
 {
+    QString qPath = QString::fromStdWString(path);
+    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
+        CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+    }
     static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, format, params);
 }
 
@@ -120,6 +125,11 @@ bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& para
     int _format = CCefViewEditor::GetFileFormat(path);
     if ( _format == 0 )
         return false;
+
+    QString qPath = QString::fromStdWString(path);
+    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
+        CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+    }
 
     static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, _format, params);
     return true;
