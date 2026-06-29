@@ -114,7 +114,7 @@ void CTabPanel::initAsSimple()
 void CTabPanel::openLocalFile(const std::wstring& path, int format, const std::wstring& params)
 {
     QString qPath = QString::fromStdWString(path);
-    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
+    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".parquet", Qt::CaseInsensitive) || qPath.endsWith(".pq", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
         CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
     }
     static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, format, params);
@@ -127,7 +127,7 @@ bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& para
         return false;
 
     QString qPath = QString::fromStdWString(path);
-    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
+    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".parquet", Qt::CaseInsensitive) || qPath.endsWith(".pq", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
         CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
     }
 
