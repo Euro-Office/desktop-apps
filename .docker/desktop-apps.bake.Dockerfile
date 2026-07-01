@@ -61,7 +61,8 @@ FROM core-base AS desktop-linux
                     libasound2-dev \
                     libpulse-dev \
                     libnss3-dev \
-                    libnspr4-dev
+                    libnspr4-dev && \
+        pip3 install aqtinstall
 
     COPY desktop-sdk /desktop-sdk
     COPY desktop-apps /desktop-apps
