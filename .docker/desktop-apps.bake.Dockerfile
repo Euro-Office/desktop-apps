@@ -62,7 +62,10 @@ FROM core-base AS desktop-linux
                     libpulse-dev \
                     libnss3-dev \
                     libnspr4-dev && \
-        pip3 install aqtinstall
+        python3 -m venv /opt/venv && \
+        /opt/venv/bin/pip install --no-cache-dir aqtinstall
+
+    ENV PATH="/opt/venv/bin:$PATH"
 
     COPY desktop-sdk /desktop-sdk
     COPY desktop-apps /desktop-apps
