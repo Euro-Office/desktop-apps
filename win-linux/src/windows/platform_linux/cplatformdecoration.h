@@ -66,17 +66,13 @@ private:
     QWidget * m_window;
     QWidget * m_title;
     QTimer * m_motionTimer;
-    ulong m_currentCursor;
+    int m_currentCursor;
     bool m_decoration;
     int m_nBorderSize;
     bool m_bIsMaximized;
     bool need_to_check_motion = false;
     QSize m_startSize;
 
-    std::map<int, ulong> m_cursors;
-
-    void createCursors();
-    void freeCursors();
     int  hitTest(int x, int y) const;
     void checkCursor(QPoint & p);
     void switchDecoration(bool);

@@ -931,8 +931,12 @@ int CMessage::showMessage(QWidget *parent,
         return WinMsg::showMessage(parent, msg, msgType, msgBtns, opts);
 # endif
 #else
-        WindowHelper::CParentDisable oDisabler(parent);
-        return GtkMsg::showMessage(parent, msg, msgType, msgBtns, opts);
+        // On Wayland, use Qt dialogs to avoid GTK falling back to Xwayland
+        // (which causes wrong scaling and misaligned click areas).
+        if (QGuiApplication::platformName() != "wayland") {
+            WindowHelper::CParentDisable oDisabler(parent);
+            return GtkMsg::showMessage(parent, msg, msgType, msgBtns, opts);
+        }
 #endif
     }
     return QtMsg::showMessage(parent, msg, msgType, msgBtns, opts);

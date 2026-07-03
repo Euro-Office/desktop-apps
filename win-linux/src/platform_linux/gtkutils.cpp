@@ -24,45 +24,59 @@
  */
 
 #include "gtkutils.h"
-#include <gdk/gdkx.h>
 #include <string.h>
 #include "platform_linux/linux_window_utils.h"
 
+#ifdef HAVE_X11
+#include <gdk/gdkx.h>
+#endif
 
 gboolean set_focus(GtkWidget *dialog)
 {
-    GdkWindow *gdk_dialog = gtk_widget_get_window(dialog);
-    if (gdk_dialog) {
-        xcb_window_t wnd = (xcb_window_t)gdk_x11_window_get_xid(gdk_dialog);
-        LinuxWindowUtils::setNativeFocusTo(wnd);
+#ifdef HAVE_X11
+    GdkDisplay *gdk_display = gdk_display_get_default();
+    if (gdk_display && GDK_IS_X11_DISPLAY(gdk_display)) {
+        GdkWindow *gdk_dialog = gtk_widget_get_window(dialog);
+        if (gdk_dialog && GDK_IS_X11_WINDOW(gdk_dialog)) {
+            WId wnd = (WId)gdk_x11_window_get_xid(gdk_dialog);
+            LinuxWindowUtils::setNativeFocusTo(wnd);
+        }
     }
+#endif
     return FALSE;
 }
 
 gboolean focus_out(gpointer data)
 {
-    if (data) {
+#ifdef HAVE_X11
+    GdkDisplay *gdk_display = gdk_display_get_default();
+    if (data && gdk_display && GDK_IS_X11_DISPLAY(gdk_display)) {
         DialogTag *tag = (DialogTag*)data;
         GtkWidget *dialog = tag->dialog;
-        xcb_window_t parent_xid = (xcb_window_t)tag->parent_xid;
-        if (dialog && LinuxWindowUtils::isNativeFocus(parent_xid))
+        WId parent_xid = (WId)tag->parent_xid;
+        if (dialog && parent_xid != 0 && LinuxWindowUtils::isNativeFocus(parent_xid))
             set_focus(dialog);
     }
+#endif
     return FALSE;
 }
 
 void set_parent(GtkWidget *dialog, gpointer data)
 {
+#ifdef HAVE_X11
     if (dialog && data) {
         GdkDisplay *gdk_display = gdk_display_get_default();
-        Window parent_xid = *(Window*)data;
-        if (gdk_display && parent_xid != None) {
-            GdkWindow *gdk_dialog = gtk_widget_get_window(dialog);
-            GdkWindow *gdk_qtparent = gdk_x11_window_foreign_new_for_display(gdk_display, parent_xid);
-            if (gdk_dialog && gdk_qtparent )
-                gdk_window_set_transient_for(gdk_dialog, gdk_qtparent);
+        if (gdk_display && GDK_IS_X11_DISPLAY(gdk_display)) {
+            Window parent_xid = *(Window*)data;
+            if (parent_xid != None) {
+                GdkWindow *gdk_dialog = gtk_widget_get_window(dialog);
+                GdkWindow *gdk_qtparent = gdk_x11_window_foreign_new_for_display(gdk_display, parent_xid);
+                if (gdk_dialog && gdk_qtparent)
+                    gdk_window_set_transient_for(gdk_dialog, gdk_qtparent);
+            }
         }
     }
+#endif
 }
 
 void add_to_recent(const gchar *uri)
