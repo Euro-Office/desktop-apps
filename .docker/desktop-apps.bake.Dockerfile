@@ -62,7 +62,11 @@ FROM core-base AS desktop-linux
                     libasound2-dev \
                     libpulse-dev \
                     libnss3-dev \
-                    libnspr4-dev
+                    libnspr4-dev && \
+        python3 -m venv /opt/venv && \
+        /opt/venv/bin/pip install --no-cache-dir aqtinstall
+
+    ENV PATH="/opt/venv/bin:$PATH"
 
     COPY desktop-sdk /desktop-sdk
     COPY desktop-apps /desktop-apps
@@ -80,9 +84,6 @@ FROM core-base AS desktop-linux
     ENV BUILD_NUMBER=${BUILD_NUMBER}
     
     ENV ABOUT_PAGE_APP_NAME="${COMPANY_NAME} ${PRODUCT_NAME}"
-    RUN pip3 install aqtinstall && \
-        aqt install-qt linux desktop 6.11.1 linux_gcc_64 -m qtmultimedia qtwebsockets qtwebchannel qtwaylandcompositor --outputdir /qt6
-    ENV QT6_ROOT=/qt6/6.11.1/gcc_64
 
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
