@@ -33,6 +33,7 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QJsonDocument>
@@ -552,6 +553,9 @@ inline double choose_scaling(double s)
 
 double Utils::getScreenDpiRatio(int scrnum)
 {
+    if (qApp && QGuiApplication::platformName() == "wayland") {
+        return 1.0;
+    }
     unsigned int _dpi_x = 0;
     unsigned int _dpi_y = 0;
     double nScale = AscAppManager::getInstance().GetMonitorScaleByIndex(scrnum, _dpi_x, _dpi_y);
@@ -560,6 +564,9 @@ double Utils::getScreenDpiRatio(int scrnum)
 
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
+    if (qApp && QGuiApplication::platformName() == "wayland") {
+        return 1.0;
+    }
     QWidget _w;
     _w.setGeometry(QRect(pt, QSize(10,10)));
 
@@ -572,6 +579,9 @@ double Utils::getScreenDpiRatio(const QPoint& pt)
 
 double Utils::getScreenDpiRatioByHWND(int hwnd)
 {
+    if (qApp && QGuiApplication::platformName() == "wayland") {
+        return 1.0;
+    }
     unsigned int _dpi_x = 0;
     unsigned int _dpi_y = 0;
     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
@@ -580,6 +590,13 @@ double Utils::getScreenDpiRatioByHWND(int hwnd)
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
+    // On Wayland, Qt handles all widget scaling natively through
+    // devicePixelRatio(). The application's manual DPI scaling
+    // (multiplying sizes by dpiRatio) is only needed on X11.
+    // Returning 1.0 prevents double-scaling.
+    if (qApp && QGuiApplication::platformName() == "wayland") {
+        return 1.0;
+    }
     if (!wid)
         return 1;
 
@@ -980,6 +997,11 @@ namespace WindowHelper {
     }
 
     auto useGtkDialog() -> bool {
+        // On Wayland, prefer XDG Desktop Portal over GTK to avoid
+        // GTK dialogs falling back to Xwayland (wrong scale / click offset).
+        if (QGuiApplication::platformName() == "wayland")
+            return false;
+
         GET_REGISTRY_USER(reg_user)
         bool use_gtk_dialog = true;
         bool saved_flag = reg_user.value("--xdg-desktop-portal", false).toBool();

@@ -31,6 +31,7 @@ FROM core-base AS desktop-linux
                     bison \
                     libnotify-dev \
                     libcups2-dev \
+                    libwayland-dev \
                     libdbus-1-dev \
                     libxcb-util0-dev \
                     libxcb-xkb-dev \
@@ -81,6 +82,7 @@ FROM core-base AS desktop-linux
     ENV ABOUT_PAGE_APP_NAME="${COMPANY_NAME} ${PRODUCT_NAME}"
     RUN pip3 install aqtinstall && \
         aqt install-qt linux desktop 6.11.1 linux_gcc_64 -m qtmultimedia qtwebsockets qtwebchannel qtwaylandcompositor --outputdir /qt6
+    ENV QT6_ROOT=/qt6/6.11.1/gcc_64
 
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
@@ -100,7 +102,7 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
-        cmake --build . && \
+        cmake --build . -- -j4 && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors

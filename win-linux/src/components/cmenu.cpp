@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QLayout>
 #include <QAction>
+#include <QGuiApplication>
 #include <qtcomp/qnativeevent.h>
 
 #ifdef __linux__

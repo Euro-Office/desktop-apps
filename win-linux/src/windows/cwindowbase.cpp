@@ -33,6 +33,7 @@
 # include "windows/platform_win/caption.h"
 #endif
 #include <QApplication>
+#include <QDebug>
 #include <QHBoxLayout>
 #include <QScreen>
 #include <functional>
@@ -66,7 +67,15 @@ CWindowBase::CWindowBase(const QRect& rect)
     , m_windowActivated(false)
 {
     setWindowIcon(Utils::appIcon());
-    m_window_rect = startRect(rect, m_dpiRatio);
+    double tempDpi = 1.0;
+    if (QGuiApplication::platformName() == "wayland") {
+        m_dpiRatio = 1.0;
+        m_window_rect = startRect(rect, tempDpi);
+        m_dpiRatio = 1.0;
+    } else {
+        m_window_rect = startRect(rect, m_dpiRatio);
+    }
+
     setMinimumSize(WINDOW_MIN_WIDTH * m_dpiRatio, WINDOW_MIN_HEIGHT * m_dpiRatio);
 #ifdef __linux__
     setGeometry(m_window_rect); // for Windows is set in CWindowPlatform
@@ -83,7 +92,11 @@ CWindowBase::~CWindowBase()
 QRect CWindowBase::startRect(const QRect &rc, double &dpi)
 {
     QRect prim_scr_rc = qApp->primaryScreen()->availableGeometry();
-    dpi = Utils::getScreenDpiRatio(rc.isEmpty() ? prim_scr_rc.topLeft() : rc.topLeft());
+    if (QGuiApplication::platformName() == "wayland") {
+        dpi = 1.0;
+    } else {
+        dpi = Utils::getScreenDpiRatio(rc.isEmpty() ? prim_scr_rc.topLeft() : rc.topLeft());
+    }
     QSize def_size = MAIN_WINDOW_DEFAULT_SIZE * dpi;
     QRect def_rc = QRect(prim_scr_rc.center() - QPoint(def_size.width()/2, def_size.height()/2), def_size),
           out_rc = rc.isEmpty() ? def_rc : rc,
@@ -190,7 +203,13 @@ void CWindowBase::saveWindowState(const QString &baseKey)
 {
     if (!windowState().testFlag(Qt::WindowFullScreen)) {
         GET_REGISTRY_USER(reg_user)
-        reg_user.setValue(baseKey + "position", normalGeometry());
+        if (QGuiApplication::platformName() == "wayland") {
+            QRect rect = normalGeometry();
+            rect.moveTo(0, 0);
+            reg_user.setValue(baseKey + "position", rect);
+        } else {
+            reg_user.setValue(baseKey + "position", normalGeometry());
+        }
         if (windowState().testFlag(Qt::WindowMaximized)) {
             reg_user.setValue(baseKey + "maximized", true);
         } else {
@@ -234,6 +253,9 @@ bool CWindowBase::event(QEvent *event)
 
 void CWindowBase::setScreenScalingFactor(double factor, bool resize)
 {
+    if (QGuiApplication::platformName() == "wayland") {
+        factor = 1.0;
+    }
     if (resize && !isMaximized()) {
         setMinimumSize(WINDOW_MIN_WIDTH * factor, WINDOW_MIN_HEIGHT * factor);
         double change_factor = factor / m_dpiRatio;

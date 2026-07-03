@@ -100,9 +100,13 @@ void CSVGPushButton::setFillDark(bool dark)
 void CSVGPushButton::updateIcon()
 {
     if ( !m_svglayout.isEmpty() ) {
-        QImage img(iconSize(), QImage::Format_ARGB32);
+        qreal dpr = devicePixelRatioF();
+        QSize physicalSize = iconSize() * dpr;
+        QImage img(physicalSize, QImage::Format_ARGB32);
+        img.setDevicePixelRatio(dpr);
         img.fill(Qt::transparent);
         QPixmap pixmap = QPixmap::fromImage(img, Qt::NoFormatConversion);
+        pixmap.setDevicePixelRatio(dpr);
 
         QPainter painter(&pixmap);
         painter.setCompositionMode(QPainter::CompositionMode_SourceOver);

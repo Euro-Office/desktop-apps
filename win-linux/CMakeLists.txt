@@ -22,6 +22,15 @@ include(${CORE_ROOT_DIR}/common.cmake)
 
 
 # 2. Find Qt Packages
+if(NOT DEFINED ENV{QT6_ROOT})
+    message(FATAL_ERROR "QT6_ROOT environment variable must be set to the Qt installation prefix (e.g. /qt6/6.11.1/gcc_64)")
+endif()
+set(QT_ROOT "$ENV{QT6_ROOT}")
+set(QT_DIR "${QT_ROOT}/lib/cmake/Qt6")
+set(Qt6_DIR "${QT_ROOT}/lib/cmake/Qt6")
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
+
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
     add_definitions(-DLINUX -D_LINUX -D_WAYLAND)
@@ -114,6 +123,8 @@ endif()
 if(NOT TARGET allthemesgen)
     add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/allthemesgen" allthemesgen )
 endif()
+
+
 
 # 3. Definitions & Global Config
 add_definitions(-D__DONT_WRITE_IN_APP_TITLE)
@@ -279,6 +290,9 @@ elseif(UNIX AND NOT APPLE)
         src/platform_linux/gtkprintdialog.cpp
         src/platform_linux/gtkutils.cpp
         src/platform_linux/linux_window_utils.cpp
+        src/platform_linux/x11backend.cpp
+        src/platform_linux/waylandbackend.cpp
+        src/platform_linux/platformbackendfactory.cpp
         extras/update-daemon/src/classes/csocket.cpp
     )
     list(APPEND COMMON_HEADERS 
@@ -294,11 +308,20 @@ elseif(UNIX AND NOT APPLE)
         src/platform_linux/gtkprintdialog.h
         src/platform_linux/gtkutils.h
         src/platform_linux/linux_window_utils.h
+        src/platform_linux/iplatformbackend.h
+        src/platform_linux/x11backend.h
+        src/platform_linux/waylandbackend.h
         extras/update-daemon/src/classes/csocket.h
     )
 
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK3 REQUIRED glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xext libnotify)
+    pkg_check_modules(GTK3 REQUIRED glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 libnotify)
+    pkg_check_modules(XCB_LIBS xcb xext)
+    pkg_check_modules(X11_LIBS x11 x11-xcb)
+    if(XCB_LIBS_FOUND AND X11_LIBS_FOUND)
+        add_definitions(-DHAVE_X11)
+    endif()
+    add_definitions(-DHAVE_WAYLAND)
 
     # Custom command for glib-compile-resources
     set(GRESOURCE_XML ${CMAKE_CURRENT_SOURCE_DIR}/res/gresource.xml)
@@ -310,7 +333,10 @@ elseif(UNIX AND NOT APPLE)
     )
     list(APPEND COMMON_SOURCES ${GRESOURCE_C})
     
-    set(PLATFORM_LIBS ${GTK3_LIBRARIES} X11 X11-xcb cups)
+    set(PLATFORM_LIBS ${GTK3_LIBRARIES} cups)
+    if(XCB_LIBS_FOUND AND X11_LIBS_FOUND)
+        list(APPEND PLATFORM_LIBS ${X11_LIBS_LIBRARIES} ${XCB_LIBS_LIBRARIES})
+    endif()
 endif()
 
 # 7. Create Executable
@@ -386,6 +412,10 @@ target_link_libraries(DesktopEditors PRIVATE
     # --- System Essentials ---
     hunspell_wrapper
     ooxmlsignature
+    dl
+    pthread
+    rt
+    z
 )
 
 if(WIN32)
@@ -407,9 +437,9 @@ endif()
 if(UNIX)
     target_link_libraries(DesktopEditors PRIVATE
         Qt${QT_VERSION_MAJOR}::DBus
-        ${LIBICUUC}
-        ${LIBICUDATA}
-        ${LIBICUI}
+        ${LIBICUUC_DESKTOP}
+        ${LIBICUDATA_DESKTOP}
+        ${LIBICUI_DESKTOP}
     )
 
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")

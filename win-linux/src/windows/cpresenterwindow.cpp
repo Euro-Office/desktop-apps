@@ -29,6 +29,7 @@
 #include "defines.h"
 #include "utils.h"
 #include <QGridLayout>
+#include <QGuiApplication>
 #include <clangater.h>
 #include <qtcomp/qnativeevent.h>
 
@@ -166,6 +167,9 @@ QWidget * CPresenterWindow::createMainPanel(QWidget * parent, const QString& tit
 
 void CPresenterWindow::setScreenScalingFactor(double factor, bool resize)
 {
+    if (QGuiApplication::platformName() == "wayland") {
+        factor = 1.0;
+    }
     CWindowPlatform::setScreenScalingFactor(factor, resize);
     QString css(AscAppManager::getWindowStylesheets(factor));
 #ifdef __linux__
