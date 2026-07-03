@@ -23,7 +23,7 @@ include(${CORE_ROOT_DIR}/common.cmake)
 
 # 2. Find Qt Packages
 if(NOT DEFINED ENV{QT6_ROOT})
-    message(FATAL_ERROR "QT6_ROOT environment variable must be set to the Qt installation prefix (e.g. /qt6/6.11.1/gcc_64)")
+    message(WARNING "QT6_ROOT environment variable is not set. Assuming Qt is provided by aqtinstall.")
 endif()
 set(QT_ROOT "$ENV{QT6_ROOT}")
 set(QT_DIR "${QT_ROOT}/lib/cmake/Qt6")
@@ -355,7 +355,6 @@ if(WIN32)
 endif()
 
 if(NOT WIN32)
-    find_package(PkgConfig REQUIRED)
     pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
 
