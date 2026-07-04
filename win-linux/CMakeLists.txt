@@ -22,12 +22,7 @@ include(${CORE_ROOT_DIR}/common.cmake)
 
 
 # 2. Find Qt Packages
-if(NOT DEFINED ENV{QT6_ROOT})
-    message(WARNING "QT6_ROOT environment variable is not set. Assuming Qt is provided by aqtinstall.")
-endif()
-set(QT_ROOT "$ENV{QT6_ROOT}")
-set(QT_DIR "${QT_ROOT}/lib/cmake/Qt6")
-set(Qt6_DIR "${QT_ROOT}/lib/cmake/Qt6")
+
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
 
