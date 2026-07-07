@@ -24,7 +24,7 @@ include(${CORE_ROOT_DIR}/common.cmake)
 # 2. Find Qt Packages
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets OpenGLWidgets)
 
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
@@ -382,8 +382,9 @@ target_link_libraries(DesktopEditors PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Svg
     Qt${QT_VERSION_MAJOR}::PrintSupport
-    Qt${QT_VERSION_MAJOR}::Multimedia 
+    Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
     ${PLATFORM_LIBS}
     ${DBUS_LIBRARIES}
 
