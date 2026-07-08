@@ -460,12 +460,18 @@ void CFileDialogWrapper::setFormats(std::vector<int>& vf)
 {
     m_filters.clear();
 
-    if ( vf.size() ) {
-        std::vector<int>::iterator i = vf.begin();
-        m_filters = m_mapFilters.value(*(i++));
-        while (i != vf.end()) {
-            m_filters += ";;" + m_mapFilters.value(*(i++));
-        }
+    // m_mapFilters.value() returns an empty string for any format id it
+    // doesn't have an entry for (e.g. a database-origin format that isn't a
+    // valid Save As target). Skip those instead of appending an empty
+    // filter, which the XDG portal / native file dialogs reject outright.
+    for (int id : vf) {
+        const QString filter = m_mapFilters.value(id);
+        if (filter.isEmpty())
+            continue;
+        if (m_filters.isEmpty())
+            m_filters = filter;
+        else
+            m_filters += ";;" + filter;
     }
 }
 

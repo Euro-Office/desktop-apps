@@ -9,6 +9,17 @@
 
 using namespace NSEditorApi;
 
+namespace {
+bool isDatabaseFile(const QString& path)
+{
+    return path.endsWith(".sqlite", Qt::CaseInsensitive) || path.endsWith(".sqlite3", Qt::CaseInsensitive) ||
+           path.endsWith(".db", Qt::CaseInsensitive) || path.endsWith(".db3", Qt::CaseInsensitive) ||
+           path.endsWith(".duckdb", Qt::CaseInsensitive) || path.endsWith(".parquet", Qt::CaseInsensitive) ||
+           path.endsWith(".pq", Qt::CaseInsensitive) || path.endsWith(".mdb", Qt::CaseInsensitive) ||
+           path.endsWith(".accdb", Qt::CaseInsensitive);
+}
+}
+
 CTabPanel * CTabPanel::createEditorPanel(QWidget *parent, const QSize& s)
 {
     QColor c = AscAppManager::themes().current().color(CTheme::ColorRole::ecrWindowBackground);
@@ -114,10 +125,14 @@ void CTabPanel::initAsSimple()
 void CTabPanel::openLocalFile(const std::wstring& path, int format, const std::wstring& params)
 {
     QString qPath = QString::fromStdWString(path);
-    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".parquet", Qt::CaseInsensitive) || qPath.endsWith(".pq", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
+    std::wstring _params = params;
+    if (isDatabaseFile(qPath)) {
         CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+        // Database engines are read-only; open in view mode so the document
+        // can't be edited/saved in place (only exported via Save As).
+        _params.append(L"&mode=view");
     }
-    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, format, params);
+    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, format, _params);
 }
 
 bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& params)
@@ -127,11 +142,13 @@ bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& para
         return false;
 
     QString qPath = QString::fromStdWString(path);
-    if (qPath.endsWith(".sqlite", Qt::CaseInsensitive) || qPath.endsWith(".sqlite3", Qt::CaseInsensitive) || qPath.endsWith(".db", Qt::CaseInsensitive) || qPath.endsWith(".db3", Qt::CaseInsensitive) || qPath.endsWith(".duckdb", Qt::CaseInsensitive) || qPath.endsWith(".parquet", Qt::CaseInsensitive) || qPath.endsWith(".pq", Qt::CaseInsensitive) || qPath.endsWith(".mdb", Qt::CaseInsensitive) || qPath.endsWith(".accdb", Qt::CaseInsensitive)) {
+    std::wstring _params = params;
+    if (isDatabaseFile(qPath)) {
         CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+        _params.append(L"&mode=view");
     }
 
-    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, _format, params);
+    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, _format, _params);
     return true;
 }
 
