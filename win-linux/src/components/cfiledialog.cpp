@@ -146,6 +146,18 @@ bool CFileDialogWrapper::modalSaveAs(QString& fileName, int selected)
         _filters.append(";;" + _sel_filter);
     }
 
+    // The document's current extension may not match any of the offered
+    // Save As filters (e.g. a database-origin document, which is
+    // deliberately excluded as a save target). In that case _sel_filter is
+    // still empty here -- default it to the first available filter instead
+    // of leaving it blank, since native/portal file dialogs reject a
+    // filter with an empty name.
+    if ( _sel_filter.isEmpty() ) {
+        const QString _first = _filters.split(";;").value(0);
+        if ( !_first.isEmpty() )
+            _sel_filter = _first;
+    }
+
 #ifdef _WIN32
     // TODO: win 10 home doesn't crop file name by self. refactor for ver 7.5 with linux ver
 //    QString _croped_name = fileName;
