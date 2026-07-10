@@ -256,6 +256,9 @@ public:
                         }
                     }
 
+                    if ( !_from_recovery )
+                        Utils::warnIfDatabaseFile(m_appmanager.mainWindow()->handle(), opts.url);
+
                     openDocument(opts);
                 }
 

@@ -3,22 +3,12 @@
 #include "cascapplicationmanagerwrapper.h"
 #include "defines.h"
 #include "cefview.h"
+#include "utils.h"
 #include <QHBoxLayout>
 #include "cmessage.h"
 
 
 using namespace NSEditorApi;
-
-namespace {
-bool isDatabaseFile(const QString& path)
-{
-    return path.endsWith(".sqlite", Qt::CaseInsensitive) || path.endsWith(".sqlite3", Qt::CaseInsensitive) ||
-           path.endsWith(".db", Qt::CaseInsensitive) || path.endsWith(".db3", Qt::CaseInsensitive) ||
-           path.endsWith(".duckdb", Qt::CaseInsensitive) || path.endsWith(".parquet", Qt::CaseInsensitive) ||
-           path.endsWith(".pq", Qt::CaseInsensitive) || path.endsWith(".mdb", Qt::CaseInsensitive) ||
-           path.endsWith(".accdb", Qt::CaseInsensitive);
-}
-}
 
 CTabPanel * CTabPanel::createEditorPanel(QWidget *parent, const QSize& s)
 {
@@ -126,8 +116,8 @@ void CTabPanel::openLocalFile(const std::wstring& path, int format, const std::w
 {
     QString qPath = QString::fromStdWString(path);
     std::wstring _params = params;
-    if (isDatabaseFile(qPath)) {
-        CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+    if (Utils::isDatabaseFile(qPath)) {
+        Utils::warnIfDatabaseFile(this, qPath);
         // Database engines are read-only; open in view mode so the document
         // can't be edited/saved in place (only exported via Save As).
         _params.append(L"&mode=view");
@@ -143,8 +133,8 @@ bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& para
 
     QString qPath = QString::fromStdWString(path);
     std::wstring _params = params;
-    if (isDatabaseFile(qPath)) {
-        CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+    if (Utils::isDatabaseFile(qPath)) {
+        Utils::warnIfDatabaseFile(this, qPath);
         _params.append(L"&mode=view");
     }
 
