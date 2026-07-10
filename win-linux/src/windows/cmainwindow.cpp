@@ -410,7 +410,18 @@ void CMainWindow::dropEvent(QDropEvent *event)
     }
     else
     {
-        doOpenLocalFile(opts);
+        // Deferred: database files trigger a synchronous modal warning (see
+        // Utils::warnIfDatabaseFile via CTabPanel::openLocalFile) inside
+        // doOpenLocalFile(). Popping a modal surface while Wayland's DnD grab
+        // for this drop is still active corrupts the resulting tab's surface
+        // state -- it renders at a tiny size and never recovers (only a
+        // detach/reattach recreates it cleanly). Running this after the drop
+        // event returns, once the compositor has released the grab, avoids
+        // the conflict. Harmless for non-database files too since no dialog
+        // is shown for those.
+        QTimer::singleShot(0, this, [this, opts]() mutable {
+            doOpenLocalFile(opts);
+        });
     }
     event->acceptProposedAction();
 }
