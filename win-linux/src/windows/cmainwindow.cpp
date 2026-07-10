@@ -58,6 +58,20 @@
 using namespace std::placeholders;
 using namespace NSEditorApi;
 
+namespace {
+// Mirrors the check in ctabpanel.cpp -- that one only guards the
+// File > Open / file-manager-launch path (CTabPanel::openLocalFile), which
+// doesn't run for files opened via the Recent Files list.
+bool isDatabaseFile(const QString& path)
+{
+    return path.endsWith(".sqlite", Qt::CaseInsensitive) || path.endsWith(".sqlite3", Qt::CaseInsensitive) ||
+           path.endsWith(".db", Qt::CaseInsensitive) || path.endsWith(".db3", Qt::CaseInsensitive) ||
+           path.endsWith(".duckdb", Qt::CaseInsensitive) || path.endsWith(".parquet", Qt::CaseInsensitive) ||
+           path.endsWith(".pq", Qt::CaseInsensitive) || path.endsWith(".mdb", Qt::CaseInsensitive) ||
+           path.endsWith(".accdb", Qt::CaseInsensitive);
+}
+}
+
 CMainWindow::CMainWindow(const QRect &rect) :
     CWindowPlatform(rect),
     CScalingWrapper(m_dpiRatio),
@@ -375,6 +389,7 @@ void CMainWindow::dragEnterEvent(QDragEnterEvent *event)
     _exts << "xlsx" << "xls" << "ods" << "csv" << "xlst" << "xltx" << "ots";
     _exts << "pdf" << "djvu" << "xps";
     _exts << "plugin";
+    _exts << "sqlite" << "sqlite3" << "db" << "db3" << "duckdb" << "parquet" << "pq" << "mdb" << "accdb";
 
     QFileInfo oInfo(urls[0].toString());
 
@@ -985,6 +1000,10 @@ void CMainWindow::onLocalFileRecent(const COpenOptions& opts)
             return;
         }
     } else forcenew = true;
+
+    if (opts.srctype == etRecentFile && isDatabaseFile(opts.url)) {
+        CMessage::warning(this, tr("Warning: Cannot recover constraints, procedures, etc. from database files. Saving won't be possible directly, you will be prompted to Save As."));
+    }
 
 //    openLocalFile(opts);
     int result = m_pTabs->openLocalDocument(opts, true, forcenew);
