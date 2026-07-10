@@ -133,16 +133,22 @@ class CMenuWidget : public QWidget
     Q_OBJECT
 public:
     explicit CMenuWidget(QWidget * parent = nullptr) :
-        // Qt::Popup added for Wayland: a plain Qt::Tool top-level has no
-        // positioner data, so Wayland compositors default to centering it
-        // over its parent regardless of move() -- this widget was rendering
-        // dead center of the main window instead of at the click position.
-        // Qt::Popup maps to the xdg_popup protocol, which does support
-        // anchored positioning. Dismiss-on-outside-click/Escape is already
-        // handled explicitly below (WindowDeactivate/MouseButtonPress/
-        // KeyRelease), so Qt::Popup's own implicit grab/dismiss behavior is
-        // redundant with, not conflicting with, that.
-        QWidget(parent, Qt::Tool | Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+        // Qt::Popup (not Qt::Tool) for Wayland: Qt defines
+        // Tool = Popup | Dialog, so "Qt::Tool | Qt::Popup" is a no-op --
+        // Popup's bit was already set, the resolved window type is still
+        // exactly Tool. Using Qt::Popup alone changes the actual resolved
+        // type, which is what Qt's Wayland QPA plugin needs to map this to
+        // the xdg_popup protocol (positioner-based, anchored to the parent)
+        // instead of a plain xdg_toplevel with set_parent() (which has no
+        // positioner, so the compositor defaults to centering it over its
+        // parent regardless of move() -- this widget was rendering dead
+        // center of the main window instead of at the click position).
+        // Dismiss-on-outside-click/Escape is already handled explicitly
+        // below (WindowDeactivate/MouseButtonPress/KeyRelease); Qt::Popup's
+        // own implicit pointer grab changes how those events are delivered
+        // (grabbed globally rather than only within this widget), so watch
+        // for that logic if dismiss behavior regresses.
+        QWidget(parent, Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     {
         m_dpiRatio = CScalingWrapper::parentScalingFactor(topLevelWidget());
         if (isCompositingEnabled()) {
