@@ -1288,7 +1288,7 @@ bool CTabBar::eventFilter(QObject *watched, QEvent *event)
                         // rendering this menu at a bogus/centered location. The
                         // event's own global position is computed correctly by
                         // Qt's input pipeline when the event was generated.
-                        QPoint pos = cm_event->globalPosition().toPoint();
+                        QPoint pos = cm_event->globalPos();
                         SKIP_EVENTS_QUEUE([=]() {
                             emit tabMenuRequested(i, pos);
                         });
