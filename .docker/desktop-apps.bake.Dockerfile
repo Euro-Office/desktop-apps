@@ -15,6 +15,7 @@ FROM core-base AS desktop-linux
     ARG PRODUCT_VERSION
     ARG BUILD_NUMBER
     ARG CACHE_BUST=3
+    ARG CMAKE_BUILD_PARALLEL_LEVEL=2
     ARG BUILD_ROOT
     ARG COMPANY_NAME
     ARG PRODUCT_NAME
@@ -102,7 +103,7 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
-        cmake --build . && \
+        cmake --build . --parallel "${CMAKE_BUILD_PARALLEL_LEVEL}" && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors
