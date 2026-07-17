@@ -103,6 +103,16 @@ int main( int argc, char *argv[] )
 #endif
 
     if (!isWayland) {
+        // Plasma and other environments export QT_SCREEN_SCALE_FACTORS /
+        // QT_SCALE_FACTOR on X11. In Qt 6 these activate high-DPI scaling
+        // even with QT_ENABLE_HIGHDPI_SCALING=0, which breaks this app:
+        // widgets become logical-pixel sized while native CEF child windows
+        // (SetWindowSize/XConfigureWindow) and _NET_WM_MOVERESIZE coordinates
+        // remain in device pixels. The app does its own DPI scaling on X11,
+        // so neutralize Qt's completely.
+        qunsetenv("QT_SCREEN_SCALE_FACTORS");
+        qunsetenv("QT_SCALE_FACTOR");
+        qunsetenv("QT_AUTO_SCREEN_SCALE_FACTOR");
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
 #else
