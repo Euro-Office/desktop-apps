@@ -19,6 +19,8 @@ FROM core-base AS desktop-linux
     ARG COMPANY_NAME
     ARG PRODUCT_NAME
     ARG BRANDING_DIR
+    ARG ARCH_TRIPLET=x64-linux-v2
+    ARG ARCH_MARCH_FLAGS=-march=x86-64-v2
 
     RUN apt-get -y update && \
         apt-get -y upgrade && \ 
@@ -100,6 +102,10 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_MODE=ON \
             -DVCPKG_MANIFEST_DIR="/core" \
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
+            -DVCPKG_OVERLAY_TRIPLETS=/core/triplets \
+            -DVCPKG_TARGET_TRIPLET="${ARCH_TRIPLET}" \
+            -DCMAKE_CXX_FLAGS_RELEASE="${ARCH_MARCH_FLAGS}" \
+            -DCMAKE_C_FLAGS_RELEASE="${ARCH_MARCH_FLAGS}" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
         cmake --build . && \
