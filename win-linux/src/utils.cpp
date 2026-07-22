@@ -564,9 +564,6 @@ double Utils::getScreenDpiRatio(int scrnum)
 
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
-    if (qApp && QGuiApplication::platformName() == "wayland") {
-        return 1.0;
-    }
     QWidget _w;
     _w.setGeometry(QRect(pt, QSize(10,10)));
 
@@ -579,9 +576,6 @@ double Utils::getScreenDpiRatio(const QPoint& pt)
 
 double Utils::getScreenDpiRatioByHWND(int hwnd)
 {
-    if (qApp && QGuiApplication::platformName() == "wayland") {
-        return 1.0;
-    }
     unsigned int _dpi_x = 0;
     unsigned int _dpi_y = 0;
     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
@@ -590,13 +584,14 @@ double Utils::getScreenDpiRatioByHWND(int hwnd)
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
-    // On Wayland, Qt handles all widget scaling natively through
-    // devicePixelRatio(). The application's manual DPI scaling
-    // (multiplying sizes by dpiRatio) is only needed on X11.
-    // Returning 1.0 prevents double-scaling.
-    if (qApp && QGuiApplication::platformName() == "wayland") {
-        return 1.0;
-    }
+    // Manual DPI scaling here (multiplying sizes by dpiRatio) computes a
+    // logical/DIP size for widgets that don't rely purely on Qt's layout
+    // system (e.g. cplatformdecoration.cpp's CUSTOM_BORDER_WIDTH * ratio).
+    // That's independent of Qt's own automatic HiDPI backing-store
+    // scaling (which just renders whatever DIP size is chosen more
+    // crisply) -- it's needed on Wayland exactly the same way it's
+    // needed on X11, so this used to (incorrectly) skip it with a flat
+    // 1.0 return on Wayland, leaving those widgets sized as if unscaled.
     if (!wid)
         return 1;
 
