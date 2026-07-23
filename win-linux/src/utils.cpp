@@ -616,8 +616,9 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
         FILE* pLogFile = fopen("/tmp/native_dpi_debug.log", "a");
         if (pLogFile)
         {
-            fprintf(pLogFile, "[getScreenDpiRatioByWidget] widget=%p nDpiX=%u nDpiY=%u dpiApp=%f screenDPR=%f chosen=%f\n",
+            fprintf(pLogFile, "[getScreenDpiRatioByWidget] widget=%p nDpiX=%u nDpiY=%u dpiApp=%f screenDPR=%f widgetDPR=%f chosen=%f\n",
                 (void*)wid, nDpiX, nDpiY, dpiApp, wid->screen() ? wid->screen()->devicePixelRatio() : -1.0,
+                wid->devicePixelRatio(),
                 dpiApp >= 0 ? choose_scaling(dpiApp) : wid->devicePixelRatio());
             fclose(pLogFile);
         }
