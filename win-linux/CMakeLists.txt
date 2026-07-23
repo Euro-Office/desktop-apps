@@ -21,11 +21,6 @@ set(BUILD_DESKTOP TRUE CACHE INTERNAL "tell common to prepare third party for de
 include(${CORE_ROOT_DIR}/common.cmake)
 
 
-# 2. Find Qt Packages
-
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg LinguistTools Multimedia MultimediaWidgets OpenGLWidgets)
-
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
     add_definitions(-DLINUX -D_LINUX -D_WAYLAND)
@@ -345,6 +340,7 @@ add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 set_default_options(DesktopEditors) 
 
 if(NOT WIN32)
+    find_package(PkgConfig REQUIRED)
     pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
 
@@ -407,10 +403,6 @@ target_link_libraries(DesktopEditors PRIVATE
     # --- System Essentials ---
     hunspell_wrapper
     ooxmlsignature
-    dl
-    pthread
-    rt
-    z
 )
 
 if(WIN32)
@@ -432,9 +424,9 @@ endif()
 if(UNIX)
     target_link_libraries(DesktopEditors PRIVATE
         Qt${QT_VERSION_MAJOR}::DBus
-        ${LIBICUUC_DESKTOP}
-        ${LIBICUDATA_DESKTOP}
-        ${LIBICUI_DESKTOP}
+        ${LIBICUUC}
+        ${LIBICUDATA}
+        ${LIBICUI}
     )
 
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")

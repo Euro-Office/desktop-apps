@@ -41,11 +41,13 @@
 namespace {
 
 auto getXDisplay() -> Display * {
-    static Display* display = NULL;
-    if ( !display )
-        display = XOpenDisplay(NULL);
-
-    return display;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+    if (auto *x11 = qGuiApp ? qGuiApp->nativeInterface<QNativeInterface::QX11Application>() : nullptr)
+        return x11->display();
+    return nullptr;
+#else
+    return QX11Info::display();
+#endif
 }
 
 void SetSkipTaskbar(Display* disp, Window win)
@@ -135,7 +137,7 @@ X11Backend::~X11Backend()
 
 void X11Backend::moveWindow(WId window, int x, int y)
 {
-    Display *disp = XOpenDisplay(NULL);
+    Display *disp = getXDisplay();
     if (disp) {
         xcb_connection_t *conn = XGetXCBConnection(disp);
         if (conn && (xcb_window_t)window != XCB_WINDOW_NONE) {
@@ -145,14 +147,13 @@ void X11Backend::moveWindow(WId window, int x, int y)
             xcb_configure_window(conn, (xcb_window_t)window, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y, val);
             xcb_flush(conn);
         }
-        XCloseDisplay(disp);
     }
 }
 
 bool X11Backend::isNativeFocus(WId window)
 {
     xcb_window_t win = 0;
-    Display *disp = XOpenDisplay(NULL);
+    Display *disp = getXDisplay();
     if (disp) {
         xcb_connection_t *conn = XGetXCBConnection(disp);
         if (conn) {
@@ -166,14 +167,13 @@ bool X11Backend::isNativeFocus(WId window)
             }
             xcb_flush(conn);
         }
-        XCloseDisplay(disp);
     }
     return (xcb_window_t)window == win;
 }
 
 void X11Backend::setNativeFocusTo(WId window)
 {
-    Display *disp = XOpenDisplay(NULL);
+    Display *disp = getXDisplay();
     if (disp) {
         xcb_connection_t *conn = XGetXCBConnection(disp);
         if (conn && (xcb_window_t)window != XCB_WINDOW_NONE) {
@@ -182,13 +182,12 @@ void X11Backend::setNativeFocusTo(WId window)
                                          (xcb_window_t)window, XCB_CURRENT_TIME);
             xcb_flush(conn);
         }
-        XCloseDisplay(disp);
     }
 }
 
 void X11Backend::setInputEnabled(WId window, bool enabled)
 {
-    Display* disp = XOpenDisplay(NULL);
+    Display* disp = getXDisplay();
     if (disp) {
         Window wnd = (Window)window;
         if (enabled) {
@@ -198,7 +197,6 @@ void X11Backend::setInputEnabled(WId window, bool enabled)
             XShapeCombineRectangles(disp, wnd, ShapeInput, 0, 0, &rc, 1, ShapeSet, YXBanded);
         }
         XFlush(disp);
-        XCloseDisplay(disp);
     }
 }
 
@@ -326,12 +324,19 @@ void X11Backend::sendButtonRelease(QWidget *window)
 
 void X11Backend::startInteractiveMove(QWidget *window, const QPoint &globalPos)
 {
+    Q_UNUSED(globalPos);  
     const int MOVE = 8;
 
     Display * xdisplay_ = getXDisplay();
     Window x_root_window_ = DefaultRootWindow(xdisplay_);
 
     XUngrabPointer(xdisplay_, CurrentTime);
+
+    Window root_ret, child_ret;                // <-- new: query native coords
+    int rx = 0, ry = 0, wx, wy;
+    unsigned int mask;
+    XQueryPointer(xdisplay_, x_root_window_, &root_ret, &child_ret,
+                  &rx, &ry, &wx, &wy, &mask);
 
     XEvent event;
     memset(&event, 0, sizeof(event));
@@ -340,8 +345,8 @@ void X11Backend::startInteractiveMove(QWidget *window, const QPoint &globalPos)
     event.xclient.window = window->winId();
     event.xclient.message_type = XInternAtom(xdisplay_, "_NET_WM_MOVERESIZE", False);
     event.xclient.format = 32;
-    event.xclient.data.l[0] = globalPos.x();
-    event.xclient.data.l[1] = globalPos.y();
+    event.xclient.data.l[0] = rx;
+    event.xclient.data.l[1] = ry;
     event.xclient.data.l[2] = MOVE;
     event.xclient.data.l[3] = Button1;
     event.xclient.data.l[4] = 0;
@@ -352,6 +357,7 @@ void X11Backend::startInteractiveMove(QWidget *window, const QPoint &globalPos)
 
 void X11Backend::startInteractiveResize(QWidget *window, Qt::Edges edges, const QPoint &globalPos)
 {
+    Q_UNUSED(globalPos);
     int direction = edgesToMoveResizeDirection(edges);
     if (direction < 0)
         return;
@@ -361,6 +367,12 @@ void X11Backend::startInteractiveResize(QWidget *window, Qt::Edges edges, const 
 
     XUngrabPointer(xdisplay_, CurrentTime);
 
+    Window root_ret, child_ret;                // <-- new: query native coords
+    int rx = 0, ry = 0, wx, wy;
+    unsigned int mask;
+    XQueryPointer(xdisplay_, x_root_window_, &root_ret, &child_ret,
+                  &rx, &ry, &wx, &wy, &mask);
+
     XEvent event;
     memset(&event, 0, sizeof(event));
     event.xclient.type = ClientMessage;
@@ -368,8 +380,8 @@ void X11Backend::startInteractiveResize(QWidget *window, Qt::Edges edges, const 
     event.xclient.window = window->winId();
     event.xclient.message_type = XInternAtom(xdisplay_, "_NET_WM_MOVERESIZE", False);
     event.xclient.format = 32;
-    event.xclient.data.l[0] = globalPos.x();
-    event.xclient.data.l[1] = globalPos.y();
+    event.xclient.data.l[0] = rx;
+    event.xclient.data.l[1] = ry;
     event.xclient.data.l[2] = direction;
     event.xclient.data.l[3] = Button1;
     event.xclient.data.l[4] = 0;
@@ -410,8 +422,15 @@ void X11Backend::resetCursor(WId window)
 
 bool X11Backend::isCompositingAvailable()
 {
-    // Qt 6 does not provide QX11Info; assume compositing is available
-    return true;
+    static const bool active = [] {
+        Display *d = getXDisplay();
+        if (!d) return true;
+        char name[32];
+        snprintf(name, sizeof(name), "_NET_WM_CM_S%d", DefaultScreen(d));
+        Atom a = XInternAtom(d, name, False);
+        return XGetSelectionOwner(d, a) != None;
+    }();
+    return active;
 }
 
 bool X11Backend::checkButtonState(Qt::MouseButton b)
