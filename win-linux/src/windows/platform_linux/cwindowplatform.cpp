@@ -184,9 +184,6 @@ bool CWindowPlatform::nativeEvent(const QByteArray &ev_type, void *msg, long *re
 
 void CWindowPlatform::setScreenScalingFactor(double factor, bool resize)
 {
-    if (QGuiApplication::platformName() == "wayland") {
-        factor = 1.0;
-    }
     CPlatformDecoration::onDpiChanged(factor);
     CWindowBase::setScreenScalingFactor(factor, resize);
 }

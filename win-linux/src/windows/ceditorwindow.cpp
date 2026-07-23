@@ -507,9 +507,6 @@ bool CEditorWindow::event(QEvent * event)
 
 void CEditorWindow::setScreenScalingFactor(double factor, bool resize)
 {
-    if (QGuiApplication::platformName() == "wayland") {
-        factor = 1.0;
-    }
     CWindowPlatform::setScreenScalingFactor(factor, resize);
     CScalingWrapper::updateScalingFactor(factor);
     if (isCustomWindowStyle()) {

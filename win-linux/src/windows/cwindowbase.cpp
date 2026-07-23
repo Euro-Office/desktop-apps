@@ -67,14 +67,7 @@ CWindowBase::CWindowBase(const QRect& rect)
     , m_windowActivated(false)
 {
     setWindowIcon(Utils::appIcon());
-    double tempDpi = 1.0;
-    if (QGuiApplication::platformName() == "wayland") {
-        m_dpiRatio = 1.0;
-        m_window_rect = startRect(rect, tempDpi);
-        m_dpiRatio = 1.0;
-    } else {
-        m_window_rect = startRect(rect, m_dpiRatio);
-    }
+    m_window_rect = startRect(rect, m_dpiRatio);
 
     setMinimumSize(WINDOW_MIN_WIDTH * m_dpiRatio, WINDOW_MIN_HEIGHT * m_dpiRatio);
 #ifdef __linux__
@@ -92,11 +85,7 @@ CWindowBase::~CWindowBase()
 QRect CWindowBase::startRect(const QRect &rc, double &dpi)
 {
     QRect prim_scr_rc = qApp->primaryScreen()->availableGeometry();
-    if (QGuiApplication::platformName() == "wayland") {
-        dpi = 1.0;
-    } else {
-        dpi = Utils::getScreenDpiRatio(rc.isEmpty() ? prim_scr_rc.topLeft() : rc.topLeft());
-    }
+    dpi = Utils::getScreenDpiRatio(rc.isEmpty() ? prim_scr_rc.topLeft() : rc.topLeft());
     QSize def_size = MAIN_WINDOW_DEFAULT_SIZE * dpi;
     QRect def_rc = QRect(prim_scr_rc.center() - QPoint(def_size.width()/2, def_size.height()/2), def_size),
           out_rc = rc.isEmpty() ? def_rc : rc,
@@ -253,9 +242,6 @@ bool CWindowBase::event(QEvent *event)
 
 void CWindowBase::setScreenScalingFactor(double factor, bool resize)
 {
-    if (QGuiApplication::platformName() == "wayland") {
-        factor = 1.0;
-    }
     if (resize && !isMaximized()) {
         setMinimumSize(WINDOW_MIN_WIDTH * factor, WINDOW_MIN_HEIGHT * factor);
         double change_factor = factor / m_dpiRatio;
