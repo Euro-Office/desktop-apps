@@ -122,6 +122,13 @@ int main( int argc, char *argv[] )
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
+        // Without this, Qt's Wayland platform plugin disables fractional-
+        // scale support and permanently rounds devicePixelRatio() to the
+        // nearest integer for ordinary widgets (e.g. a real 1.25 scale
+        // reports as 2) -- not a startup race, the default, permanent
+        // behavior regardless of how long you wait. Must be set before
+        // QGuiApplication is constructed.
+        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     }
     // On Wayland, skip AA_Use96Dpi to let the compositor's native DPI
     // take effect — otherwise Qt overrides DPI, causing fuzzy text.
