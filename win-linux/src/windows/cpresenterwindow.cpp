@@ -167,9 +167,6 @@ QWidget * CPresenterWindow::createMainPanel(QWidget * parent, const QString& tit
 
 void CPresenterWindow::setScreenScalingFactor(double factor, bool resize)
 {
-    if (QGuiApplication::platformName() == "wayland") {
-        factor = 1.0;
-    }
     CWindowPlatform::setScreenScalingFactor(factor, resize);
     QString css(AscAppManager::getWindowStylesheets(factor));
 #ifdef __linux__
