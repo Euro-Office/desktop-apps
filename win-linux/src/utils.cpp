@@ -29,7 +29,6 @@
 #include "utils.h"
 #include "defines.h"
 #include <QSettings>
-#include <QDateTime>
 #include <QStandardPaths>
 #include <QDir>
 #include <QRegularExpression>
@@ -595,24 +594,6 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 #else
     double dpiApp = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)wid->winId(), nDpiX, nDpiY);
 #endif
-
-    // TEMPORARY: confirm whether native widgets hit the same startup
-    // devicePixelRatio() race already proven for CEF (raw reads 200 a
-    // few times before settling to 125), now that
-    // HighDpiScaleFactorRoundingPolicy::PassThrough is set -- if so,
-    // these widgets need the same kind of correction-on-change handling
-    // CEF's poll timer approximates, not just a data-source fix.
-    {
-        FILE* pLogFile = fopen("/tmp/native_dpi_debug.log", "a");
-        if (pLogFile)
-        {
-            fprintf(pLogFile, "[%lld] [getScreenDpiRatioByWidget] class=%s widget=%p dpiApp=%f widgetDPR=%f chosen=%f\n",
-                QDateTime::currentMSecsSinceEpoch(), wid->metaObject()->className(), (void*)wid, dpiApp,
-                wid->devicePixelRatio(),
-                dpiApp >= 0 ? choose_scaling(dpiApp) : wid->devicePixelRatio());
-            fclose(pLogFile);
-        }
-    }
 
     if ( dpiApp >= 0 ) {
         return choose_scaling(dpiApp);
