@@ -72,6 +72,12 @@ CWindowBase::CWindowBase(const QRect& rect)
     setMinimumSize(WINDOW_MIN_WIDTH * m_dpiRatio, WINDOW_MIN_HEIGHT * m_dpiRatio);
 #ifdef __linux__
     setGeometry(m_window_rect); // for Windows is set in CWindowPlatform
+
+    // m_dpiRatio above may have been computed from a transiently-wrong
+    // devicePixelRatio() (e.g. the startup Wayland compositor round-trip
+    // hasn't completed yet) -- re-derive and re-apply once Qt tells us
+    // this window's own ratio actually changed.
+    Utils::WatchForDpiChange(this, [this]() { updateScaling(); });
 #endif
 }
 
