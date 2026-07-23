@@ -552,17 +552,6 @@ inline double choose_scaling(double s)
            s > 1 ? 1.25 : 1;
 }
 
-double Utils::getScreenDpiRatio(int scrnum)
-{
-    if (qApp && QGuiApplication::platformName() == "wayland") {
-        return 1.0;
-    }
-    unsigned int _dpi_x = 0;
-    unsigned int _dpi_y = 0;
-    double nScale = AscAppManager::getInstance().GetMonitorScaleByIndex(scrnum, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
-}
-
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
     QWidget _w;
