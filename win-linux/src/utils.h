@@ -91,7 +91,6 @@ public:
     static void openUrl(const QString&);
     static void openFileLocation(const QString&);
     static QString getPortalName(const QString&);
-    static double getScreenDpiRatio(int);
     static double getScreenDpiRatio(const QPoint&);
     static double getScreenDpiRatioByHWND(int);
     static double getScreenDpiRatioByWidget(QWidget*);
