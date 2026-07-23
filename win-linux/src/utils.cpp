@@ -606,6 +606,23 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
     double dpiApp = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)wid->winId(), nDpiX, nDpiY);
 #endif
 
+    // TEMPORARY: investigating "gigantic" native widgets on Wayland --
+    // confirm whether choose_scaling() is snapping a transient
+    // devicePixelRatio() misread (matching the same startup-window-
+    // placement race already found and fixed for CEF's UI scale) to a
+    // too-high standard step, and whether that happens even for widgets
+    // constructed well after startup (e.g. on-demand dialogs).
+    {
+        FILE* pLogFile = fopen("/tmp/native_dpi_debug.log", "a");
+        if (pLogFile)
+        {
+            fprintf(pLogFile, "[getScreenDpiRatioByWidget] widget=%p nDpiX=%u nDpiY=%u dpiApp=%f screenDPR=%f chosen=%f\n",
+                (void*)wid, nDpiX, nDpiY, dpiApp, wid->screen() ? wid->screen()->devicePixelRatio() : -1.0,
+                dpiApp >= 0 ? choose_scaling(dpiApp) : wid->devicePixelRatio());
+            fclose(pLogFile);
+        }
+    }
+
     if ( dpiApp >= 0 ) {
         return choose_scaling(dpiApp);
     }
