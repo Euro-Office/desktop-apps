@@ -375,6 +375,7 @@ void CMainWindow::dragEnterEvent(QDragEnterEvent *event)
     _exts << "xlsx" << "xls" << "ods" << "csv" << "xlst" << "xltx" << "ots";
     _exts << "pdf" << "djvu" << "xps";
     _exts << "plugin";
+    _exts << "sqlite" << "sqlite3" << "db" << "db3" << "duckdb" << "parquet" << "pq" << "mdb" << "accdb";
 
     QFileInfo oInfo(urls[0].toString());
 

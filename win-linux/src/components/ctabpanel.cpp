@@ -3,7 +3,9 @@
 #include "cascapplicationmanagerwrapper.h"
 #include "defines.h"
 #include "cefview.h"
+#include "utils.h"
 #include <QHBoxLayout>
+#include "cmessage.h"
 
 
 using namespace NSEditorApi;
@@ -112,7 +114,19 @@ void CTabPanel::initAsSimple()
 
 void CTabPanel::openLocalFile(const std::wstring& path, int format, const std::wstring& params)
 {
-    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, format, params);
+    QString qPath = QString::fromStdWString(path);
+    std::wstring _params = params;
+    if (Utils::isDatabaseFile(qPath)) {
+        // Database engines are read-only; open in view mode so the document
+        // can't be edited/saved in place (only exported via Save As). The
+        // warning itself is shown later, once the tab finishes loading (see
+        // CAscTabWidget::applyPageLoadingStatus) -- showing it synchronously
+        // here broke drag-and-drop opens under Wayland (a modal surface
+        // popped while the compositor's DnD grab was still active corrupted
+        // the new tab's rendering).
+        _params.append(L"&mode=view");
+    }
+    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, format, _params);
 }
 
 bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& params)
@@ -121,7 +135,13 @@ bool CTabPanel::openLocalFile(const std::wstring& path, const std::wstring& para
     if ( _format == 0 )
         return false;
 
-    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, _format, params);
+    QString qPath = QString::fromStdWString(path);
+    std::wstring _params = params;
+    if (Utils::isDatabaseFile(qPath)) {
+        _params.append(L"&mode=view");
+    }
+
+    static_cast<CCefViewEditor *>(m_pViewer->GetCefView())->OpenLocalFile(path, _format, _params);
     return true;
 }
 
