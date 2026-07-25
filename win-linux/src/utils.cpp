@@ -565,12 +565,6 @@ double Utils::getScreenDpiRatio(const QPoint& pt)
 
 double Utils::getScreenDpiRatioByHWND(int hwnd)
 {
-    // See getScreenDpiRatioByWidget: on Wayland Qt's PassThrough
-    // devicePixelRatio already scales native widgets, so manual scaling
-    // must stay neutral to avoid double-scaling.
-    if (qApp && QGuiApplication::platformName() == QLatin1String("wayland"))
-        return 1.0;
-
     unsigned int _dpi_x = 0;
     unsigned int _dpi_y = 0;
     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
@@ -579,22 +573,14 @@ double Utils::getScreenDpiRatioByHWND(int hwnd)
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
-    // This returns the factor by which the app MANUALLY scales native Qt
-    // widgets (multiplying sizes/margins by it, plus the QSS "scaling"
-    // property that bakes the factor into pixel font-sizes). That manual
-    // scaling is the app's substitute for Qt's automatic HiDPI scaling,
-    // which is deliberately disabled on X11 (AA_Use96Dpi,
-    // QT_ENABLE_HIGHDPI_SCALING=0) so devicePixelRatio() stays 1 there.
-    //
-    // On Wayland, HighDpiScaleFactorRoundingPolicy::PassThrough is set, so
-    // Qt's own devicePixelRatio() reports the true fractional scale and Qt
-    // already scales every widget by it. Applying the app's manual scaling
-    // on top double-scales (a 1.25 display renders native UI at ~1.56).
-    // Let Qt's devicePixelRatio be the single source of scaling on Wayland
-    // by returning a neutral 1.0 here.
-    if (qApp && QGuiApplication::platformName() == QLatin1String("wayland"))
-        return 1.0;
-
+    // Manual DPI scaling here (multiplying sizes by dpiRatio) computes a
+    // logical/DIP size for widgets that don't rely purely on Qt's layout
+    // system (e.g. cplatformdecoration.cpp's CUSTOM_BORDER_WIDTH * ratio).
+    // That's independent of Qt's own automatic HiDPI backing-store
+    // scaling (which just renders whatever DIP size is chosen more
+    // crisply) -- it's needed on Wayland exactly the same way it's
+    // needed on X11, so this used to (incorrectly) skip it with a flat
+    // 1.0 return on Wayland, leaving those widgets sized as if unscaled.
     if (!wid)
         return 1;
 
