@@ -322,6 +322,14 @@ void QtMsg::applyScaling()
 
     QString zoom = QString::number(m_priv->dpiRatio) + "x";
     m_centralWidget->setProperty("scaling", zoom);
+
+    // layout()'s SetFixedSize constraint locks the dialog's own top-level
+    // size the first time it activates. Shrinking a child's minimum width
+    // afterwards (the WatchForDpiChange-triggered re-run, once the real
+    // ratio arrives) doesn't automatically renegotiate an already-mapped
+    // Wayland surface down to the smaller size -- force it explicitly.
+    layout()->invalidate();
+    adjustSize();
 }
 
 QtMsg::~QtMsg()
