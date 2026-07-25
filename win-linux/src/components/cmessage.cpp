@@ -150,12 +150,10 @@ private:
     void setContent(const QString&);
     void setCheckBox(const QString &chekBoxText, bool checkBoxState);
     bool getCheckStatus();
-    // Re-applies every dpiRatio-dependent size/margin/stylesheet. Called once
-    // from the constructor and again whenever this dialog's own
-    // devicePixelRatio() self-corrects after the Wayland compositor's async
-    // fractional-scale answer arrives (the initial read in
-    // QtMsgPrivateIntf's constructor can catch the same startup race already
-    // handled for CWindowBase, but this dialog never had the reactive fix).
+    // Applies every dpiRatio-dependent size/margin/stylesheet. On Wayland
+    // dpiRatio is a neutral 1.0 (Qt's PassThrough devicePixelRatio does the
+    // scaling); on X11 it carries the real factor (Qt HiDPI is disabled
+    // there). See Utils::getScreenDpiRatioByWidget.
     void applyScaling();
 
     QWidget *m_boxButtons = nullptr,
@@ -274,15 +272,6 @@ QtMsg::QtMsg(QWidget * p)
     m_centralWidget->move(0, 0);
 
     applyScaling();
-    // m_priv->dpiRatio above may have been read from this dialog's own
-    // devicePixelRatio() before Qt received the Wayland compositor's async
-    // fractional-scale answer for its surface -- re-derive and re-apply
-    // once Qt tells us it actually changed (mirrors CWindowBase's use of
-    // the same watcher).
-    Utils::WatchForDpiChange(this, [this]() {
-        m_priv->dpiRatio = Utils::getScreenDpiRatioByWidget(this);
-        applyScaling();
-    });
 
     m_priv->focusConnection = QObject::connect(qApp, &QApplication::focusChanged, this,
                                                [&] (QWidget * from, QWidget *to){
@@ -322,14 +311,6 @@ void QtMsg::applyScaling()
 
     QString zoom = QString::number(m_priv->dpiRatio) + "x";
     m_centralWidget->setProperty("scaling", zoom);
-
-    // layout()'s SetFixedSize constraint locks the dialog's own top-level
-    // size the first time it activates. Shrinking a child's minimum width
-    // afterwards (the WatchForDpiChange-triggered re-run, once the real
-    // ratio arrives) doesn't automatically renegotiate an already-mapped
-    // Wayland surface down to the smaller size -- force it explicitly.
-    layout()->invalidate();
-    adjustSize();
 }
 
 QtMsg::~QtMsg()
