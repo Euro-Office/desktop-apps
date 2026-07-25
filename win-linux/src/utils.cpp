@@ -29,6 +29,7 @@
 #include "utils.h"
 #include "defines.h"
 #include <QSettings>
+#include <QDateTime>
 #include <QStandardPaths>
 #include <QDir>
 #include <QRegularExpression>
@@ -594,6 +595,28 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 #else
     double dpiApp = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)wid->winId(), nDpiX, nDpiY);
 #endif
+
+    // TEMPORARY diagnostic: capture, per native widget (main window, tab
+    // widget, dialogs), the factor this computes vs the widget's own and
+    // the screen's devicePixelRatio -- to see how the oversized dialog's
+    // numbers differ from the correctly-sized main window on Wayland.
+    {
+        FILE* pLogFile = fopen("/tmp/native_dpi_debug.log", "a");
+        if (pLogFile)
+        {
+            double screenDpr = (qApp && QGuiApplication::primaryScreen())
+                ? QGuiApplication::primaryScreen()->devicePixelRatio() : -1.0;
+            fprintf(pLogFile,
+                "[%lld] platform=%s class=%s widget=%p size=%dx%d widgetDPR=%f screenDPR=%f dpiApp=%f chosen=%f\n",
+                QDateTime::currentMSecsSinceEpoch(),
+                qApp ? QGuiApplication::platformName().toUtf8().constData() : "?",
+                wid->metaObject()->className(), (void*)wid,
+                wid->width(), wid->height(),
+                wid->devicePixelRatio(), screenDpr, dpiApp,
+                dpiApp >= 0 ? choose_scaling(dpiApp) : wid->devicePixelRatio());
+            fclose(pLogFile);
+        }
+    }
 
     if ( dpiApp >= 0 ) {
         return choose_scaling(dpiApp);
