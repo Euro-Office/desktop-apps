@@ -150,6 +150,13 @@ private:
     void setContent(const QString&);
     void setCheckBox(const QString &chekBoxText, bool checkBoxState);
     bool getCheckStatus();
+    // Re-applies every dpiRatio-dependent size/margin/stylesheet. Called once
+    // from the constructor and again whenever this dialog's own
+    // devicePixelRatio() self-corrects after the Wayland compositor's async
+    // fractional-scale answer arrives (the initial read in
+    // QtMsgPrivateIntf's constructor can catch the same startup race already
+    // handled for CWindowBase, but this dialog never had the reactive fix).
+    void applyScaling();
 
     QWidget *m_boxButtons = nullptr,
             *m_centralWidget = nullptr;
@@ -197,6 +204,10 @@ public:
     double dpiRatio = 1;
     QMetaObject::Connection focusConnection;
     bool isWindowActive = false;
+    // Kept around so applyScaling() can re-set their margins later; every
+    // other dpiRatio-dependent widget it touches is already a QtMsg member.
+    QVBoxLayout * cLayout = nullptr;
+    QFormLayout * fLayout = nullptr;
 };
 
 int QtMsg::m_modalresult(MODAL_RESULT_CANCEL);
@@ -220,44 +231,34 @@ QtMsg::QtMsg(QWidget * p)
     m_centralWidget->setObjectName("messageBody");
     m_centralWidget->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().originalId()));
 
-    QVBoxLayout * _c_layout  = new QVBoxLayout;
+    m_priv->cLayout  = new QVBoxLayout;
     QHBoxLayout * _h_layout2 = new QHBoxLayout;
     QHBoxLayout * _h_layout1 = new QHBoxLayout;
-    _c_layout->addLayout(_h_layout2, 1);
-    _c_layout->addLayout(_h_layout1, 0);
-
-    const int _body_margin = int(12 * m_priv->dpiRatio);
-    _c_layout->setContentsMargins(_body_margin,_body_margin,_body_margin,_body_margin);
+    m_priv->cLayout->addLayout(_h_layout2, 1);
+    m_priv->cLayout->addLayout(_h_layout1, 0);
 
     m_typeIcon->setProperty("class", "msg-icon");
-    m_typeIcon->setFixedSize(int(round(MSG_ICON_WIDTH*m_priv->dpiRatio - 0.25)),
-                             int(round(MSG_ICON_HEIGHT*m_priv->dpiRatio - 0.25)));
     _h_layout2->addWidget(m_typeIcon, 0, Qt::AlignTop);
 
 //    m_message->setWordWrap(true);
     m_message->setProperty("class", "msg-report");
-    m_message->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
     m_message->setTextFormat(Qt::PlainText);
 
     m_content->setProperty("class", "msg-report");
-    m_content->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
     m_content->setTextFormat(Qt::RichText);
     m_content->setOpenExternalLinks(true);
 
-    QFormLayout * _f_layout = new QFormLayout;
-    _f_layout->addWidget(m_message);
-    _f_layout->addWidget(m_content);
-    _f_layout->setSpacing(0);
-    _f_layout->setContentsMargins(int(10*m_priv->dpiRatio),0,int(5*m_priv->dpiRatio),0);
-    _h_layout2->addLayout(_f_layout, 1);
+    m_priv->fLayout = new QFormLayout;
+    m_priv->fLayout->addWidget(m_message);
+    m_priv->fLayout->addWidget(m_content);
+    m_priv->fLayout->setSpacing(0);
+    _h_layout2->addLayout(m_priv->fLayout, 1);
     _h_layout2->setContentsMargins(0,0,0,0);
 
     QPushButton * btn_ok = new QPushButton("&" + QObject::tr("OK"));
     btn_ok->setAutoDefault(true);
     m_boxButtons->setLayout(new QHBoxLayout);
     m_boxButtons->layout()->addWidget(btn_ok);
-    m_boxButtons->layout()->setContentsMargins(0,int(10*m_priv->dpiRatio),0,0);
-    m_boxButtons->layout()->setSpacing(int(8*m_priv->dpiRatio));
     _h_layout1->addWidget(m_boxButtons, 0, Qt::AlignCenter);
 
     m_priv->addButton(btn_ok);
@@ -269,16 +270,19 @@ QtMsg::QtMsg(QWidget * p)
         }
     );
 
-    m_centralWidget->setLayout(_c_layout);
-    m_centralWidget->setMinimumWidth(int(350*m_priv->dpiRatio));
+    m_centralWidget->setLayout(m_priv->cLayout);
     m_centralWidget->move(0, 0);
 
-    QString _styles(Utils::readStylesheets(":/styles/message.qss"));
-    _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
-    m_centralWidget->setStyleSheet( _styles );
-
-    QString zoom = QString::number(m_priv->dpiRatio) + "x";
-    m_centralWidget->setProperty("scaling", zoom);
+    applyScaling();
+    // m_priv->dpiRatio above may have been read from this dialog's own
+    // devicePixelRatio() before Qt received the Wayland compositor's async
+    // fractional-scale answer for its surface -- re-derive and re-apply
+    // once Qt tells us it actually changed (mirrors CWindowBase's use of
+    // the same watcher).
+    Utils::WatchForDpiChange(this, [this]() {
+        m_priv->dpiRatio = Utils::getScreenDpiRatioByWidget(this);
+        applyScaling();
+    });
 
     m_priv->focusConnection = QObject::connect(qApp, &QApplication::focusChanged, this,
                                                [&] (QWidget * from, QWidget *to){
@@ -292,6 +296,32 @@ QtMsg::QtMsg(QWidget * p)
         } else {
         }
     });
+}
+
+void QtMsg::applyScaling()
+{
+    const int _body_margin = int(12 * m_priv->dpiRatio);
+    m_priv->cLayout->setContentsMargins(_body_margin,_body_margin,_body_margin,_body_margin);
+
+    m_typeIcon->setFixedSize(int(round(MSG_ICON_WIDTH*m_priv->dpiRatio - 0.25)),
+                             int(round(MSG_ICON_HEIGHT*m_priv->dpiRatio - 0.25)));
+
+    m_message->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
+    m_content->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
+
+    m_priv->fLayout->setContentsMargins(int(10*m_priv->dpiRatio),0,int(5*m_priv->dpiRatio),0);
+
+    m_boxButtons->layout()->setContentsMargins(0,int(10*m_priv->dpiRatio),0,0);
+    m_boxButtons->layout()->setSpacing(int(8*m_priv->dpiRatio));
+
+    m_centralWidget->setMinimumWidth(int((m_priv->buttons.size() > 2 ? 400 : 350)*m_priv->dpiRatio));
+
+    QString _styles(Utils::readStylesheets(":/styles/message.qss"));
+    _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
+    m_centralWidget->setStyleSheet( _styles );
+
+    QString zoom = QString::number(m_priv->dpiRatio) + "x";
+    m_centralWidget->setProperty("scaling", zoom);
 }
 
 QtMsg::~QtMsg()
