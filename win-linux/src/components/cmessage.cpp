@@ -167,11 +167,37 @@ private:
     std::unique_ptr<QtMsgPrivateIntf> m_priv;
 };
 
+namespace {
+// Returns a DPI ratio taken from a window whose devicePixelRatio has already
+// settled. A freshly-created top-level dialog must NOT use its own ratio: on
+// Wayland a brand-new surface reports the rounded default (e.g. 2.0) until the
+// compositor answers with the real fractional scale, so reading it here would
+// size the whole dialog for the wrong factor (and, with no later correction,
+// leave it that way). The parent window has been mapped long enough to carry
+// the correct value.
+double stableDpiRatioForDialog(QWidget * parent)
+{
+    QWidget * ref = parent ? parent->window() : nullptr;
+    if (!ref)
+        ref = QApplication::activeWindow();
+    if (!ref) {
+        const QWidgetList tops = QApplication::topLevelWidgets();
+        for (QWidget * w : tops) {
+            if (w->isWindow() && w->isVisible() && !w->windowFlags().testFlag(Qt::ToolTip)) {
+                ref = w;
+                break;
+            }
+        }
+    }
+    return ref ? Utils::getScreenDpiRatioByWidget(ref) : 1.0;
+}
+}
+
 class QtMsg::QtMsgPrivateIntf {
 public:
-    explicit QtMsgPrivateIntf(QtMsg * parent)
-        : m_mess(parent)
-        , dpiRatio(Utils::getScreenDpiRatioByWidget(parent))
+    QtMsgPrivateIntf(QtMsg * dlg, QWidget * parentWindow)
+        : m_mess(dlg)
+        , dpiRatio(stableDpiRatioForDialog(parentWindow))
     {}
 
     auto addButton(QPushButton * b) -> void {
@@ -215,7 +241,7 @@ QtMsg::QtMsg(QWidget * p)
     , m_message(new QLabel)
     , m_content(new QLabel)
     , m_typeIcon(new QLabel)
-    , m_priv(new QtMsgPrivateIntf(this))
+    , m_priv(new QtMsgPrivateIntf(this, p))
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     //setWindowTitle(APP_TITLE);
@@ -239,10 +265,12 @@ QtMsg::QtMsg(QWidget * p)
 
 //    m_message->setWordWrap(true);
     m_message->setProperty("class", "msg-report");
-    m_message->setTextFormat(Qt::PlainText);
+    m_message->setTextFormat(Qt::RichText);         // setText() bolds the primary line
+    m_message->setAlignment(Qt::AlignHCenter);      // match the GTK message dialog
 
     m_content->setProperty("class", "msg-report");
     m_content->setTextFormat(Qt::RichText);
+    m_content->setAlignment(Qt::AlignHCenter);
     m_content->setOpenExternalLinks(true);
 
     m_priv->fLayout = new QFormLayout;
@@ -270,12 +298,9 @@ QtMsg::QtMsg(QWidget * p)
     m_centralWidget->setLayout(m_priv->cLayout);
     m_centralWidget->move(0, 0);
 
-    // Scale once, from the (stable) parent's ratio computed in
-    // QtMsgPrivateIntf. Deliberately NOT re-derived from this dialog's own
-    // devicePixelRatio: on Wayland that value races 2.0 -> 1.25 as the
-    // compositor answers, and re-running applyScaling() through the transient
-    // 2.0 corrupts the dialog's styling and leaves it oversized. X11 never
-    // sees that race and styles once correctly; do the same everywhere.
+    // Scale once, from the stable parent-window ratio (see
+    // stableDpiRatioForDialog). No watcher/re-derivation is needed because
+    // that ratio doesn't change under this dialog.
     applyScaling();
 
     m_priv->focusConnection = QObject::connect(qApp, &QApplication::focusChanged, this,
@@ -472,7 +497,19 @@ void QtMsg::setIcon(MsgType msgType)
 
 void QtMsg::setText( const QString& t)
 {
-    m_message->setText(t);
+    // Mirror the GTK message dialog: the first line is the bold "primary"
+    // text; any following lines stay regular "secondary" text.
+    const QString esc = t.toHtmlEscaped();
+    const int nl = esc.indexOf('\n');
+    QString html;
+    if (nl != -1) {
+        QString secondary = esc.mid(nl + 1);
+        secondary.replace("\n", "<br>");
+        html = "<b>" + esc.left(nl) + "</b><br>" + secondary;
+    } else {
+        html = "<b>" + esc + "</b>";
+    }
+    m_message->setText(html);
 }
 
 void QtMsg::setContent( const QString& t)
