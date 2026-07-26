@@ -265,12 +265,12 @@ QtMsg::QtMsg(QWidget * p)
 
 //    m_message->setWordWrap(true);
     m_message->setProperty("class", "msg-report");
-    m_message->setTextFormat(Qt::RichText);         // setText() bolds the primary line
-    m_message->setAlignment(Qt::AlignHCenter);      // match the GTK message dialog
+    m_message->setTextFormat(Qt::RichText);
+    m_message->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     m_content->setProperty("class", "msg-report");
     m_content->setTextFormat(Qt::RichText);
-    m_content->setAlignment(Qt::AlignHCenter);
+    m_content->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_content->setOpenExternalLinks(true);
 
     m_priv->fLayout = new QFormLayout;
@@ -335,7 +335,7 @@ void QtMsg::applyScaling()
     m_boxButtons->layout()->setContentsMargins(0,int(10*m_priv->dpiRatio),0,0);
     m_boxButtons->layout()->setSpacing(int(8*m_priv->dpiRatio));
 
-    m_centralWidget->setMinimumWidth(int((m_priv->buttons.size() > 2 ? 400 : 350)*m_priv->dpiRatio));
+    m_centralWidget->setMinimumWidth(m_priv->buttons.size() > 2 ? 400 : 350);
 
     QString _styles(Utils::readStylesheets(":/styles/message.qss"));
     _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
@@ -407,7 +407,7 @@ void QtMsg::setButtons(std::initializer_list<QString> btns)
     }
 
     if (_btn_num > 2)
-        m_centralWidget->setMinimumWidth(int(400*m_priv->dpiRatio));
+        m_centralWidget->setMinimumWidth(400);
 }
 
 void QtMsg::setButtons(MsgBtns btns)
