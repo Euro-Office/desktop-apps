@@ -231,6 +231,7 @@ public:
     // other dpiRatio-dependent widget it touches is already a QtMsg member.
     QVBoxLayout * cLayout = nullptr;
     QFormLayout * fLayout = nullptr;
+    QWidget * bodyWidget = nullptr;
 };
 
 int QtMsg::m_modalresult(MODAL_RESULT_CANCEL);
@@ -255,13 +256,20 @@ QtMsg::QtMsg(QWidget * p)
     m_centralWidget->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().originalId()));
 
     m_priv->cLayout  = new QVBoxLayout;
-    QHBoxLayout * _h_layout2 = new QHBoxLayout;
-    QHBoxLayout * _h_layout1 = new QHBoxLayout;
-    m_priv->cLayout->addLayout(_h_layout2, 1);
-    m_priv->cLayout->addLayout(_h_layout1, 0);
 
+    // bodyWidget groups the content row (icon + text) and the buttons row so
+    // they share the same left/right extents. The whole block is then centered
+    // within cLayout, giving symmetric margins and aligning the icon's left
+    // edge with the first button's left edge.
+    m_priv->bodyWidget = new QWidget;
+    QVBoxLayout * bodyLayout = new QVBoxLayout(m_priv->bodyWidget);
+    bodyLayout->setContentsMargins(0, 0, 0, 0);
+    bodyLayout->setSpacing(0);
+
+    QHBoxLayout * contentRow = new QHBoxLayout;
+    contentRow->setContentsMargins(0, 0, 0, 0);
     m_typeIcon->setProperty("class", "msg-icon");
-    _h_layout2->addWidget(m_typeIcon, 0, Qt::AlignTop);
+    contentRow->addWidget(m_typeIcon, 0, Qt::AlignTop);
 
 //    m_message->setWordWrap(true);
     m_message->setProperty("class", "msg-report");
@@ -277,14 +285,20 @@ QtMsg::QtMsg(QWidget * p)
     m_priv->fLayout->addWidget(m_message);
     m_priv->fLayout->addWidget(m_content);
     m_priv->fLayout->setSpacing(0);
-    _h_layout2->addLayout(m_priv->fLayout, 1);
-    _h_layout2->setContentsMargins(0,0,0,0);
+    contentRow->addLayout(m_priv->fLayout, 1);
+    bodyLayout->addLayout(contentRow, 1);
 
     QPushButton * btn_ok = new QPushButton("&" + QObject::tr("OK"));
     btn_ok->setAutoDefault(true);
     m_boxButtons->setLayout(new QHBoxLayout);
     m_boxButtons->layout()->addWidget(btn_ok);
-    _h_layout1->addWidget(m_boxButtons, 0, Qt::AlignCenter);
+
+    QHBoxLayout * buttonsRow = new QHBoxLayout;
+    buttonsRow->setContentsMargins(0, 0, 0, 0);
+    buttonsRow->addWidget(m_boxButtons, 0, Qt::AlignCenter);
+    bodyLayout->addLayout(buttonsRow, 0);
+
+    m_priv->cLayout->addWidget(m_priv->bodyWidget, 0, Qt::AlignCenter);
 
     m_priv->addButton(btn_ok);
 
