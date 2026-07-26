@@ -97,8 +97,8 @@
 #define TEXT_SAVEANDINS toCharPtr(BTN_TEXT_SAVEANDINS)
 #define TEXT_DOWNLOAD   toCharPtr(BTN_TEXT_DOWNLOAD)
 
-#define MSG_ICON_WIDTH  35
-#define MSG_ICON_HEIGHT 35
+#define MSG_ICON_WIDTH  44
+#define MSG_ICON_HEIGHT 44
 
 #define DLG_PADDING 7
 #define BTN_SPACING 5
@@ -325,7 +325,9 @@ void QtMsg::applyScaling()
     m_typeIcon->setFixedSize(int(round(MSG_ICON_WIDTH*m_priv->dpiRatio - 0.25)),
                              int(round(MSG_ICON_HEIGHT*m_priv->dpiRatio - 0.25)));
 
-    m_message->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
+    // Wider gap under the primary line, matching the GTK message dialog's
+    // spacing between its bold primary and regular secondary text.
+    m_message->setStyleSheet(QString("margin-bottom: %1px;").arg(int(12*m_priv->dpiRatio)));
     m_content->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
 
     m_priv->fLayout->setContentsMargins(int(10*m_priv->dpiRatio),0,int(5*m_priv->dpiRatio),0);
@@ -463,13 +465,27 @@ int QtMsg::showMessage(QWidget *parent,
         dlg.setLayoutDirection(Qt::RightToLeft);
 #endif
     }
-    dlg.setText(QTextDocumentFragment::fromHtml(msg).toPlainText());
+    // Split the primary (first) line from any following secondary lines, like
+    // the GTK message dialog: the primary is bold/larger, the rest regular.
+    const QString plain = QTextDocumentFragment::fromHtml(msg).toPlainText();
+    QString primary = plain, secondary;
+    const int nl = plain.indexOf('\n');
+    if (nl != -1) {
+        primary = plain.left(nl);
+        secondary = plain.mid(nl + 1);
+    }
+    dlg.setText(primary);
     QString content = opts.contentText;
     if (!content.isEmpty() && !opts.linkText.isEmpty()) {
         content.append("\n");
         content.replace("\n", "<br>");
     }
     content.append(opts.linkText);
+    if (!secondary.isEmpty()) {
+        QString sec = secondary.toHtmlEscaped();
+        sec.replace("\n", "<br>");
+        content = content.isEmpty() ? sec : (sec + "<br>" + content);
+    }
     if (!content.isEmpty())
         dlg.setContent(content);
     dlg.setIcon(msgType);
@@ -497,19 +513,12 @@ void QtMsg::setIcon(MsgType msgType)
 
 void QtMsg::setText( const QString& t)
 {
-    // Mirror the GTK message dialog: the first line is the bold "primary"
-    // text; any following lines stay regular "secondary" text.
-    const QString esc = t.toHtmlEscaped();
-    const int nl = esc.indexOf('\n');
-    QString html;
-    if (nl != -1) {
-        QString secondary = esc.mid(nl + 1);
-        secondary.replace("\n", "<br>");
-        html = "<b>" + esc.left(nl) + "</b><br>" + secondary;
-    } else {
-        html = "<b>" + esc + "</b>";
-    }
-    m_message->setText(html);
+    // Primary line, styled like the GTK message dialog: bold and a little
+    // larger than the secondary text. showMessage() splits the primary line
+    // off and routes the rest to the (regular) content label.
+    const int px = int(13.5 * m_priv->dpiRatio + 0.5);
+    m_message->setText(QString("<span style='font-size:%1px;'><b>%2</b></span>")
+                       .arg(px).arg(t.toHtmlEscaped()));
 }
 
 void QtMsg::setContent( const QString& t)
