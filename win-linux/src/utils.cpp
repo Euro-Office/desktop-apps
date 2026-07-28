@@ -748,6 +748,58 @@ bool Utils::updatesAllowed()
     return false;
 }
 
+bool Utils::defaultSaveFormatEnforced()
+{
+    GET_REGISTRY_SYSTEM(reg_system)
+    return reg_system.value("EnforceDefaultFormat", false).toBool();
+}
+
+bool Utils::defaultSaveFormatManaged()
+{
+    GET_REGISTRY_SYSTEM(reg_system)
+    return reg_system.value("EnforceDefaultFormat", false).toBool() ||
+                !reg_system.value("DefaultSaveFormat").toString().isEmpty();
+}
+
+QString Utils::defaultSaveFormat()
+{
+    GET_REGISTRY_SYSTEM(reg_system)
+    QString _format;
+
+    if ( reg_system.value("EnforceDefaultFormat", false).toBool() ) {
+        _format = reg_system.value("DefaultSaveFormat").toString();
+    } else {
+        /* the user scope falls back to the system scope by default, which would
+         * make an administrator's value indistinguishable from one the user has
+         * picked for themselves. the cascade must tell those two apart. */
+        GET_REGISTRY_USER(reg_user)
+        reg_user.setFallbacksEnabled(false);
+
+        _format = reg_user.value("DefaultSaveFormat").toString();
+        if ( _format.isEmpty() )
+            _format = reg_system.value("DefaultSaveFormat").toString();
+    }
+
+    return _format.compare(SAVE_FORMAT_ODF, Qt::CaseInsensitive) == 0 ?
+                SAVE_FORMAT_ODF : APP_DEFAULT_SAVE_FORMAT;
+}
+
+bool Utils::defaultSaveFormatChosen()
+{
+    GET_REGISTRY_USER(reg_user)
+    reg_user.setFallbacksEnabled(false);
+
+    return reg_user.value("FormatOnboardingShown", false).toBool() ||
+                !reg_user.value("DefaultSaveFormat").toString().isEmpty();
+}
+
+void Utils::keepDefaultSaveFormat(const QString& format)
+{
+    GET_REGISTRY_USER(reg_user)
+    reg_user.setValue("DefaultSaveFormat", format);
+    reg_user.setValue("FormatOnboardingShown", true);
+}
+
 void Utils::addToRecent(const std::wstring &path)
 {
 #ifdef _WIN32

@@ -80,6 +80,8 @@
 #define BTN_TEXT_RESTART    QObject::tr("Restart Now")
 #define BTN_TEXT_SAVEANDINS QObject::tr("Save and Install Now")
 #define BTN_TEXT_DOWNLOAD   QObject::tr("Download update")
+#define BTN_TEXT_OOXML      QObject::tr("Compatibility (OOXML)")
+#define BTN_TEXT_ODF        QObject::tr("Open Standard (ODF)")
 
 #define TEXT_CANCEL toCharPtr(BTN_TEXT_CANCEL)
 #define TEXT_YES    toCharPtr(BTN_TEXT_YES)
@@ -96,6 +98,8 @@
 #define TEXT_RESTART    toCharPtr(BTN_TEXT_RESTART)
 #define TEXT_SAVEANDINS toCharPtr(BTN_TEXT_SAVEANDINS)
 #define TEXT_DOWNLOAD   toCharPtr(BTN_TEXT_DOWNLOAD)
+#define TEXT_OOXML      toCharPtr(BTN_TEXT_OOXML)
+#define TEXT_ODF        toCharPtr(BTN_TEXT_ODF)
 
 #define MSG_ICON_WIDTH  44
 #define MSG_ICON_HEIGHT 44
@@ -409,7 +413,9 @@ void QtMsg::setButtons(std::initializer_list<QString> btns)
             {MODAL_RESULT_DOWNLOAD,  BTN_TEXT_DOWNLOAD},
             {MODAL_RESULT_INSTALL,   BTN_TEXT_INSTALL},
             {MODAL_RESULT_INSLATER,  BTN_TEXT_INSLATER},
-            {MODAL_RESULT_RESTART,   BTN_TEXT_RESTART}
+            {MODAL_RESULT_RESTART,   BTN_TEXT_RESTART},
+            {MODAL_RESULT_OOXML,     BTN_TEXT_OOXML},
+            {MODAL_RESULT_ODF,       BTN_TEXT_ODF}
         };
 
         m_boxButtons->layout()->addWidget(_btn);
@@ -441,6 +447,7 @@ void QtMsg::setButtons(MsgBtns btns)
     case MsgBtns::mbSkipRemindInstall:        setButtons({BTN_TEXT_SKIPVER, BTN_TEXT_REMIND, DEFAULT_BUTTON(BTN_TEXT_INSTALL)}); break;
     case MsgBtns::mbSkipRemindSaveandinstall: setButtons({BTN_TEXT_SKIPVER, BTN_TEXT_REMIND, DEFAULT_BUTTON(BTN_TEXT_INSTALL)}); break;
     case MsgBtns::mbSkipRemindDownload:       setButtons({BTN_TEXT_SKIPVER, BTN_TEXT_REMIND, DEFAULT_BUTTON(BTN_TEXT_DOWNLOAD)}); break;
+    case MsgBtns::mbOoxmlDefOdf:    setButtons({DEFAULT_BUTTON(BTN_TEXT_OOXML), BTN_TEXT_ODF}); break;
     default: break;
     }
 }
@@ -682,6 +689,12 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
         pButtons[1] = {IDNO,  TEXT_REMIND};
         pButtons[2] = {IDYES, TEXT_DOWNLOAD};
         break;
+    case MsgBtns::mbOoxmlDefOdf:
+        cButtons = 2;
+        pButtons = new TASKDIALOG_BUTTON[cButtons];
+        pButtons[0] = {IDYES, TEXT_OOXML};
+        pButtons[1] = {IDNO,  TEXT_ODF};
+        break;
     default:
         cButtons = 1;
         pButtons = new TASKDIALOG_BUTTON[cButtons];
@@ -705,6 +718,7 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     case MsgBtns::mbSkipRemindInstall:        nDefltBtn = IDYES; break;
     case MsgBtns::mbSkipRemindSaveandinstall: nDefltBtn = IDYES; break;
     case MsgBtns::mbSkipRemindDownload:       nDefltBtn = IDYES; break;
+    case MsgBtns::mbOoxmlDefOdf:    nDefltBtn = IDYES; break;
     default:                        nDefltBtn = IDOK; break;
     }
 
@@ -773,11 +787,13 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
                          (msgBtns == MsgBtns::mbActivateDefContinue) ? MODAL_RESULT_ACTIVATE :
                          (msgBtns == MsgBtns::mbSkipRemindInstall || msgBtns == MsgBtns::mbSkipRemindSaveandinstall) ? MODAL_RESULT_INSTALL :
                          (msgBtns == MsgBtns::mbSkipRemindDownload) ? MODAL_RESULT_DOWNLOAD :
+                         (msgBtns == MsgBtns::mbOoxmlDefOdf) ? MODAL_RESULT_OOXML :
                          (msgBtns == MsgBtns::mbInslaterRestart) ? MODAL_RESULT_INSLATER : MODAL_RESULT_YES;
         break;
     case IDNO:  result = (msgBtns == MsgBtns::mbActivateDefContinue) ? MODAL_RESULT_CONTINUE :
                          (msgBtns == MsgBtns::mbSkipRemindInstall || msgBtns == MsgBtns::mbSkipRemindSaveandinstall
                              || msgBtns == MsgBtns::mbSkipRemindDownload) ? MODAL_RESULT_REMIND :
+                         (msgBtns == MsgBtns::mbOoxmlDefOdf) ? MODAL_RESULT_ODF :
                          (msgBtns == MsgBtns::mbInslaterRestart) ? MODAL_RESULT_RESTART : MODAL_RESULT_NO;
         break;
     case IDOK:  result = (msgBtns == MsgBtns::mbContinue) ? MODAL_RESULT_CONTINUE : MODAL_RESULT_OK;
@@ -941,6 +957,10 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
         AddButton(TEXT_REMIND, GTK_RESPONSE_NO);
         AddButton(TEXT_DOWNLOAD, GTK_RESPONSE_YES);
         break;
+    case MsgBtns::mbOoxmlDefOdf:
+        AddButton(TEXT_OOXML, GTK_RESPONSE_YES);
+        AddButton(TEXT_ODF, GTK_RESPONSE_NO);
+        break;
     default:
         AddButton(TEXT_OK, GTK_RESPONSE_OK);
         break;
@@ -961,6 +981,7 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
     case MsgBtns::mbSkipRemindInstall: GrabFocus(GTK_RESPONSE_YES); break;
     case MsgBtns::mbSkipRemindSaveandinstall: GrabFocus(GTK_RESPONSE_YES); break;
     case MsgBtns::mbSkipRemindDownload: GrabFocus(GTK_RESPONSE_YES); break;
+    case MsgBtns::mbOoxmlDefOdf: GrabFocus(GTK_RESPONSE_YES); break;
     default: GrabFocus(GTK_RESPONSE_OK); break;
     }
 
@@ -971,11 +992,13 @@ int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns ms
                                     (msgBtns == MsgBtns::mbActivateDefContinue) ? MODAL_RESULT_ACTIVATE :
                                     (msgBtns == MsgBtns::mbSkipRemindInstall || msgBtns == MsgBtns::mbSkipRemindSaveandinstall) ? MODAL_RESULT_INSTALL :
                                     (msgBtns == MsgBtns::mbSkipRemindDownload) ? MODAL_RESULT_DOWNLOAD :
+                                    (msgBtns == MsgBtns::mbOoxmlDefOdf) ? MODAL_RESULT_OOXML :
                                     (msgBtns == MsgBtns::mbInslaterRestart) ? MODAL_RESULT_INSLATER : MODAL_RESULT_YES;
         break;
     case GTK_RESPONSE_NO:  result = (msgBtns == MsgBtns::mbActivateDefContinue) ? MODAL_RESULT_CONTINUE :
                                     (msgBtns == MsgBtns::mbSkipRemindInstall || msgBtns == MsgBtns::mbSkipRemindSaveandinstall
                                         || msgBtns == MsgBtns::mbSkipRemindDownload) ? MODAL_RESULT_REMIND :
+                                    (msgBtns == MsgBtns::mbOoxmlDefOdf) ? MODAL_RESULT_ODF :
                                     (msgBtns == MsgBtns::mbInslaterRestart) ? MODAL_RESULT_RESTART : MODAL_RESULT_NO;
         break;
     case GTK_RESPONSE_OK:  result = (msgBtns == MsgBtns::mbContinue) ? MODAL_RESULT_CONTINUE : MODAL_RESULT_OK;

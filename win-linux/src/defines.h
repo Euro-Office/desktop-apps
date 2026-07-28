@@ -58,6 +58,12 @@
 #define APP_PROTOCOL "oo-office"
 #define FILE_PREFIX "eurooffice_"
 
+/* default format new documents are saved in. resolved from the registry
+ * cascade (system scope, then user scope) by Utils::defaultSaveFormat() */
+#define SAVE_FORMAT_OOXML "OOXML"
+#define SAVE_FORMAT_ODF   "ODF"
+#define APP_DEFAULT_SAVE_FORMAT SAVE_FORMAT_OOXML
+
 #define URL_SITE                "https://github.com/Euro-Office"
 #define URL_SIGNUP              "https://onlyoffice.com/registration.aspx?desktop=true"
 

@@ -122,6 +122,11 @@ public:
     static QJsonObject parseJsonString(const std::wstring&);
     static QJsonObject parseJsonFile(const QString&);
     static bool updatesAllowed();
+    static QString defaultSaveFormat();
+    static bool defaultSaveFormatEnforced();
+    static bool defaultSaveFormatManaged();
+    static bool defaultSaveFormatChosen();
+    static void keepDefaultSaveFormat(const QString&);
     static void addToRecent(const std::wstring&);
     static void processMoreEvents(uint timeout = 60);
 
