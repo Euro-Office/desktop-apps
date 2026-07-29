@@ -474,6 +474,8 @@
                 if ( $optsDefaultSaveFormat && !appSettings.defaultsaveformat.locked ) {
                     _new_settings.defaultsaveformat = $optsDefaultSaveFormat.val();
                     $optsDefaultSaveFormat.selectpicker('refresh');
+
+                    CommonEvents.fire('defaultformat:changed', [_new_settings.defaultsaveformat]);
                 }
 
                 if ( $chGpu ) {
@@ -681,6 +683,8 @@
 
                             if ( appSettings.defaultsaveformat.locked )
                                 $('#sett-save-format-managed', $panel).show();
+
+                            CommonEvents.fire('defaultformat:changed', [appSettings.defaultsaveformat.format]);
                         }
 
                         if ( appSettings.spellcheckdetect !== undefined ) {
