@@ -1152,7 +1152,7 @@ static void askForDefaultSaveFormat(QWidget * parent)
         "<b>Open Standard (ODF — .odt / .ods / .odp)</b><br>"
         "An open, ISO-standardized format built for long-term archival stability and "
         "cross-editor portability — while still opening and saving cleanly to Microsoft "
-        "formats whenever you need to.<br>"
+        "formats whenever you need to.<br><br>"
         "You can change this anytime in Settings.");
 
     int res = CMessage::showMessage(parent, msg, MsgType::MSG_BRAND, MsgBtns::mbOoxmlDefOdf);
