@@ -33,6 +33,7 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QJsonDocument>
@@ -550,14 +551,6 @@ inline double choose_scaling(double s)
            s > 1 ? 1.25 : 1;
 }
 
-double Utils::getScreenDpiRatio(int scrnum)
-{
-    unsigned int _dpi_x = 0;
-    unsigned int _dpi_y = 0;
-    double nScale = AscAppManager::getInstance().GetMonitorScaleByIndex(scrnum, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
-}
-
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
     QWidget _w;
@@ -580,6 +573,14 @@ double Utils::getScreenDpiRatioByHWND(int hwnd)
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
+    // Manual DPI scaling here (multiplying sizes by dpiRatio) computes a
+    // logical/DIP size for widgets that don't rely purely on Qt's layout
+    // system (e.g. cplatformdecoration.cpp's CUSTOM_BORDER_WIDTH * ratio).
+    // That's independent of Qt's own automatic HiDPI backing-store
+    // scaling (which just renders whatever DIP size is chosen more
+    // crisply) -- it's needed on Wayland exactly the same way it's
+    // needed on X11, so this used to (incorrectly) skip it with a flat
+    // 1.0 return on Wayland, leaving those widgets sized as if unscaled.
     if (!wid)
         return 1;
 
@@ -599,6 +600,36 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
     }
 
     return wid->devicePixelRatio();
+}
+
+namespace {
+class CDpiChangeWatcher : public QObject
+{
+public:
+    CDpiChangeWatcher(QWidget* w, std::function<void()> onChange)
+        : QObject(w), m_onChange(std::move(onChange))
+    {
+        w->installEventFilter(this);
+    }
+
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override
+    {
+        if (event->type() == QEvent::DevicePixelRatioChange)
+            m_onChange();
+        return QObject::eventFilter(watched, event);
+    }
+
+private:
+    std::function<void()> m_onChange;
+};
+}
+
+void Utils::WatchForDpiChange(QWidget* w, std::function<void()> onChange)
+{
+    if (!w)
+        return;
+    new CDpiChangeWatcher(w, std::move(onChange));
 }
 
 QScreen * Utils::screenAt(const QPoint& pt)
@@ -715,6 +746,58 @@ bool Utils::updatesAllowed()
 #endif
     }
     return false;
+}
+
+bool Utils::defaultSaveFormatEnforced()
+{
+    GET_REGISTRY_SYSTEM(reg_system)
+    return reg_system.value("EnforceDefaultFormat", false).toBool();
+}
+
+bool Utils::defaultSaveFormatManaged()
+{
+    GET_REGISTRY_SYSTEM(reg_system)
+    return reg_system.value("EnforceDefaultFormat", false).toBool() ||
+                !reg_system.value("DefaultSaveFormat").toString().isEmpty();
+}
+
+QString Utils::defaultSaveFormat()
+{
+    GET_REGISTRY_SYSTEM(reg_system)
+    QString _format;
+
+    if ( reg_system.value("EnforceDefaultFormat", false).toBool() ) {
+        _format = reg_system.value("DefaultSaveFormat").toString();
+    } else {
+        /* the user scope falls back to the system scope by default, which would
+         * make an administrator's value indistinguishable from one the user has
+         * picked for themselves. the cascade must tell those two apart. */
+        GET_REGISTRY_USER(reg_user)
+        reg_user.setFallbacksEnabled(false);
+
+        _format = reg_user.value("DefaultSaveFormat").toString();
+        if ( _format.isEmpty() )
+            _format = reg_system.value("DefaultSaveFormat").toString();
+    }
+
+    return _format.compare(SAVE_FORMAT_ODF, Qt::CaseInsensitive) == 0 ?
+                SAVE_FORMAT_ODF : APP_DEFAULT_SAVE_FORMAT;
+}
+
+bool Utils::defaultSaveFormatChosen()
+{
+    GET_REGISTRY_USER(reg_user)
+    reg_user.setFallbacksEnabled(false);
+
+    return reg_user.value("FormatOnboardingShown", false).toBool() ||
+                !reg_user.value("DefaultSaveFormat").toString().isEmpty();
+}
+
+void Utils::keepDefaultSaveFormat(const QString& format)
+{
+    GET_REGISTRY_USER(reg_user)
+    reg_user.setValue("DefaultSaveFormat", format);
+    reg_user.setValue("FormatOnboardingShown", true);
 }
 
 void Utils::addToRecent(const std::wstring &path)
@@ -980,6 +1063,11 @@ namespace WindowHelper {
     }
 
     auto useGtkDialog() -> bool {
+        // On Wayland, prefer XDG Desktop Portal over GTK to avoid
+        // GTK dialogs falling back to Xwayland (wrong scale / click offset).
+        if (QGuiApplication::platformName() == "wayland")
+            return false;
+
         GET_REGISTRY_USER(reg_user)
         bool use_gtk_dialog = true;
         bool saved_flag = reg_user.value("--xdg-desktop-portal", false).toBool();

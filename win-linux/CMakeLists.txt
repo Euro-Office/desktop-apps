@@ -21,7 +21,6 @@ set(BUILD_DESKTOP TRUE CACHE INTERNAL "tell common to prepare third party for de
 include(${CORE_ROOT_DIR}/common.cmake)
 
 
-# 2. Find Qt Packages
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
     add_definitions(-DLINUX -D_LINUX -D_WAYLAND)
@@ -114,6 +113,8 @@ endif()
 if(NOT TARGET allthemesgen)
     add_subdirectory( "${CORE_ROOT_DIR}/DesktopEditor/allthemesgen" allthemesgen )
 endif()
+
+
 
 # 3. Definitions & Global Config
 add_definitions(-D__DONT_WRITE_IN_APP_TITLE)
@@ -279,6 +280,9 @@ elseif(UNIX AND NOT APPLE)
         src/platform_linux/gtkprintdialog.cpp
         src/platform_linux/gtkutils.cpp
         src/platform_linux/linux_window_utils.cpp
+        src/platform_linux/x11backend.cpp
+        src/platform_linux/waylandbackend.cpp
+        src/platform_linux/platformbackendfactory.cpp
         extras/update-daemon/src/classes/csocket.cpp
     )
     list(APPEND COMMON_HEADERS 
@@ -294,11 +298,20 @@ elseif(UNIX AND NOT APPLE)
         src/platform_linux/gtkprintdialog.h
         src/platform_linux/gtkutils.h
         src/platform_linux/linux_window_utils.h
+        src/platform_linux/iplatformbackend.h
+        src/platform_linux/x11backend.h
+        src/platform_linux/waylandbackend.h
         extras/update-daemon/src/classes/csocket.h
     )
 
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK3 REQUIRED glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 xcb xext libnotify)
+    pkg_check_modules(GTK3 REQUIRED glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 libnotify)
+    pkg_check_modules(XCB_LIBS xcb xext)
+    pkg_check_modules(X11_LIBS x11 x11-xcb)
+    if(XCB_LIBS_FOUND AND X11_LIBS_FOUND)
+        add_definitions(-DHAVE_X11)
+    endif()
+    add_definitions(-DHAVE_WAYLAND)
 
     # Custom command for glib-compile-resources
     set(GRESOURCE_XML ${CMAKE_CURRENT_SOURCE_DIR}/res/gresource.xml)
@@ -310,7 +323,10 @@ elseif(UNIX AND NOT APPLE)
     )
     list(APPEND COMMON_SOURCES ${GRESOURCE_C})
     
-    set(PLATFORM_LIBS ${GTK3_LIBRARIES} X11 X11-xcb cups)
+    set(PLATFORM_LIBS ${GTK3_LIBRARIES} cups)
+    if(XCB_LIBS_FOUND AND X11_LIBS_FOUND)
+        list(APPEND PLATFORM_LIBS ${X11_LIBS_LIBRARIES} ${XCB_LIBS_LIBRARIES})
+    endif()
 endif()
 
 # 7. Create Executable
@@ -362,8 +378,9 @@ target_link_libraries(DesktopEditors PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Svg
     Qt${QT_VERSION_MAJOR}::PrintSupport
-    Qt${QT_VERSION_MAJOR}::Multimedia 
+    Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
     ${PLATFORM_LIBS}
     ${DBUS_LIBRARIES}
 

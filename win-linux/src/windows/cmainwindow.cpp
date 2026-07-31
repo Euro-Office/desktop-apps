@@ -39,6 +39,7 @@
 #include <QGridLayout>
 #include <QTimer>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QAction>
 #include <QJsonDocument>
 #include <QJsonObject>

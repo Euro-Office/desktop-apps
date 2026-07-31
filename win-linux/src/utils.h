@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QWidget>
+#include <functional>
 #ifdef Q_OS_WIN
 # include <Windows.h>
 #endif
@@ -90,10 +91,18 @@ public:
     static void openUrl(const QString&);
     static void openFileLocation(const QString&);
     static QString getPortalName(const QString&);
-    static double getScreenDpiRatio(int);
     static double getScreenDpiRatio(const QPoint&);
     static double getScreenDpiRatioByHWND(int);
     static double getScreenDpiRatioByWidget(QWidget*);
+
+    // Installs a watcher (child of w, cleaned up automatically with it) that
+    // calls onChange whenever w's own effective devicePixelRatio() changes
+    // (QEvent::DevicePixelRatioChange) -- e.g. once Qt receives the async
+    // Wayland fractional-scale compositor answer for w's surface, which can
+    // arrive after the widget's initial DPI-dependent sizing was already
+    // computed from a transiently-wrong reading. Safe to call multiple
+    // times on the same widget; each call adds an independent watcher.
+    static void WatchForDpiChange(QWidget* w, std::function<void()> onChange);
     static QScreen * screenAt(const QPoint&);
     static QString replaceBackslash(const QString&);
     static std::wstring normalizeAppProtocolUrl(const std::wstring &url);
@@ -113,6 +122,11 @@ public:
     static QJsonObject parseJsonString(const std::wstring&);
     static QJsonObject parseJsonFile(const QString&);
     static bool updatesAllowed();
+    static QString defaultSaveFormat();
+    static bool defaultSaveFormatEnforced();
+    static bool defaultSaveFormatManaged();
+    static bool defaultSaveFormatChosen();
+    static void keepDefaultSaveFormat(const QString&);
     static void addToRecent(const std::wstring&);
     static void processMoreEvents(uint timeout = 60);
 

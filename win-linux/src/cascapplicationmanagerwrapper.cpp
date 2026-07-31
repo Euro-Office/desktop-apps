@@ -958,11 +958,12 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
             }else
             if ( check_param(arg, L"--new" ) ) {
                 open_opts.srctype = etNewFile;
-                open_opts.format = arg.rfind(L"cell") != wstring::npos ? AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLSX :
-                                    arg.rfind(L"slide") != wstring::npos ? AVS_OFFICESTUDIO_FILE_PRESENTATION_PPTX :
-                                    // arg.rfind(L"draw") != wstring::npos ? AVS_OFFICESTUDIO_FILE_DRAW_VSDX :
-                                    arg.rfind(L"form") != wstring::npos ? AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF :
-                            /*if ( line.rfind(L"word") != wstring::npos )*/ AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX;
+                open_opts.format = AscAppManager::newFileFormat(
+                                    arg.rfind(L"cell") != wstring::npos ? L"cell" :
+                                    arg.rfind(L"slide") != wstring::npos ? L"slide" :
+                                    // arg.rfind(L"draw") != wstring::npos ? L"draw" :
+                                    arg.rfind(L"form") != wstring::npos ? L"form" :
+                            /*if ( line.rfind(L"word") != wstring::npos )*/ L"word");
 
                 open_opts.name = AscAppManager::newFileName(open_opts.format);
             } else continue;
@@ -1044,7 +1045,7 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
                 } else {
                     /* file doesn't exists */
                     open_opts.srctype = etNewFile;
-                    open_opts.format = open_opts.format = AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX;
+                    open_opts.format = AscAppManager::newFileFormat(L"word");
                     open_opts.name = AscAppManager::newFileName(open_opts.format);
                 }
             } else
@@ -1132,6 +1133,44 @@ void CAscApplicationManagerWrapper::handleDeeplinkActions(const std::vector<std:
     }
 }
 
+/* one-time prompt that lets an unmanaged user pick a default save format before
+ * they create their first document. skipped as soon as either an administrator
+ * (system scope) or the user themselves has expressed a preference. */
+static void askForDefaultSaveFormat(QWidget * parent)
+{
+    static bool asked = false;
+    if ( asked || Utils::defaultSaveFormatManaged() || Utils::defaultSaveFormatChosen() )
+        return;
+
+    asked = true;
+
+    const QString msg = QObject::tr(
+        "Choose your default save format<br>"
+        "<b>Compatibility (OOXML — .docx / .xlsx / .pptx)</b><br>"
+        "Best if you frequently exchange files with Microsoft Office users, or your "
+        "organization already standardizes on Microsoft formats.<br>"
+        "<b>Open Standard (ODF — .odt / .ods / .odp)</b><br>"
+        "An open, ISO-standardized format built for long-term archival stability and "
+        "cross-editor portability — while still opening and saving cleanly to Microsoft "
+        "formats whenever you need to.<br><br>"
+        "You can change this anytime in Settings.");
+
+    int res = CMessage::showMessage(parent, msg, MsgType::MSG_BRAND, MsgBtns::mbOoxmlDefOdf);
+
+    /* closing the dialog without choosing still records that it was shown, so
+     * it never reappears, and resolution falls through to the system/compiled-in
+     * default as usual */
+    if ( res == MODAL_RESULT_ODF )
+        Utils::keepDefaultSaveFormat(SAVE_FORMAT_ODF);
+    else
+    if ( res == MODAL_RESULT_OOXML )
+        Utils::keepDefaultSaveFormat(SAVE_FORMAT_OOXML);
+    else {
+        GET_REGISTRY_USER(reg_user)
+        reg_user.setValue("FormatOnboardingShown", true);
+    }
+}
+
 void CAscApplicationManagerWrapper::onDocumentReady(int uid)
 {
 #ifndef __OS_WIN_XP
@@ -1158,6 +1197,12 @@ void CAscApplicationManagerWrapper::onDocumentReady(int uid)
 #ifdef _WIN32
     Association::instance().chekForAssociations(uid);
 #endif
+
+    if (uid < 0) {
+        QTimer::singleShot(50, this, [=]() {
+            askForDefaultSaveFormat(mainWindow() ? mainWindow()->handle() : nullptr);
+        });
+    }
 
     if (uid > -1) {
         if (printData().printerCapabilitiesReady())
@@ -2012,6 +2057,14 @@ bool CAscApplicationManagerWrapper::applySettings(const wstring& wstrjson)
             _reg_user.setValue("editorWindowMode", m_private->m_openEditorWindow);
         }
 
+        /* an enforced format is administrator policy, so a value arriving from
+         * the settings panel is ignored rather than written to the user scope */
+        if ( objRoot.contains("defaultsaveformat") && !Utils::defaultSaveFormatEnforced() ) {
+            QString _format = objRoot["defaultsaveformat"].toString();
+            _reg_user.setValue("DefaultSaveFormat",
+                    _format.compare(SAVE_FORMAT_ODF, Qt::CaseInsensitive) == 0 ? SAVE_FORMAT_ODF : SAVE_FORMAT_OOXML);
+        }
+
         if ( objRoot.contains("usegpu") ) {
             bool use_gpu = objRoot["usegpu"].toBool(true);
             setUserSettings(L"disable-gpu", use_gpu ? L"0" : L"1");
@@ -2365,6 +2418,7 @@ QString CAscApplicationManagerWrapper::newFileName(int format)
     switch ( format ) {
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOTX:
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX:        return tr("Document%1.docx").arg(++docx_count);
+    case AVS_OFFICESTUDIO_FILE_DOCUMENT_ODT:         return tr("Document%1.docx").arg(++docx_count).replace("docx", "odt");
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_OFORM_PDF:
     case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF: {
         QString docname = tr("Document%1.docx").arg(++pdf_count);
@@ -2372,21 +2426,35 @@ QString CAscApplicationManagerWrapper::newFileName(int format)
     }
     case AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLTX:
     case AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLSX:     return tr("Book%1.xlsx").arg(++xlsx_count);
+    case AVS_OFFICESTUDIO_FILE_SPREADSHEET_ODS:      return tr("Book%1.xlsx").arg(++xlsx_count).replace("xlsx", "ods");
     case AVS_OFFICESTUDIO_FILE_PRESENTATION_POTX:
     case AVS_OFFICESTUDIO_FILE_PRESENTATION_PPTX:    return tr("Presentation%1.pptx").arg(++pptx_count);
+    case AVS_OFFICESTUDIO_FILE_PRESENTATION_ODP:     return tr("Presentation%1.pptx").arg(++pptx_count).replace("pptx", "odp");
     default:                                         return "Document.asc";
     }
 }
 
+int CAscApplicationManagerWrapper::newFileFormat(const std::wstring& type)
+{
+    /* forms are only defined for ooxml, so they keep their format regardless */
+    if ( type == L"form" )
+        return AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF;
+
+    bool _prefer_odf = Utils::defaultSaveFormat() == SAVE_FORMAT_ODF;
+    if ( type == L"word" )
+        return _prefer_odf ? AVS_OFFICESTUDIO_FILE_DOCUMENT_ODT : AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX;
+    if ( type == L"cell" )
+        return _prefer_odf ? AVS_OFFICESTUDIO_FILE_SPREADSHEET_ODS : AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLSX;
+    // if ( type == L"draw" ) return AVS_OFFICESTUDIO_FILE_DRAW_VSDX;
+    if ( type == L"slide" )
+        return _prefer_odf ? AVS_OFFICESTUDIO_FILE_PRESENTATION_ODP : AVS_OFFICESTUDIO_FILE_PRESENTATION_PPTX;
+
+    return AVS_OFFICESTUDIO_FILE_UNKNOWN;
+}
+
 QString CAscApplicationManagerWrapper::newFileName(const std::wstring& format)
 {
-    int _f = format == L"word" ? AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX :
-                 format == L"cell" ? AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLSX :
-                 format == L"form" ? AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF :
-                 // format == L"draw" ? AVS_OFFICESTUDIO_FILE_DRAW_VSDX :
-                 format == L"slide" ? AVS_OFFICESTUDIO_FILE_PRESENTATION_PPTX : AVS_OFFICESTUDIO_FILE_UNKNOWN;
-
-    return newFileName(_f);
+    return newFileName(newFileFormat(format));
 }
 
 wstring CAscApplicationManagerWrapper::userSettings(const wstring& name)
