@@ -39,6 +39,7 @@
 #include "utils.h"
 #include "chelp.h"
 #include "common/File.h"
+#include "docautomation.h"
 #include <QStyleFactory>
 
 
@@ -65,6 +66,9 @@ int main( int argc, char *argv[] )
         return 0;
     }
 #endif
+    if ( NSDocAutomation::ShouldRun() ) {
+        return NSDocAutomation::Run();
+    }
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
 #else
