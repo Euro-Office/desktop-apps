@@ -100,8 +100,11 @@ int NSDocAutomation::Run() {
     oBuilder.WriteEncodeXmlString(oManager.m_oSettings.fonts_cache_info_path + L"/AllFonts.js");
     oBuilder.WriteString(L"</m_sAllFontsPath></TaskQueueDataConvert>");
 
+    // No BOM: x2t's XML parser doesn't skip it, so a BOM before <?xml ...?>
+    // leaves m_sFileFrom/m_sFileTo unparsed ("Empty sFileFrom or sFileTo"),
+    // confirmed by capturing and hand-testing the generated file against x2t.
     std::wstring sXmlPath = NSFile::CFileBinary::CreateTempFileWithUniqueName(NSFile::CFileBinary::GetTempPath(), L"CLI");
-    NSFile::CFileBinary::SaveToFile(sXmlPath, oBuilder.GetData(), true);
+    NSFile::CFileBinary::SaveToFile(sXmlPath, oBuilder.GetData(), false);
 
     int nReturnCode = NSX2T::Convert(oManager.m_oSettings.file_converter_path + L"/x2t", sXmlPath, &oManager, true);
 
