@@ -24,9 +24,9 @@
 */
 
 #include "docautomation.h"
-#include "cascapplicationmanagerwrapper.h"
 #include "defines.h"
 #include "utils.h"
+#include "../../../desktop-sdk/ChromiumBasedEditors/lib/include/applicationmanager.h"
 #include "../../../desktop-sdk/ChromiumBasedEditors/lib/src/x2t.h"
 #include "../../../core/DesktopEditor/common/File.h"
 #include "../../../core/DesktopEditor/common/StringBuilder.h"
@@ -79,7 +79,11 @@ int NSDocAutomation::Run() {
         }
     }
 
-    CAscApplicationManagerWrapper& oManager = AscAppManager::getInstance();
+    // A plain CAscApplicationManager, not the QObject-based GUI singleton
+    // (AscAppManager::getInstance()) -- that one installs Qt event filters
+    // in its constructor and crashes without a live QCoreApplication, which
+    // doesn't exist yet at this point (before any CEF/Qt startup).
+    CAscApplicationManager oManager;
     QString sUserDataPath = Utils::getUserPath() + APP_DATA_PATH;
     oManager.m_oSettings.SetUserDataPath(sUserDataPath.toStdWString());
     std::wstring sAppPath = NSFile::GetProcessDirectory();
