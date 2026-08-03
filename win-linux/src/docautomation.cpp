@@ -31,10 +31,8 @@
 #include "../../../core/DesktopEditor/common/File.h"
 #include "../../../core/DesktopEditor/common/Directory.h"
 #include "../../../core/DesktopEditor/common/StringBuilder.h"
-#include "../../../core/Common/OfficeFileFormats.h"
 
 #include <iostream>
-#include <map>
 
 namespace {
     std::wstring GetFlagValue(const std::wstring& flag) {
@@ -49,30 +47,6 @@ namespace {
             }
         }
         return L"";
-    }
-
-    int FormatFromExtension(const std::wstring& sPath) {
-        static const std::map<std::wstring, int> formats = {
-            { L"docx", AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX },
-            { L"doc",  AVS_OFFICESTUDIO_FILE_DOCUMENT_DOC },
-            { L"odt",  AVS_OFFICESTUDIO_FILE_DOCUMENT_ODT },
-            { L"rtf",  AVS_OFFICESTUDIO_FILE_DOCUMENT_RTF },
-            { L"txt",  AVS_OFFICESTUDIO_FILE_DOCUMENT_TXT },
-            { L"html", AVS_OFFICESTUDIO_FILE_DOCUMENT_HTML },
-            { L"htm",  AVS_OFFICESTUDIO_FILE_DOCUMENT_HTML },
-            { L"pdf",  AVS_OFFICESTUDIO_FILE_CROSSPLATFORM_PDF },
-            { L"xlsx", AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLSX },
-            { L"xls",  AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLS },
-            { L"ods",  AVS_OFFICESTUDIO_FILE_SPREADSHEET_ODS },
-            { L"csv",  AVS_OFFICESTUDIO_FILE_SPREADSHEET_CSV },
-            { L"pptx", AVS_OFFICESTUDIO_FILE_PRESENTATION_PPTX },
-            { L"ppt",  AVS_OFFICESTUDIO_FILE_PRESENTATION_PPT },
-            { L"odp",  AVS_OFFICESTUDIO_FILE_PRESENTATION_ODP },
-        };
-        std::wstring sExt = NSFile::GetFileExtention(sPath);
-        for (auto& c : sExt) c = towlower(c);
-        auto it = formats.find(sExt);
-        return it != formats.end() ? it->second : 0;
     }
 }
 
@@ -106,12 +80,6 @@ int NSDocAutomation::Run() {
         }
     }
 
-    int nFormatTo = FormatFromExtension(sOutput);
-    if (0 == nFormatTo) {
-        std::wcerr << L"Unsupported output extension: " << sOutput << std::endl;
-        return 1;
-    }
-
     // A plain CAscApplicationManager, not the QObject-based GUI singleton
     // (AscAppManager::getInstance()) -- that one installs Qt event filters
     // in its constructor and crashes without a live QCoreApplication, which
@@ -124,30 +92,30 @@ int NSDocAutomation::Run() {
 
     std::wstring sTempDir = NSDirectory::CreateDirectoryWithUniqueName(NSFile::CFileBinary::GetTempPath());
 
-    // Mirrors CSimpleConverter::ThreadProc (fileconverter.h), the class the
-    // running editor uses for its own "export to PDF"/format-conversion
-    // actions, field for field (m_nFormatTo, m_sFontDir, m_sTempDir,
-    // m_bIsNoBase64=false) rather than the minimal from/to-only task this
-    // originally sent -- that minimal form parsed correctly by every
-    // external check (x2t reads back the exact bytes written, and replaying
-    // the exact captured file by hand against x2t succeeds every time) but
-    // still failed specifically when x2t was forked from this GUI binary.
+    // Formats are left for x2t to detect from the file extensions, the same
+    // way its own `x2t <from> <to>` mode does.
     NSStringUtils::CStringBuilder oBuilder;
     oBuilder.WriteString(L"<?xml version=\"1.0\" encoding=\"utf-8\"?><TaskQueueDataConvert><m_sFileFrom>");
     oBuilder.WriteEncodeXmlString(sInput);
     oBuilder.WriteString(L"</m_sFileFrom><m_sFileTo>");
     oBuilder.WriteEncodeXmlString(sOutput);
-    oBuilder.WriteString(L"</m_sFileTo><m_nFormatTo>");
-    oBuilder.WriteString(std::to_wstring(nFormatTo));
-    oBuilder.WriteString(L"</m_nFormatTo><m_sFontDir>");
+    oBuilder.WriteString(L"</m_sFileTo><m_sFontDir>");
     oBuilder.WriteEncodeXmlString(oManager.m_oSettings.fonts_cache_info_path);
-    oBuilder.WriteString(L"</m_sFontDir><m_bIsNoBase64>false</m_bIsNoBase64><m_sAllFontsPath>");
+    oBuilder.WriteString(L"</m_sFontDir><m_sAllFontsPath>");
     oBuilder.WriteEncodeXmlString(oManager.m_oSettings.fonts_cache_info_path + L"/AllFonts.js");
     oBuilder.WriteString(L"</m_sAllFontsPath><m_sTempDir>");
     oBuilder.WriteEncodeXmlString(sTempDir);
     oBuilder.WriteString(L"</m_sTempDir></TaskQueueDataConvert>");
 
-    std::wstring sXmlPath = NSFile::CFileBinary::CreateTempFileWithUniqueName(NSFile::CFileBinary::GetTempPath(), L"CLI");
+    // The ".xml" suffix is load-bearing: x2t only parses its argument as a
+    // TaskQueueDataConvert file when the name ends in ".xml" (see
+    // X2tConverter/src/main.cpp). Anything else is taken as the first of a
+    // bare `x2t <from> <to>` pair, leaving the destination empty and failing
+    // with "Empty sFileFrom or sFileTo".
+    std::wstring sTempName = NSFile::CFileBinary::CreateTempFileWithUniqueName(NSFile::CFileBinary::GetTempPath(), L"CLI");
+    if (NSFile::CFileBinary::Exists(sTempName))
+        NSFile::CFileBinary::Remove(sTempName);
+    std::wstring sXmlPath = sTempName + L".xml";
     NSFile::CFileBinary::SaveToFile(sXmlPath, oBuilder.GetData(), true);
 
     int nReturnCode = NSX2T::Convert(oManager.m_oSettings.file_converter_path + L"/x2t", sXmlPath, &oManager, true);
