@@ -369,7 +369,7 @@
             page_num++;
             isCloudTmplsLoading = true;
 
-            const _domain = localStorage.templatesdomain ? localStorage.templatesdomain : 'https://templates.onlyoffice.com'; // https://oforms.teamlab.info
+            const _domain = localStorage.templatesdomain ? localStorage.templatesdomain : 'https://templates.eurooffice.example'; // https://oforms.teamlab.info
             const _url = `${_domain}/dashboard/api/oforms?populate=*&locale=${locale}&pagination[page]=${page_num}`;
             fetch(_url)
                 .then(r => r.json())
