@@ -183,7 +183,6 @@ set(COMMON_HEADERS
 set(COMMON_SOURCES
     src/prop/cmainwindowimpl.cpp
     src/prop/utils.cpp
-    src/utils.cpp
     src/docautomation.cpp
     src/windows/cmainwindow.cpp
     src/windows/cwindowbase.cpp
