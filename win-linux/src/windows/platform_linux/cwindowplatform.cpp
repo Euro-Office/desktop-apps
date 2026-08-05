@@ -129,7 +129,7 @@ bool CWindowPlatform::event(QEvent * event)
         adjustGeometry();
     } else
     if (event->type() == QEvent::HoverLeave) {
-        if (m_boxTitleBtns)
+        if (m_boxTitleBtns && QGuiApplication::platformName() == QLatin1String("wayland"))
             m_boxTitleBtns->setCursor(QCursor(Qt::ArrowCursor));
     } else
     if (event->type() == QEvent::LayoutDirectionChange) {
