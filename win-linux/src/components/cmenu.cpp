@@ -51,6 +51,12 @@
 static bool isCompositingEnabled()
 {
 #ifdef __linux__
+    // On Wayland the compositor renders shadows natively. Qt's
+    // QGraphicsDropShadowEffect uses its own off-screen painter, and a
+    // concurrent Wayland compositor flush during window close causes
+    // "painted by one painter at a time" crashes. Skip it entirely.
+    if (QGuiApplication::platformName() == QLatin1String("wayland"))
+        return false;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QX11Info::isCompositingManagerRunning();
 #else
