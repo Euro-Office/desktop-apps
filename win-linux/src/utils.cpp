@@ -551,6 +551,34 @@ inline double choose_scaling(double s)
            s > 1 ? 1.25 : 1;
 }
 
+namespace {
+// The app sizes its custom chrome by multiplying base constants by the
+// ratio these helpers return. Qt then renders those logical sizes at
+// devicePixelRatio physical pixels, so whatever Qt already applies must be
+// divided out here or the two compound: on a 1.25-scaled display the
+// manual 1.25 and Qt's 1.25 produced chrome at 1.5625x, 25% larger than
+// the display scale, while the editor content (scaled once, by CEF page
+// zoom off the same devicePixelRatio) sat correctly at 1.25x -- the top
+// bar looking oversized next to the document.
+//
+// This applies on X11 as well as Wayland: Qt 6 scales on xcb too
+// (measured devicePixelRatio 1.25 with Xft.dpi 120), because main.cpp's
+// attempt to disable it uses QT_ENABLE_HIGHDPI_SCALING, removed in Qt 6,
+// and AA_DisableHighDpiScaling, guarded to Qt 5. On Windows, where the
+// disabling does work, devicePixelRatio is 1 and this divides by 1.
+//
+// Returns what is left for the app to apply itself: 1.0 when Qt's scaling
+// already covers the display scale, >1 only where the detected DPI ratio
+// genuinely exceeds it.
+double residualManualScale(double detectedRatio, double qtAutoScale)
+{
+    if (qtAutoScale <= 0)
+        return detectedRatio;
+    const double residual = detectedRatio / qtAutoScale;
+    return residual < 1.0 ? 1.0 : residual;
+}
+}
+
 double Utils::getScreenDpiRatio(const QPoint& pt)
 {
     QWidget _w;
@@ -568,19 +596,19 @@ double Utils::getScreenDpiRatioByHWND(int hwnd)
     unsigned int _dpi_x = 0;
     unsigned int _dpi_y = 0;
     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
+    // See residualManualScale. On Windows Qt's own scaling really is
+    // disabled, so devicePixelRatio is 1 and there is nothing to divide
+    // out; only Linux needs the lookup (WId is an integer type there).
+    double qtAutoScale = 1.0;
+#ifdef Q_OS_LINUX
+    if (QWidget * wid = QWidget::find((WId)hwnd))
+        qtAutoScale = wid->devicePixelRatio();
+#endif
+    return residualManualScale(choose_scaling(nScale), qtAutoScale);
 }
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
 {
-    // Manual DPI scaling here (multiplying sizes by dpiRatio) computes a
-    // logical/DIP size for widgets that don't rely purely on Qt's layout
-    // system (e.g. cplatformdecoration.cpp's CUSTOM_BORDER_WIDTH * ratio).
-    // That's independent of Qt's own automatic HiDPI backing-store
-    // scaling (which just renders whatever DIP size is chosen more
-    // crisply) -- it's needed on Wayland exactly the same way it's
-    // needed on X11, so this used to (incorrectly) skip it with a flat
-    // 1.0 return on Wayland, leaving those widgets sized as if unscaled.
     if (!wid)
         return 1;
 
@@ -595,11 +623,13 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
     double dpiApp = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)wid->winId(), nDpiX, nDpiY);
 #endif
 
+    // See residualManualScale: divide out the scaling Qt performs itself,
+    // so the caller's manual multiplication doesn't compound with it.
     if ( dpiApp >= 0 ) {
-        return choose_scaling(dpiApp);
+        return residualManualScale(choose_scaling(dpiApp), wid->devicePixelRatio());
     }
 
-    return wid->devicePixelRatio();
+    return 1.0;
 }
 
 namespace {
