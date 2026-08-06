@@ -835,6 +835,56 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C15. Create charts and edit data series ---
+        //
+        // ApiWorksheet.GetAllCharts() (apiBuilder.js:9359) is the only real
+        // addressing mechanism -- ApiChart has no GetName/SetName at all, so
+        // chartIndex-into-GetAllCharts() isn't a workaround, it's the sole option.
+        // AddSeria/SetSeriaName (13641,13608) take range strings, not a single
+        // range/name scalar as originally planned for a couple of the params.
+
+        auto resolveChart = QStringLiteral(R"js(
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var chart = ws.GetAllCharts()[scope.chartIndex];
+                    if (!chart) throw new Error("no chart at chartIndex " + scope.chartIndex);
+        )js");
+
+        table.Register(QStringLiteral("cell.addSeria"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("chartIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("valuesRange"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveChart + QStringLiteral(R"js(
+                    chart.AddSeria("", scope.valuesRange);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.setSeriaName"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("chartIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("seriaIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveChart + QStringLiteral(R"js(
+                    return chart.SetSeriaName(scope.name, scope.seriaIndex);
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
