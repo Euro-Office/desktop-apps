@@ -116,5 +116,47 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B3. Insert/edit text ---
+        //
+        // ApiDocumentContent.GetElement(nPos) (apiBuilder.js:6028) resolves a
+        // paragraph by index; ApiParagraph.GetElement(nPos) (apiBuilder.js:10315)
+        // resolves a run within it the same way. ApiParagraph.AddText(text)
+        // (apiBuilder.js:10146) always appends a *new* run carrying `text` -- it does
+        // not edit an existing run in place -- and ApiRun.GetText (apiBuilder.js:12883)
+        // reads one run's text back.
+
+        table.Register(QStringLiteral("word.addText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    para.AddText(scope.text);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("runIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var run = para.GetElement(scope.runIndex);
+                    if (!run) throw new Error("no run at runIndex " + scope.runIndex);
+                    return run.GetText();
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }

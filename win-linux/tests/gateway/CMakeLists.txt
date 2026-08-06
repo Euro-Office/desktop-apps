@@ -48,3 +48,24 @@ add_test(
     NAME gateway_word_content_enumeration
     COMMAND gateway_word_content_enumeration_test
 )
+
+add_executable(gateway_word_insert_edit_text_test
+    word_insert_edit_text_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/wordcommands.cpp
+)
+
+set_target_properties(gateway_word_insert_edit_text_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_word_insert_edit_text_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_word_insert_edit_text
+    COMMAND gateway_word_insert_edit_text_test
+)
