@@ -70,5 +70,51 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B2. Content enumeration ---
+        //
+        // ApiDocument inherits ApiDocumentContent (apiBuilder.js:3112), so
+        // GetAllParagraphs/GetAllTables/GetAllDrawingObjects/GetAllCharts are real,
+        // inherited methods (apiBuilder.js:6193-6289). Each returns an array of Api*
+        // object instances, which aren't themselves JSON-serializable over CDP's
+        // returnByValue -- returned as an array of 0-based indices instead, matching
+        // gateway-test-case-designs.md §B2's corrected expectation and the same index
+        // space paraIndex/tableIndex/etc. scope fields elsewhere already use.
+
+        table.Register(QStringLiteral("word.getAllParagraphs"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetAllParagraphs().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getAllTables"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetAllTables().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getAllDrawingObjects"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetAllDrawingObjects().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getAllCharts"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetAllCharts().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
