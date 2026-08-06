@@ -492,6 +492,43 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C8. AutoFilter ---
+        //
+        // ApiAutoFilter.ApplyFilter() (apiBuilder.js:27379) only re-evaluates an
+        // *existing* AutoFilter's criteria -- it does not create one. Establishing a
+        // new AutoFilter range is ApiRange.SetAutoFilter() with no arguments (12216),
+        // which toggles: creates one if none exists, deletes the existing one if
+        // called again. GetFilters() (27421) returns unserializable ApiFilter[] --
+        // cell.getFilters returns GetFilterMode()'s boolean instead.
+
+        table.Register(QStringLiteral("cell.applyFilter"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    range.SetAutoFilter();
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.getFilters"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    return ws.GetAutoFilter().GetFilterMode();
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
