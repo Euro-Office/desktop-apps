@@ -220,5 +220,70 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- C4. Copy/paste, find/replace ---
+        //
+        // ApiRange.Copy(destination) (apiBuilder.js:11338) needs a real ApiRange
+        // destination, not a string. Find/Replace (11616, 11764) are per-range
+        // methods, not document-wide search -- Find returns a single ApiRange | null
+        // (first match), not a list; both are called here against
+        // ApiWorksheet.GetUsedRange() (8524) as the search scope. Results reported as
+        // an address string (ApiRange.GetAddress(), 10043) or null, not the
+        // unserializable ApiRange handle.
+
+        table.Register(QStringLiteral("cell.copy"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("from"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("to"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var src = ws.GetRange(scope.from);
+                    var dst = ws.GetRange(scope.to);
+                    if (!src || !dst) throw new Error("could not resolve from/to range");
+                    src.Copy(dst);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.find"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var found = ws.GetUsedRange().Find({What: scope.text});
+                    return found ? found.GetAddress() : null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.replace"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("find"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("replace"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var found = ws.GetUsedRange().Replace({What: scope.find, Replacement: scope.replace, ReplaceAll: true});
+                    return found ? found.GetAddress() : null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
