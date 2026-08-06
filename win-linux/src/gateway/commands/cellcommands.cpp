@@ -821,6 +821,20 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C14. Recalculate formulas ---
+        //
+        // Api.RecalculateAllFormulas(fLogger) (apiBuilder.js:7586) matches the plan
+        // exactly -- no correction needed.
+
+        table.Register(QStringLiteral("cell.recalculateAllFormulas"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.RecalculateAllFormulas();
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
