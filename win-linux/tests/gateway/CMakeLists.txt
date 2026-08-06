@@ -195,3 +195,24 @@ add_test(
     NAME gateway_word_image_shape
     COMMAND gateway_word_image_shape_test
 )
+
+add_executable(gateway_word_page_setup_test
+    word_page_setup_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/wordcommands.cpp
+)
+
+set_target_properties(gateway_word_page_setup_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_word_page_setup_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_word_page_setup
+    COMMAND gateway_word_page_setup_test
+)

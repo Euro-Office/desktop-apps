@@ -590,5 +590,69 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B10. Headers/footers, page setup ---
+        //
+        // ApiDocument has no GetSection(index), only GetFinalSection()
+        // (apiBuilder.js:7191) -- these operate on the document's one section, correct
+        // for every fixture used across this file. ApiSection.GetHeader (13289)
+        // returns an ApiDocumentContent with no direct text-insertion method;
+        // populated via Api.CreateParagraph() (4575) + ApiParagraph.AddText (§B3) +
+        // ApiDocumentContent.AddElement(0, paragraph) (6052). SetPageMargins/
+        // SetPageSize (13181, 13141) take twips.
+
+        static const QStringList validHeaderTypes = {
+            QStringLiteral("title"), QStringLiteral("even"), QStringLiteral("default")
+        };
+
+        table.Register(QStringLiteral("word.setHeaderText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("type"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validHeaderTypes.contains(scope.value(QStringLiteral("type")).toString()))
+                    return QStringLiteral("scope.type must be one of title, even, default");
+                return RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var section = Api.GetDocument().GetFinalSection();
+                    var header = section.GetHeader(scope.type, true);
+                    if (!header) throw new Error("could not get/create header of type " + scope.type);
+                    var para = Api.CreateParagraph();
+                    para.AddText(scope.text);
+                    header.AddElement(0, para);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setPageMargins"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                for (const char* field : {"left", "top", "right", "bottom"})
+                {
+                    const QString err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetFinalSection().SetPageMargins(scope.left, scope.top, scope.right, scope.bottom);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setPageSize"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("width"), /*minimum=*/1);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("height"), /*minimum=*/1);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetFinalSection().SetPageSize(scope.width, scope.height, true);
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
