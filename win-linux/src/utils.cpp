@@ -39,6 +39,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QScreen>
+#include <QWindow>
+#include <QTimer>
+#include <QPointer>
 #include <QStorageInfo>
 #include <QPrinterInfo>
 #include <QProcess>
@@ -637,20 +640,113 @@ class CDpiChangeWatcher : public QObject
 {
 public:
     CDpiChangeWatcher(QWidget* w, std::function<void()> onChange)
-        : QObject(w), m_onChange(std::move(onChange))
+        : QObject(w), m_widget(w), m_onChange(std::move(onChange))
     {
+        // Collapse a burst of triggers (screenChanged + a DPR change + the
+        // new screen's geometry settling all arrive together when a window
+        // is dragged across a monitor boundary) into a single rescale, and
+        // keep the resulting setGeometry() out of the window manager's own
+        // move/resize handling by deferring it to the next event loop pass.
+        m_debounce.setSingleShot(true);
+        m_debounce.setInterval(80);
+        connect(&m_debounce, &QTimer::timeout, this, [this]() {
+            // updateScaling() resizes and re-centers the window, which can
+            // itself emit geometryChanged/screenChanged. Don't let that feed
+            // back in; the caller's own "did the ratio actually change?"
+            // check is what decides whether a further pass is needed.
+            if (m_inChange)
+                return;
+            m_inChange = true;
+            m_onChange();
+            m_inChange = false;
+        });
+
         w->installEventFilter(this);
+        attachToWindow();
     }
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override
     {
-        if (event->type() == QEvent::DevicePixelRatioChange)
-            m_onChange();
+        switch (event->type()) {
+        // Wayland: the compositor reports a per-surface (fractional) scale,
+        // so a real scale change always surfaces as a DPR change.
+        case QEvent::DevicePixelRatioChange:
+            schedule();
+            break;
+
+        // The QWindow only exists once the widget acquires a native handle,
+        // which happens after this watcher is constructed. Re-attach on every
+        // event that can create or replace it.
+        case QEvent::Show:
+        case QEvent::WinIdChange:
+        case QEvent::PlatformSurface:
+            attachToWindow();
+            break;
+
+        default:
+            break;
+        }
         return QObject::eventFilter(watched, event);
     }
 
 private:
+    void attachToWindow()
+    {
+        QWindow* wnd = m_widget ? m_widget->windowHandle() : nullptr;
+        if (!wnd || wnd == m_window)
+            return;
+
+        if (m_window)
+            m_window->disconnect(this);
+        m_window = wnd;
+
+        // xcb: Qt's own scaling is deliberately neutralized on X11 (see
+        // main.cpp -- QT_ENABLE_HIGHDPI_SCALING=0 + AA_Use96Dpi), so
+        // devicePixelRatio() is pinned at 1.0 on every screen and
+        // DevicePixelRatioChange never fires. The app derives its scale
+        // per-screen itself (QDpiChecker::GetMonitorDpi), so the value does
+        // change when the window moves -- it just needs a trigger to be
+        // re-read. screenChanged is that trigger, and it works on Wayland
+        // too, so it is not gated by platform.
+        connect(wnd, &QWindow::screenChanged, this, [this](QScreen*) {
+            attachToScreen();
+            schedule();
+        });
+
+        attachToScreen();
+    }
+
+    void attachToScreen()
+    {
+        QScreen* scr = m_window ? m_window->screen() : nullptr;
+        if (!scr || scr == m_screen)
+            return;
+
+        if (m_screen)
+            m_screen->disconnect(this);
+        m_screen = scr;
+
+        // The window can also stay put while the monitor under it changes
+        // resolution or DPI (xrandr, display settings, docking). None of
+        // these produce a DPR change on X11 either.
+        auto rescale = [this]() { schedule(); };
+        connect(scr, &QScreen::physicalDotsPerInchChanged, this, rescale);
+        connect(scr, &QScreen::logicalDotsPerInchChanged, this, rescale);
+        connect(scr, &QScreen::geometryChanged, this, rescale);
+    }
+
+    void schedule()
+    {
+        if (!m_inChange)
+            m_debounce.start();
+    }
+
+    QPointer<QWidget> m_widget;
+    QPointer<QWindow> m_window;
+    QPointer<QScreen> m_screen;
+    QTimer m_debounce;
+    bool m_inChange = false;
     std::function<void()> m_onChange;
 };
 }
