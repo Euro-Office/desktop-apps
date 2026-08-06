@@ -166,5 +166,59 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- C3. Number formats, merge, clear ---
+        //
+        // SetNumberFormat/Merge/ClearContents (apiBuilder.js:10828,10897,9759) all
+        // return null/undefined on success -- no boolean result to surface.
+
+        table.Register(QStringLiteral("cell.setNumberFormat"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("format"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    range.SetNumberFormat(scope.format);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.merge"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireBool(scope, QStringLiteral("across"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    range.Merge(scope.across);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.clearContents"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    range.ClearContents();
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
