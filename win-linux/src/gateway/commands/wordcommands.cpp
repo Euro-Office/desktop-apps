@@ -510,5 +510,85 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B9. Insert images/shapes with positioning ---
+        //
+        // Api.CreateImage(imageSrc, width, height) (apiBuilder.js:4674) -- imageSrc is
+        // a URL or base64 data URI, not a local file path (per the method's own doc
+        // comment); width/height are EMU. ApiParagraph.AddDrawing (10486) inserts the
+        // created ApiImage (extends ApiDrawing, 3665) into a paragraph.
+        // SetWrappingStyle/SetHorPosition (18651, 18771) operate on a drawing resolved
+        // the same way word.getAllDrawingObjects (§B2) indexes them.
+
+        static const QStringList validWrappingStyles = {
+            QStringLiteral("inline"), QStringLiteral("square"), QStringLiteral("tight"),
+            QStringLiteral("through"), QStringLiteral("topAndBottom"),
+            QStringLiteral("behind"), QStringLiteral("inFront")
+        };
+        static const QStringList validRelativeFromH = {
+            QStringLiteral("character"), QStringLiteral("column"), QStringLiteral("leftMargin"),
+            QStringLiteral("rightMargin"), QStringLiteral("margin"), QStringLiteral("page")
+        };
+
+        table.Register(QStringLiteral("word.createImage"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("imageSrc"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("width"), /*minimum=*/1);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("height"), /*minimum=*/1);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var image = Api.CreateImage(scope.imageSrc, scope.width, scope.height);
+                    para.AddDrawing(image);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setWrappingStyle"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("drawingIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("style"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validWrappingStyles.contains(scope.value(QStringLiteral("style")).toString()))
+                    return QStringLiteral("scope.style is not a recognized wrapping style");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var drawing = Api.GetDocument().GetAllDrawingObjects()[scope.drawingIndex];
+                    if (!drawing) throw new Error("no drawing at drawingIndex " + scope.drawingIndex);
+                    return drawing.SetWrappingStyle(scope.style);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setHorPosition"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("drawingIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("distanceEmu"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("relativeTo"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validRelativeFromH.contains(scope.value(QStringLiteral("relativeTo")).toString()))
+                    return QStringLiteral("scope.relativeTo is not a recognized reference point");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var drawing = Api.GetDocument().GetAllDrawingObjects()[scope.drawingIndex];
+                    if (!drawing) throw new Error("no drawing at drawingIndex " + scope.drawingIndex);
+                    return drawing.SetHorPosition(scope.relativeTo, scope.distanceEmu, false);
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
