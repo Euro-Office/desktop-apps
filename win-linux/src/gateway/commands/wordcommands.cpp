@@ -654,5 +654,72 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B11. Bookmarks and hyperlinks ---
+        //
+        // Bookmark creation is only on ApiRange (apiBuilder.js:1581), not
+        // ApiParagraph directly -- resolved via ApiParagraph.GetRange(0,0) (10604).
+        // ApiParagraph.AddHyperlink(sLink, sScreenTipText, sBookmarkName)
+        // (apiBuilder.js:10578) takes no display-text parameter -- it wraps whatever
+        // text is already in the paragraph (via an internal SelectAll), so the text is
+        // added first via AddText (§B3), then wrapped. getBookmark returns a boolean,
+        // matching the unserializable-handle pattern already used in §B6/§B8. The URL
+        // scheme allowlist below is defense-in-depth at the gateway's own schema layer,
+        // independent of whatever scheme handling AddHyperlink does internally.
+
+        static const QRegularExpression allowedUrlScheme(
+            QStringLiteral("^(https?://|mailto:)"), QRegularExpression::CaseInsensitiveOption);
+
+        table.Register(QStringLiteral("word.addBookmark"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var range = para.GetRange(0, 0);
+                    if (!range) throw new Error("could not get a range for paraIndex " + scope.paraIndex);
+                    range.AddBookmark(scope.name);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getBookmark"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return !!Api.GetDocument().GetBookmark(scope.name);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.addHyperlink"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                const QJsonValue urlValue = scope.value(QStringLiteral("url"));
+                if (!urlValue.isString() || !allowedUrlScheme.match(urlValue.toString()).hasMatch())
+                    return QStringLiteral("scope.url must start with http://, https://, or mailto:");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    para.AddText(scope.text);
+                    var link = para.AddHyperlink(scope.url, "", null);
+                    if (!link) throw new Error("AddHyperlink rejected the given url/text");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
