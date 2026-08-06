@@ -449,5 +449,66 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B8. Style creation and application ---
+        //
+        // ApiDocument.CreateStyle/GetStyle (apiBuilder.js:7106,7091);
+        // ApiStyle.SetTextPr (15424) requires an actual ApiTextPr, built via
+        // Api.CreateTextPr() (27443). getStyle returns a boolean (ApiStyle.Style is
+        // undefined when the named style doesn't exist) rather than the unserializable
+        // ApiStyle handle -- same pattern as §B2/§B6.
+
+        static const QStringList validStyleTypes = {
+            QStringLiteral("paragraph"), QStringLiteral("table"),
+            QStringLiteral("run"), QStringLiteral("numbering")
+        };
+
+        table.Register(QStringLiteral("word.createStyle"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("type"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validStyleTypes.contains(scope.value(QStringLiteral("type")).toString()))
+                    return QStringLiteral("scope.type must be one of paragraph, table, run, numbering");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    Api.GetDocument().CreateStyle(scope.name, scope.type);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getStyle"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var style = Api.GetDocument().GetStyle(scope.name);
+                    return !!(style && style.Style);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setStyleTextPr"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("styleId"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireBool(scope, QStringLiteral("bold"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var style = Api.GetDocument().GetStyle(scope.styleId);
+                    if (!style || !style.Style) throw new Error("no such style " + scope.styleId);
+                    var textPr = Api.CreateTextPr();
+                    textPr.SetBold(scope.bold);
+                    style.SetTextPr(textPr);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
