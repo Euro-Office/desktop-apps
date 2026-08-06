@@ -782,6 +782,45 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C13. Insert/delete rows and columns ---
+        //
+        // ApiWorksheet.GetRangeByNumber(nRow, nCol) (apiBuilder.js:8642) resolves
+        // 0-based grid coordinates directly, matching this document's row/col index
+        // convention -- anchors GetEntireRow()/GetEntireColumn() (12753,12775) before
+        // Insert/Delete (11280,11241).
+
+        table.Register(QStringLiteral("cell.insertEntireRow"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("rowIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    ws.GetRangeByNumber(scope.rowIndex, 0).GetEntireRow().Insert("down");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.deleteEntireColumn"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("colIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    ws.GetRangeByNumber(0, scope.colIndex).GetEntireColumn().Delete("left");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
