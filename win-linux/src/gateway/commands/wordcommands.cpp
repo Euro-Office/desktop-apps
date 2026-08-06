@@ -354,5 +354,100 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B7. Table creation and editing ---
+        //
+        // tableIndex indexes into GetAllTables() (apiBuilder.js:6275), the same index
+        // space word.getAllTables (§B2) already exposes -- not raw document-content
+        // position, which would also count paragraphs. ApiTable.AddRow/AddColumn
+        // (13755, 13811) take a *cell* to insert relative to, not a row/column number
+        // directly -- resolved via ApiTable.GetCell(row, col) (13589) then inserted
+        // after it (isBefore=false), which is what "insert after rowIndex/colIndex"
+        // means here. MergeCells (13609) takes an array of ApiTableCell -- built from
+        // the fromRow/fromCol..toRow/toCol rectangle. SetStyle (13666) takes an
+        // ApiStyle object, not a style id string -- resolved via
+        // ApiDocument.GetStyle(sStyleName) (apiBuilder.js:7091).
+
+        auto resolveTable = QStringLiteral(R"js(
+                    var table = Api.GetDocument().GetAllTables()[scope.tableIndex];
+                    if (!table) throw new Error("no table at tableIndex " + scope.tableIndex);
+        )js");
+
+        table.Register(QStringLiteral("word.addRow"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("tableIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("rowIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveTable + QStringLiteral(R"js(
+                    var cell = table.GetCell(scope.rowIndex, 0);
+                    if (!cell) throw new Error("no row at rowIndex " + scope.rowIndex);
+                    table.AddRow(cell, false);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.addColumn"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("tableIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("colIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveTable + QStringLiteral(R"js(
+                    var cell = table.GetCell(0, scope.colIndex);
+                    if (!cell) throw new Error("no column at colIndex " + scope.colIndex);
+                    table.AddColumn(cell, false);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.mergeCells"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                for (const char* field : {"tableIndex", "fromRow", "fromCol", "toRow", "toCol"})
+                {
+                    const QString err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveTable + QStringLiteral(R"js(
+                    var cells = [];
+                    for (var r = scope.fromRow; r <= scope.toRow; r++) {
+                        for (var c = scope.fromCol; c <= scope.toCol; c++) {
+                            var cell = table.GetCell(r, c);
+                            if (cell) cells.push(cell);
+                        }
+                    }
+                    var merged = table.MergeCells(cells);
+                    if (!merged) throw new Error("merge failed for the given range");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setStyle"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("tableIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("styleId"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveTable + QStringLiteral(R"js(
+                    var style = Api.GetDocument().GetStyle(scope.styleId);
+                    if (!style) throw new Error("no such style " + scope.styleId);
+                    if (!table.SetStyle(style)) throw new Error("SetStyle failed");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
