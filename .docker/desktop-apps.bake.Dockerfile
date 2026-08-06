@@ -103,6 +103,7 @@ FROM core-base AS desktop-linux
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
         cmake --build . && \
+        ctest --test-dir . --output-on-failure && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors
