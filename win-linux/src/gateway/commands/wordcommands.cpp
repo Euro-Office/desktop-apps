@@ -251,5 +251,74 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B5. Paragraph formatting ---
+        //
+        // ApiParagraph.GetParaPr() (apiBuilder.js:10253) returns the ApiParaPr;
+        // SetJc/SetSpacingBefore/SetIndLeft (16677, 16863, 16580) all take twips
+        // (1/1440 inch) -- scope field named `twips`, not `points`, to match.
+
+        static const QStringList validAlignments = {
+            QStringLiteral("left"), QStringLiteral("right"),
+            QStringLiteral("center"), QStringLiteral("both")
+        };
+
+        table.Register(QStringLiteral("word.setJc"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("align"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validAlignments.contains(scope.value(QStringLiteral("align")).toString()))
+                    return QStringLiteral("scope.align must be one of left, right, center, both");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    para.GetParaPr().SetJc(scope.align);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setSpacingBefore"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                if (!scope.contains(QStringLiteral("twips")) || !scope.value(QStringLiteral("twips")).isDouble())
+                    return QStringLiteral("scope.twips must be an integer");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    para.GetParaPr().SetSpacingBefore(scope.twips);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setIndLeft"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                // Negative twips is valid (hanging indent) -- only type-check, no
+                // minimum, unlike RequireInt's default floor of 0.
+                if (!scope.contains(QStringLiteral("twips")) || !scope.value(QStringLiteral("twips")).isDouble())
+                    return QStringLiteral("scope.twips must be an integer");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    para.GetParaPr().SetIndLeft(scope.twips);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }

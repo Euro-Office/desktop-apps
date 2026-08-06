@@ -90,3 +90,24 @@ add_test(
     NAME gateway_word_character_formatting
     COMMAND gateway_word_character_formatting_test
 )
+
+add_executable(gateway_word_paragraph_formatting_test
+    word_paragraph_formatting_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/wordcommands.cpp
+)
+
+set_target_properties(gateway_word_paragraph_formatting_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_word_paragraph_formatting_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_word_paragraph_formatting
+    COMMAND gateway_word_paragraph_formatting_test
+)
