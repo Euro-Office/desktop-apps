@@ -778,5 +778,70 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B13. Comments and track changes ---
+        //
+        // ApiDocument.AddComment(sText, sAuthor, sUserId) (apiBuilder.js:9583) adds
+        // "to the current document selection, or to the current word if no text is
+        // selected" -- positioned via the same GetRange(0,0).Select() pattern as §B12.
+        // GetAllComments (8702) returns ApiComment[], mapped to plain {text, author}
+        // objects via ApiComment.GetText/GetAuthorName (27848, 27877) since ApiComment
+        // isn't itself JSON-serializable, same pattern as elsewhere in this file.
+        // SetTrackRevisions/AcceptAllRevisionChanges (7982 confirmed earlier in this
+        // family's design, 8856) are direct ApiDocument methods, no resolution needed.
+
+        table.Register(QStringLiteral("word.addComment"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("author"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var range = para.GetRange(0, 0);
+                    if (!range) throw new Error("could not get a range for paraIndex " + scope.paraIndex);
+                    range.Select();
+                    var comment = Api.GetDocument().AddComment(scope.text, scope.author);
+                    if (!comment) throw new Error("AddComment failed");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getAllComments"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetAllComments().map(function(c){
+                        return {text: c.GetText(), author: c.GetAuthorName()};
+                    });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setTrackRevisions"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireBool(scope, QStringLiteral("enabled"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().SetTrackRevisions(scope.enabled);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.acceptAllRevisionChanges"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    Api.GetDocument().AcceptAllRevisionChanges();
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
