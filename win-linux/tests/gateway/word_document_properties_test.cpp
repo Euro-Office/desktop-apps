@@ -3,15 +3,17 @@
 //
 // SCOPE OF WHAT THIS FILE CAN VERIFY RIGHT NOW: schema validation and allowlist lookup
 // only (A1-A4, B1.2 negative half, B1.4). The cases that require a real CDP round trip
-// against a running document (A5-A9, B1.1, B1.3, B1.5) are NOT executable yet — they
-// need two pieces of infrastructure this commit deliberately leaves as open, flagged
-// gaps rather than faked: GatewayCommandRunner::ResolveTargetWebSocketUrl (see the
-// KNOWN GAP note in gatewaycommandrunner.h) and a GatewayServer/GatewayCommandRunner
-// instantiation hook in the app's startup path. Those two are the very next things to
-// resolve — see cdp-gateway-cli-plan.md — before this file's TODO-marked cases can be
-// filled in and this command family can be considered done per the plan's per-command
-// loop (§5 step 4: "Run it -> verify: test passes... against a running editor
-// instance").
+// against a running document (A5-A9, B1.1, B1.3, B1.5) are NOT executable from this
+// standalone binary — GatewayCommandRunner now resolves targets and drives CDP for
+// real (CAscApplicationManager::GetViewById + CCefView::SendGatewayDevToolsMessage,
+// see gatewaycommandrunner.cpp), but that needs an actual running CCefView backed by
+// a live CEF browser, which this lightweight CTest target deliberately does not spin
+// up (would mean linking the whole ascdocumentscore/CEF stack into a "unit" test).
+// Those round-trip cases are exercised instead at the per-editor gate
+// (cdp-gateway-cli-plan.md §6): build the real DesktopEditors binary, run it, and
+// drive these same commands through it end-to-end -- that's what "verify: test
+// passes... against a running editor instance" (§5 step 4) actually means for this
+// command family.
 //
 // No test framework dependency was added for this (repo has none currently - see
 // investigation notes referenced from the plan); this is a minimal self-contained
