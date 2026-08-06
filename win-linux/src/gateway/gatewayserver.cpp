@@ -3,6 +3,7 @@
 #include "gatewaytypes.h"
 #include "allowlist.h"
 #include "commands/wordcommands.h"
+#include "commands/cellcommands.h"
 
 #include <QLocalSocket>
 #include <QJsonDocument>
@@ -68,6 +69,7 @@ namespace Gateway
         // Commands::RegisterCellCommands()/RegisterSlideCommands()/RegisterPdfCommands()
         // join this list when those families exist.
         Commands::RegisterWordCommands();
+        Commands::RegisterCellCommands();
 
         const QString socketPath = SocketPath();
         QLocalServer::removeServer(socketPath); // clear a stale socket file from a crashed prior run

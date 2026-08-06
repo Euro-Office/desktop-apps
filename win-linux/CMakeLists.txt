@@ -150,6 +150,7 @@ set(COMMON_HEADERS
     src/gateway/gatewaycommandrunner.h
     src/gateway/gatewayserver.h
     src/gateway/commands/wordcommands.h
+    src/gateway/commands/cellcommands.h
     src/prop/defines_p.h
     src/prop/cascapplicationmanagerwrapperintf.h
     src/prop/version_p.h
@@ -203,6 +204,7 @@ set(COMMON_SOURCES
     src/gateway/gatewaycommandrunner.cpp
     src/gateway/gatewayserver.cpp
     src/gateway/commands/wordcommands.cpp
+    src/gateway/commands/cellcommands.cpp
     src/prop/cmainwindowimpl.cpp
     src/prop/utils.cpp
     src/windows/cmainwindow.cpp

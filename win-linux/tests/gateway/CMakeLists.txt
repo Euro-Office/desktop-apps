@@ -279,3 +279,24 @@ add_test(
     NAME gateway_word_comment_revision
     COMMAND gateway_word_comment_revision_test
 )
+
+add_executable(gateway_cell_sheet_management_test
+    cell_sheet_management_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/cellcommands.cpp
+)
+
+set_target_properties(gateway_cell_sheet_management_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_cell_sheet_management_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_cell_sheet_management
+    COMMAND gateway_cell_sheet_management_test
+)
