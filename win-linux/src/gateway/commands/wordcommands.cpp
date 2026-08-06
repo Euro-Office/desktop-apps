@@ -1,6 +1,8 @@
 #include "wordcommands.h"
 #include "../allowlist.h"
 
+#include <QRegularExpression>
+
 // Word command family, implemented in the sequential order set by
 // cdp-gateway-cli-plan.md §4 ("Word (first)"). Each command's test cases live in
 // gateway-test-case-designs.md under the matching §B heading (this file: §B1).
@@ -155,6 +157,97 @@ namespace Gateway::Commands
                     var run = para.GetElement(scope.runIndex);
                     if (!run) throw new Error("no run at runIndex " + scope.runIndex);
                     return run.GetText();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        // --- B4. Character formatting ---
+        //
+        // All four are ApiRun methods (apiBuilder.js:12457,12550,12614; SetColor at
+        // 12507 forwards to ApiTextPr.SetColor at 15918, whose non-ApiColor branch
+        // still accepts plain (r,g,b) ints -- used here instead of constructing an
+        // ApiColor object, since the scope's hex-string shape already has to be
+        // decomposed into r/g/b for that call regardless.
+
+        auto resolveRun = QStringLiteral(R"js(
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var run = para.GetElement(scope.runIndex);
+                    if (!run) throw new Error("no run at runIndex " + scope.runIndex);
+        )js");
+
+        table.Register(QStringLiteral("word.setBold"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("runIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireBool(scope, QStringLiteral("bold"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRun + QStringLiteral(R"js(
+                    run.SetBold(scope.bold);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setItalic"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("runIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireBool(scope, QStringLiteral("italic"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRun + QStringLiteral(R"js(
+                    run.SetItalic(scope.italic);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setFontFamily"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("runIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("font"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRun + QStringLiteral(R"js(
+                    run.SetFontFamily(scope.font);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setColor"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("runIndex"));
+                if (!err.isEmpty()) return err;
+                static const QRegularExpression hexColor(QStringLiteral("^#[0-9A-Fa-f]{6}$"));
+                const QJsonValue colorValue = scope.value(QStringLiteral("color"));
+                if (!colorValue.isString() || !hexColor.match(colorValue.toString()).hasMatch())
+                    return QStringLiteral("scope.color must be a #RRGGBB hex string");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRun + QStringLiteral(R"js(
+                    var hex = scope.color.replace('#', '');
+                    var r = parseInt(hex.substring(0, 2), 16);
+                    var g = parseInt(hex.substring(2, 4), 16);
+                    var b = parseInt(hex.substring(4, 6), 16);
+                    run.SetColor(r, g, b);
+                    return null;
                 })(%%SCOPE%%);
             )js")
         });
