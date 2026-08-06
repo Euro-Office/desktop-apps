@@ -510,3 +510,24 @@ add_test(
     NAME gateway_cell_image_ole
     COMMAND gateway_cell_image_ole_test
 )
+
+add_executable(gateway_cell_comment_reply_test
+    cell_comment_reply_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/cellcommands.cpp
+)
+
+set_target_properties(gateway_cell_comment_reply_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_cell_comment_reply_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_cell_comment_reply
+    COMMAND gateway_cell_comment_reply_test
+)

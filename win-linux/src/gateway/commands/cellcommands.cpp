@@ -712,6 +712,76 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C12. Comments with replies ---
+        //
+        // ApiRange.AddComment (apiBuilder.js:10969) returns ApiComment|null.
+        // ApiComment has no public row/col accessor -- addReply/setSolved address a
+        // comment by the id AddComment/GetId() (13921) returns, resolved via
+        // ws.GetComments().find(...), not by range (no real lookup for that exists).
+
+        auto resolveComment = QStringLiteral(R"js(
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var comment = ws.GetComments().find(function(c){ return c.GetId() === scope.commentId; });
+                    if (!comment) throw new Error("no comment with id " + scope.commentId);
+        )js");
+
+        table.Register(QStringLiteral("cell.addComment"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("author"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    var comment = range.AddComment(scope.text, scope.author);
+                    if (!comment) throw new Error("AddComment failed");
+                    return comment.GetId();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.addReply"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("commentId"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("author"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveComment + QStringLiteral(R"js(
+                    comment.AddReply(scope.text, scope.author);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.setSolved"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("commentId"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireBool(scope, QStringLiteral("solved"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveComment + QStringLiteral(R"js(
+                    comment.SetSolved(scope.solved);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
