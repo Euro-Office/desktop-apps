@@ -529,6 +529,93 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C9. PivotTable ---
+        //
+        // Three real, distinct steps (apiBuilder.js:7676,16192,17582): create via
+        // Api.InsertPivotExistingWorksheet(dataRef, pivotRef, confirmation) (real
+        // ApiRange objects, not strings), name it (SetName, 16782) so later commands
+        // can re-resolve it via ApiWorksheet.GetPivotByName (9412) -- there's no
+        // addressing by source range. AddDataField (16192) returns an
+        // ApiPivotDataField; ApiPivotField.SetFunction (the field type AddFields
+        // works with) is a hardcoded-error stub -- the real setter is
+        // ApiPivotDataField.SetFunction (17582), re-resolved via GetDataFields
+        // (16633) for a later, separate call. private_MakeError really throws
+        // (throwException), so AddDataField on an unknown field already propagates
+        // as SCRIPT_EXCEPTION with no extra null-check needed.
+
+        table.Register(QStringLiteral("cell.addPivotTable"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                for (const char* field : {"sourceSheet", "sourceRange", "pivotSheet", "pivotRange", "name"})
+                {
+                    const QString err = RequireString(scope, QString::fromLatin1(field), /*allowEmpty=*/false);
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var srcWs = Api.GetSheet(scope.sourceSheet);
+                    if (!srcWs) throw new Error("no sheet named " + scope.sourceSheet);
+                    var pivotWs = Api.GetSheet(scope.pivotSheet);
+                    if (!pivotWs) throw new Error("no sheet named " + scope.pivotSheet);
+                    var dataRef = srcWs.GetRange(scope.sourceRange);
+                    var pivotRef = pivotWs.GetRange(scope.pivotRange);
+                    if (!dataRef || !pivotRef) throw new Error("could not resolve source/pivot range");
+                    var table = Api.InsertPivotExistingWorksheet(dataRef, pivotRef, true);
+                    if (!table) throw new Error("InsertPivotExistingWorksheet failed");
+                    table.SetName(scope.name);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.addPivotDataField"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("pivotName"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("field"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("func"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var table = ws.GetPivotByName(scope.pivotName);
+                    if (!table) throw new Error("no pivot table named " + scope.pivotName);
+                    var dataField = table.AddDataField(scope.field);
+                    dataField.SetFunction(scope.func);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.setPivotFieldFunction"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("pivotName"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("field"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("func"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var table = ws.GetPivotByName(scope.pivotName);
+                    if (!table) throw new Error("no pivot table named " + scope.pivotName);
+                    var dataField = table.GetDataFields(scope.field);
+                    if (!dataField) throw new Error("no data field " + scope.field);
+                    dataField.SetFunction(scope.func);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
