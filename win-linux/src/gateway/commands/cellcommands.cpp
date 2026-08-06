@@ -616,6 +616,28 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C10. Freeze panes ---
+        //
+        // ApiWorksheet.GetFreezePanes().FreezeAt(range) (apiBuilder.js:9474,15780) --
+        // range resolved explicitly via ws.GetRange() first rather than relying on
+        // FreezeAt's own string-overload, which resolves against the *active* sheet,
+        // not necessarily the sheet this command's `sheet` scope field names.
+
+        table.Register(QStringLiteral("cell.freezeAt"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    ws.GetFreezePanes().FreezeAt(range);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
