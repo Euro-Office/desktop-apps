@@ -27,12 +27,12 @@ if(UNIX)
     add_definitions(-DLINUX -D_LINUX -D_WAYLAND)
 endif()
 
-# Gateway (see cdp-gateway-cli-plan.md): CDP's Runtime.evaluate is JSON-RPC over a
-# WebSocket, so GatewayCommandRunner needs a WebSocket client. Qt6WebSockets is the
-# same Qt family already used throughout this app, chosen over hand-rolling a
-# WebSocket client to keep the gateway's own code small (decided with the user, see
-# plan §0 history — not a default/unreviewed dependency addition).
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS WebSockets)
+# Gateway (see cdp-gateway-cli-plan.md): GatewayCommandRunner drives CDP in-process via
+# CCefView::SendGatewayDevToolsMessage (CefBrowserHost::SendDevToolsMessage under the
+# hood) -- no external --remote-debugging-port, no WebSocket client needed. An earlier
+# design used Qt6WebSockets against an external CDP port; dropped after investigation
+# showed the in-process CefBrowserHost API solves target resolution for free (see
+# gatewaycommandrunner.h and the desktop-sdk cefview.h/.cpp changes on this branch).
 
 if(NOT TARGET hunspell-wrapper)
     add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell-wrapper)
@@ -387,7 +387,6 @@ target_link_libraries(DesktopEditors PRIVATE
     Qt${QT_VERSION_MAJOR}::PrintSupport
     Qt${QT_VERSION_MAJOR}::Multimedia 
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
-    Qt${QT_VERSION_MAJOR}::WebSockets
     ${PLATFORM_LIBS}
     ${DBUS_LIBRARIES}
 

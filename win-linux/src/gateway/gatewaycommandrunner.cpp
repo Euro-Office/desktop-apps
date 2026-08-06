@@ -4,7 +4,9 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QJsonDocument>
-#include <QWebSocket>
+
+#include "applicationmanager.h"
+#include "cefview.h"
 
 namespace Gateway
 {
@@ -24,80 +26,68 @@ namespace Gateway
         if (!validationError.isEmpty())
             return Result::Failure(ErrorCode::SchemaInvalid, validationError);
 
-        Error targetError{ErrorCode::TargetNotFound, QString()};
-        const QString wsUrl = ResolveTargetWebSocketUrl(targetViewId, targetError);
-        if (wsUrl.isEmpty())
-            return Result::Failure(targetError.code, targetError.message);
+        CCefView* view = m_manager ? m_manager->GetViewById(targetViewId) : nullptr;
+        if (!view)
+            return Result::Failure(ErrorCode::TargetNotFound,
+                                    QStringLiteral("no open document with view id %1").arg(targetViewId));
 
         QString script = spec->script;
         script.replace(QStringLiteral("%%SCOPE%%"),
                         QString::fromUtf8(QJsonDocument(scope).toJson(QJsonDocument::Compact)));
 
-        // Drive one CDP Runtime.evaluate round-trip over a fresh WebSocket connection.
-        // A connection-per-call is deliberate for now (simplicity over the more
-        // efficient long-lived-connection-per-target design) — revisit only if the
-        // per-editor gate's test suite shows this is a real latency problem.
-        QWebSocket socket;
+        const int messageId = m_nextMessageId++;
+
+        QJsonObject params;
+        params.insert(QStringLiteral("expression"), script);
+        params.insert(QStringLiteral("returnByValue"), true);
+        params.insert(QStringLiteral("awaitPromise"), false);
+
+        QJsonObject request;
+        request.insert(QStringLiteral("id"), messageId);
+        request.insert(QStringLiteral("method"), QStringLiteral("Runtime.evaluate"));
+        request.insert(QStringLiteral("params"), params);
+
+        const QByteArray requestBytes = QJsonDocument(request).toJson(QJsonDocument::Compact);
+
+        // CCefView::SendGatewayDevToolsMessage's callback fires on the CEF browser
+        // process UI thread -- which, in this single-process-embedded-CEF app, is the
+        // same thread pumping the Qt event loop we spin below. A nested QEventLoop is
+        // therefore the correct way to make this call look synchronous to
+        // GatewayCommandRunner's own caller, matching every functional test case in
+        // gateway-test-case-designs.md, which expects Execute() to just return a Result.
         QEventLoop loop;
         Result result = Result::Failure(ErrorCode::ScriptException, QStringLiteral("CDP call timed out"));
-        int requestId = 1;
 
-        QObject::connect(&socket, &QWebSocket::connected, &loop, [&]() {
-            QJsonObject params;
-            params.insert(QStringLiteral("expression"), script);
-            params.insert(QStringLiteral("returnByValue"), true);
-            params.insert(QStringLiteral("awaitPromise"), false);
+        view->SendGatewayDevToolsMessage(requestBytes.toStdString(), messageId,
+            [&result, &loop](bool ok, const std::string& jsonResponseOrError) {
+                if (!ok)
+                {
+                    result = Result::Failure(ErrorCode::ScriptException, QString::fromStdString(jsonResponseOrError));
+                    loop.quit();
+                    return;
+                }
 
-            QJsonObject request;
-            request.insert(QStringLiteral("id"), requestId);
-            request.insert(QStringLiteral("method"), QStringLiteral("Runtime.evaluate"));
-            request.insert(QStringLiteral("params"), params);
+                const QJsonObject response = QJsonDocument::fromJson(
+                    QByteArray::fromStdString(jsonResponseOrError)).object();
+                const QJsonObject cdpResult = response.value(QStringLiteral("result")).toObject();
+                const QJsonObject exceptionDetails = cdpResult.value(QStringLiteral("exceptionDetails")).toObject();
 
-            socket.sendTextMessage(QString::fromUtf8(QJsonDocument(request).toJson(QJsonDocument::Compact)));
-        });
+                if (!exceptionDetails.isEmpty())
+                {
+                    result = Result::Failure(ErrorCode::ScriptException,
+                                              exceptionDetails.value(QStringLiteral("text")).toString());
+                }
+                else
+                {
+                    const QJsonObject remoteObject = cdpResult.value(QStringLiteral("result")).toObject();
+                    result = Result::Success(remoteObject.value(QStringLiteral("value")));
+                }
+                loop.quit();
+            });
 
-        QObject::connect(&socket, &QWebSocket::textMessageReceived, &loop, [&](const QString& message) {
-            const QJsonObject response = QJsonDocument::fromJson(message.toUtf8()).object();
-            if (response.value(QStringLiteral("id")).toInt() != requestId)
-                return; // not our request/response — ignore (defensive; single in-flight request per call)
-
-            const QJsonObject cdpResult = response.value(QStringLiteral("result")).toObject();
-            const QJsonObject exceptionDetails = cdpResult.value(QStringLiteral("exceptionDetails")).toObject();
-            if (!exceptionDetails.isEmpty())
-            {
-                const QString message = exceptionDetails.value(QStringLiteral("text")).toString();
-                result = Result::Failure(ErrorCode::ScriptException, message);
-            }
-            else
-            {
-                const QJsonObject remoteObject = cdpResult.value(QStringLiteral("result")).toObject();
-                result = Result::Success(remoteObject.value(QStringLiteral("value")));
-            }
-            loop.quit();
-        });
-
-        QObject::connect(&socket, &QWebSocket::errorOccurred, &loop, [&]() {
-            result = Result::Failure(ErrorCode::ScriptException,
-                                      QStringLiteral("CDP WebSocket error: %1").arg(socket.errorString()));
-            loop.quit();
-        });
-
-        QTimer::singleShot(5000, &loop, &QEventLoop::quit); // bounded wait; see A6 test case (no hang on a dead target)
-
-        socket.open(QUrl(wsUrl));
+        QTimer::singleShot(5000, &loop, &QEventLoop::quit); // bounded wait; see test case A6 (no hang on a dead target)
         loop.exec();
 
         return result;
-    }
-
-    QString GatewayCommandRunner::ResolveTargetWebSocketUrl(int /*targetViewId*/, Error& outErrorIfNotFound)
-    {
-        // See the KNOWN GAP note in gatewaycommandrunner.h — not yet wired to
-        // CAscApplicationManager's m_mapViews. Fails closed (TARGET_NOT_FOUND) rather
-        // than guessing a target, so callers get test case A5's documented behavior
-        // instead of a silent wrong-document write.
-        outErrorIfNotFound = Error{ErrorCode::TargetNotFound,
-                                    QStringLiteral("target resolution not yet implemented")};
-        return QString();
     }
 }
