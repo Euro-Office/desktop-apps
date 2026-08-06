@@ -721,5 +721,62 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B12. Fillable form fields / content controls ---
+        //
+        // ApiDocument.InsertTextForm (sdkjs-forms/apiBuilder.js:452) inserts at the
+        // current cursor/selection -- positioned via ApiRange.Select()
+        // (sdkjs/word/apiBuilder.js:1737) on paragraph.GetRange(0,0) first.
+        // GetAllForms/SetFormsData confirmed (apiBuilder.js:8613,7963); SetFormsData
+        // takes Array<{key,value}>. word.addCheckBoxForm is deliberately NOT
+        // implemented here -- no confirmed insertion method exists in the vendored
+        // source for a created ApiCheckBoxForm; see gateway-test-case-designs.md §B12
+        // for the full reasoning. Do not add it without finding/confirming a real
+        // insertion path first.
+
+        table.Register(QStringLiteral("word.addTextForm"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("paraIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("key"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var para = Api.GetDocument().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var range = para.GetRange(0, 0);
+                    if (!range) throw new Error("could not get a range for paraIndex " + scope.paraIndex);
+                    range.Select();
+                    var form = Api.GetDocument().InsertTextForm({key: scope.key});
+                    if (!form) throw new Error("InsertTextForm failed");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.getAllForms"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetAllForms().map(function(form){ return form.GetFormKey(); });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.setFormsData"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                if (!scope.contains(QStringLiteral("data")) || !scope.value(QStringLiteral("data")).isObject())
+                    return QStringLiteral("scope.data must be an object of {key: value}");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var arrData = Object.keys(scope.data).map(function(key){
+                        return {key: key, value: scope.data[key]};
+                    });
+                    return Api.GetDocument().SetFormsData(arrData);
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
