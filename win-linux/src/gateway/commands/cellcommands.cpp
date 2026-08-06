@@ -440,6 +440,58 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C7. Data validation and named ranges ---
+        //
+        // ApiRange.GetValidation().Add(...) (apiBuilder.js:12793, 19898) takes the
+        // real internal enum strings (FromXlValidationTypeTo/FromXlValidationOperatorTo,
+        // 19653/19747), e.g. "xlValidateWholeNumber"/"xlBetween" -- accepted verbatim
+        // in scope rather than inventing a translation layer. ApiWorksheet.AddDefName
+        // (8974) returns false (not a throw) for an invalid name/ref -- converted to a
+        // thrown error here to keep this gateway's own error contract consistent.
+
+        table.Register(QStringLiteral("cell.addValidation"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("type"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("operator"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("formula1"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("formula2"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    var v = range.GetValidation().Add(scope.type, undefined, scope.operator, scope.formula1, scope.formula2 || undefined);
+                    if (!v) throw new Error("Add validation failed (unrecognized type/operator, or validation already exists)");
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.addDefName"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("refersTo"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var refersTo = scope.refersTo;
+                    var sheetName = refersTo.split('!')[0];
+                    var ws = Api.GetSheet(sheetName);
+                    if (!ws) throw new Error("no sheet named " + sheetName);
+                    if (!ws.AddDefName(scope.name, refersTo, false))
+                        throw new Error("AddDefName rejected the given name/refersTo");
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
