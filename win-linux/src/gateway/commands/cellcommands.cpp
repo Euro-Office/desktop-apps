@@ -2,6 +2,7 @@
 #include "../allowlist.h"
 
 #include <QRegularExpression>
+#include <vector>
 
 // Cell command family, implemented in the sequential order set by
 // cdp-gateway-cli-plan.md §4 ("Cell (second)"). Each command's test cases live in
@@ -634,6 +635,79 @@ namespace Gateway::Commands
                     )js") + resolveRange + QStringLiteral(R"js(
                     ws.GetFreezePanes().FreezeAt(range);
                     return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        // --- C11. Insert images/OLE objects (shapes deferred) ---
+        //
+        // ApiWorksheet.AddImage/AddOleObject (apiBuilder.js:9167,9228) place objects
+        // by column/row + EMU offset, not a range; sImageSrc is a URL/base64 data URI
+        // (same as word.createImage, §B9), not a local file path. cell.addShape is
+        // deliberately NOT implemented -- AddShape needs real ApiFill/ApiStroke
+        // objects whose constructors weren't confirmed in this file this pass; see
+        // gateway-test-case-designs.md §C11.
+
+        auto imagePlacementFields = std::vector<const char*>{
+            "fromCol", "colOffset", "fromRow", "rowOffset"
+        };
+
+        table.Register(QStringLiteral("cell.addImage"), CommandSpec{
+            [imagePlacementFields](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("imageSrc"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("width"), /*minimum=*/1);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("height"), /*minimum=*/1);
+                if (!err.isEmpty()) return err;
+                for (const char* field : imagePlacementFields)
+                {
+                    err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var image = ws.AddImage(scope.imageSrc, scope.width, scope.height,
+                        scope.fromCol, scope.colOffset, scope.fromRow, scope.rowOffset);
+                    return !!image;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.addOleObject"), CommandSpec{
+            [imagePlacementFields](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("imageSrc"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("width"), /*minimum=*/1);
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("height"), /*minimum=*/1);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("data"), /*allowEmpty=*/true);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("appId"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                for (const char* field : imagePlacementFields)
+                {
+                    err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var ole = ws.AddOleObject(scope.imageSrc, scope.width, scope.height,
+                        scope.data, scope.appId, scope.fromCol, scope.colOffset, scope.fromRow, scope.rowOffset);
+                    return !!ole;
                 })(%%SCOPE%%);
             )js")
         });
