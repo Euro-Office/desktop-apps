@@ -1,6 +1,8 @@
 #include "cellcommands.h"
 #include "../allowlist.h"
 
+#include <QRegularExpression>
+
 // Cell command family, implemented in the sequential order set by
 // cdp-gateway-cli-plan.md §4 ("Cell (second)"). Each command's test cases live in
 // gateway-test-case-designs.md under the matching §C heading (this file: §C1).
@@ -264,6 +266,123 @@ namespace Gateway::Commands
                     if (!ws) throw new Error("no sheet named " + scope.sheet);
                     var found = ws.GetUsedRange().Find({What: scope.text});
                     return found ? found.GetAddress() : null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        // --- C5. Font/fill/border/alignment formatting ---
+        //
+        // SetFontName (apiBuilder.js:10513) takes a plain string. SetFillColor (10772)
+        // and SetBorders (§C3's investigation, same file) both need a real ApiColor,
+        // built via Api.CreateColorFromRGB (925) from the scope's #RRGGBB hex, same
+        // decomposition as word.setColor (§B4). SetBorders has no "all" edge mode --
+        // the script loops over the four outer edges itself. SetAlignHorizontal (10575)
+        // returns false (not a throw) for an unrecognized value; the script throws in
+        // that case to keep this gateway's own error contract consistent.
+
+        table.Register(QStringLiteral("cell.setFontName"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("font"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    range.SetFontName(scope.font);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.setFillColor"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                static const QRegularExpression hexColor(QStringLiteral("^#[0-9A-Fa-f]{6}$"));
+                const QJsonValue colorValue = scope.value(QStringLiteral("color"));
+                if (!colorValue.isString() || !hexColor.match(colorValue.toString()).hasMatch())
+                    return QStringLiteral("scope.color must be a #RRGGBB hex string");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    var hex = scope.color.replace('#', '');
+                    var r = parseInt(hex.substring(0, 2), 16);
+                    var g = parseInt(hex.substring(2, 4), 16);
+                    var b = parseInt(hex.substring(4, 6), 16);
+                    range.SetFillColor(Api.CreateColorFromRGB(r, g, b));
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.setBorders"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                static const QStringList validEdges = {
+                    QStringLiteral("all"), QStringLiteral("DiagonalDown"), QStringLiteral("DiagonalUp"),
+                    QStringLiteral("Bottom"), QStringLiteral("Left"), QStringLiteral("Right"), QStringLiteral("Top"),
+                    QStringLiteral("InsideHorizontal"), QStringLiteral("InsideVertical")
+                };
+                err = RequireString(scope, QStringLiteral("edge"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validEdges.contains(scope.value(QStringLiteral("edge")).toString()))
+                    return QStringLiteral("scope.edge is not a recognized border edge");
+                err = RequireString(scope, QStringLiteral("style"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                static const QRegularExpression hexColor(QStringLiteral("^#[0-9A-Fa-f]{6}$"));
+                const QJsonValue colorValue = scope.value(QStringLiteral("color"));
+                if (!colorValue.isString() || !hexColor.match(colorValue.toString()).hasMatch())
+                    return QStringLiteral("scope.color must be a #RRGGBB hex string");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    var hex = scope.color.replace('#', '');
+                    var r = parseInt(hex.substring(0, 2), 16);
+                    var g = parseInt(hex.substring(2, 4), 16);
+                    var b = parseInt(hex.substring(4, 6), 16);
+                    var color = Api.CreateColorFromRGB(r, g, b);
+                    var edges = (scope.edge === 'all') ? ['Top', 'Bottom', 'Left', 'Right'] : [scope.edge];
+                    for (var i = 0; i < edges.length; i++) {
+                        range.SetBorders(edges[i], scope.style, color);
+                    }
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.setAlignHorizontal"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                static const QStringList validAligns = {
+                    QStringLiteral("left"), QStringLiteral("right"),
+                    QStringLiteral("center"), QStringLiteral("justify")
+                };
+                err = RequireString(scope, QStringLiteral("align"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!validAligns.contains(scope.value(QStringLiteral("align")).toString()))
+                    return QStringLiteral("scope.align must be one of left, right, center, justify");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    if (!range.SetAlignHorizontal(scope.align)) throw new Error("SetAlignHorizontal rejected the given alignment");
+                    return null;
                 })(%%SCOPE%%);
             )js")
         });
