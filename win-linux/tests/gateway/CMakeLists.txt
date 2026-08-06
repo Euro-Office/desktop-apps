@@ -384,3 +384,24 @@ add_test(
     NAME gateway_cell_formatting
     COMMAND gateway_cell_formatting_test
 )
+
+add_executable(gateway_cell_conditional_formatting_test
+    cell_conditional_formatting_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/cellcommands.cpp
+)
+
+set_target_properties(gateway_cell_conditional_formatting_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_cell_conditional_formatting_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_cell_conditional_formatting
+    COMMAND gateway_cell_conditional_formatting_test
+)

@@ -387,6 +387,59 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C6. Conditional formatting ---
+        //
+        // ApiRange.GetFormatConditions() (apiBuilder.js:12827) returns the
+        // ApiFormatConditions collection; Add* methods (AddColorScale, AddDatabar,
+        // AddIconSetCondition, 21119/21229/21299) return the created rule or null,
+        // not JSON-serializable -- surfaced as a boolean. AddIconSetCondition takes no
+        // parameters -- the originally-planned iconSet scope field dropped rather than
+        // guessed at (see gateway-test-case-designs.md §C6).
+
+        table.Register(QStringLiteral("cell.addColorScale"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("scaleType"), /*minimum=*/2);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    return !!range.GetFormatConditions().AddColorScale(scope.scaleType);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.addDatabar"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    return !!range.GetFormatConditions().AddDatabar();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.addIconSetCondition"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    return !!range.GetFormatConditions().AddIconSetCondition();
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
