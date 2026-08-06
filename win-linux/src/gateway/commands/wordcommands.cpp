@@ -320,5 +320,39 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- B6. Search & replace ---
+        //
+        // ApiDocument.Search (apiBuilder.js:8253) returns an array of ApiRange
+        // objects, not JSON-serializable over returnByValue (same issue as §B2) --
+        // returns the match count instead. ApiDocument.SearchAndReplace
+        // (apiBuilder.js:7598) takes {searchString, replaceString, matchCase=true}.
+
+        table.Register(QStringLiteral("word.search"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().Search(scope.text, false).length;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("word.searchAndReplace"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("find"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("replace"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().SearchAndReplace({
+                        searchString: scope.find,
+                        replaceString: scope.replace
+                    });
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
