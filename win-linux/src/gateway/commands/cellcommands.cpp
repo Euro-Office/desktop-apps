@@ -885,6 +885,27 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- C16. Read SmartArt object type ---
+        //
+        // ApiSmartArt (apiBuilder.js:13294) is one variant of the generic Drawing
+        // typedef -- no SmartArt-only collection exists; index addresses into
+        // ApiWorksheet.GetAllDrawings() (9271), the generic mixed-type collection.
+
+        table.Register(QStringLiteral("cell.getSmartArtClassType"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    return ws.GetAllDrawings()[scope.index].GetClassType();
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("cell.replace"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
