@@ -101,5 +101,70 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- C2. Cell/range read & write ---
+        //
+        // ApiWorksheet.GetRange(Range1) (apiBuilder.js:8602) resolves a range string
+        // on a given sheet, throwing if it can't. ApiRange.SetValue (10161) is the
+        // only setter -- no separate SetFormula exists; a value string starting with
+        // "=" becomes a formula through this same call. GetFormula (10241) returns
+        // "= " + the formula text, with a literal space -- preserved, not assumed away.
+
+        auto resolveRange = QStringLiteral(R"js(
+                    var ws = Api.GetSheet(scope.sheet);
+                    if (!ws) throw new Error("no sheet named " + scope.sheet);
+                    var range = ws.GetRange(scope.range);
+                    if (!range) throw new Error("could not resolve range " + scope.range);
+        )js");
+
+        table.Register(QStringLiteral("cell.setValue"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (!scope.contains(QStringLiteral("value")) ||
+                    !(scope.value(QStringLiteral("value")).isString() ||
+                      scope.value(QStringLiteral("value")).isDouble() ||
+                      scope.value(QStringLiteral("value")).isBool()))
+                    return QStringLiteral("scope.value must be a string, number, or boolean");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    if (!range.SetValue(scope.value)) throw new Error("SetValue failed (protected sheet or invalid range)");
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.getValue"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    return range.GetValue();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("cell.getFormula"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("sheet"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("range"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveRange + QStringLiteral(R"js(
+                    return range.GetFormula();
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
