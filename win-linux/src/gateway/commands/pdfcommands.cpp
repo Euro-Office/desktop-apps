@@ -282,5 +282,66 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- E4. Redaction ---
+        //
+        // Two-step workflow, confirmed against source rather than the original
+        // design's single `pdf.applyRedact{page,rect}` call: Api.CreateRedactAnnot(rect)
+        // (apiBuilder.js:1123) creates a *pending* redact annotation (same
+        // AddObject-to-attach pattern as §E2) -- it does NOT itself remove content.
+        // ApiDocument.SearchAndRedact(props) (1478) marks every doc-wide match of a
+        // SearchProps text search as pending redact in one call, returning
+        // ApiRedactAnnotation[] (converted to a count, since GetClassType() would just
+        // be "redact" repeated -- the count is the useful signal here).
+        // ApiDocument.ApplyRedact() (1507) is what actually removes the marked
+        // content; it throws if nothing is pending. There is no per-page ApplyRedact --
+        // it applies every pending redact in the document at once.
+
+        table.Register(QStringLiteral("pdf.addRedact"), CommandSpec{
+            [requireRect](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("page"));
+                if (!err.isEmpty()) return err;
+                return requireRect(scope);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolvePage + QStringLiteral(R"js(
+                    var annot = Api.CreateRedactAnnot(scope.rect);
+                    page.AddObject(annot);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.searchAndRedact"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (scope.contains(QStringLiteral("matchCase")) && !scope.value(QStringLiteral("matchCase")).isBool())
+                    return QStringLiteral("scope.matchCase must be a boolean");
+                if (scope.contains(QStringLiteral("wholeWords")) && !scope.value(QStringLiteral("wholeWords")).isBool())
+                    return QStringLiteral("scope.wholeWords must be a boolean");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var marked = Api.GetDocument().SearchAndRedact({
+                        text: scope.text,
+                        matchCase: scope.matchCase || false,
+                        wholeWords: scope.wholeWords || false
+                    });
+                    return marked.length;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.applyRedact"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().ApplyRedact();
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
