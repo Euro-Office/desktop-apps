@@ -11,8 +11,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 # never go through set_default_options() (core/common.cmake) or the app's install
 # step, so they get no RPATH and no copy of Qt's vcpkg-built .so files next to them --
 # ctest runs them straight out of the build tree, where they'd otherwise fail with
-# "libQt6Core.so.6: cannot open shared object file". CMAKE_BUILD_RPATH set here
-# applies to every target add_executable()'d below in this directory scope.
+# "libQt6Core.so.6: cannot open shared object file".
 #
 # get_target_property(Qt::Core LOCATION) was tried first and silently resolved to
 # nothing -- Qt's vcpkg-generated imported target only populates
@@ -20,8 +19,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 # set (as here). Deriving the path directly from vcpkg's own install layout instead,
 # confirmed against the actual build log (.../vcpkg_installed/<triplet>/lib/libvulkan.so
 # alongside every other vcpkg-built .so, including Qt's).
-set(CMAKE_BUILD_RPATH "${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/lib")
-message(STATUS "gateway tests: CMAKE_BUILD_RPATH = ${CMAKE_BUILD_RPATH}")
+#
+# CMAKE_BUILD_RPATH was tried next and also had no effect: core/common.cmake sets
+# CMAKE_BUILD_WITH_INSTALL_RPATH TRUE globally, which makes build-tree binaries use
+# each target's INSTALL_RPATH property instead of the auto-computed build RPATH --
+# CMAKE_BUILD_RPATH is simply ignored under that setting. CMAKE_INSTALL_RPATH (which
+# seeds the INSTALL_RPATH property for targets created afterward in this directory
+# scope) is what actually takes effect here, and applies without needing an install step.
+set(CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/lib")
+message(STATUS "gateway tests: CMAKE_INSTALL_RPATH = ${CMAKE_INSTALL_RPATH}")
 
 add_executable(gateway_word_document_properties_test
     word_document_properties_test.cpp
