@@ -492,6 +492,45 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- D10. Comments ---
+        //
+        // ApiSlide.AddComment(posX, posY, text, author, userId) (apiBuilder.js:3649)
+        // takes an EMU position -- x/y added to the scope, missing from the original
+        // design. ApiPresentation.GetAllComments() (1697) returns ApiComment[] via the
+        // same shared class as Word (GetText/GetAuthorName, §B13) -- returned as plain
+        // {text,author} objects, same pattern as word.getAllComments.
+
+        table.Register(QStringLiteral("slide.addComment"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("x"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("y"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("author"), /*allowEmpty=*/true);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return slide.AddComment(scope.x, scope.y, scope.text, scope.author);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("presentation.getAllComments"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetPresentation().GetAllComments().map(function(c){
+                        return {text: c.GetText(), author: c.GetAuthorName()};
+                    });
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
