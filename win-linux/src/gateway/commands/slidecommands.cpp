@@ -196,5 +196,33 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- D4. Set transitions (background deferred) ---
+        //
+        // Api.CreateSlideShowTransition() (apiBuilder.js:1075, no-arg) configured via
+        // SetEntryEffect/SetDuration (4848,4902), then ApiSlide.SetSlideShowTransition
+        // (4389). slide.setBackground intentionally NOT implemented -- SetBackground
+        // (3723) needs a real ApiFill; no solid-fill factory was confirmed in this
+        // file. See gateway-test-case-designs.md §D4.
+
+        table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("entryEffect"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("duration"), /*minimum=*/0);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    var transition = Api.CreateSlideShowTransition();
+                    if (!transition.SetEntryEffect(scope.entryEffect))
+                        throw new Error("unrecognized entryEffect: " + scope.entryEffect);
+                    transition.SetDuration(scope.duration);
+                    return slide.SetSlideShowTransition(transition);
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }

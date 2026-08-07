@@ -678,3 +678,24 @@ add_test(
     NAME gateway_slide_layout_master
     COMMAND gateway_slide_layout_master_test
 )
+
+add_executable(gateway_slide_transition_test
+    slide_transition_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/slidecommands.cpp
+)
+
+set_target_properties(gateway_slide_transition_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_slide_transition_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_slide_transition
+    COMMAND gateway_slide_transition_test
+)
