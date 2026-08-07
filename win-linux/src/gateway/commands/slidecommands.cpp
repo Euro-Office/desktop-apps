@@ -86,5 +86,59 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- D2. Enumerate slide content ---
+        //
+        // ApiSlide.GetAllShapes/GetAllImages/GetAllTables/GetAllCharts
+        // (apiBuilder.js:4140,4155,4197,4169) return Api*[], not JSON-serializable --
+        // returned as index arrays, same established pattern as word.getAllTables (§B2).
+
+        table.Register(QStringLiteral("slide.getAllShapes"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return slide.GetAllShapes().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.getAllImages"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return slide.GetAllImages().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.getAllTables"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return slide.GetAllTables().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.getAllCharts"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return slide.GetAllCharts().map(function(_, idx){ return idx; });
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
