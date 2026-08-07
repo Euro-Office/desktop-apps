@@ -301,6 +301,62 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- D6. Text formatting ---
+        //
+        // ApiRun.SetBold/SetFontFamily are shared classes with Word (confirmed absent
+        // from this file, so they come from a common file included by all editors),
+        // per the plan's own note. Resolved via ApiShape.GetContent() (6975) +
+        // GetElement(paraIndex).GetElement(runIndex), same chain as word.setBold
+        // (§B4) -- the originally-planned scope was missing paraIndex, added here.
+
+        auto resolveSlideRun = QStringLiteral(R"js(
+                    var presentation = Api.GetPresentation();
+                    var slide = presentation.GetSlideByIndex(scope.index);
+                    if (!slide) throw new Error("no slide at index " + scope.index);
+                    var shape = slide.GetAllShapes()[scope.shapeIndex];
+                    if (!shape) throw new Error("no shape at shapeIndex " + scope.shapeIndex);
+                    var para = shape.GetContent().GetElement(scope.paraIndex);
+                    if (!para) throw new Error("no paragraph at paraIndex " + scope.paraIndex);
+                    var run = para.GetElement(scope.runIndex);
+                    if (!run) throw new Error("no run at runIndex " + scope.runIndex);
+        )js");
+
+        table.Register(QStringLiteral("slide.setBold"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                for (const char* field : {"index", "shapeIndex", "paraIndex", "runIndex"})
+                {
+                    const QString err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return RequireBool(scope, QStringLiteral("bold"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlideRun + QStringLiteral(R"js(
+                    run.SetBold(scope.bold);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.setFontFamily"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                for (const char* field : {"index", "shapeIndex", "paraIndex", "runIndex"})
+                {
+                    const QString err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return RequireString(scope, QStringLiteral("font"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlideRun + QStringLiteral(R"js(
+                    run.SetFontFamily(scope.font);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
