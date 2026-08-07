@@ -450,6 +450,48 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- D9. Speaker notes ---
+        //
+        // ApiSlide.AddNotesText(sText) (apiBuilder.js:4331) calls ApiParagraph.AddText
+        // internally -- same append-only semantics as word.addText (§B3). Read-back
+        // (slide.getNotesText, not in the original design) via
+        // GetNotesPage().GetBodyShape().GetDocContent().GetElement(0).GetText() --
+        // without it there was no way to verify addNotesText's effect at all.
+
+        table.Register(QStringLiteral("slide.addNotesText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                return RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return slide.AddNotesText(scope.text);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.getNotesText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    var notesPage = slide.GetNotesPage();
+                    if (!notesPage) return "";
+                    var bodyShape = notesPage.GetBodyShape();
+                    if (!bodyShape) return "";
+                    var docContent = bodyShape.GetDocContent();
+                    if (!docContent) return "";
+                    var para = docContent.GetElement(0);
+                    if (!para) return "";
+                    return para.GetText();
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
