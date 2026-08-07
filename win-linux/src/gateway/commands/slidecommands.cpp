@@ -388,6 +388,68 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- D8. Table editing (creation deferred) ---
+        //
+        // Api.CreateTable (apiBuilder.js:947) places the table on whatever
+        // private_GetCurrentSlide() resolves to -- no public setter exists to target
+        // an arbitrary slide by index first, so slide.createTable is deliberately NOT
+        // implemented. AddRow/MergeCells (7412, 7314) operate on an existing table,
+        // addressed via slide.GetAllTables()[tableIndex] (§D2). Cell resolution via
+        // GetRow(r).GetCell(c) (7295, 7614) -- no GetCell(row,col) shortcut exists here.
+
+        auto resolveSlideTable = QStringLiteral(R"js(
+                    var presentation = Api.GetPresentation();
+                    var slide = presentation.GetSlideByIndex(scope.index);
+                    if (!slide) throw new Error("no slide at index " + scope.index);
+                    var table = slide.GetAllTables()[scope.tableIndex];
+                    if (!table) throw new Error("no table at tableIndex " + scope.tableIndex);
+        )js");
+
+        table.Register(QStringLiteral("slide.addRow"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("tableIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlideTable + QStringLiteral(R"js(
+                    var row = table.AddRow();
+                    return !!row;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.mergeCells"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                for (const char* field : {"tableIndex", "fromRow", "fromCol", "toRow", "toCol"})
+                {
+                    err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlideTable + QStringLiteral(R"js(
+                    var cells = [];
+                    for (var r = scope.fromRow; r <= scope.toRow; r++) {
+                        var row = table.GetRow(r);
+                        if (!row) continue;
+                        for (var c = scope.fromCol; c <= scope.toCol; c++) {
+                            var cell = row.GetCell(c);
+                            if (cell) cells.push(cell);
+                        }
+                    }
+                    var merged = table.MergeCells(cells);
+                    if (!merged) throw new Error("merge failed for the given range");
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
