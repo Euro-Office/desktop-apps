@@ -7,6 +7,16 @@
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
+# Unlike the app's real targets (DesktopEditors, x2t, ...), these test executables
+# never go through set_default_options() (core/common.cmake) or the app's install
+# step, so they get no RPATH and no copy of Qt's vcpkg-built .so files next to them --
+# ctest runs them straight out of the build tree, where they'd otherwise fail with
+# "libQt6Core.so.6: cannot open shared object file". CMAKE_BUILD_RPATH set here
+# applies to every target add_executable()'d below in this directory scope.
+get_target_property(GATEWAY_QT_CORE_LOCATION Qt${QT_VERSION_MAJOR}::Core LOCATION)
+get_filename_component(GATEWAY_QT_LIB_DIR "${GATEWAY_QT_CORE_LOCATION}" DIRECTORY)
+set(CMAKE_BUILD_RPATH "${GATEWAY_QT_LIB_DIR}")
+
 add_executable(gateway_word_document_properties_test
     word_document_properties_test.cpp
     ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
