@@ -343,5 +343,52 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- E5. Page operations ---
+        //
+        // ApiDocument.AddPage(nPos, nWidth, nHeight) (apiBuilder.js:1353) clones the
+        // page at nPos-1 (or nPos if that's out of range) for its default size when
+        // width/height aren't given, and returns an unserializable ApiPage --
+        // converted to its index (GetIndex(), 1582) like every other Api* result in
+        // this file. ApiDocument.RemovePage(nPos) (1397) returns `false` rather than
+        // throwing for an out-of-range index -- converted to a thrown Error for the
+        // consistent SCRIPT_EXCEPTION contract used throughout, same as pdf.setFieldValue
+        // and the §B/§C/§D equivalents. pdf.getPageCount (not in the original design)
+        // added via ApiDocument.GetPagesCount() (1414) since it's the only allowlisted
+        // way to verify AddPage/RemovePage's effect.
+
+        table.Register(QStringLiteral("pdf.getPageCount"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetDocument().GetPagesCount();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.addPage"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var page = Api.GetDocument().AddPage(scope.index);
+                    return page.GetIndex();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.removePage"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var removed = Api.GetDocument().RemovePage(scope.index);
+                    if (!removed) throw new Error("no page at index " + scope.index);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
