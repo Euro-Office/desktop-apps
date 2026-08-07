@@ -140,5 +140,61 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- D3. Apply layouts, masters, themes (theme application deferred) ---
+        //
+        // GetLayout/ApplyLayout (apiBuilder.js:4092,3800) work with real ApiLayout
+        // objects -- no id-string addressing exists. applyLayout borrows an
+        // already-resolved layout from another slide rather than looking one up by a
+        // fabricated layoutId. AddMaster (1522) needs a real ApiMaster from
+        // Api.CreateMaster() (553), called with no theme argument to use its own
+        // documented fallback. slide.applyTheme is deliberately NOT implemented --
+        // Api.CreateTheme (640) needs three further factory-built scheme objects not
+        // confirmed in this pass; see gateway-test-case-designs.md §D3.
+
+        table.Register(QStringLiteral("slide.getLayout"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("index"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    return !!slide.GetLayout();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.applyLayout"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("fromIndex"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var presentation = Api.GetPresentation();
+                    var slide = presentation.GetSlideByIndex(scope.index);
+                    if (!slide) throw new Error("no slide at index " + scope.index);
+                    var fromSlide = presentation.GetSlideByIndex(scope.fromIndex);
+                    if (!fromSlide) throw new Error("no slide at fromIndex " + scope.fromIndex);
+                    var layout = fromSlide.GetLayout();
+                    if (!layout) throw new Error("slide at fromIndex has no layout to borrow");
+                    return slide.ApplyLayout(layout);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.addMaster"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("position"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    var master = Api.CreateMaster();
+                    if (!master) throw new Error("CreateMaster failed (no theme available)");
+                    return Api.GetPresentation().AddMaster(scope.position, master);
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }
