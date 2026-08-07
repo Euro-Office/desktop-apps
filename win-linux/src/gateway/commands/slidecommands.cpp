@@ -205,6 +205,102 @@ namespace Gateway::Commands
         // (3723) needs a real ApiFill; no solid-fill factory was confirmed in this
         // file. See gateway-test-case-designs.md §D4.
 
+        // --- D5. Insert shapes/text boxes with positioning ---
+        //
+        // Api.CreateShape(sType, nWidth, nHeight) (apiBuilder.js:870) has real
+        // internal defaults for fill/stroke -- fully implementable, unlike Cell's
+        // AddShape (§C11). Positioned separately via AddObject (3621) +
+        // ApiDrawing.SetPosition (6100), since CreateShape itself takes no position.
+        // Existing shapes resolved via slide.GetAllShapes()[shapeIndex], same index
+        // space as slide.getAllShapes (§D2).
+
+        auto resolveShape = QStringLiteral(R"js(
+                    var presentation = Api.GetPresentation();
+                    var slide = presentation.GetSlideByIndex(scope.index);
+                    if (!slide) throw new Error("no slide at index " + scope.index);
+                    var shape = slide.GetAllShapes()[scope.shapeIndex];
+                    if (!shape) throw new Error("no shape at shapeIndex " + scope.shapeIndex);
+        )js");
+
+        table.Register(QStringLiteral("slide.createShape"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("type"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                for (const char* field : {"x", "y", "width", "height"})
+                {
+                    err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    var shape = Api.CreateShape(scope.type, scope.width, scope.height);
+                    var added = slide.AddObject(shape);
+                    if (!added) throw new Error("AddObject failed");
+                    shape.SetPosition(scope.x, scope.y);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.setPosition"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("shapeIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("x"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("y"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveShape + QStringLiteral(R"js(
+                    shape.SetPosition(scope.x, scope.y);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.setRotation"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("shapeIndex"));
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("degrees"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveShape + QStringLiteral(R"js(
+                    return shape.SetRotation(scope.degrees);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("slide.setSize"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("shapeIndex"));
+                if (!err.isEmpty()) return err;
+                err = RequireInt(scope, QStringLiteral("width"), /*minimum=*/0);
+                if (!err.isEmpty()) return err;
+                return RequireInt(scope, QStringLiteral("height"), /*minimum=*/0);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveShape + QStringLiteral(R"js(
+                    shape.SetSize(scope.width, scope.height);
+                    return null;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
