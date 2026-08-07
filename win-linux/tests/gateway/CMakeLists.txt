@@ -13,9 +13,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 # ctest runs them straight out of the build tree, where they'd otherwise fail with
 # "libQt6Core.so.6: cannot open shared object file". CMAKE_BUILD_RPATH set here
 # applies to every target add_executable()'d below in this directory scope.
-get_target_property(GATEWAY_QT_CORE_LOCATION Qt${QT_VERSION_MAJOR}::Core LOCATION)
-get_filename_component(GATEWAY_QT_LIB_DIR "${GATEWAY_QT_CORE_LOCATION}" DIRECTORY)
-set(CMAKE_BUILD_RPATH "${GATEWAY_QT_LIB_DIR}")
+#
+# get_target_property(Qt::Core LOCATION) was tried first and silently resolved to
+# nothing -- Qt's vcpkg-generated imported target only populates
+# IMPORTED_LOCATION_<CONFIG>, not the generic LOCATION, when CMAKE_BUILD_TYPE isn't
+# set (as here). Deriving the path directly from vcpkg's own install layout instead,
+# confirmed against the actual build log (.../vcpkg_installed/<triplet>/lib/libvulkan.so
+# alongside every other vcpkg-built .so, including Qt's).
+set(CMAKE_BUILD_RPATH "${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/lib")
+message(STATUS "gateway tests: CMAKE_BUILD_RPATH = ${CMAKE_BUILD_RPATH}")
 
 add_executable(gateway_word_document_properties_test
     word_document_properties_test.cpp
