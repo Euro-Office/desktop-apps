@@ -531,6 +531,34 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- D11. Document properties ---
+        //
+        // ApiPresentation.GetDocumentInfo() (apiBuilder.js:1849) returns a plain JS
+        // object of primitives -- already JSON-safe. GetCustomProperties() (1936)
+        // returns the same shared ApiCustomProperties class as Word (§B1, no GetAll)
+        // -- corrected to a singular getCustomProperty{name}, same fix as
+        // word.getCustomProperty.
+
+        table.Register(QStringLiteral("presentation.getDocumentInfo"), CommandSpec{
+            [](const QJsonObject&) -> QString { return QString(); },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetPresentation().GetDocumentInfo();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("presentation.getCustomProperty"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireString(scope, QStringLiteral("name"), /*allowEmpty=*/false);
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    return Api.GetPresentation().GetCustomProperties().Get(scope.name);
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
