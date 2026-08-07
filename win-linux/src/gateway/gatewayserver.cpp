@@ -5,6 +5,7 @@
 #include "commands/wordcommands.h"
 #include "commands/cellcommands.h"
 #include "commands/slidecommands.h"
+#include "commands/pdfcommands.h"
 
 #include <QLocalSocket>
 #include <QJsonDocument>
@@ -72,6 +73,7 @@ namespace Gateway
         Commands::RegisterWordCommands();
         Commands::RegisterCellCommands();
         Commands::RegisterSlideCommands();
+        Commands::RegisterPdfCommands();
 
         const QString socketPath = SocketPath();
         QLocalServer::removeServer(socketPath); // clear a stale socket file from a crashed prior run
