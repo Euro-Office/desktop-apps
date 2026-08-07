@@ -357,6 +357,37 @@ namespace Gateway::Commands
             )js")
         });
 
+        // --- D7. Insert images ---
+        //
+        // Api.CreateImage(sImageSrc, nWidth, nHeight) (apiBuilder.js:825) -- URL/base64
+        // data URI, matching the Word/Cell precedent; same two-step
+        // AddObject+SetPosition pattern as slide.createShape (§D5).
+
+        table.Register(QStringLiteral("slide.createImage"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("index"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("imageSrc"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                for (const char* field : {"x", "y", "width", "height"})
+                {
+                    err = RequireInt(scope, QString::fromLatin1(field));
+                    if (!err.isEmpty()) return err;
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolveSlide + QStringLiteral(R"js(
+                    var image = Api.CreateImage(scope.imageSrc, scope.width, scope.height);
+                    var added = slide.AddObject(image);
+                    if (!added) throw new Error("AddObject failed");
+                    image.SetPosition(scope.x, scope.y);
+                    return true;
+                })(%%SCOPE%%);
+            )js")
+        });
+
         table.Register(QStringLiteral("slide.setTransition"), CommandSpec{
             [](const QJsonObject& scope) -> QString {
                 QString err = RequireInt(scope, QStringLiteral("index"));
