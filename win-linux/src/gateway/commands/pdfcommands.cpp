@@ -200,5 +200,87 @@ namespace Gateway::Commands
                 })(%%SCOPE%%);
             )js")
         });
+
+        // --- E3. Text search / selection / extraction ---
+        //
+        // ApiPage.Search(props) (apiBuilder.js:1659) returns Quad[], where Quad is
+        // already a flat 8-number array (x1,y1,x2,y2,x3,y3,x4,y4 -- see the typedef at
+        // line 234), so it round-trips through CDP returnByValue with no conversion,
+        // unlike the Api* object results elsewhere in this file. ApiPage.SetSelection
+        // (1690) takes two Point ({x,y}) objects (validated by private_CheckPoint,
+        // 8147) and must be called before GetSelectedText (1757) has anything to
+        // return. ApiPage.RecognizeContent (1767) returns ApiDrawing[], not
+        // JSON-serializable -- converted to GetClassType() per drawing, same pattern
+        // as annotations in §E2.
+
+        table.Register(QStringLiteral("pdf.searchText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("page"));
+                if (!err.isEmpty()) return err;
+                err = RequireString(scope, QStringLiteral("text"), /*allowEmpty=*/false);
+                if (!err.isEmpty()) return err;
+                if (scope.contains(QStringLiteral("matchCase")) && !scope.value(QStringLiteral("matchCase")).isBool())
+                    return QStringLiteral("scope.matchCase must be a boolean");
+                if (scope.contains(QStringLiteral("wholeWords")) && !scope.value(QStringLiteral("wholeWords")).isBool())
+                    return QStringLiteral("scope.wholeWords must be a boolean");
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolvePage + QStringLiteral(R"js(
+                    return page.Search({
+                        text: scope.text,
+                        matchCase: scope.matchCase || false,
+                        wholeWords: scope.wholeWords || false
+                    });
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.setSelection"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                QString err = RequireInt(scope, QStringLiteral("page"));
+                if (!err.isEmpty()) return err;
+                for (const QString& pointField : {QStringLiteral("startPoint"), QStringLiteral("endPoint")})
+                {
+                    const QJsonValue pointValue = scope.value(pointField);
+                    if (!pointValue.isObject()
+                        || !pointValue.toObject().value(QStringLiteral("x")).isDouble()
+                        || !pointValue.toObject().value(QStringLiteral("y")).isDouble())
+                        return QStringLiteral("scope.%1 must be an object with numeric x and y").arg(pointField);
+                }
+                return QString();
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolvePage + QStringLiteral(R"js(
+                    return page.SetSelection(scope.startPoint, scope.endPoint);
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.getSelectedText"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("page"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolvePage + QStringLiteral(R"js(
+                    return page.GetSelectedText();
+                })(%%SCOPE%%);
+            )js")
+        });
+
+        table.Register(QStringLiteral("pdf.recognizeContent"), CommandSpec{
+            [](const QJsonObject& scope) -> QString {
+                return RequireInt(scope, QStringLiteral("page"));
+            },
+            QStringLiteral(R"js(
+                (function(scope){
+                    )js") + resolvePage + QStringLiteral(R"js(
+                    return page.RecognizeContent().map(function(d){ return d.GetClassType(); });
+                })(%%SCOPE%%);
+            )js")
+        });
     }
 }

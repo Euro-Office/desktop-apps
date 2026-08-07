@@ -888,3 +888,24 @@ add_test(
     NAME gateway_pdf_annotation
     COMMAND gateway_pdf_annotation_test
 )
+
+add_executable(gateway_pdf_text_search_test
+    pdf_text_search_test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/allowlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../../src/gateway/commands/pdfcommands.cpp
+)
+
+set_target_properties(gateway_pdf_text_search_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    AUTOMOC ON
+)
+
+target_link_libraries(gateway_pdf_text_search_test PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+)
+
+add_test(
+    NAME gateway_pdf_text_search
+    COMMAND gateway_pdf_text_search_test
+)
