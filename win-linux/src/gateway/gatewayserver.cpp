@@ -4,6 +4,7 @@
 #include "allowlist.h"
 #include "commands/wordcommands.h"
 #include "commands/cellcommands.h"
+#include "commands/slidecommands.h"
 
 #include <QLocalSocket>
 #include <QJsonDocument>
@@ -70,6 +71,7 @@ namespace Gateway
         // join this list when those families exist.
         Commands::RegisterWordCommands();
         Commands::RegisterCellCommands();
+        Commands::RegisterSlideCommands();
 
         const QString socketPath = SocketPath();
         QLocalServer::removeServer(socketPath); // clear a stale socket file from a crashed prior run
