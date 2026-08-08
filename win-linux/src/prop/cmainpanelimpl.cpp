@@ -131,7 +131,7 @@ void CMainPanelImpl::updateScaling(double dpiratio)
             ? QStringLiteral(":/logo-dark-eo.svg")
             : QStringLiteral(":/logo-light-eo.svg");
     m_pButtonMain->setIcon(logo);
-    m_pButtonMain->setIconSize(QSize(83,20)*dpiratio);
+    m_pButtonMain->setIconSize(QSize(84,20)*dpiratio);
 }
 
 void CMainPanelImpl::applyTheme(const std::wstring& theme)
@@ -143,7 +143,7 @@ void CMainPanelImpl::applyTheme(const std::wstring& theme)
             ? QStringLiteral(":/logo-dark-eo.svg")
             : QStringLiteral(":/logo-light-eo.svg");
     m_pButtonMain->setIcon(logo);
-    m_pButtonMain->setIconSize(QSize(83,20)*dpiratio);
+    m_pButtonMain->setIconSize(QSize(84,20)*dpiratio);
 }
 
 void CMainPanelImpl::onLocalOptions(const QString& json)
