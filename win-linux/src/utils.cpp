@@ -160,6 +160,13 @@ namespace EditorJSVariables {
         vars_object["os"] = "winxp";
 #elif defined(__linux__)
         vars_object["os"] = "linux";
+        // Lets JS distinguish Wayland's OSR-mode CEF from windowed CEF
+        // (X11, Windows), without inferring it from the mere presence of
+        // window.AscDesktopEditor -- that exists on every desktop platform.
+        // Needed wherever behavior differs specifically because CEF has no
+        // native window to work with, e.g. sdkjs's native clipboard bridge
+        // and canvas device-scale correction.
+        vars_object["isWayland"] = (QGuiApplication::platformName() == QLatin1String("wayland"));
 #endif
         if ( InputArgs::contains(L"--help-url") )
             vars_object["helpUrl"] = QUrl(QString::fromStdWString(InputArgs::argument_value(L"--help-url"))).toString();
