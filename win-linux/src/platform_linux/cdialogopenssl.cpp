@@ -103,10 +103,7 @@ CDialogOpenSsl::CDialogOpenSsl(QWidget *parent)
     double dpiRatio = CScalingWrapper::parentScalingFactor(topLevelWidget());
     setMinimumWidth(300 * dpiRatio);
     setWindowTitle(tr("Select certificate"));
-    // See Utils::getDisplayScaleFactor: "zoom" feeds a discrete QSS lookup
-    // keyed by the real display scale, not dpiRatio (the residual left
-    // after Qt's own auto-scaling).
-    setProperty("zoom", QString::number(Utils::getDisplayScaleFactor(topLevelWidget())) + "x");
+    setProperty("zoom", QString::number(dpiRatio) + "x");
 
     QGridLayout * _main_layout = new QGridLayout(this);
 
