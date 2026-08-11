@@ -1533,12 +1533,7 @@ void CMainWindow::updateScalingFactor(double dpiratio)
             btn->setFixedSize(small_btn_size);
     }*/
     m_pButtonMain->setFixedSize(int(BUTTON_MAIN_WIDTH * dpiratio), int(m_toolbtn_height * dpiratio));
-    // "zoom" drives editor_unix.qss's #mainPanel[zoom="1.25x"] etc, a
-    // discrete lookup of pre-computed physical paddings/sizes -- needs the
-    // real display scale, not dpiratio (which, since the compounding fix,
-    // is the residual left after Qt's own auto-scaling and so is typically
-    // 1.0/"1x", a value with no matching rule). See Utils::getDisplayScaleFactor.
-    m_pMainPanel->setProperty("zoom", QString::number(Utils::getDisplayScaleFactor(this)) + "x");
+    m_pMainPanel->setProperty("zoom", QString::number(dpiratio) + "x");
     QString tab_css = Utils::readStylesheets(":/styles/tabbar.qss");
     m_pTabs->tabBar()->setStyleSheet(tab_css.arg(GetColorQValueByRole(ecrWindowBackground),
                                                  GetColorQValueByRole(ecrButtonBackground),
