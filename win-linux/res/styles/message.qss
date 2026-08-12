@@ -5,7 +5,10 @@ QLabel[class=msg-icon][type=msg-error] {image: url(":/message_error.svg");}
 QLabel[class=msg-icon][type=msg-info] {image: url(":/message_info.svg");}
 QLabel[class=msg-icon][type=msg-confirm] {image: url(":/message_confirm.svg");}
 
-#messageBody QLabel[class=msg-report] {font-size: 11px;}
+/* 12px to match the editor's own body text (web-apps' @font-size-medium),
+   so the Qt message dialog used on Wayland reads at the same size as the
+   editor behind it. */
+#messageBody QLabel[class=msg-report] {font-size: 12px;}
 #messageBody[scaling="1.25x"] QLabel[class=msg-report] {font-size: 14px;}
 #messageBody[scaling="1.5x"] QLabel[class=msg-report] {font-size: 17px;}
 #messageBody[scaling="1.75x"] QLabel[class=msg-report] {font-size: 19px;}
