@@ -175,7 +175,7 @@ namespace {
 // size the whole dialog for the wrong factor (and, with no later correction,
 // leave it that way). The parent window has been mapped long enough to carry
 // the correct value.
-QWidget * stableRefWindowForDialog(QWidget * parent)
+double stableDpiRatioForDialog(QWidget * parent)
 {
     QWidget * ref = parent ? parent->window() : nullptr;
     if (!ref)
@@ -189,12 +189,6 @@ QWidget * stableRefWindowForDialog(QWidget * parent)
             }
         }
     }
-    return ref;
-}
-
-double stableDpiRatioForDialog(QWidget * parent)
-{
-    QWidget * ref = stableRefWindowForDialog(parent);
     return ref ? Utils::getScreenDpiRatioByWidget(ref) : 1.0;
 }
 }
@@ -204,16 +198,7 @@ public:
     QtMsgPrivateIntf(QtMsg * dlg, QWidget * parentWindow)
         : m_mess(dlg)
         , dpiRatio(stableDpiRatioForDialog(parentWindow))
-    {
-        // See getDisplayScaleFactor: the "scaling" QSS property
-        // (message.qss's #messageBody[scaling="1.25x"] etc) is a discrete
-        // lookup keyed by the real display scale, not the residual dpiRatio
-        // above -- feeding it the residual matched no rule and silently
-        // fell back to unscaled base styling. From the same stable
-        // reference window dpiRatio itself was resolved from.
-        if (QWidget * ref = stableRefWindowForDialog(parentWindow))
-            displayScaleFactor = Utils::getDisplayScaleFactor(ref);
-    }
+    {}
 
     auto addButton(QPushButton * b) -> void {
         if ( !defaultButton )
@@ -240,7 +225,6 @@ public:
     QPushButton * defaultButton = nullptr;
     QWidget * focusWidget = nullptr;
     double dpiRatio = 1;
-    double displayScaleFactor = 1;
     QMetaObject::Connection focusConnection;
     bool isWindowActive = false;
     // Kept around so applyScaling() can re-set their margins later; every
@@ -371,7 +355,7 @@ void QtMsg::applyScaling()
     _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
     m_centralWidget->setStyleSheet( _styles );
 
-    QString zoom = QString::number(m_priv->displayScaleFactor) + "x";
+    QString zoom = QString::number(m_priv->dpiRatio) + "x";
     m_centralWidget->setProperty("scaling", zoom);
 }
 

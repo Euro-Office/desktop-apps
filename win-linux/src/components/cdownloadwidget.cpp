@@ -473,10 +473,7 @@ void CDownloadWidget::polish()
 void CDownloadWidget::updateScalingFactor(double factor)
 {
     m_dpiRatio = factor;
-    // See Utils::getDisplayScaleFactor: "zoom" feeds a discrete QSS lookup
-    // (e.g. #mainPanel[zoom="1.25x"]) keyed by the real display scale, not
-    // the residual factor left after Qt's own auto-scaling.
-    setProperty("zoom", QString::number(Utils::getDisplayScaleFactor(this)) + "x");
+    setProperty("zoom", QString::number(factor) + "x");
     int shd = 0, rad = 0;
     int mrg = qRound(MARGINS);
     int mrg_half = qRound(MARGINS/2);
