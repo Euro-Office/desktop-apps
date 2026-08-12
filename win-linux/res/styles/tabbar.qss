@@ -72,7 +72,11 @@ CTabBar #tabScroll {min-width: 32px; max-width: 32px;}
 CTabBar #tabScroll>QToolButton {max-height: 28px;}
 Tab {min-width: 41px; max-width: 135px; width: 135px; height: 28px;}
 Tab #tabIcon {padding: 0px; min-width: 15px; min-height: 15px; max-width: 15px; max-height: 15px;}
-Tab #tabText {font-size: 11px;}
+/* 12px, not 11px, to match the editor ribbon's own tab labels
+   (web-apps' .ribtab uses @font-size-medium: 12px). The two sit
+   directly above one another, so a 1px difference is visible as the
+   title bar looking undersized next to the ribbon. */
+Tab #tabText {font-size: 12px;}
 Tab #tabButton {width: 16px; max-width: 16px; max-height: 16px; border-width: 2px;}
 #mainPanel[rtl-font=true][unix=true] Tab #tabText {font-size: 12px;}
 #mainPanel[win10=true] CTabBar {margin-top: 5px;}
