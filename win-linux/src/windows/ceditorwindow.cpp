@@ -246,7 +246,9 @@ QWidget * CEditorWindow::createMainPanel(QWidget * parent, const QString& title)
     }
 
     mainPanel->setProperty("rtl-font", CLangater::isRtlLanguage(CLangater::getCurrentLangCode()));
-    mainPanel->setProperty("zoom", QString::number(m_dpiRatio) + "x");
+    // See Utils::getDisplayScaleFactor: "zoom" feeds a discrete QSS lookup
+    // keyed by the real display scale, not the residual m_dpiRatio.
+    mainPanel->setProperty("zoom", QString::number(Utils::getDisplayScaleFactor(mainPanel)) + "x");
     mainPanel->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().id()));
     QString css(AscAppManager::getWindowStylesheets(m_dpiRatio) + m_css);
 #ifdef __linux__
@@ -516,7 +518,10 @@ void CEditorWindow::setScreenScalingFactor(double factor, bool resize)
                                   QSizePolicy::Fixed, QSizePolicy::Fixed);
         }
     }
-    QString zoom = QString::number(factor) + "x";
+    // See Utils::getDisplayScaleFactor: "zoom" feeds a discrete QSS lookup
+    // keyed by the real display scale, not factor (the residual left after
+    // Qt's own auto-scaling).
+    QString zoom = QString::number(Utils::getDisplayScaleFactor(m_pMainPanel)) + "x";
     m_pMainPanel->setProperty("zoom", zoom);
 
     QString css(AscAppManager::getWindowStylesheets(factor));
