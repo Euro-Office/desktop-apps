@@ -642,6 +642,39 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
     return 1.0;
 }
 
+double Utils::getDisplayScaleFactor(QWidget* wid)
+{
+    // The real, un-residual-corrected display scale (e.g. 1.25), for
+    // callers that need the actual factor rather than what's left for
+    // manual widget-geometry math to apply on top of Qt's own scaling
+    // (see residualManualScale/getScreenDpiRatioByWidget).
+    //
+    // Needed by every "zoom"/"scaling" QSS property this app sets
+    // (editor_unix.qss's #mainPanel[zoom="1.25x"], message.qss's
+    // #messageBody[scaling="1.25x"], etc.): those are discrete lookup
+    // tables of pre-computed *physical* pixel font-sizes/paddings per
+    // scale factor, not something Qt's per-widget backing-store scaling
+    // touches -- feeding them the residual (typically 1.0, i.e. "1x")
+    // silently matches no rule and falls through to the base, unscaled
+    // styling. This is exactly what getScreenDpiRatioByWidget used to
+    // return before that function was changed to return the residual.
+    if (!wid)
+        return 1;
+
+    unsigned int nDpiX = 0;
+    unsigned int nDpiY = 0;
+
+#ifdef Q_OS_LINUX
+    QDpiChecker * pChecker = (QDpiChecker *)AscAppManager::getInstance().GetDpiChecker();
+    pChecker->GetWidgetDpi(wid, &nDpiX, &nDpiY);
+    double dpiApp = pChecker->GetScale(nDpiX, nDpiY);
+#else
+    double dpiApp = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)wid->winId(), nDpiX, nDpiY);
+#endif
+
+    return dpiApp >= 0 ? choose_scaling(dpiApp) : wid->devicePixelRatio();
+}
+
 namespace {
 class CDpiChangeWatcher : public QObject
 {
