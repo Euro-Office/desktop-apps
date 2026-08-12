@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QLayout>
 #include <QAction>
+#include <QGuiApplication>
 #include <qtcomp/qnativeevent.h>
 
 #ifdef __linux__
@@ -50,6 +51,12 @@
 static bool isCompositingEnabled()
 {
 #ifdef __linux__
+    // On Wayland the compositor renders shadows natively. Qt's
+    // QGraphicsDropShadowEffect uses its own off-screen painter, and a
+    // concurrent Wayland compositor flush during window close causes
+    // "painted by one painter at a time" crashes. Skip it entirely.
+    if (QGuiApplication::platformName() == QLatin1String("wayland"))
+        return false;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QX11Info::isCompositingManagerRunning();
 #else
@@ -132,7 +139,22 @@ class CMenuWidget : public QWidget
     Q_OBJECT
 public:
     explicit CMenuWidget(QWidget * parent = nullptr) :
-        QWidget(parent, Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+        // Qt::Popup (not Qt::Tool) for Wayland: Qt defines
+        // Tool = Popup | Dialog, so "Qt::Tool | Qt::Popup" is a no-op --
+        // Popup's bit was already set, the resolved window type is still
+        // exactly Tool. Using Qt::Popup alone changes the actual resolved
+        // type, which is what Qt's Wayland QPA plugin needs to map this to
+        // the xdg_popup protocol (positioner-based, anchored to the parent)
+        // instead of a plain xdg_toplevel with set_parent() (which has no
+        // positioner, so the compositor defaults to centering it over its
+        // parent regardless of move() -- this widget was rendering dead
+        // center of the main window instead of at the click position).
+        // Dismiss-on-outside-click/Escape is already handled explicitly
+        // below (WindowDeactivate/MouseButtonPress/KeyRelease); Qt::Popup's
+        // own implicit pointer grab changes how those events are delivered
+        // (grabbed globally rather than only within this widget), so watch
+        // for that logic if dismiss behavior regresses.
+        QWidget(parent, Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     {
         m_dpiRatio = CScalingWrapper::parentScalingFactor(topLevelWidget());
         if (isCompositingEnabled()) {

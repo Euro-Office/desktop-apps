@@ -33,11 +33,15 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QUrl>
 #include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QScreen>
+#include <QWindow>
+#include <QTimer>
+#include <QPointer>
 #include <QStorageInfo>
 #include <QPrinterInfo>
 #include <QProcess>
@@ -156,6 +160,13 @@ namespace EditorJSVariables {
         vars_object["os"] = "winxp";
 #elif defined(__linux__)
         vars_object["os"] = "linux";
+        // Lets JS distinguish Wayland's OSR-mode CEF from windowed CEF
+        // (X11, Windows), without inferring it from the mere presence of
+        // window.AscDesktopEditor -- that exists on every desktop platform.
+        // Needed wherever behavior differs specifically because CEF has no
+        // native window to work with, e.g. sdkjs's native clipboard bridge
+        // and canvas device-scale correction.
+        vars_object["isWayland"] = (QGuiApplication::platformName() == QLatin1String("wayland"));
 #endif
         if ( InputArgs::contains(L"--help-url") )
             vars_object["helpUrl"] = QUrl(QString::fromStdWString(InputArgs::argument_value(L"--help-url"))).toString();
@@ -550,12 +561,32 @@ inline double choose_scaling(double s)
            s > 1 ? 1.25 : 1;
 }
 
-double Utils::getScreenDpiRatio(int scrnum)
+namespace {
+// The app sizes its custom chrome by multiplying base constants by the
+// ratio these helpers return. Qt then renders those logical sizes at
+// devicePixelRatio physical pixels, so whatever Qt already applies must be
+// divided out here or the two compound: on a 1.25-scaled display the
+// manual 1.25 and Qt's 1.25 produced chrome at 1.5625x, 25% larger than
+// the display scale, while the editor content (scaled once, by CEF page
+// zoom off the same devicePixelRatio) sat correctly at 1.25x -- the top
+// bar looking oversized next to the document.
+//
+// This applies on X11 as well as Wayland: Qt 6 scales on xcb too
+// (measured devicePixelRatio 1.25 with Xft.dpi 120), because main.cpp's
+// attempt to disable it uses QT_ENABLE_HIGHDPI_SCALING, removed in Qt 6,
+// and AA_DisableHighDpiScaling, guarded to Qt 5. On Windows, where the
+// disabling does work, devicePixelRatio is 1 and this divides by 1.
+//
+// Returns what is left for the app to apply itself: 1.0 when Qt's scaling
+// already covers the display scale, >1 only where the detected DPI ratio
+// genuinely exceeds it.
+double residualManualScale(double detectedRatio, double qtAutoScale)
 {
-    unsigned int _dpi_x = 0;
-    unsigned int _dpi_y = 0;
-    double nScale = AscAppManager::getInstance().GetMonitorScaleByIndex(scrnum, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
+    if (qtAutoScale <= 0)
+        return detectedRatio;
+    const double residual = detectedRatio / qtAutoScale;
+    return residual < 1.0 ? 1.0 : residual;
+}
 }
 
 double Utils::getScreenDpiRatio(const QPoint& pt)
@@ -575,7 +606,15 @@ double Utils::getScreenDpiRatioByHWND(int hwnd)
     unsigned int _dpi_x = 0;
     unsigned int _dpi_y = 0;
     double nScale = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)hwnd, _dpi_x, _dpi_y);
-    return choose_scaling(nScale);
+    // See residualManualScale. On Windows Qt's own scaling really is
+    // disabled, so devicePixelRatio is 1 and there is nothing to divide
+    // out; only Linux needs the lookup (WId is an integer type there).
+    double qtAutoScale = 1.0;
+#ifdef Q_OS_LINUX
+    if (QWidget * wid = QWidget::find((WId)hwnd))
+        qtAutoScale = wid->devicePixelRatio();
+#endif
+    return residualManualScale(choose_scaling(nScale), qtAutoScale);
 }
 
 double Utils::getScreenDpiRatioByWidget(QWidget* wid)
@@ -594,11 +633,136 @@ double Utils::getScreenDpiRatioByWidget(QWidget* wid)
     double dpiApp = AscAppManager::getInstance().GetMonitorScaleByWindow((WindowHandleId)wid->winId(), nDpiX, nDpiY);
 #endif
 
+    // See residualManualScale: divide out the scaling Qt performs itself,
+    // so the caller's manual multiplication doesn't compound with it.
     if ( dpiApp >= 0 ) {
-        return choose_scaling(dpiApp);
+        return residualManualScale(choose_scaling(dpiApp), wid->devicePixelRatio());
     }
 
-    return wid->devicePixelRatio();
+    return 1.0;
+}
+
+namespace {
+class CDpiChangeWatcher : public QObject
+{
+public:
+    CDpiChangeWatcher(QWidget* w, std::function<void()> onChange)
+        : QObject(w), m_widget(w), m_onChange(std::move(onChange))
+    {
+        // Collapse a burst of triggers (screenChanged + a DPR change + the
+        // new screen's geometry settling all arrive together when a window
+        // is dragged across a monitor boundary) into a single rescale, and
+        // keep the resulting setGeometry() out of the window manager's own
+        // move/resize handling by deferring it to the next event loop pass.
+        m_debounce.setSingleShot(true);
+        m_debounce.setInterval(80);
+        connect(&m_debounce, &QTimer::timeout, this, [this]() {
+            // updateScaling() resizes and re-centers the window, which can
+            // itself emit geometryChanged/screenChanged. Don't let that feed
+            // back in; the caller's own "did the ratio actually change?"
+            // check is what decides whether a further pass is needed.
+            if (m_inChange)
+                return;
+            m_inChange = true;
+            m_onChange();
+            m_inChange = false;
+        });
+
+        w->installEventFilter(this);
+        attachToWindow();
+    }
+
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override
+    {
+        switch (event->type()) {
+        // Wayland: the compositor reports a per-surface (fractional) scale,
+        // so a real scale change always surfaces as a DPR change.
+        case QEvent::DevicePixelRatioChange:
+            schedule();
+            break;
+
+        // The QWindow only exists once the widget acquires a native handle,
+        // which happens after this watcher is constructed. Re-attach on every
+        // event that can create or replace it.
+        case QEvent::Show:
+        case QEvent::WinIdChange:
+        case QEvent::PlatformSurface:
+            attachToWindow();
+            break;
+
+        default:
+            break;
+        }
+        return QObject::eventFilter(watched, event);
+    }
+
+private:
+    void attachToWindow()
+    {
+        QWindow* wnd = m_widget ? m_widget->windowHandle() : nullptr;
+        if (!wnd || wnd == m_window)
+            return;
+
+        if (m_window)
+            m_window->disconnect(this);
+        m_window = wnd;
+
+        // xcb: Qt's own scaling is deliberately neutralized on X11 (see
+        // main.cpp -- QT_ENABLE_HIGHDPI_SCALING=0 + AA_Use96Dpi), so
+        // devicePixelRatio() is pinned at 1.0 on every screen and
+        // DevicePixelRatioChange never fires. The app derives its scale
+        // per-screen itself (QDpiChecker::GetMonitorDpi), so the value does
+        // change when the window moves -- it just needs a trigger to be
+        // re-read. screenChanged is that trigger, and it works on Wayland
+        // too, so it is not gated by platform.
+        connect(wnd, &QWindow::screenChanged, this, [this](QScreen*) {
+            attachToScreen();
+            schedule();
+        });
+
+        attachToScreen();
+    }
+
+    void attachToScreen()
+    {
+        QScreen* scr = m_window ? m_window->screen() : nullptr;
+        if (!scr || scr == m_screen)
+            return;
+
+        if (m_screen)
+            m_screen->disconnect(this);
+        m_screen = scr;
+
+        // The window can also stay put while the monitor under it changes
+        // resolution or DPI (xrandr, display settings, docking). None of
+        // these produce a DPR change on X11 either.
+        auto rescale = [this]() { schedule(); };
+        connect(scr, &QScreen::physicalDotsPerInchChanged, this, rescale);
+        connect(scr, &QScreen::logicalDotsPerInchChanged, this, rescale);
+        connect(scr, &QScreen::geometryChanged, this, rescale);
+    }
+
+    void schedule()
+    {
+        if (!m_inChange)
+            m_debounce.start();
+    }
+
+    QPointer<QWidget> m_widget;
+    QPointer<QWindow> m_window;
+    QPointer<QScreen> m_screen;
+    QTimer m_debounce;
+    bool m_inChange = false;
+    std::function<void()> m_onChange;
+};
+}
+
+void Utils::WatchForDpiChange(QWidget* w, std::function<void()> onChange)
+{
+    if (!w)
+        return;
+    new CDpiChangeWatcher(w, std::move(onChange));
 }
 
 QScreen * Utils::screenAt(const QPoint& pt)
@@ -980,6 +1144,11 @@ namespace WindowHelper {
     }
 
     auto useGtkDialog() -> bool {
+        // On Wayland, prefer XDG Desktop Portal over GTK to avoid
+        // GTK dialogs falling back to Xwayland (wrong scale / click offset).
+        if (QGuiApplication::platformName() == "wayland")
+            return false;
+
         GET_REGISTRY_USER(reg_user)
         bool use_gtk_dialog = true;
         bool saved_flag = reg_user.value("--xdg-desktop-portal", false).toBool();

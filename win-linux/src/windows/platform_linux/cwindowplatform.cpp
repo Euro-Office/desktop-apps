@@ -33,7 +33,11 @@
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QX11Info>
 #endif
+#ifdef HAVE_X11
 #include <xcb/xcb.h>
+#endif
+#include <QGuiApplication>
+#include "platform_linux/iplatformbackend.h"
 
 #ifdef DOCUMENTSCORE_OPENSSL_SUPPORT
 # include "platform_linux/cdialogopenssl.h"
@@ -48,11 +52,7 @@ CWindowPlatform::CWindowPlatform(const QRect &rect) :
     if (AscAppManager::isRtlEnabled())
         setLayoutDirection(Qt::RightToLeft);
     if (isCustomWindowStyle()) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        if (QX11Info::isCompositingManagerRunning())
-#else
-        if (true)
-#endif
+        if (IPlatformBackend::instance()->isCompositingAvailable())
             setAttribute(Qt::WA_TranslucentBackground);
         CPlatformDecoration::turnOff();
     }
@@ -129,7 +129,7 @@ bool CWindowPlatform::event(QEvent * event)
         adjustGeometry();
     } else
     if (event->type() == QEvent::HoverLeave) {
-        if (m_boxTitleBtns)
+        if (m_boxTitleBtns && QGuiApplication::platformName() == QLatin1String("wayland"))
             m_boxTitleBtns->setCursor(QCursor(Qt::ArrowCursor));
     } else
     if (event->type() == QEvent::LayoutDirectionChange) {
@@ -140,6 +140,13 @@ bool CWindowPlatform::event(QEvent * event)
     } else
     if (event->type() == QEvent::WindowActivate) {
         onWindowActivate(true);
+        if (QGuiApplication::platformName() == "wayland") {
+            focus();
+            m_propertyTimer->stop();
+            if (property("stabilized").toBool())
+                setProperty("stabilized", false);
+            m_propertyTimer->start();
+        }
     }
     else
     if (event->type() == QEvent::WindowDeactivate) {
@@ -154,6 +161,7 @@ bool CWindowPlatform::nativeEvent(const QByteArray &ev_type, void *msg, qintptr 
 bool CWindowPlatform::nativeEvent(const QByteArray &ev_type, void *msg, long *res)
 #endif
 {
+#ifdef HAVE_X11
     if (ev_type == "xcb_generic_event_t") {
         xcb_generic_event_t *ev = static_cast<xcb_generic_event_t*>(msg);
         switch (ev->response_type & ~0x80) {
@@ -170,6 +178,7 @@ bool CWindowPlatform::nativeEvent(const QByteArray &ev_type, void *msg, long *re
             break;
         }
     }
+#endif
     return CWindowBase::nativeEvent(ev_type, msg, res);
 }
 
@@ -181,11 +190,7 @@ void CWindowPlatform::setScreenScalingFactor(double factor, bool resize)
 
 void CWindowPlatform::paintEvent(QPaintEvent *event)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    if (!QX11Info::isCompositingManagerRunning()) {
-#else
-    if (false) {
-#endif
+    if (!IPlatformBackend::instance()->isCompositingAvailable()) {
         CWindowBase::paintEvent(event);
         return;
     }

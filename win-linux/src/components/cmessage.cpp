@@ -97,8 +97,8 @@
 #define TEXT_SAVEANDINS toCharPtr(BTN_TEXT_SAVEANDINS)
 #define TEXT_DOWNLOAD   toCharPtr(BTN_TEXT_DOWNLOAD)
 
-#define MSG_ICON_WIDTH  35
-#define MSG_ICON_HEIGHT 35
+#define MSG_ICON_WIDTH  44
+#define MSG_ICON_HEIGHT 44
 
 #define DLG_PADDING 7
 #define BTN_SPACING 5
@@ -150,6 +150,10 @@ private:
     void setContent(const QString&);
     void setCheckBox(const QString &chekBoxText, bool checkBoxState);
     bool getCheckStatus();
+    // Applies every dpiRatio-dependent size/margin/stylesheet, once, from the
+    // parent-derived m_priv->dpiRatio. See the call site for why it must not
+    // be re-run off this dialog's own (Wayland-racing) devicePixelRatio.
+    void applyScaling();
 
     QWidget *m_boxButtons = nullptr,
             *m_centralWidget = nullptr;
@@ -163,11 +167,37 @@ private:
     std::unique_ptr<QtMsgPrivateIntf> m_priv;
 };
 
+namespace {
+// Returns a DPI ratio taken from a window whose devicePixelRatio has already
+// settled. A freshly-created top-level dialog must NOT use its own ratio: on
+// Wayland a brand-new surface reports the rounded default (e.g. 2.0) until the
+// compositor answers with the real fractional scale, so reading it here would
+// size the whole dialog for the wrong factor (and, with no later correction,
+// leave it that way). The parent window has been mapped long enough to carry
+// the correct value.
+double stableDpiRatioForDialog(QWidget * parent)
+{
+    QWidget * ref = parent ? parent->window() : nullptr;
+    if (!ref)
+        ref = QApplication::activeWindow();
+    if (!ref) {
+        const QWidgetList tops = QApplication::topLevelWidgets();
+        for (QWidget * w : tops) {
+            if (w->isWindow() && w->isVisible() && !w->windowFlags().testFlag(Qt::ToolTip)) {
+                ref = w;
+                break;
+            }
+        }
+    }
+    return ref ? Utils::getScreenDpiRatioByWidget(ref) : 1.0;
+}
+}
+
 class QtMsg::QtMsgPrivateIntf {
 public:
-    explicit QtMsgPrivateIntf(QtMsg * parent)
-        : m_mess(parent)
-        , dpiRatio(Utils::getScreenDpiRatioByWidget(parent))
+    QtMsgPrivateIntf(QtMsg * dlg, QWidget * parentWindow)
+        : m_mess(dlg)
+        , dpiRatio(stableDpiRatioForDialog(parentWindow))
     {}
 
     auto addButton(QPushButton * b) -> void {
@@ -197,6 +227,11 @@ public:
     double dpiRatio = 1;
     QMetaObject::Connection focusConnection;
     bool isWindowActive = false;
+    // Kept around so applyScaling() can re-set their margins later; every
+    // other dpiRatio-dependent widget it touches is already a QtMsg member.
+    QVBoxLayout * cLayout = nullptr;
+    QFormLayout * fLayout = nullptr;
+    QWidget * bodyWidget = nullptr;
 };
 
 int QtMsg::m_modalresult(MODAL_RESULT_CANCEL);
@@ -207,7 +242,7 @@ QtMsg::QtMsg(QWidget * p)
     , m_message(new QLabel)
     , m_content(new QLabel)
     , m_typeIcon(new QLabel)
-    , m_priv(new QtMsgPrivateIntf(this))
+    , m_priv(new QtMsgPrivateIntf(this, p))
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     //setWindowTitle(APP_TITLE);
@@ -220,45 +255,50 @@ QtMsg::QtMsg(QWidget * p)
     m_centralWidget->setObjectName("messageBody");
     m_centralWidget->setProperty("uitheme", QString::fromStdWString(GetCurrentTheme().originalId()));
 
-    QVBoxLayout * _c_layout  = new QVBoxLayout;
-    QHBoxLayout * _h_layout2 = new QHBoxLayout;
-    QHBoxLayout * _h_layout1 = new QHBoxLayout;
-    _c_layout->addLayout(_h_layout2, 1);
-    _c_layout->addLayout(_h_layout1, 0);
+    m_priv->cLayout  = new QVBoxLayout;
 
-    const int _body_margin = int(12 * m_priv->dpiRatio);
-    _c_layout->setContentsMargins(_body_margin,_body_margin,_body_margin,_body_margin);
+    // bodyWidget groups the content row (icon + text) and the buttons row so
+    // they share the same left/right extents. The whole block is then centered
+    // within cLayout, giving symmetric margins and aligning the icon's left
+    // edge with the first button's left edge.
+    m_priv->bodyWidget = new QWidget;
+    QVBoxLayout * bodyLayout = new QVBoxLayout(m_priv->bodyWidget);
+    bodyLayout->setContentsMargins(0, 0, 0, 0);
+    bodyLayout->setSpacing(0);
 
+    QHBoxLayout * contentRow = new QHBoxLayout;
+    contentRow->setContentsMargins(0, 0, 0, 0);
     m_typeIcon->setProperty("class", "msg-icon");
-    m_typeIcon->setFixedSize(int(round(MSG_ICON_WIDTH*m_priv->dpiRatio - 0.25)),
-                             int(round(MSG_ICON_HEIGHT*m_priv->dpiRatio - 0.25)));
-    _h_layout2->addWidget(m_typeIcon, 0, Qt::AlignTop);
+    contentRow->addWidget(m_typeIcon, 0, Qt::AlignTop);
 
 //    m_message->setWordWrap(true);
     m_message->setProperty("class", "msg-report");
-    m_message->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
-    m_message->setTextFormat(Qt::PlainText);
+    m_message->setTextFormat(Qt::RichText);
+    m_message->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
     m_content->setProperty("class", "msg-report");
-    m_content->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
     m_content->setTextFormat(Qt::RichText);
+    m_content->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_content->setOpenExternalLinks(true);
 
-    QFormLayout * _f_layout = new QFormLayout;
-    _f_layout->addWidget(m_message);
-    _f_layout->addWidget(m_content);
-    _f_layout->setSpacing(0);
-    _f_layout->setContentsMargins(int(10*m_priv->dpiRatio),0,int(5*m_priv->dpiRatio),0);
-    _h_layout2->addLayout(_f_layout, 1);
-    _h_layout2->setContentsMargins(0,0,0,0);
+    m_priv->fLayout = new QFormLayout;
+    m_priv->fLayout->addWidget(m_message);
+    m_priv->fLayout->addWidget(m_content);
+    m_priv->fLayout->setSpacing(0);
+    contentRow->addLayout(m_priv->fLayout, 1);
+    bodyLayout->addLayout(contentRow, 1);
 
     QPushButton * btn_ok = new QPushButton("&" + QObject::tr("OK"));
     btn_ok->setAutoDefault(true);
     m_boxButtons->setLayout(new QHBoxLayout);
     m_boxButtons->layout()->addWidget(btn_ok);
-    m_boxButtons->layout()->setContentsMargins(0,int(10*m_priv->dpiRatio),0,0);
-    m_boxButtons->layout()->setSpacing(int(8*m_priv->dpiRatio));
-    _h_layout1->addWidget(m_boxButtons, 0, Qt::AlignCenter);
+
+    QHBoxLayout * buttonsRow = new QHBoxLayout;
+    buttonsRow->setContentsMargins(0, 0, 0, 0);
+    buttonsRow->addWidget(m_boxButtons, 0, Qt::AlignCenter);
+    bodyLayout->addLayout(buttonsRow, 0);
+
+    m_priv->cLayout->addWidget(m_priv->bodyWidget, 0, Qt::AlignCenter);
 
     m_priv->addButton(btn_ok);
 
@@ -269,16 +309,13 @@ QtMsg::QtMsg(QWidget * p)
         }
     );
 
-    m_centralWidget->setLayout(_c_layout);
-    m_centralWidget->setMinimumWidth(int(350*m_priv->dpiRatio));
+    m_centralWidget->setLayout(m_priv->cLayout);
     m_centralWidget->move(0, 0);
 
-    QString _styles(Utils::readStylesheets(":/styles/message.qss"));
-    _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
-    m_centralWidget->setStyleSheet( _styles );
-
-    QString zoom = QString::number(m_priv->dpiRatio) + "x";
-    m_centralWidget->setProperty("scaling", zoom);
+    // Scale once, from the stable parent-window ratio (see
+    // stableDpiRatioForDialog). No watcher/re-derivation is needed because
+    // that ratio doesn't change under this dialog.
+    applyScaling();
 
     m_priv->focusConnection = QObject::connect(qApp, &QApplication::focusChanged, this,
                                                [&] (QWidget * from, QWidget *to){
@@ -292,6 +329,34 @@ QtMsg::QtMsg(QWidget * p)
         } else {
         }
     });
+}
+
+void QtMsg::applyScaling()
+{
+    const int _body_margin = int(12 * m_priv->dpiRatio);
+    m_priv->cLayout->setContentsMargins(_body_margin,_body_margin,_body_margin,_body_margin);
+
+    m_typeIcon->setFixedSize(int(round(MSG_ICON_WIDTH*m_priv->dpiRatio - 0.25)),
+                             int(round(MSG_ICON_HEIGHT*m_priv->dpiRatio - 0.25)));
+
+    // Wider gap under the primary line, matching the GTK message dialog's
+    // spacing between its bold primary and regular secondary text.
+    m_message->setStyleSheet(QString("margin-bottom: %1px;").arg(int(12*m_priv->dpiRatio)));
+    m_content->setStyleSheet(QString("margin-bottom: %1px;").arg(int(8*m_priv->dpiRatio)));
+
+    m_priv->fLayout->setContentsMargins(int(10*m_priv->dpiRatio),0,int(5*m_priv->dpiRatio),0);
+
+    m_boxButtons->layout()->setContentsMargins(0,int(10*m_priv->dpiRatio),0,0);
+    m_boxButtons->layout()->setSpacing(int(8*m_priv->dpiRatio));
+
+    m_centralWidget->setMinimumWidth(m_priv->buttons.size() > 2 ? 400 : 350);
+
+    QString _styles(Utils::readStylesheets(":/styles/message.qss"));
+    _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
+    m_centralWidget->setStyleSheet( _styles );
+
+    QString zoom = QString::number(m_priv->dpiRatio) + "x";
+    m_centralWidget->setProperty("scaling", zoom);
 }
 
 QtMsg::~QtMsg()
@@ -356,7 +421,7 @@ void QtMsg::setButtons(std::initializer_list<QString> btns)
     }
 
     if (_btn_num > 2)
-        m_centralWidget->setMinimumWidth(int(400*m_priv->dpiRatio));
+        m_centralWidget->setMinimumWidth(400);
 }
 
 void QtMsg::setButtons(MsgBtns btns)
@@ -414,13 +479,27 @@ int QtMsg::showMessage(QWidget *parent,
         dlg.setLayoutDirection(Qt::RightToLeft);
 #endif
     }
-    dlg.setText(QTextDocumentFragment::fromHtml(msg).toPlainText());
+    // Split the primary (first) line from any following secondary lines, like
+    // the GTK message dialog: the primary is bold/larger, the rest regular.
+    const QString plain = QTextDocumentFragment::fromHtml(msg).toPlainText();
+    QString primary = plain, secondary;
+    const int nl = plain.indexOf('\n');
+    if (nl != -1) {
+        primary = plain.left(nl);
+        secondary = plain.mid(nl + 1);
+    }
+    dlg.setText(primary);
     QString content = opts.contentText;
     if (!content.isEmpty() && !opts.linkText.isEmpty()) {
         content.append("\n");
         content.replace("\n", "<br>");
     }
     content.append(opts.linkText);
+    if (!secondary.isEmpty()) {
+        QString sec = secondary.toHtmlEscaped();
+        sec.replace("\n", "<br>");
+        content = content.isEmpty() ? sec : (sec + "<br>" + content);
+    }
     if (!content.isEmpty())
         dlg.setContent(content);
     dlg.setIcon(msgType);
@@ -448,7 +527,12 @@ void QtMsg::setIcon(MsgType msgType)
 
 void QtMsg::setText( const QString& t)
 {
-    m_message->setText(t);
+    // Primary line, styled like the GTK message dialog: bold and a little
+    // larger than the secondary text. showMessage() splits the primary line
+    // off and routes the rest to the (regular) content label.
+    const int px = int(13.5 * m_priv->dpiRatio + 0.5);
+    m_message->setText(QString("<span style='font-size:%1px;'><b>%2</b></span>")
+                       .arg(px).arg(t.toHtmlEscaped()));
 }
 
 void QtMsg::setContent( const QString& t)
@@ -931,8 +1015,12 @@ int CMessage::showMessage(QWidget *parent,
         return WinMsg::showMessage(parent, msg, msgType, msgBtns, opts);
 # endif
 #else
-        WindowHelper::CParentDisable oDisabler(parent);
-        return GtkMsg::showMessage(parent, msg, msgType, msgBtns, opts);
+        // On Wayland, use Qt dialogs to avoid GTK falling back to Xwayland
+        // (which causes wrong scaling and misaligned click areas).
+        if (QGuiApplication::platformName() != "wayland") {
+            WindowHelper::CParentDisable oDisabler(parent);
+            return GtkMsg::showMessage(parent, msg, msgType, msgBtns, opts);
+        }
 #endif
     }
     return QtMsg::showMessage(parent, msg, msgType, msgBtns, opts);

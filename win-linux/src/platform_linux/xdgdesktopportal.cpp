@@ -2,6 +2,7 @@
 #include "xdgdesktopportal.h"
 #include "components/cmessage.h"
 #include "platform_linux/linux_window_utils.h"
+#include "iplatformbackend.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -13,7 +14,9 @@
 #include <dbus/dbus.h>
 #include <sys/syscall.h>
 #include <linux/random.h>
+#ifdef HAVE_X11
 #include <X11/Xlib.h>
+#endif
 
 #if defined(__x86_64__)
 # define GETRANDOM_NR 318
@@ -804,7 +807,7 @@ Result allocAndCopyFilePathWithExtn(const char* fileUri, const char* extn, char*
 }
 #endif
 
-Result callXdgPortal(Window parent, Xdg::Mode mode, const char* title,
+Result callXdgPortal(QWidget* parent, Xdg::Mode mode, const char* title,
                      DBusMessage* &outMsg,
                      const FilterItem* filterList,
                      uint filterCount,
@@ -831,8 +834,9 @@ Result callXdgPortal(Window parent, Xdg::Mode mode, const char* title,
     DBusMessageIter iter;
     dbus_message_iter_init_append(methd, &iter);
 
-    QString parent_window_qstr = "x11:" + QString::number((long)parent, 16);
-    char* parent_window = parent_window_qstr.toUtf8().data();
+    QString parent_window_qstr = parent ? IPlatformBackend::instance()->portalParentHandle(parent) : QString();
+    QByteArray parent_window_ba = parent_window_qstr.toUtf8();
+    char* parent_window = parent_window_ba.data();
     __dbusAppend(&iter, DBUS_TYPE_STRING, &parent_window);
     __dbusAppend(&iter, DBUS_TYPE_STRING, &title);
 
@@ -936,7 +940,7 @@ void freePath(char* filePath) {
     Free(filePath);
 }
 
-Result openDialog(Window parent, Xdg::Mode mode, const char* title,
+Result openDialog(QWidget* parent, Xdg::Mode mode, const char* title,
                   char** outPaths,
                   const FilterItem* filterList,
                   uint filterCount,
@@ -1076,7 +1080,7 @@ void Free(void* p) {
     }
 }
 
-void onWindowFound(xcb_window_t w, void *user_data)
+void onWindowFound(WId w, void *user_data)
 {
     if (QWidget *p = (QWidget*)user_data)
         LinuxWindowUtils::moveWindow(w, p->x() + 20, p->y() + 80);
@@ -1107,7 +1111,6 @@ QStringList Xdg::openXdgPortal(QWidget *parent,
                                bool sel_multiple)
 {
     initDBus();
-    Window parentWid = (parent) ? (Window)parent->winId() : 0L;
     const int pos = file_name.lastIndexOf('/');
     const QString _file_name = (pos != -1) ? file_name.mid(pos + 1) : file_name;
     const QString _path = (path.isEmpty() && pos != -1) ? file_name.mid(0, pos) : path;
@@ -1135,7 +1138,7 @@ QStringList Xdg::openXdgPortal(QWidget *parent,
     char* outPaths;
     LinuxWindowUtils::findWindowAsync("xdg-desktop-portal", (void*)parent, 3000, onWindowFound);
     Result result;
-    result = openDialog(parentWid, mode, title.toUtf8().data(),
+    result = openDialog(parent, mode, title.toUtf8().data(),
                         &outPaths,
                         filterItem,
                         filterSize,
