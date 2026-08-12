@@ -94,10 +94,6 @@ public:
     static double getScreenDpiRatio(const QPoint&);
     static double getScreenDpiRatioByHWND(int);
     static double getScreenDpiRatioByWidget(QWidget*);
-    // The real display scale factor, not divided by Qt's own auto-scaling
-    // (unlike getScreenDpiRatioByWidget). For "zoom"/"scaling" QSS
-    // properties specifically -- see the .cpp for why those need it.
-    static double getDisplayScaleFactor(QWidget*);
 
     // Installs a watcher (child of w, cleaned up automatically with it) that
     // calls onChange whenever the display scale w should be drawn at may
