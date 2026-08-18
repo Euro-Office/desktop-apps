@@ -4,6 +4,7 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QJsonDocument>
+#include <QDir>
 
 #include "applicationmanager.h"
 #include "cefview.h"
@@ -89,5 +90,17 @@ namespace Gateway
         loop.exec();
 
         return result;
+    }
+
+    int GatewayCommandRunner::ResolveViewIdByPath(const QString& path) const
+    {
+        if (!m_manager || path.isEmpty())
+            return -1;
+
+        QString normalized = QDir::isAbsolutePath(path) ? path : QDir::current().absoluteFilePath(path);
+        normalized = QDir::cleanPath(normalized);
+
+        CCefView* view = m_manager->GetViewByUrl(normalized.toStdWString());
+        return view ? view->GetId() : -1;
     }
 }

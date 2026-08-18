@@ -143,6 +143,34 @@ namespace Gateway
                         response.insert(QStringLiteral("ok"), true);
                         response.insert(QStringLiteral("result"), names);
                     }
+                    else if (command == QStringLiteral("gateway.connect"))
+                    {
+                        // Meta command, same rationale as gateway.listCommands above:
+                        // a pure resolver (GatewayCommandRunner::ResolveViewIdByPath),
+                        // not a CDP round trip, so it stays a special case here rather
+                        // than going through the allowlist. Deliberately does NOT open
+                        // anything itself -- see that method's header comment. Returns
+                        // targetViewId: -1 (not an error) when the path isn't open yet,
+                        // so a polling client can distinguish "not open yet, keep
+                        // waiting" from a real failure.
+                        const QJsonObject scope = request.value(QStringLiteral("scope")).toObject();
+                        const QString path = scope.value(QStringLiteral("path")).toString();
+                        if (path.isEmpty())
+                        {
+                            QJsonObject error;
+                            error.insert(QStringLiteral("code"), ErrorCodeToString(ErrorCode::SchemaInvalid));
+                            error.insert(QStringLiteral("message"), QStringLiteral("scope.path must be a non-empty string"));
+                            response.insert(QStringLiteral("ok"), false);
+                            response.insert(QStringLiteral("error"), error);
+                        }
+                        else
+                        {
+                            QJsonObject result;
+                            result.insert(QStringLiteral("targetViewId"), m_runner->ResolveViewIdByPath(path));
+                            response.insert(QStringLiteral("ok"), true);
+                            response.insert(QStringLiteral("result"), result);
+                        }
+                    }
                     else
                     {
                         const QJsonObject scope = request.value(QStringLiteral("scope")).toObject();

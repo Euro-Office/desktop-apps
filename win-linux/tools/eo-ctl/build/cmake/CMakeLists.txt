@@ -8,7 +8,10 @@ set(EO_CTL_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../..")
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 
-add_executable(eo-ctl "${EO_CTL_ROOT_DIR}/src/main.cpp")
+add_executable(eo-ctl
+    "${EO_CTL_ROOT_DIR}/src/main.cpp"
+    "${EO_CTL_ROOT_DIR}/src/connectlogic.cpp"
+)
 
 set_target_properties(eo-ctl PROPERTIES
     CXX_STANDARD 17

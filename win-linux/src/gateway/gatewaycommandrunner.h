@@ -33,6 +33,20 @@ namespace Gateway
         // -- never CDP target URL/title matching, per plan §0.
         Result Execute(const QString& command, const QJsonObject& scope, int targetViewId);
 
+        // Backs the gateway.connect meta-command (gatewayserver.cpp) -- a pure
+        // resolver, not an "open" operation: matches CAscApplicationManager::GetViewByUrl
+        // (which itself checks a view's GetUrl()/GetOriginalUrl()/GetUrlAsLocal()) after
+        // normalizing `path` the same way CAscApplicationManagerWrapper::handleInputCmd
+        // does before a view's local-file URL is ever set, so an already-open or
+        // freshly-opened view for this file is actually found. Returns -1 if no view
+        // matches -- the caller (a client that itself launched
+        // `DesktopEditors <path>`, relying on SingleApplication to either cold-start or
+        // forward-and-open-a-new-tab in the already-running instance either way) is
+        // expected to poll this in a bounded loop rather than this method opening
+        // anything itself, so gateway.connect stays a single CDP-free, side-effect-free
+        // call like gateway.listCommands, not a second way to open documents.
+        int ResolveViewIdByPath(const QString& path) const;
+
     private:
         CAscApplicationManager* m_manager;
         int m_nextMessageId = 1;

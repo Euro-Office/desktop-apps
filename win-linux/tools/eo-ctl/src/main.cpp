@@ -20,6 +20,8 @@
 
 #include <unistd.h>
 
+#include "connectlogic.h"
+
 namespace
 {
     QString SocketPath()
@@ -132,7 +134,46 @@ int main(int argc, char* argv[])
             err << "usage: eo-ctl connect <file>\n";
             return 1;
         }
-        return EnsureEditorRunning(args.at(1), err) ? 0 : 1;
+
+        const QString file = args.at(1);
+        const bool socketAlreadyExists = QFile::exists(SocketPath());
+
+        // gateway.connect is a pure resolver (never opens anything itself, see
+        // gatewayserver.cpp) -- launching DesktopEditors <file> is what actually
+        // opens the document, via SingleApplication's cold-start-or-forward
+        // behavior; see connectlogic.h for the full rationale.
+        auto resolveViewId = [&file, &err]() -> int {
+            QJsonObject request;
+            request.insert(QStringLiteral("id"), QStringLiteral("eo-ctl-connect"));
+            request.insert(QStringLiteral("command"), QStringLiteral("gateway.connect"));
+            QJsonObject scope;
+            scope.insert(QStringLiteral("path"), file);
+            request.insert(QStringLiteral("scope"), scope);
+
+            QJsonObject response;
+            if (!SendRequest(request, response, err) || !response.value(QStringLiteral("ok")).toBool())
+                return -1;
+            return response.value(QStringLiteral("result")).toObject()
+                .value(QStringLiteral("targetViewId")).toInt(-1);
+        };
+
+        const int viewId = EoCtl::ConnectAndResolveViewId(
+            socketAlreadyExists,
+            [&file, &err]() { return EnsureEditorRunning(file, err); },
+            resolveViewId,
+            [&file]() { QProcess::startDetached(QStringLiteral("DesktopEditors"), {file}); },
+            [](int ms) { QThread::msleep(static_cast<unsigned long>(ms)); });
+
+        if (viewId == -1)
+        {
+            err << "eo-ctl: timed out resolving a view for " << file << "\n";
+            return 1;
+        }
+
+        QJsonObject result;
+        result.insert(QStringLiteral("targetViewId"), viewId);
+        out << QString::fromUtf8(QJsonDocument(result).toJson(QJsonDocument::Compact)) << "\n";
+        return 0;
     }
 
     if (subcommand == QStringLiteral("call"))
