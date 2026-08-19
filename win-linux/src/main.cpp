@@ -32,6 +32,7 @@
 # include <unistd.h>
 #endif
 #include "cascapplicationmanagerwrapper.h"
+#include "gateway/gatewayserver.h"
 #include "defines.h"
 #include "clangater.h"
 #include "clogger.h"
@@ -185,6 +186,18 @@ int main( int argc, char *argv[] )
     CLangater::init();
     AscAppManager::initializeApp();
     AscAppManager::startApp();
+
+    // Authenticated command gateway (see cdp-gateway-cli-plan.md). Started once here,
+    // not per-window: AscAppManager::getInstance() is a process-wide Meyers singleton
+    // (cascapplicationmanagerwrapper.cpp) and CAscApplicationManager_Private's view map
+    // is shared across every editor window/view in this process, so one GatewayServer
+    // instance already covers all of them. Single-instance-per-user-session is already
+    // guaranteed upstream by the SingleApplication::isPrimary() check earlier in this
+    // function -- a second launch forwards its args and exits before reaching here.
+    static Gateway::GatewayServer gatewayServer(&AscAppManager::getInstance());
+    if (!gatewayServer.Start())
+        CLogger::log("eo-gateway: failed to start (socket or token file could not be created)");
+
     AscAppManager::getInstance().StartSpellChecker();
     AscAppManager::getInstance().StartKeyboardChecker();
     AscAppManager::getInstance().CheckFonts();

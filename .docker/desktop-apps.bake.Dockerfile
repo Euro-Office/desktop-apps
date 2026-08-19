@@ -102,7 +102,17 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
-        cmake --build . && \
+        cmake --build .
+
+    # Split from the compile step above so ctest's own output isn't sharing (and
+    # getting pushed out of) BuildKit's per-step 2MiB log buffer with the compiler's
+    # warning noise -- that clipping repeatedly hid ctest's actual per-test results
+    # during the gateway test suite's rollout.
+    RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${CACHE_BUST} \
+        --mount=type=cache,target=/ccache,id=ccache \
+        export CCACHE_DIR=/ccache && \
+        cd /build-cache-desktop && \
+        ctest --test-dir . --output-on-failure && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors
