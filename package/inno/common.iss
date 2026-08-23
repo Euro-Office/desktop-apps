@@ -16,7 +16,14 @@
 #define ARCH 'x64'
 #endif
 #ifndef BUILD_DIR
-#define BUILD_DIR '..\build\' + ARCH
+; Absolute and already normalized, deliberately NOT '..\build\'+ARCH: iscc runs
+; with the inno\ directory as its working dir, so the relative form resolves to
+; "...\package\inno\..\build\..." and those 8 extra characters push the longest
+; staged file (a base32-named template, 256 chars) past MAX_PATH - the compiler
+; then aborts with "Das System kann den angegebenen Pfad nicht finden".
+; SourcePath carries a trailing backslash, hence ExtractFileDir twice to reach
+; the package\ directory.
+#define BUILD_DIR ExtractFileDir(ExtractFileDir(SourcePath)) + '\build\' + ARCH
 #endif
 #ifndef OUTPUT_DIR
 #define OUTPUT_DIR '.'
@@ -76,10 +83,13 @@ ChangesAssociations       =yes
 ChangesEnvironment        =yes
 SetupMutex                =ASC
 
-#if Ver < EncodeVer(6,0,0) & ARCH == "x64"
+; The "x64compatible" identifier was introduced in Inno Setup 6.3 - NOT in 6.0.
+; Gating on 6.0 makes every 6.0-6.2.x compiler emit a value it does not know:
+; "Value of [Setup] section directive "ArchitecturesAllowed" is invalid."
+#if Ver < EncodeVer(6,3,0) & ARCH == "x64"
 ArchitecturesAllowed              = x64
 ArchitecturesInstallIn64BitMode   = x64
-#elif Ver >= EncodeVer(6,0,0) & ARCH == "x64"
+#elif Ver >= EncodeVer(6,3,0) & ARCH == "x64"
 ArchitecturesAllowed              = x64compatible
 ArchitecturesInstallIn64BitMode   = x64compatible
 #elif ARCH == "arm64"
