@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ASCBundleBuildNumber</key>
+	<string>0</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDocumentTypes</key>
@@ -497,10 +499,10 @@
 			<array>
 				<string>xlsm</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Microsoft Excel Workbook with macro enabled (.xlsm)</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>file-xlsm</string>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel Workbook with macro enabled (.xlsm)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -509,10 +511,10 @@
 			<array>
 				<string>xlsb</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Microsoft Excel binary workbook (.xlsb)</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>file-xlsb</string>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel binary workbook (.xlsb)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -658,8 +660,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>537</string>
-	<key>ASCBundleBuildNumber</key>
-	<string>0</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>LSMinimumSystemVersion</key>

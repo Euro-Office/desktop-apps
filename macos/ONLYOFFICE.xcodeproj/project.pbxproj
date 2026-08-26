@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		3B521DD5303DF2BA000EED85 /* ascdocumentscore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5EE5492E3382D20010A8A8 /* ascdocumentscore.framework */; };
+		3B521DD6303DF2BA000EED85 /* ooxmlsignature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5EE5482E3382D20010A8A8 /* ooxmlsignature.framework */; };
 		5A02294D2CB9C0410011C6EC /* QuickLookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A02294C2CB9C0410011C6EC /* QuickLookUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5A02294E2CB9C3260011C6EC /* QuickLookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A02294C2CB9C0410011C6EC /* QuickLookUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5A0229502CCFBF260011C6EC /* file-fods.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5A02294F2CCFBF260011C6EC /* file-fods.icns */; };
@@ -1141,8 +1143,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A02294D2CB9C0410011C6EC /* QuickLookUI.framework in Frameworks */,
-				BE5EE54C2E3391440010A8A8 /* ascdocumentscore.framework in Frameworks */,
-				BE5EE54D2E3391440010A8A8 /* ooxmlsignature.framework in Frameworks */,
+				3B521DD5303DF2BA000EED85 /* ascdocumentscore.framework in Frameworks */,
+				3B521DD6303DF2BA000EED85 /* ooxmlsignature.framework in Frameworks */,
 				5AD24E2C2902AE3C00748926 /* Sparkle.framework in Frameworks */,
 				FC0BD6C5258B63F700C47F95 /* WebKit.framework in Frameworks */,
 				FC0BD6C6258B63F700C47F95 /* Security.framework in Frameworks */,
@@ -1926,7 +1928,6 @@
 						ProvisioningStyle = Manual;
 					};
 					FCB4C6BA26DD018B0012C20D = {
-						DevelopmentTeam = 2WH24U26GJ;
 						ProvisioningStyle = Manual;
 					};
 					FCBC42671B9D650400405301 = {
@@ -2312,7 +2313,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n#exit 0\n\nCreateDir() {\nif [ ! -d $1 ]; then\nmkdir -p $1\nelse\nrm -Rf $1\nmkdir -p $1\nfi\n}\n\nBASE_DIR=$(pwd)\nDST_DIR=\"${BASE_DIR}/Vendor/ONLYOFFICE\"\nSRC_BASE_DIR=\"${BASE_DIR}/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors\"\n\n# Copy application resources\necho \"Copy application resources\"\nCreateDir \"${DST_DIR}/login\"\ncp -vR \"${SRC_BASE_DIR}/index.html\" \"${DST_DIR}/login/index.html\"\ncp -vR \"${SRC_BASE_DIR}/editors/webext/noconnect.html\" \"${DST_DIR}/login/noconnect.html\"\ncp -vR \"${SRC_BASE_DIR}/fonts\" \"${DST_DIR}/login/fonts\"\ncp -vR \"${BASE_DIR}/ONLYOFFICE/Resources/acknowledgments.html\" \"${DST_DIR}/login/acknowledgments.html\"\ncp -vR \"${SRC_BASE_DIR}/providers\" \"${DST_DIR}\"\n\n[ ! -d \"${DST_DIR}/license\" ] && mkdir -p \"${DST_DIR}/license\"\n\n# Copy editors and convertor\necho \"Copy editors and convertor\"\ncd \"$BASE_DIR\"\ncp -vR \"${SRC_BASE_DIR}/editors\" \"${DST_DIR}\"\ncp -vR \"${SRC_BASE_DIR}/converter\" \"${DST_DIR}\"\n";
+			shellScript = "#!/bin/sh\n\n#exit 0\n\nCreateDir() {\nif [ ! -d $1 ]; then\nmkdir -p $1\nelse\nrm -Rf $1\nmkdir -p $1\nfi\n}\n\nBASE_DIR=$(pwd)\nDST_DIR=\"${BASE_DIR}/Vendor/ONLYOFFICE\"\nSRC_BASE_DIR=\"${EO_MAC_STAGE_DIR}\"\n\nif [ -z \"${EO_MAC_STAGE_DIR}\" ]; then\n  echo \"error: EO_MAC_STAGE_DIR build setting is not set. Pass it via 'xcodebuild ... EO_MAC_STAGE_DIR=/path/to/stage', an .xcconfig, or a scheme environment variable.\" 1>&2\n  exit 1\nfi\n\n# Copy application resources\necho \"Copy application resources\"\nCreateDir \"${DST_DIR}/login\"\ncp -vR \"${SRC_BASE_DIR}/index.html\" \"${DST_DIR}/login/index.html\"\ncp -vR \"${SRC_BASE_DIR}/editors/webext/noconnect.html\" \"${DST_DIR}/login/noconnect.html\"\ncp -vR \"${SRC_BASE_DIR}/fonts\" \"${DST_DIR}/login/fonts\"\ncp -vR \"${BASE_DIR}/ONLYOFFICE/Resources/acknowledgments.html\" \"${DST_DIR}/login/acknowledgments.html\"\ncp -vR \"${SRC_BASE_DIR}/providers\" \"${DST_DIR}\"\n\n[ ! -d \"${DST_DIR}/license\" ] && mkdir -p \"${DST_DIR}/license\"\n\n# Copy editors and convertor\necho \"Copy editors and convertor\"\ncd \"$BASE_DIR\"\ncp -vR \"${SRC_BASE_DIR}/editors\" \"${DST_DIR}\"\ncp -vR \"${SRC_BASE_DIR}/converter\" \"${DST_DIR}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FCB4C73226DD018B0012C20D /* Rename symbols */ = {
@@ -2331,7 +2332,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n#exit 0\n\nbase_path=$(pwd)\ncontents_path=${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}\nframeworks_path=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nconverter_path=\"${contents_path}/Resources/converter\"\ncore_path=\"${base_path}/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors\"\napp_name=\"ONLYOFFICE\"\n\n# Signs a framework with the provided identity\ncode_sign_if_enabled() {\n  if [ -n \"${EXPANDED_CODE_SIGN_IDENTITY:-}\" -a \"${CODE_SIGNING_REQUIRED:-}\" != \"NO\" -a \"${CODE_SIGNING_ALLOWED}\" != \"NO\" ]; then\n    # Use the current code_sign_identity\n    echo \"Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}\"\n    local code_sign_cmd=\"/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS:-} --preserve-metadata=identifier,entitlements '$1'\"\n\n    echo \"$code_sign_cmd\"\n    eval \"$code_sign_cmd\"\n  fi\n}\n\n# Sign libs in directory\nsign_libs_in_directory() {\n    for i in $1/*.framework; do\n        [ -d \"$i\" ] || break\n        code_sign_if_enabled \"$i/Versions/Current\"\n    done\n}\n\n# Change path of dependency library\nchange_dependency_path() {\n  echo \"Rename path for $1 from $2 to $3\"\n  install_name_tool -change \"$2\" \"$3\" \"$1\"\n}\n\nrm -rf \"${frameworks_path}/Chromium Embedded Framework.framework\"\nrm -rf \"${frameworks_path}/editors_helper.app\"\nrm -rf \"${frameworks_path}/editors_helper (GPU).app\"\nrm -rf \"${frameworks_path}/editors_helper (Renderer).app\"\nrm -rf \"${frameworks_path}/ascdocumentscore.framework\"\n#rm -rf \"${frameworks_path}/ooxmlsignature.framework\"\nrm -rf \"${frameworks_path}/hunspell.framework\"\n\nif [ ! -d \"${frameworks_path}\" ]; then\nmkdir -p \"${frameworks_path}\"\nfi\n\necho \"Copy libraries and frameworks\"\ncp -Rv \"${core_path}/editors_helper.app\" \"${frameworks_path}/\"\ncp -Rv \"${core_path}/editors_helper (GPU).app\" \"${frameworks_path}/\"\ncp -Rv \"${core_path}/editors_helper (Renderer).app\" \"${frameworks_path}/\"\ncp -Rv \"${core_path}/Chromium Embedded Framework.framework\" \"${frameworks_path}\"\ncp -Rv \"${core_path}/ascdocumentscore.framework\" \"${frameworks_path}\"\n#cp -Rv \"${core_path}/ooxmlsignature.framework\" \"${frameworks_path}\"\ncp -Rv \"${core_path}/hunspell.framework\" \"${frameworks_path}\"\n\n# Fixed paths application\necho \"Fixed dependency paths of application\"\nchange_dependency_path \"${contents_path}/MacOS/${app_name}\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@rpath/Chromium Embedded Framework.framework/Chromium Embedded Framework\"\n\n# Resign the code if required by the build settings to avoid unstable apps\necho \"Sign libraries and frameworks with ${EXPANDED_CODE_SIGN_IDENTITY_NAME}\"\n\n#code_sign_if_enabled \"${frameworks_path}/ooxmlsignature.framework/Versions/Current\"\ncode_sign_if_enabled \"${frameworks_path}/ascdocumentscore.framework/Versions/Current\"\ncode_sign_if_enabled \"${frameworks_path}/hunspell.framework/Versions/Current\"\n\nsign_libs_in_directory ${converter_path}\n\ncodesign --verbose --force --options runtime --entitlements \"${CODE_SIGN_ENTITLEMENTS}\" --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${converter_path}/x2t\"\n\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libEGL.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libswiftshader_libEGL.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libGLESv2.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libswiftshader_libGLESv2.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libvk_swiftshader.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\"  \"${frameworks_path}/editors_helper.app\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\"  \"${frameworks_path}/editors_helper (GPU).app\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\"  \"${frameworks_path}/editors_helper (Renderer).app\"\n\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/Autoupdate\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/XPCServices/org.sparkle-project.Downloader.xpc/Contents/MacOS/org.sparkle-project.Downloader\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/org.sparkle-project.InstallerLauncher\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B\"\n\ncodesign --verbose=4 --force --options runtime --entitlements \"${CODE_SIGN_ENTITLEMENTS}\" --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${contents_path}/MacOS/${app_name}\"\n";
+			shellScript = "#!/bin/sh\n\n#exit 0\n\nbase_path=$(pwd)\ncontents_path=${CONFIGURATION_BUILD_DIR}/${CONTENTS_FOLDER_PATH}\nframeworks_path=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nconverter_path=\"${contents_path}/Resources/converter\"\ncore_path=\"${EO_MAC_STAGE_DIR}\"\nif [ -z \"${EO_MAC_STAGE_DIR}\" ]; then\n  echo \"error: EO_MAC_STAGE_DIR build setting is not set. Pass it via 'xcodebuild ... EO_MAC_STAGE_DIR=/path/to/stage', an .xcconfig, or a scheme environment variable.\" 1>&2\n  exit 1\nfi\napp_name=\"ONLYOFFICE\"\n\n# Signs a framework with the provided identity\ncode_sign_if_enabled() {\n  if [ -n \"${EXPANDED_CODE_SIGN_IDENTITY:-}\" -a \"${CODE_SIGNING_REQUIRED:-}\" != \"NO\" -a \"${CODE_SIGNING_ALLOWED}\" != \"NO\" ]; then\n    # Use the current code_sign_identity\n    echo \"Code Signing $1 with Identity ${EXPANDED_CODE_SIGN_IDENTITY_NAME}\"\n    local code_sign_cmd=\"/usr/bin/codesign --force --sign ${EXPANDED_CODE_SIGN_IDENTITY} ${OTHER_CODE_SIGN_FLAGS:-} --preserve-metadata=identifier,entitlements '$1'\"\n\n    echo \"$code_sign_cmd\"\n    eval \"$code_sign_cmd\"\n  fi\n}\n\n# Sign libs in directory\nsign_libs_in_directory() {\n    for i in $1/*.framework; do\n        [ -d \"$i\" ] || break\n        code_sign_if_enabled \"$i/Versions/Current\"\n    done\n}\n\n# Change path of dependency library\nchange_dependency_path() {\n  echo \"Rename path for $1 from $2 to $3\"\n  install_name_tool -change \"$2\" \"$3\" \"$1\"\n}\n\n# Restructure a flat/legacy CEF framework distribution into the versioned\n# bundle layout Xcode 26 requires for embedded frameworks (Info.plist must\n# live at Versions/Current/Resources/Info.plist, not just Resources/Info.plist).\nrestructure_cef_framework() {\n  local dst=\"$1\"\n  local src=\"$2\"\n  local real_src\n  real_src=\"$(cd \"$src\" && pwd -P)\"\n  rm -rf \"$dst\"\n  mkdir -p \"$dst/Versions/A\"\n  cp -R \"${real_src}/.\" \"$dst/Versions/A/\"\n  ln -sfn \"A\" \"$dst/Versions/Current\"\n  ln -sfn \"Versions/Current/Chromium Embedded Framework\" \"$dst/Chromium Embedded Framework\"\n  ln -sfn \"Versions/Current/Libraries\" \"$dst/Libraries\"\n  ln -sfn \"Versions/Current/Resources\" \"$dst/Resources\"\n}\n\nrm -rf \"${frameworks_path}/Chromium Embedded Framework.framework\"\nrm -rf \"${frameworks_path}/editors_helper.app\"\nrm -rf \"${frameworks_path}/editors_helper (GPU).app\"\nrm -rf \"${frameworks_path}/editors_helper (Renderer).app\"\nrm -rf \"${frameworks_path}/ascdocumentscore.framework\"\nrm -rf \"${frameworks_path}/ooxmlsignature.framework\"\n\nif [ ! -d \"${frameworks_path}\" ]; then\nmkdir -p \"${frameworks_path}\"\nfi\n\necho \"Copy libraries and frameworks\"\ncp -Rv \"${core_path}/editors_helper.app\" \"${frameworks_path}/\"\ncp -Rv \"${core_path}/editors_helper (GPU).app\" \"${frameworks_path}/\"\ncp -Rv \"${core_path}/editors_helper (Renderer).app\" \"${frameworks_path}/\"\ncp -Rv \"${core_path}/ascdocumentscore.framework\" \"${frameworks_path}\"\ncp -Rv \"${core_path}/ooxmlsignature.framework\" \"${frameworks_path}\"\nrestructure_cef_framework \"${frameworks_path}/Chromium Embedded Framework.framework\" \"${core_path}/Chromium Embedded Framework.framework\"\nrestructure_cef_framework \"${frameworks_path}/editors_helper.app/Contents/Frameworks/Chromium Embedded Framework.framework\" \"${core_path}/Chromium Embedded Framework.framework\"\nrestructure_cef_framework \"${frameworks_path}/editors_helper (GPU).app/Contents/Frameworks/Chromium Embedded Framework.framework\" \"${core_path}/Chromium Embedded Framework.framework\"\nrestructure_cef_framework \"${frameworks_path}/editors_helper (Renderer).app/Contents/Frameworks/Chromium Embedded Framework.framework\" \"${core_path}/Chromium Embedded Framework.framework\"\n\n# Fixed paths application\necho \"Fixed dependency paths of application\"\nchange_dependency_path \"${contents_path}/MacOS/${app_name}\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@rpath/Chromium Embedded Framework.framework/Chromium Embedded Framework\"\n\n# Resign the code if required by the build settings to avoid unstable apps\necho \"Sign libraries and frameworks with ${EXPANDED_CODE_SIGN_IDENTITY_NAME}\"\n\ncode_sign_if_enabled \"${frameworks_path}/ooxmlsignature.framework/Versions/Current\"\ncode_sign_if_enabled \"${frameworks_path}/ascdocumentscore.framework/Versions/Current\"\n\nsign_libs_in_directory ${converter_path}\n\ncodesign --verbose --force --options runtime --entitlements \"${CODE_SIGN_ENTITLEMENTS}\" --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${converter_path}/x2t\"\n\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libEGL.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libswiftshader_libEGL.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libGLESv2.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libswiftshader_libGLESv2.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework/Libraries/libvk_swiftshader.dylib\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Chromium Embedded Framework.framework\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\"  \"${frameworks_path}/editors_helper.app\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\"  \"${frameworks_path}/editors_helper (GPU).app\"\ncodesign --verbose=4 --force --deep --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\"  \"${frameworks_path}/editors_helper (Renderer).app\"\n\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/Autoupdate\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/XPCServices/org.sparkle-project.Downloader.xpc/Contents/MacOS/org.sparkle-project.Downloader\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/org.sparkle-project.InstallerLauncher\"\ncodesign --verbose --force --options runtime --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${frameworks_path}/Sparkle.framework/Versions/B\"\n\ncodesign --verbose=4 --force --options runtime --entitlements \"${CODE_SIGN_ENTITLEMENTS}\" --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${contents_path}/MacOS/${app_name}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FCB4C73326DD018B0012C20D /* Increment Build Number */ = {
@@ -3215,16 +3216,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "ONLYOFFICE/Resources/ONLYOFFICE-arm/ONLYOFFICE.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 410;
 				DEVELOPMENT_TEAM = 2WH24U26GJ;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_HARDENED_RUNTIME = YES;
+				EO_MAC_STAGE_DIR = "";
 				EXCLUDED_ARCHS = x86_64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors",
-					"$(PROJECT_DIR)/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors/converter",
+					"$(EO_MAC_STAGE_DIR)",
+					"$(EO_MAC_STAGE_DIR)/converter",
 					"$(PROJECT_DIR)/ONLYOFFICE",
 					"$(PROJECT_DIR)/Vendor/Sparkle",
 					"$(PROJECT_DIR)/../../core/DesktopEditor/xmlsec/src/include",
@@ -3240,7 +3244,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @executable_path/../Resources/converter @loader_path/../Resources/converter";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors",
+					"$(EO_MAC_STAGE_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CODE_SIGN_FLAGS = "";
@@ -3248,7 +3252,7 @@
 					"$(inherited)",
 					"-headerpad_max_install_names",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = asc.onlyoffice.ONLYOFFICE;
+				PRODUCT_BUNDLE_IDENTIFIER = "asc.euro-office.Euro-Office";
 				PRODUCT_NAME = ONLYOFFICE;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3261,16 +3265,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "ONLYOFFICE/Resources/ONLYOFFICE-arm/ONLYOFFICE.entitlements";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Ascensio System SIA (2WH24U26GJ)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 410;
 				DEVELOPMENT_TEAM = 2WH24U26GJ;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_HARDENED_RUNTIME = YES;
+				EO_MAC_STAGE_DIR = "";
 				EXCLUDED_ARCHS = x86_64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors",
-					"$(PROJECT_DIR)/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors/converter",
+					"$(EO_MAC_STAGE_DIR)",
+					"$(EO_MAC_STAGE_DIR)/converter",
 					"$(PROJECT_DIR)/ONLYOFFICE",
 					"$(PROJECT_DIR)/Vendor/Sparkle",
 					"$(PROJECT_DIR)/../../core/DesktopEditor/xmlsec/src/include",
@@ -3286,7 +3293,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @executable_path/../Resources/converter @loader_path/../Resources/converter";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../build_tools/out/mac_arm64/onlyoffice/desktopeditors",
+					"$(EO_MAC_STAGE_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CODE_SIGN_FLAGS = "";
@@ -3294,7 +3301,7 @@
 					"$(inherited)",
 					"-headerpad_max_install_names",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = asc.onlyoffice.ONLYOFFICE;
+				PRODUCT_BUNDLE_IDENTIFIER = "asc.euro-office.Euro-Office";
 				PRODUCT_NAME = ONLYOFFICE;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
