@@ -159,22 +159,8 @@
 }
 
 - (IBAction)onLicenseButtonClick:(id)sender {
-    NSURL * eulaUrl = [[NSBundle mainBundle] URLForResource:@"EULA" withExtension:@"html" subdirectory:@"license"];
-    if ( !eulaUrl )
-        eulaUrl = [[NSBundle mainBundle] URLForResource:@"LICENSE" withExtension:@"html" subdirectory:@"license"];
-    
-    NSWindowController * windowController = [self.storyboard instantiateControllerWithIdentifier:@"ASCLicenseWindowControllerId"];
-    ASCLicenseController *licView = (ASCLicenseController *)windowController.contentViewController;
-    [licView setUrl:eulaUrl];
-    NSWindow *licWindow = windowController.window;
-    
-    NSRect parentFrame = self.view.window.frame;
-    NSRect childFrame = licWindow.frame;
-    [licWindow setFrameOrigin:NSMakePoint(NSMidX(parentFrame) - childFrame.size.width/2,
-                                          NSMidY(parentFrame) - childFrame.size.height/2)];
-    [licWindow makeKeyAndOrderFront:nil]; // Show the window first to apply the coordinates
-    
-    [NSApp runModalForWindow:licWindow];
+    NSURL *licenseUrl = [NSURL URLWithString:@"https://github.com/Euro-Office/DesktopEditors/blob/main/LICENSE"];
+    [[NSWorkspace sharedWorkspace] openURL:licenseUrl];
 }
 
 @end
