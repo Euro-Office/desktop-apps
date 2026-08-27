@@ -676,7 +676,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2026 Ascensio System SIA. All rights reserved.</string>
+	<string>Euro-Office was based on ONLYOFFICE by Ascensio System SIA</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSMicrophoneUsageDescription</key>
