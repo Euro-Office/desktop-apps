@@ -26,7 +26,7 @@ platform :mac do
   lane :common_release do |options|
     build = "build"
     scheme = options[:scheme]
-    app_name = "ONLYOFFICE"
+    app_name = "Euro-Office"
     app = "#{build}/#{app_name}.app"
     git_suffix = options[:git_suffix]
     edition = options[:edition]
