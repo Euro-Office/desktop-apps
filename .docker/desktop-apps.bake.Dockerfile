@@ -72,7 +72,7 @@ FROM core-base AS desktop-linux
     COPY core-fonts /core-fonts
 
     ### Branding
-    COPY ${BRANDING_DIR}/desktop-apps /desktop-apps
+    COPY --from=brand-icons /[d]esktop-apps /desktop-apps
     ###
 
     COPY --from=desktop-common /index.html /desktop-apps/common/loginpage/deploy/index.html
