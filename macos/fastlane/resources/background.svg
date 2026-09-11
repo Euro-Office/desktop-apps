@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="390" viewBox="0 0 640 390">
+  <rect width="640" height="390" fill="#ffffff"/>
+  <text x="320" y="80" text-anchor="middle"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="24" font-weight="600" fill="#2c2c2c">Drag and Drop to Install</text>
+  <path d="M 270 215 Q 320 190 370 220" fill="none" stroke="#2e6da4" stroke-width="2.5"
+        stroke-dasharray="2 6" stroke-linecap="round"/>
+  <path d="M 362 210 L 372 221 L 359 226" fill="none" stroke="#2e6da4" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
