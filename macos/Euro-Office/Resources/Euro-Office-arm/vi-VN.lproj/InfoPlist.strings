@@ -1,0 +1,6 @@
+/* Bundle name */
+"CFBundleName" = "ONLYOFFICE";
+
+/* Copyright (human-readable) */
+"NSHumanReadableCopyright" = "Euro-Office được xây dựng dựa trên ONLYOFFICE của Ascensio System SIA";
+
