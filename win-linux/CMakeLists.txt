@@ -323,6 +323,11 @@ add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 
 set_default_options(DesktopEditors) 
 
+if(WIN32)
+    set_target_properties(DesktopEditors PROPERTIES WIN32_EXECUTABLE TRUE)
+    target_link_libraries(DesktopEditors PRIVATE Qt6::EntryPointPrivate)
+endif()
+
 if(NOT WIN32)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(DBUS REQUIRED dbus-1)
