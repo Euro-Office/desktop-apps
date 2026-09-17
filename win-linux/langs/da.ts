@@ -27,7 +27,7 @@
     <message>
         <location filename="../src/cascapplicationmanagerwrapper.cpp" line="1988"/>
         <source>You must restart the application for the settings to take effect.</source>
-        <translation>Du skal genstarte applikationen for at indstillingerne træder i kraft.</translation>
+        <translation>Du skal genstarte appen, før indstillingerne træder i kraft.</translation>
     </message>
     <message>
         <location filename="../src/cascapplicationmanagerwrapper.cpp" line="2322"/>
@@ -64,7 +64,7 @@
         <location filename="../src/cascapplicationmanagerwrapper.cpp" line="927"/>
         <location filename="../src/components/asctabwidget.cpp" line="704"/>
         <source>Document</source>
-        <translation>Åbner...</translation>
+        <translation>Dokument</translation>
     </message>
 </context>
 <context>
@@ -93,12 +93,12 @@
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="111"/>
         <source>select certificate file...</source>
-        <translation>vælg certifikatsfil...</translation>
+        <translation>vælg certifikatfil...</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="113"/>
         <source>Certificate password:</source>
-        <translation>Certifikatsdagangskode:</translation>
+        <translation>Adgangskode til certifikat:</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="115"/>
@@ -108,7 +108,7 @@
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="117"/>
         <source>Key password:</source>
-        <translation>Nøgleadgangskode:</translation>
+        <translation>Adgangskode til nøgle:</translation>
     </message>
     <message>
         <source>Open Document</source>
@@ -117,37 +117,37 @@
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="229"/>
         <source>Enter certificate path</source>
-        <translation>Indtast certifikat vej</translation>
+        <translation>Indtast sti til certifikat</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="238"/>
         <source>Certificate is not supported</source>
-        <translation>Certifikat er ikke understøttet</translation>
+        <translation>Certifikatet understøttes ikke</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="244"/>
         <source>Enter certificate password</source>
-        <translation>Indtast Certifikatsadgangskode</translation>
+        <translation>Indtast adgangskode til certifikat</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="245"/>
         <source>Wrong certificate password.&lt;br&gt;Please enter again</source>
-        <translation>Forkert Certifikatsadgangskode.&lt;br&gt;Prøv at indtaste igen</translation>
+        <translation>Forkert adgangskode til certifikat.&lt;br&gt;Prøv igen</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="254"/>
         <source>Enter valid private key</source>
-        <translation>Indtast en gyldig privatkode</translation>
+        <translation>Indtast en gyldig privat nøgle</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="264"/>
         <source>Key is not supported</source>
-        <translation>Nøgle er ikke understøttet</translation>
+        <translation>Nøglen understøttes ikke</translation>
     </message>
     <message>
         <location filename="../src/platform_linux/cdialogopenssl.cpp" line="269"/>
         <source>Enter key password</source>
-        <translation>Indtast nøgleadgangskode</translation>
+        <translation>Indtast adgangskode til nøgle</translation>
     </message>
 </context>
 <context>
@@ -155,12 +155,12 @@
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="175"/>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation>Hentninger</translation>
     </message>
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="178"/>
         <source>Clear</source>
-        <translation>Klar</translation>
+        <translation>Ryd</translation>
     </message>
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="259"/>
@@ -176,12 +176,12 @@
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="306"/>
         <source>Canceled</source>
-        <translation>Aflyst</translation>
+        <translation>Annulleret</translation>
     </message>
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="343"/>
         <source>Open</source>
-        <translation>Åben</translation>
+        <translation>Åbn</translation>
     </message>
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="359"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../src/ceditortools.cpp" line="538"/>
         <source>Some data will lost.&lt;br&gt;Continue?</source>
-        <translation>Hvis du fortsætter med at gemme i dette format vil alle funktioner undtagen teksten blive væk.&lt;br&gt;Er du sikker på du vil fortsætte?</translation>
+        <translation>Nogle data går tabt.&lt;br&gt;Vil du fortsætte?</translation>
     </message>
     <message>
         <location filename="../src/windows/ceditorwindow_p.h" line="152"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="73"/>
         <source>ODT Document (*.odt)</source>
-        <translation>OpenDocument Tekstfil (*.odt)</translation>
+        <translation>OpenDocument-tekst (*.odt)</translation>
     </message>
     <message>
         <source>OpenDocument Document template (*.ott)</source>
@@ -274,22 +274,22 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="77"/>
         <source>HTML File (*.html)</source>
-        <translation>HyperText Markup Language File (*.html)</translation>
+        <translation>HTML-fil (*.html)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="78"/>
         <source>MHT File (*.mht)</source>
-        <translation>Web Page Archive File (*.mht)</translation>
+        <translation>Webarkiv (*.mht)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="79"/>
         <source>EPUB File (*.epub)</source>
-        <translation>Electronic Publication File (*.epub)</translation>
+        <translation>EPUB-e-bog (*.epub)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="80"/>
         <source>FB2 File (*.fb2)</source>
-        <translation>FictionBook 2 File (*.fb2)</translation>
+        <translation>FictionBook 2-fil (*.fb2)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="81"/>
@@ -303,7 +303,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="83"/>
         <source>DOCXF Document (*.docxf)</source>
-        <translation>ONLYOFFICE formularskabelon (*.docxf)</translation>
+        <translation>Formularskabelon (*.docxf)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="85"/>
@@ -322,7 +322,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="88"/>
         <source>ODP File (*.odp)</source>
-        <translation>OpenDocument Præsentation (*.odp)</translation>
+        <translation>OpenDocument-præsentation (*.odp)</translation>
     </message>
     <message>
         <source>OpenDocument Presentation Template (*.otp)</source>
@@ -336,7 +336,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="91"/>
         <source>Macro-enabled Presentation File (*.pptm)</source>
-        <translation>Macro-enabled præsentationsfil (*.pptm)</translation>
+        <translation>Præsentation med makroer (*.pptm)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="93"/>
@@ -355,7 +355,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="98"/>
         <source>ODS File (*.ods)</source>
-        <translation>OpenDocument Regneark (*.ods)</translation>
+        <translation>OpenDocument-regneark (*.ods)</translation>
     </message>
     <message>
         <source>OpenDocument Spreadsheet Template (*.ots)</source>
@@ -369,7 +369,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="74"/>
         <source>OpenDocument Document template</source>
-        <translation>OpenDocument Dokumentskabelon</translation>
+        <translation>OpenDocument-dokumentskabelon</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="82"/>
@@ -379,22 +379,22 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="89"/>
         <source>OpenDocument Presentation Template</source>
-        <translation>OpenDocument Præsentationsskabelon</translation>
+        <translation>OpenDocument-præsentationsskabelon</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="95"/>
         <source>Macro-enabled spreadsheet template</source>
-        <translation>Macro-enabled regnearksskabelon</translation>
+        <translation>Regnearksskabelon med makroer</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="96"/>
         <source>XLSB File (*.xlsb)</source>
-        <translation>Excel binær fil (*.xlsb)</translation>
+        <translation>Binært Excel-regneark (*.xlsb)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="99"/>
         <source>OpenDocument Spreadsheet Template</source>
-        <translation>OpenDocument Regnearksskabelon</translation>
+        <translation>OpenDocument-regnearksskabelon</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="100"/>
@@ -404,17 +404,17 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="102"/>
         <source>PDF File (*.pdf)</source>
-        <translation>Portable Document (*.pdf)</translation>
+        <translation>PDF-dokument (*.pdf)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="103"/>
         <source>PDFA File (*.pdf)</source>
-        <translation>Portable Document /A (*.pdf)</translation>
+        <translation>PDF/A-dokument (*.pdf)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="104"/>
         <source>DJVU File (*.djvu)</source>
-        <translation>Digitalt dokument (*.djvu)</translation>
+        <translation>DjVu-dokument (*.djvu)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="105"/>
@@ -434,17 +434,17 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="109"/>
         <source>VSDM File</source>
-        <translation>Visio Macro-aktiveret tegning</translation>
+        <translation>Visio-tegning med makroer</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="110"/>
         <source>VSSX File</source>
-        <translation>Visio-sjablon</translation>
+        <translation>Visio-stencil</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="111"/>
         <source>VSSM File</source>
-        <translation>Visio Makro-aktiveret stencil</translation>
+        <translation>Visio-stencil med makroer</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="112"/>
@@ -454,7 +454,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="113"/>
         <source>VSTM File</source>
-        <translation>Visio Makro-aktiveret skabelon</translation>
+        <translation>Visio-skabelon med makroer</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="115"/>
@@ -469,7 +469,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="166"/>
         <source>Save As</source>
-        <translation>Gem Som</translation>
+        <translation>Gem som</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="214"/>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="240"/>
         <source>Word Document</source>
-        <translation>Word Dokument</translation>
+        <translation>Word-dokument</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="243"/>
@@ -489,12 +489,12 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="246"/>
         <source>PowerPoint Presentation</source>
-        <translation>PowerPoint Præsentation</translation>
+        <translation>PowerPoint-præsentation</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="249"/>
         <source>%1 File (*.%2)</source>
-        <translation>%1 Fil (*.%2)</translation>
+        <translation>%1-fil (*.%2)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="259"/>
@@ -556,7 +556,7 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="268"/>
         <source>Web Page</source>
-        <translation>Hjemmeside</translation>
+        <translation>Webside</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="269"/>
@@ -574,19 +574,19 @@
         <location filename="../src/ceditortools.cpp" line="342"/>
         <location filename="../src/components/cfiledialog.cpp" line="94"/>
         <source>Spreadsheet template</source>
-        <translation>Excel Open XML Regnearksskabelon</translation>
+        <translation>Regnearksskabelon</translation>
     </message>
     <message>
         <location filename="../src/ceditortools.cpp" line="345"/>
         <location filename="../src/components/cfiledialog.cpp" line="87"/>
         <source>Presentation template</source>
-        <translation>PowerPoint Open XML Præsentationsskabelon</translation>
+        <translation>Præsentationsskabelon</translation>
     </message>
     <message>
         <location filename="../src/ceditortools.cpp" line="347"/>
         <location filename="../src/components/cfiledialog.cpp" line="71"/>
         <source>Document template</source>
-        <translation>Word Open XML Dokumentskabelon</translation>
+        <translation>Dokumentskabelon</translation>
     </message>
     <message>
         <location filename="../src/ceditortools.cpp" line="368"/>
@@ -596,13 +596,13 @@
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="289"/>
         <source>Open Document</source>
-        <translation>Åben Dokument</translation>
+        <translation>Åbn dokument</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="319"/>
         <location filename="../src/components/cfiledialog.cpp" line="331"/>
         <source>All Images</source>
-        <translation>All Billeder</translation>
+        <translation>Alle billeder</translation>
     </message>
     <message>
         <source>Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Tiff (*.tiff *.tif)</source>
@@ -616,7 +616,7 @@
         <location filename="../src/components/cfiledialog.cpp" line="344"/>
         <location filename="../src/components/cfiledialog.cpp" line="353"/>
         <source>Plugin file (*.plugin)</source>
-        <translation>Plugin fil (*.plugin)</translation>
+        <translation>Pluginfil (*.plugin)</translation>
     </message>
     <message>
         <location filename="../src/components/cfiledialog.cpp" line="410"/>
@@ -645,7 +645,7 @@
     <message>
         <location filename="../src/windows/cmainwindow.cpp" line="316"/>
         <source>More than one document is open.&lt;br&gt;Close the window anyway?</source>
-        <translation>Mere end et document er åbent.&lt;br&gt;Ønsker at lukke vinduet alligevel?</translation>
+        <translation>Der er mere end ét dokument åbent.&lt;br&gt;Vil du lukke vinduet alligevel?</translation>
     </message>
     <message>
         <location filename="../src/windows/cmainwindow.cpp" line="315"/>
@@ -656,7 +656,7 @@
         <location filename="../src/windows/cmainwindow.cpp" line="963"/>
         <location filename="../src/windows/cmainwindow.cpp" line="1003"/>
         <source>File format not supported.</source>
-        <translation>Filformat er ikke understøttet.</translation>
+        <translation>Filformatet understøttes ikke.</translation>
     </message>
     <message>
         <location filename="../src/windows/cmainwindow.cpp" line="987"/>
@@ -671,7 +671,7 @@
     <message>
         <location filename="../src/windows/cmainwindow.cpp" line="1229"/>
         <source>Document must be saved to continue.&lt;br&gt;Save the document?</source>
-        <translation>Dokument skal gemmes for at fortsætte. &lt;br&gt;Gem dokumentet?</translation>
+        <translation>Dokumentet skal gemmes for at fortsætte.&lt;br&gt;Gem dokumentet?</translation>
     </message>
     <message>
         <source>There are no printers available</source>
@@ -688,7 +688,7 @@
     <message>
         <location filename="../src/windows/cmainwindow.cpp" line="1478"/>
         <source>Sign Up</source>
-        <translation>Opret portal</translation>
+        <translation>Opret konto</translation>
     </message>
     <message>
         <location filename="../src/windows/cmainwindow.cpp" line="1585"/>
@@ -714,7 +714,7 @@
     <message>
         <location filename="../src/components/cmenu.cpp" line="375"/>
         <source>Close saved</source>
-        <translation>Luk gemt</translation>
+        <translation>Luk gemte</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="376"/>
@@ -729,7 +729,7 @@
     <message>
         <location filename="../src/components/cmenu.cpp" line="378"/>
         <source>Move to start</source>
-        <translation>Flyt til toppen</translation>
+        <translation>Flyt til begyndelsen</translation>
     </message>
     <message>
         <location filename="../src/components/cmenu.cpp" line="379"/>
@@ -749,7 +749,7 @@
     <message>
         <location filename="../src/components/cmenu.cpp" line="382"/>
         <source>Create new</source>
-        <translation>Opret nyt</translation>
+        <translation>Opret ny</translation>
     </message>
 </context>
 <context>
@@ -784,7 +784,7 @@
     <message>
         <location filename="../src/components/cprintprogress.cpp" line="225"/>
         <source>Document is printing: page %1 of %2</source>
-        <translation>Udskriver dokument: page %1 af %2</translation>
+        <translation>Udskriver dokument: side %1 af %2</translation>
     </message>
     <message>
         <source>Document is preparing</source>
@@ -804,12 +804,12 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="106"/>
         <source>Check for updates</source>
-        <translation>Tjek for opdateringer</translation>
+        <translation>Søg efter opdateringer</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="98"/>
         <source>Unable to check update: URL not defined.</source>
-        <translation>Kunne ikke tjekke opdatering: URL ikke defineret.</translation>
+        <translation>Søgningen efter opdateringer mislykkedes: URL er ikke defineret.</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="81"/>
@@ -839,7 +839,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="96"/>
         <source>To finish updating, restart app</source>
-        <translation>Genstart appen for at afslutte opdatering</translation>
+        <translation>Genstart appen for at afslutte opdateringen</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="108"/>
@@ -849,7 +849,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="90"/>
         <source>Checking for updates...</source>
-        <translation>Tjekker for opdateringer…</translation>
+        <translation>Søger efter opdateringer...</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="97"/>
@@ -868,7 +868,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="93"/>
         <source>Downloading new version %1 (%2%)</source>
-        <translation>Downloader ny version %1 (%2%)</translation>
+        <translation>Henter ny version %1 (%2%)</translation>
     </message>
     <message>
         <source>An error occurred while loading updates: Update Service not found!</source>
@@ -882,12 +882,12 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="99"/>
         <source>An error occurred while loading updates: package Url is empty!</source>
-        <translation>En fejl opstod under indlæsning af opdateringer: Pakke-URL er tom!</translation>
+        <translation>Der opstod en fejl under indlæsning af opdateringer: Pakke-URL er tom!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="104"/>
         <source>Update package error: md5 sum does not match the original.</source>
-        <translation>Fejl i opdateringspakke: md5 sum matcher ikke den originale.</translation>
+        <translation>Fejl i opdateringspakken: md5-summen stemmer ikke med originalens.</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="94"/>
@@ -906,7 +906,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="107"/>
         <source>Download update</source>
-        <translation>Download opdatering</translation>
+        <translation>Hent opdatering</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="89"/>
@@ -916,7 +916,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="80"/>
         <source>An error occurred while unpacking the archive</source>
-        <translation>En fejl opstod under udpakning af arkivet</translation>
+        <translation>Der opstod en fejl under udpakning af arkivet.</translation>
     </message>
     <message>
         <source>Update download failed: out of memory!</source>
@@ -946,7 +946,7 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="88"/>
         <source>Last check performed %1</source>
-        <translation>Sidste tjek udført %1</translation>
+        <translation>Sidste søgning udført %1</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="92"/>
@@ -961,17 +961,17 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="100"/>
         <source>An error occurred while check updates: the Update Service is not installed or is not running!</source>
-        <translation>En fejl opstod under kontrol af opdateringer: Opdateringstjenesten er ikke installeret eller under drift!</translation>
+        <translation>Der opstod en fejl under søgning efter opdateringer: Opdateringstjenesten er ikke installeret eller kører ikke!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="101"/>
         <source>An error occurred while loading updates: the Update Service is not installed or is not running!</source>
-        <translation>En fejl opstod under indlæsning af opdateringer: Opdateringstjenesten er ikke installeret eller under drift!</translation>
+        <translation>Der opstod en fejl under indlæsning af opdateringer: Opdateringstjenesten er ikke installeret eller kører ikke!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="102"/>
         <source>An error occurred while unzip updates: the Update Service is not installed or is not running!</source>
-        <translation>En fejl opstod under udpakning af opdateringer: Opdateringstjenesten er ikke installeret eller under drift!</translation>
+        <translation>Der opstod en fejl under udpakning af opdateringer: Opdateringstjenesten er ikke installeret eller kører ikke!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="103"/>
@@ -1007,17 +1007,17 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="952"/>
         <source>To finish updating, restart the app</source>
-        <translation>For at afslutte opdatering, så genstart appen</translation>
+        <translation>Genstart appen for at afslutte opdateringen</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="888"/>
         <source>Would you like to download update now?</source>
-        <translation>Ønsker du at downloade opdatering nu?</translation>
+        <translation>Vil du hente opdateringen nu?</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="937"/>
         <source>Update is ready to install</source>
-        <translation>Opdatering er klar til at blive installeret</translation>
+        <translation>Opdateringen er klar til installation</translation>
     </message>
     <message>
         <source>A new version of %1 is available!</source>
@@ -1043,7 +1043,7 @@
     <message>
         <location filename="../src/cascapplicationmanagerwrapper_private.h" line="326"/>
         <source>File %1 cannot be opened or doesn&apos;t exists.</source>
-        <translation>Fil %1 kan ikke åbnes eller eksisterer ikke.</translation>
+        <translation>Filen %1 kan ikke åbnes eller findes ikke.</translation>
     </message>
     <message>
         <source>All supported files (*.txt *.csv)</source>
@@ -1088,7 +1088,7 @@
     <message>
         <location filename="../src/casctabdata.cpp" line="220"/>
         <source>Read only</source>
-        <translation>Kun læsning</translation>
+        <translation>Skrivebeskyttet</translation>
     </message>
     <message>
         <location filename="../src/components/cmessage.cpp" line="83"/>
@@ -1110,7 +1110,7 @@
         <location filename="../src/components/cnotification.cpp" line="70"/>
         <location filename="../src/components/cnotification.cpp" line="72"/>
         <source>Later</source>
-        <translation>Installer senere</translation>
+        <translation>Senere</translation>
     </message>
     <message>
         <location filename="../src/components/cmessage.cpp" line="87"/>
@@ -1133,7 +1133,7 @@
     <message>
         <location filename="../src/components/cmessage.cpp" line="89"/>
         <source>Download update</source>
-        <translation>Download opdatering</translation>
+        <translation>Hent opdatering</translation>
     </message>
     <message>
         <source>Software Update</source>
@@ -1151,12 +1151,12 @@
     <message>
         <location filename="../src/cupdatemanager.cpp" line="753"/>
         <source>An error occurred while start install updates: Update Service not found!</source>
-        <translation>Der opstod en fejl under start af installationsopdateringer: Update Service ikke fundet!</translation>
+        <translation>Der opstod en fejl, da opdateringen skulle installeres: Opdateringstjenesten blev ikke fundet!</translation>
     </message>
     <message>
         <location filename="../src/cupdatemanager.cpp" line="763"/>
         <source>An error occurred while start replacing files: Update Service not found!</source>
-        <translation>En fejl opstod under påbegyndelsen af erstatning af filer: Opdateringstjeneste ikke fundet!</translation>
+        <translation>Der opstod en fejl, da filerne skulle erstattes: Opdateringstjenesten blev ikke fundet!</translation>
     </message>
     <message>
         <location filename="../src/components/cmessage.cpp" line="75"/>
@@ -1200,7 +1200,7 @@
         <location filename="../src/components/cmessage.cpp" line="81"/>
         <location filename="../src/components/cnotification.cpp" line="67"/>
         <source>Activate</source>
-        <translation>Aktiver</translation>
+        <translation>Aktivér</translation>
     </message>
     <message>
         <location filename="../src/components/cmessage.cpp" line="82"/>
@@ -1211,7 +1211,7 @@
     <message>
         <location filename="../src/platform_linux/xdgdesktopportal.cpp" line="1165"/>
         <source>An error occurred while opening the portal:&lt;br&gt;%1</source>
-        <translation>En fejl opstod under åbningen af portalen:&lt;br&gt;%1</translation>
+        <translation>Der opstod en fejl under åbning af portalen:&lt;br&gt;%1</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -1220,7 +1220,7 @@
     <message>
         <location filename="../src/cascapplicationmanagerwrapper.cpp" line="391"/>
         <source>File %1 is already loaded. Replace it?</source>
-        <translation>Fil %1 er allerede indlæst. Erstat den?</translation>
+        <translation>Filen %1 er allerede indlæst. Vil du erstatte den?</translation>
     </message>
     <message>
         <location filename="../src/components/cdownloadwidget.cpp" line="124"/>
@@ -1251,7 +1251,7 @@
     <message>
         <location filename="../src/platform_win/printdialog.cpp" line="523"/>
         <source>Unable to open print dialog:&lt;br&gt;%1</source>
-        <translation>Ikke i stand til at åbne printdialog:&lt;br&gt;%1</translation>
+        <translation>Udskriftsdialogen kan ikke åbnes:&lt;br&gt;%1</translation>
     </message>
     <message>
         <location filename="../src/components/cprintprogress.cpp" line="96"/>
@@ -1274,12 +1274,12 @@
     <message>
         <location filename="../src/platform_win/association.cpp" line="234"/>
         <source>Do you want to make %1 your default application for extension: %2?</source>
-        <translation>Vil du gøre %1 til dit standardprogram for udvidelse: %2?</translation>
+        <translation>Vil du gøre %1 til dit standardprogram for filtypen %2?</translation>
     </message>
     <message>
         <location filename="../src/platform_win/association.cpp" line="236"/>
         <source>Do you want to make %1 your default application for all supported extensions?</source>
-        <translation>Vil du gøre %1 til dit standardprogram for alle understøttede udvidelser?</translation>
+        <translation>Vil du gøre %1 til dit standardprogram for alle understøttede filtyper?</translation>
     </message>
     <message>
         <location filename="../src/platform_win/association.cpp" line="240"/>
@@ -1301,7 +1301,7 @@
         <location filename="../src/components/cnotification.cpp" line="71"/>
         <location filename="../src/components/cnotification.cpp" line="74"/>
         <source>Install</source>
-        <translation>Installere</translation>
+        <translation>Installer</translation>
     </message>
     <message>
         <location filename="../src/components/cnotification.cpp" line="73"/>
@@ -1311,7 +1311,7 @@
     <message>
         <location filename="../src/components/cnotification.cpp" line="75"/>
         <source>Download</source>
-        <translation>Download</translation>
+        <translation>Hent</translation>
     </message>
 </context>
 <context>
