@@ -32,10 +32,10 @@
 "Delete and Quit" = "Slet og slut";
 
 /* No comment provided by engineer. */
-"DjVu File" = "Digitalt dokument (*.djvu)";
+"DjVu File" = "DjVu-dokument (*.djvu)";
 
 /* No comment provided by engineer. */
-"Do you want to save the changes made to the document \"%@\"?" = "Vil du gemme ændringer der er blevet lavet i dokumentet \"%@\"?";
+"Do you want to save the changes made to the document \"%@\"?" = "Vil du gemme de ændringer, du har lavet i dokumentet \"%@\"?";
 
 /* No comment provided by engineer. */
 "Document %ld.docx" = "Dokument %ld.docx";
@@ -44,7 +44,7 @@
 "Document %ld.pdf" = "Dokument %ld.pdf";
 
 /* No comment provided by engineer. */
-"Document template" = "Word Open XML Dokumentskabelon (*.dotx)";
+"Document template" = "Dokumentskabelon (*.dotx)";
 
 /* No comment provided by engineer. */
 "Excel 97-2003 Spreadsheet" = "Excel 97-2003-regneark (*.xls)";
@@ -77,7 +77,7 @@
 "new-document" = "Nyt dokument";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Nyt PDF";
+"new-pdfform" = "Ny PDF-formular";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Ny præsentation";
@@ -98,28 +98,28 @@
 "ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne en anden fil.";
 
 /* No comment provided by engineer. */
-"OpenDocument Document Template" = "OpenDocument Dokumentskabelon (*.ott)";
+"OpenDocument Document Template" = "OpenDocument-dokumentskabelon (*.ott)";
 
 /* No comment provided by engineer. */
-"OpenDocument Presentation Template" = "OpenDocument Præsentationsskabelon  (*.otp)";
+"OpenDocument Presentation Template" = "OpenDocument-præsentationsskabelon (*.otp)";
 
 /* No comment provided by engineer. */
-"OpenDocument Spreadsheet Template" = "OpenDocument Regnearksskabelon (*.ots)";
+"OpenDocument Spreadsheet Template" = "OpenDocument-regnearksskabelon (*.ots)";
 
 /* No comment provided by engineer. */
 "Opening" = "Åbner";
 
 /* No comment provided by engineer. */
-"OpenOffice Document" = "OpenDocument Tekstfil (*.odt)";
+"OpenOffice Document" = "OpenDocument-tekst (*.odt)";
 
 /* No comment provided by engineer. */
-"OpenOffice Presentation" = "OpenDocument Præsentation (*.odp)";
+"OpenOffice Presentation" = "OpenDocument-præsentation (*.odp)";
 
 /* No comment provided by engineer. */
-"OpenOffice Spreadsheet" = "OpenDocument Regneark (*.ods)";
+"OpenOffice Spreadsheet" = "OpenDocument-regneark (*.ods)";
 
 /* No comment provided by engineer. */
-"PDF File" = "Portable Document (*.pdf)";
+"PDF File" = "PDF-dokument (*.pdf)";
 
 /* No comment provided by engineer. */
 "Plain Text" = "Alm. tekst";
@@ -140,13 +140,13 @@
 "Presentation %ld.pptx" = "Præsentation %ld.pptx";
 
 /* No comment provided by engineer. */
-"Presentation template" = "PowerPoint Open XML Præsentationsskabelon (*.potx)";
+"Presentation template" = "Præsentationsskabelon (*.potx)";
 
 /* No comment provided by engineer. */
 "Quit %@" = "Slut %@";
 
 /* No comment provided by engineer. */
-"Review Changes..." = "Gennemgå Ændringer...";
+"Review Changes..." = "Gennemgå ændringer...";
 
 /* No comment provided by engineer. */
 "Rich Text Document" = "RTF-dokument";
@@ -161,10 +161,10 @@
 "Spreadsheet %ld.xlsx" = "Regneark %ld.xlsx";
 
 /* No comment provided by engineer. */
-"Spreadsheet template" = "Excel Open XML Regnearksskabelon (*.xltx)";
+"Spreadsheet template" = "Regnearksskabelon (*.xltx)";
 
 /* No comment provided by engineer. */
-"Thank you for evaluating %@!" = "Tak for din evaluering %@!";
+"Thank you for evaluating %@!" = "Tak, fordi du prøvede %@!";
 
 /* No comment provided by engineer. */
 "The document \"%@\" must be built. Continue?" = "Dokumentet \"%@\" skal bygges. Ønsker du at fortsætte?";

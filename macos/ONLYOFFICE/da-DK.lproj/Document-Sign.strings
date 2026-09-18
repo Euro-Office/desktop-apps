@@ -1,5 +1,5 @@
 /* Class = "NSTextFieldCell"; title = "Enter the password for the private key."; ObjectID = "1dL-nN-bJI"; */
-"1dL-nN-bJI.title" = "Indtast adgangskoden for den private nøgle.";
+"1dL-nN-bJI.title" = "Indtast adgangskoden til den private nøgle.";
 
 /* Class = "NSTextFieldCell"; title = "Enter the password for the digital signature."; ObjectID = "1Fy-mg-aq9"; */
 "1Fy-mg-aq9.title" = "Indtast adgangskoden til den digitale signatur.";
@@ -29,7 +29,7 @@
 "Tfc-EF-VnS.title" = "Angiv en privat nøgle til den digitale signatur.";
 
 /* Class = "NSButtonCell"; title = "Load Signature"; ObjectID = "tTF-wa-eJp"; */
-"tTF-wa-eJp.title" = "Indlæs Signatur";
+"tTF-wa-eJp.title" = "Indlæs signatur";
 
 /* Class = "NSSecureTextFieldCell"; placeholderString = "Enter Password"; ObjectID = "Zj5-0h-hpW"; */
 "Zj5-0h-hpW.placeholderString" = "Indtast adgangskode";

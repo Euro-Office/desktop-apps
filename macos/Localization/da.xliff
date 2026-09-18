@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="1dL-nN-bJI.title" xml:space="preserve">
         <source>Enter the password for the private key.</source>
-        <target>Indtast adgangskoden for den private nøgle.</target>
+        <target>Indtast adgangskoden til den private nøgle.</target>
         <note>Class = "NSTextFieldCell"; title = "Enter the password for the private key."; ObjectID = "1dL-nN-bJI";</note>
       </trans-unit>
       <trans-unit id="2Ck-6y-ygx.title" xml:space="preserve">
@@ -62,7 +62,7 @@
       </trans-unit>
       <trans-unit id="tTF-wa-eJp.title" xml:space="preserve">
         <source>Load Signature</source>
-        <target>Indlæs Signatur</target>
+        <target>Indlæs signatur</target>
         <note>Class = "NSButtonCell"; title = "Load Signature"; ObjectID = "tTF-wa-eJp";</note>
       </trans-unit>
     </body>
@@ -134,12 +134,12 @@
       </trans-unit>
       <trans-unit id="DjVu File" xml:space="preserve">
         <source>DjVu File</source>
-        <target state="translated">Digitalt dokument</target>
+        <target state="translated">DjVu-dokument</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Do you want to save the changes made to the document &quot;%@&quot;?" xml:space="preserve">
         <source>Do you want to save the changes made to the document "%@"?</source>
-        <target>Vil du gemme ændringer der er blevet lavet i dokumentet "%@"?</target>
+        <target>Vil du gemme de ændringer, du har lavet i dokumentet &quot;%@&quot;?</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Document %ld.docx" xml:space="preserve">
@@ -154,7 +154,7 @@
       </trans-unit>
       <trans-unit id="Document template" xml:space="preserve">
         <source>Document template</source>
-        <target state="translated">Word Open XML Dokumentskabelon</target>
+        <target state="translated">Dokumentskabelon</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Excel 97-2003 Spreadsheet" xml:space="preserve">
@@ -229,32 +229,32 @@
       </trans-unit>
       <trans-unit id="OpenDocument Document Template" xml:space="preserve">
         <source>OpenDocument Document Template</source>
-        <target state="translated">OpenDocument Dokumentskabelon</target>
+        <target state="translated">OpenDocument-dokumentskabelon</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Presentation Template" xml:space="preserve">
         <source>OpenDocument Presentation Template</source>
-        <target state="translated">OpenDocument Præsentationsskabelon</target>
+        <target state="translated">OpenDocument-præsentationsskabelon</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Spreadsheet Template" xml:space="preserve">
         <source>OpenDocument Spreadsheet Template</source>
-        <target state="translated">OpenDocument Regnearksskabelon</target>
+        <target state="translated">OpenDocument-regnearksskabelon</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Document" xml:space="preserve">
         <source>OpenOffice Document</source>
-        <target state="translated">OpenDocument Tekstfil</target>
+        <target state="translated">OpenDocument-tekst</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Presentation" xml:space="preserve">
         <source>OpenOffice Presentation</source>
-        <target state="translated">OpenDocument Præsentation</target>
+        <target state="translated">OpenDocument-præsentation</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenOffice Spreadsheet" xml:space="preserve">
         <source>OpenOffice Spreadsheet</source>
-        <target state="translated">OpenDocument Regneark</target>
+        <target state="translated">OpenDocument-regneark</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Opening" xml:space="preserve">
@@ -264,7 +264,7 @@
       </trans-unit>
       <trans-unit id="PDF File" xml:space="preserve">
         <source>PDF File</source>
-        <target state="translated">Portable Document</target>
+        <target state="translated">PDF-dokument</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PDF/A File" xml:space="preserve">
@@ -304,7 +304,7 @@
       </trans-unit>
       <trans-unit id="Presentation template" xml:space="preserve">
         <source>Presentation template</source>
-        <target state="translated">PowerPoint Open XML Præsentationsskabelon</target>
+        <target state="translated">Præsentationsskabelon</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Quit %@" xml:space="preserve">
@@ -314,7 +314,7 @@
       </trans-unit>
       <trans-unit id="Review Changes..." xml:space="preserve">
         <source>Review Changes...</source>
-        <target>Gennemgå Ændringer...</target>
+        <target>Gennemgå ændringer...</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Rich Text Document" xml:space="preserve">
@@ -339,12 +339,12 @@
       </trans-unit>
       <trans-unit id="Spreadsheet template" xml:space="preserve">
         <source>Spreadsheet template</source>
-        <target state="translated">Excel Open XML Regnearksskabelon</target>
+        <target state="translated">Regnearksskabelon</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Thank you for evaluating %@!" xml:space="preserve">
         <source>Thank you for evaluating %@!</source>
-        <target>Tak for din evaluering %@!</target>
+        <target>Tak, fordi du prøvede %@!</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="The document &quot;%@&quot; must be built. Continue?" xml:space="preserve">
@@ -453,7 +453,7 @@ Vi har et specielt tilbud til dig.</target>
       </trans-unit>
       <trans-unit id="new-pdfform" xml:space="preserve">
         <source>New PDF Form</source>
-        <target>Nyt PDF</target>
+        <target>Ny PDF-formular</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
