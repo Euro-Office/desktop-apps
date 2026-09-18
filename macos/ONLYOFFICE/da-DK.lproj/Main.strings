@@ -92,7 +92,7 @@
 "bgn-CT-cEk.title" = "Vis farver";
 
 /* Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu"; */
-"bib-Uj-vzu.title" = "Fil";
+"bib-Uj-vzu.title" = "Arkiv";
 
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "BOF-NM-1cW"; */
 "BOF-NM-1cW.title" = "Indstillinger…";
@@ -125,7 +125,7 @@
 "d9M-CD-aMd.title" = "Med små bogstaver";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ"; */
-"dMs-cI-mzQ.title" = "Fil";
+"dMs-cI-mzQ.title" = "Arkiv";
 
 /* Class = "NSMenuItem"; title = "Spreadsheet"; ObjectID = "DOj-j9-dza"; */
 "DOj-j9-dza.title" = "Regneark";
@@ -164,7 +164,7 @@
 "Gi5-1S-RQB.title" = "Skrift";
 
 /* Class = "NSTextFieldCell"; title = "File Name"; ObjectID = "gm3-6i-EnL"; */
-"gm3-6i-EnL.title" = "Filnavn";
+"gm3-6i-EnL.title" = "Arkivnavn";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "GUa-eO-cwY"; */
 "GUa-eO-cwY.title" = "Brug standard";

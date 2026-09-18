@@ -14,13 +14,13 @@
 "Cancel" = "Annuller";
 
 /* No comment provided by engineer. */
-"Cannot open file of Digital Signature" = "Kan ikke åbne filen med digital signatur";
+"Cannot open file of Digital Signature" = "Arkivet med den digitale signatur kan ikke åbnes";
 
 /* No comment provided by engineer. */
-"Cannot open file of Private Key" = "Kan ikke åbne filen med den private nøgle";
+"Cannot open file of Private Key" = "Arkivet med den private nøgle kan ikke åbnes";
 
 /* No comment provided by engineer. */
-"Cannot open folder of the file location." = "Kan ikke åbne mappen på filplaceringen.";
+"Cannot open folder of the file location." = "Mappen med arkivet kan ikke åbnes.";
 
 /* No comment provided by engineer. */
 "Comma-Separated Values" = "Kommaseparerede værdier (*.csv)";
@@ -53,13 +53,13 @@
 "Excel 2007 Spreadsheet" = "Office Open XML-regneark (*.xlsx)";
 
 /* No comment provided by engineer. */
-"File \"%@\" can not be open or not exist." = "Fil \"%@\" kan ikke åbnes eller eksisterer ikke.";
+"File \"%@\" can not be open or not exist." = "Arkivet \"%@\" kan ikke åbnes eller findes ikke.";
 
 /* No comment provided by engineer. */
-"File can not be open." = "File kan ikke åbnes.";
+"File can not be open." = "Arkivet kan ikke åbnes.";
 
 /* No comment provided by engineer. */
-"File Format:" = "Filformat:";
+"File Format:" = "Arkivformat:";
 
 /* No comment provided by engineer. */
 "Hide %@" = "Skjul %@";
@@ -95,7 +95,7 @@
 "ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE kan ikke åbne filen med den digitale signatur. Prøv at åbne en anden fil.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne en anden fil.";
+"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne et andet arkiv.";
 
 /* No comment provided by engineer. */
 "OpenDocument Document Template" = "OpenDocument-dokumentskabelon (*.ott)";
@@ -170,7 +170,7 @@
 "The document \"%@\" must be built. Continue?" = "Dokumentet \"%@\" skal bygges. Ønsker du at fortsætte?";
 
 /* No comment provided by engineer. */
-"To open the file location, it must be saved." = "For at åbne filplaceringen, skal den være gemt.";
+"To open the file location, it must be saved." = "Arkivet skal gemmes, før du kan åbne dets placering.";
 
 /* No comment provided by engineer. */
 "Unconfirmed" = "Ikke bekræftet";

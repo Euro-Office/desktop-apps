@@ -5,7 +5,7 @@
 "1Fy-mg-aq9.title" = "Indtast adgangskoden til den digitale signatur.";
 
 /* Class = "NSTextFieldCell"; title = "Specify the digital signature file for the document."; ObjectID = "2Ck-6y-ygx"; */
-"2Ck-6y-ygx.title" = "Angiv den digitale signaturfil for dokumentet.";
+"2Ck-6y-ygx.title" = "Angiv arkivet med den digitale signatur til dokumentet.";
 
 /* Class = "NSSecureTextFieldCell"; placeholderString = "Enter Password"; ObjectID = "4gA-s8-Lne"; */
 "4gA-s8-Lne.placeholderString" = "Indtast adgangskode";

@@ -17,7 +17,7 @@
       </trans-unit>
       <trans-unit id="2Ck-6y-ygx.title" xml:space="preserve">
         <source>Specify the digital signature file for the document.</source>
-        <target>Angiv den digitale signaturfil for dokumentet.</target>
+        <target>Angiv arkivet med den digitale signatur til dokumentet.</target>
         <note>Class = "NSTextFieldCell"; title = "Specify the digital signature file for the document."; ObjectID = "2Ck-6y-ygx";</note>
       </trans-unit>
       <trans-unit id="4gA-s8-Lne.placeholderString" xml:space="preserve">
@@ -104,17 +104,17 @@
       </trans-unit>
       <trans-unit id="Cannot open file of Digital Signature" xml:space="preserve">
         <source>Cannot open file of Digital Signature</source>
-        <target state="translated">Kan ikke åbne filen med digital signatur</target>
+        <target state="translated">Arkivet med den digitale signatur kan ikke åbnes</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Cannot open file of Private Key" xml:space="preserve">
         <source>Cannot open file of Private Key</source>
-        <target state="translated">Kan ikke åbne filen med den private nøgle</target>
+        <target state="translated">Arkivet med den private nøgle kan ikke åbnes</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Cannot open folder of the file location." xml:space="preserve">
         <source>Cannot open folder of the file location.</source>
-        <target state="translated">Kan ikke åbne mappen på filplaceringen.</target>
+        <target state="translated">Mappen med arkivet kan ikke åbnes.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Comma-Separated Values" xml:space="preserve">
@@ -169,17 +169,17 @@
       </trans-unit>
       <trans-unit id="File &quot;%@&quot; can not be open or not exist." xml:space="preserve">
         <source>File "%@" can not be open or not exist.</source>
-        <target>Fil "%@" kan ikke åbnes eller eksisterer ikke.</target>
+        <target>Arkivet &quot;%@&quot; kan ikke åbnes eller findes ikke.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="File Format:" xml:space="preserve">
         <source>File Format:</source>
-        <target>Filformat:</target>
+        <target>Arkivformat:</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="File can not be open." xml:space="preserve">
         <source>File can not be open.</source>
-        <target>File kan ikke åbnes.</target>
+        <target>Arkivet kan ikke åbnes.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Hide %@" xml:space="preserve">
@@ -224,7 +224,7 @@
       </trans-unit>
       <trans-unit id="ONLYOFFICE can not open the Private Key. Try opening another file." xml:space="preserve">
         <source>ONLYOFFICE can not open the Private Key. Try opening another file.</source>
-        <target state="translated">ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne en anden fil.</target>
+        <target state="translated">ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne et andet arkiv.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="OpenDocument Document Template" xml:space="preserve">
@@ -354,7 +354,7 @@
       </trans-unit>
       <trans-unit id="To open the file location, it must be saved." xml:space="preserve">
         <source>To open the file location, it must be saved.</source>
-        <target state="translated">For at åbne filplaceringen, skal den være gemt.</target>
+        <target state="translated">Arkivet skal gemmes, før du kan åbne dets placering.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Unconfirmed" xml:space="preserve">
@@ -1001,7 +1001,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="bib-Uj-vzu.title" xml:space="preserve">
         <source>File</source>
-        <target>Fil</target>
+        <target>Arkiv</target>
         <note>Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu";</note>
       </trans-unit>
       <trans-unit id="buJ-ug-pKt.title" xml:space="preserve">
@@ -1041,7 +1041,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="dMs-cI-mzQ.title" xml:space="preserve">
         <source>File</source>
-        <target>Fil</target>
+        <target>Arkiv</target>
         <note>Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ";</note>
       </trans-unit>
       <trans-unit id="dRJ-4n-Yzg.title" xml:space="preserve">
@@ -1056,7 +1056,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="gm3-6i-EnL.title" xml:space="preserve">
         <source>File Name</source>
-        <target>Filnavn</target>
+        <target>Arkivnavn</target>
         <note>Class = "NSTextFieldCell"; title = "File Name"; ObjectID = "gm3-6i-EnL";</note>
       </trans-unit>
       <trans-unit id="hD5-Cz-ItX.title" xml:space="preserve">
