@@ -1,11 +1,11 @@
 /* No comment provided by engineer. */
-"%@ Help" = "%@ Hjælp";
+"%@ Help" = "Hjælp til %@";
 
 /* No comment provided by engineer. */
 "About %@" = "Om %@";
 
 /* No comment provided by engineer. */
-"Acknowledgments" = "Bekræftelser";
+"Acknowledgments" = "Tak til";
 
 /* No comment provided by engineer. */
 "Before signing the document, it must be saved." = "Dokumentet skal gemmes, inden det kan underskrives.";
@@ -29,7 +29,7 @@
 "Create portal" = "Opret portal";
 
 /* No comment provided by engineer. */
-"Delete and Quit" = "Slet of Afslut";
+"Delete and Quit" = "Slet og slut";
 
 /* No comment provided by engineer. */
 "DjVu File" = "Digitalt dokument (*.djvu)";
@@ -122,7 +122,7 @@
 "PDF File" = "Portable Document (*.pdf)";
 
 /* No comment provided by engineer. */
-"Plain Text" = "Almindelig tekst (*.txt)";
+"Plain Text" = "Alm. tekst";
 
 /* No comment provided by engineer. */
 "PowerPoint 97-2003 Presentation" = "PowerPoint 97-2003-præsentation (*.ppt)";
@@ -134,7 +134,7 @@
 "PowerPoint Slide Show" = "Office Open XML-diasshow (*.ppsx)";
 
 /* No comment provided by engineer. */
-"Preparing..." = "Forbereder...";
+"Preparing..." = "Forbereder…";
 
 /* No comment provided by engineer. */
 "Presentation %ld.pptx" = "Præsentation %ld.pptx";
@@ -143,13 +143,13 @@
 "Presentation template" = "PowerPoint Open XML Præsentationsskabelon (*.potx)";
 
 /* No comment provided by engineer. */
-"Quit %@" = "Afslut %@";
+"Quit %@" = "Slut %@";
 
 /* No comment provided by engineer. */
 "Review Changes..." = "Gennemgå Ændringer...";
 
 /* No comment provided by engineer. */
-"Rich Text Document" = "Rich Text Format-fil (*.rtf)";
+"Rich Text Document" = "RTF-dokument";
 
 /* No comment provided by engineer. */
 "Save" = "Gem";
@@ -176,7 +176,7 @@
 "Unconfirmed" = "Ikke bekræftet";
 
 /* No comment provided by engineer. */
-"Untitled" = "Ikke navngivet";
+"Untitled" = "Uden navn";
 
 /* No comment provided by engineer. */
 "Web Page" = "Webside";
@@ -200,7 +200,7 @@
 "You have successfully activated %@." = "Du har nu aktiveret %@.";
 
 /* No comment provided by engineer. */
-"Your changes will be lost if you don’t save them." = "Dine ændringer vil gå tabt hvis du ikke gemmer dem.";
+"Your changes will be lost if you don’t save them." = "Du mister ændringerne, hvis de ikke gemmes.";
 
 /* No comment provided by engineer. */
 "Your subscription has expired.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount." = "Dit abonnement er udløbet.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount.";

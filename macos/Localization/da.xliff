@@ -74,7 +74,7 @@
     <body>
       <trans-unit id="%@ Help" xml:space="preserve">
         <source>%@ Help</source>
-        <target>%@ Hjælp</target>
+        <target>Hjælp til %@</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="%@ Reporter Window" xml:space="preserve">
@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="Acknowledgments" xml:space="preserve">
         <source>Acknowledgments</source>
-        <target>Bekræftelser</target>
+        <target>Tak til</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Before signing the document, it must be saved." xml:space="preserve">
@@ -129,7 +129,7 @@
       </trans-unit>
       <trans-unit id="Delete and Quit" xml:space="preserve">
         <source>Delete and Quit</source>
-        <target>Slet of Afslut</target>
+        <target>Slet og slut</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="DjVu File" xml:space="preserve">
@@ -274,7 +274,7 @@
       </trans-unit>
       <trans-unit id="Plain Text" xml:space="preserve">
         <source>Plain Text</source>
-        <target state="translated">Almindelig tekst</target>
+        <target state="translated">Alm. tekst</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="PowerPoint 97-2003 Presentation" xml:space="preserve">
@@ -294,7 +294,7 @@
       </trans-unit>
       <trans-unit id="Preparing..." xml:space="preserve">
         <source>Preparing...</source>
-        <target>Forbereder...</target>
+        <target>Forbereder…</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Presentation %ld.pptx" xml:space="preserve">
@@ -309,7 +309,7 @@
       </trans-unit>
       <trans-unit id="Quit %@" xml:space="preserve">
         <source>Quit %@</source>
-        <target>Afslut %@</target>
+        <target>Slut %@</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Review Changes..." xml:space="preserve">
@@ -319,7 +319,7 @@
       </trans-unit>
       <trans-unit id="Rich Text Document" xml:space="preserve">
         <source>Rich Text Document</source>
-        <target state="translated">Rich Text Format-fil</target>
+        <target state="translated">RTF-dokument</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Save" xml:space="preserve">
@@ -364,7 +364,7 @@
       </trans-unit>
       <trans-unit id="Untitled" xml:space="preserve">
         <source>Untitled</source>
-        <target>Ikke navngivet</target>
+        <target>Uden navn</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Version %@ (%@)" xml:space="preserve">
@@ -409,7 +409,7 @@
       </trans-unit>
       <trans-unit id="Your changes will be lost if you don’t save them." xml:space="preserve">
         <source>Your changes will be lost if you don’t save them.</source>
-        <target>Dine ændringer vil gå tabt hvis du ikke gemmer dem.</target>
+        <target>Du mister ændringerne, hvis de ikke gemmes.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Your subscription has expired.&#10;&#10;The program works in the non-activated mode.&#10;&#10;Now you can prolong or upgrade your subscription with a discount." xml:space="preserve">
@@ -521,7 +521,7 @@ The trial period will end in %d days, after that you will not be able to create 
     <body>
       <trans-unit id="1UK-8n-QPP.title" xml:space="preserve">
         <source>Customize Toolbar…</source>
-        <target>Tilpas værktøjslinje…</target>
+        <target>Indstil værktøjslinje…</target>
         <note>Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP";</note>
       </trans-unit>
       <trans-unit id="1Xt-HY-uBw.title" xml:space="preserve">
@@ -536,22 +536,22 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="1tx-W0-xDw.title" xml:space="preserve">
         <source>Lower</source>
-        <target>Lavere</target>
+        <target>Sænk</target>
         <note>Class = "NSMenuItem"; title = "Lower"; ObjectID = "1tx-W0-xDw";</note>
       </trans-unit>
       <trans-unit id="2h7-ER-AoG.title" xml:space="preserve">
         <source>Raise</source>
-        <target>Højere</target>
+        <target>Hæv</target>
         <note>Class = "NSMenuItem"; title = "Raise"; ObjectID = "2h7-ER-AoG";</note>
       </trans-unit>
       <trans-unit id="2oI-Rn-ZJC.title" xml:space="preserve">
         <source>Transformations</source>
-        <target>Transformationer</target>
+        <target>Forvandlinger</target>
         <note>Class = "NSMenuItem"; title = "Transformations"; ObjectID = "2oI-Rn-ZJC";</note>
       </trans-unit>
       <trans-unit id="3IN-sU-3Bg.title" xml:space="preserve">
         <source>Spelling</source>
-        <target>Stavemåde</target>
+        <target>Stavekontrol</target>
         <note>Class = "NSMenu"; title = "Spelling"; ObjectID = "3IN-sU-3Bg";</note>
       </trans-unit>
       <trans-unit id="3Om-Ey-2VK.title" xml:space="preserve">
@@ -586,7 +586,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="5Vv-lz-BsD.title" xml:space="preserve">
         <source>Copy Style</source>
-        <target>Kopier typografi</target>
+        <target>Kopier format</target>
         <note>Class = "NSMenuItem"; title = "Copy Style"; ObjectID = "5Vv-lz-BsD";</note>
       </trans-unit>
       <trans-unit id="5kV-Vb-QxS.title" xml:space="preserve">
@@ -596,7 +596,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="6dh-zS-Vam.title" xml:space="preserve">
         <source>Redo</source>
-        <target>Fortryd</target>
+        <target>Gentag</target>
         <note>Class = "NSMenuItem"; title = "Redo"; ObjectID = "6dh-zS-Vam";</note>
       </trans-unit>
       <trans-unit id="8Ga-Cu-VGe.title" xml:space="preserve">
@@ -626,17 +626,17 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="9yt-4B-nSM.title" xml:space="preserve">
         <source>Smart Copy/Paste</source>
-        <target>Smart Kopier/Sæt Ind</target>
+        <target>Smart kopiering/indsættelse</target>
         <note>Class = "NSMenuItem"; title = "Smart Copy/Paste"; ObjectID = "9yt-4B-nSM";</note>
       </trans-unit>
       <trans-unit id="46P-cB-AYj.title" xml:space="preserve">
         <source>Tighten</source>
-        <target>Stram</target>
+        <target>Strammere</target>
         <note>Class = "NSMenuItem"; title = "Tighten"; ObjectID = "46P-cB-AYj";</note>
       </trans-unit>
       <trans-unit id="78Y-hA-62v.title" xml:space="preserve">
         <source>Correct Spelling Automatically</source>
-        <target>Ret Stavekontrol Automatisk</target>
+        <target>Ret stavefejl automatisk</target>
         <note>Class = "NSMenuItem"; title = "Correct Spelling Automatically"; ObjectID = "78Y-hA-62v";</note>
       </trans-unit>
       <trans-unit id="AYu-sK-qS6.title" xml:space="preserve">
@@ -656,12 +656,12 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="Bw7-FT-i3A.title" xml:space="preserve">
         <source>Save As…</source>
-        <target>Gem Som…</target>
+        <target>Gem som…</target>
         <note>Class = "NSMenuItem"; title = "Save As…"; ObjectID = "Bw7-FT-i3A";</note>
       </trans-unit>
       <trans-unit id="CJU-dx-a9l.title" xml:space="preserve">
         <source>Acknowledgments</source>
-        <target>Bekræftelser</target>
+        <target>Tak til</target>
         <note>Class = "NSMenuItem"; title = "Acknowledgments"; ObjectID = "CJU-dx-a9l";</note>
       </trans-unit>
       <trans-unit id="DOj-j9-dza.title" xml:space="preserve">
@@ -676,7 +676,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="Dv1-io-Yv7.title" xml:space="preserve">
         <source>Spelling and Grammar</source>
-        <target>Stavekontrol og Grammatik</target>
+        <target>Stavekontrol og grammatik</target>
         <note>Class = "NSMenuItem"; title = "Spelling and Grammar"; ObjectID = "Dv1-io-Yv7";</note>
       </trans-unit>
       <trans-unit id="F2S-fz-NVQ.title" xml:space="preserve">
@@ -721,7 +721,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="Gi5-1S-RQB.title" xml:space="preserve">
         <source>Font</source>
-        <target>Skrifttype</target>
+        <target>Skrift</target>
         <note>Class = "NSMenuItem"; title = "Font"; ObjectID = "Gi5-1S-RQB";</note>
       </trans-unit>
       <trans-unit id="H1b-Si-o9J.title" xml:space="preserve">
@@ -731,32 +731,32 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="H8h-7b-M4v.title" xml:space="preserve">
         <source>View</source>
-        <target>Visning</target>
+        <target>Oversigt</target>
         <note>Class = "NSMenuItem"; title = "View"; ObjectID = "H8h-7b-M4v";</note>
       </trans-unit>
       <trans-unit id="HFQ-gK-NFA.title" xml:space="preserve">
         <source>Text Replacement</source>
-        <target>Teksterstatning</target>
+        <target>Udskift tekst</target>
         <note>Class = "NSMenuItem"; title = "Text Replacement"; ObjectID = "HFQ-gK-NFA";</note>
       </trans-unit>
       <trans-unit id="HFo-cy-zxI.title" xml:space="preserve">
         <source>Show Spelling and Grammar</source>
-        <target>Vis Stavekontrol og Grammatik</target>
+        <target>Vis stavekontrol og grammatik</target>
         <note>Class = "NSMenuItem"; title = "Show Spelling and Grammar"; ObjectID = "HFo-cy-zxI";</note>
       </trans-unit>
       <trans-unit id="HyV-fh-RgO.title" xml:space="preserve">
         <source>View</source>
-        <target>Visning</target>
+        <target>Oversigt</target>
         <note>Class = "NSMenu"; title = "View"; ObjectID = "HyV-fh-RgO";</note>
       </trans-unit>
       <trans-unit id="I0S-gh-46l.title" xml:space="preserve">
         <source>Subscript</source>
-        <target>Sænket Skrift</target>
+        <target>Sænket skrift</target>
         <note>Class = "NSMenuItem"; title = "Subscript"; ObjectID = "I0S-gh-46l";</note>
       </trans-unit>
       <trans-unit id="IAo-SY-fd9.title" xml:space="preserve">
         <source>Open…</source>
-        <target>Åben…</target>
+        <target>Åbn…</target>
         <note>Class = "NSMenuItem"; title = "Open…"; ObjectID = "IAo-SY-fd9";</note>
       </trans-unit>
       <trans-unit id="IQv-IB-iLA.title" xml:space="preserve">
@@ -771,27 +771,27 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="J7y-lM-qPV.title" xml:space="preserve">
         <source>Use None</source>
-        <target>Brug Ingen</target>
+        <target>Brug ingen</target>
         <note>Class = "NSMenuItem"; title = "Use None"; ObjectID = "J7y-lM-qPV";</note>
       </trans-unit>
       <trans-unit id="KaW-ft-85H.title" xml:space="preserve">
         <source>Revert to Saved</source>
-        <target>Vend Tilbage til Gemt</target>
+        <target>Tilbage til gemt</target>
         <note>Class = "NSMenuItem"; title = "Revert to Saved"; ObjectID = "KaW-ft-85H";</note>
       </trans-unit>
       <trans-unit id="Kd2-mp-pUS.title" xml:space="preserve">
         <source>Show All</source>
-        <target>Vis Alle</target>
+        <target>Vis alle</target>
         <note>Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS";</note>
       </trans-unit>
       <trans-unit id="LE2-aR-0XJ.title" xml:space="preserve">
         <source>Bring All to Front</source>
-        <target>Bring Alle Foran</target>
+        <target>Anbring alle forrest</target>
         <note>Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "LE2-aR-0XJ";</note>
       </trans-unit>
       <trans-unit id="LVM-kO-fVI.title" xml:space="preserve">
         <source>Paste Ruler</source>
-        <target>Indsæt Lineal</target>
+        <target>Sæt lineal ind</target>
         <note>Class = "NSMenuItem"; title = "Paste Ruler"; ObjectID = "LVM-kO-fVI";</note>
       </trans-unit>
       <trans-unit id="Lbh-J2-qVU.title" xml:space="preserve">
@@ -801,12 +801,12 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="MkV-Pr-PK5.title" xml:space="preserve">
         <source>Copy Ruler</source>
-        <target>Kopier Lineal</target>
+        <target>Kopier lineal</target>
         <note>Class = "NSMenuItem"; title = "Copy Ruler"; ObjectID = "MkV-Pr-PK5";</note>
       </trans-unit>
       <trans-unit id="NMo-om-nkz.title" xml:space="preserve">
         <source>Services</source>
-        <target>Ydelser</target>
+        <target>Tjenester</target>
         <note>Class = "NSMenuItem"; title = "Services"; ObjectID = "NMo-om-nkz";</note>
       </trans-unit>
       <trans-unit id="Nop-cj-93Q.title" xml:space="preserve">
@@ -821,7 +821,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="OaQ-X3-Vso.title" xml:space="preserve">
         <source>Baseline</source>
-        <target>Basislinje</target>
+        <target>Grundlinje</target>
         <note>Class = "NSMenuItem"; title = "Baseline"; ObjectID = "OaQ-X3-Vso";</note>
       </trans-unit>
       <trans-unit id="Olw-nP-bQN.title" xml:space="preserve">
@@ -831,12 +831,12 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="OwM-mh-QMV.title" xml:space="preserve">
         <source>Find Previous</source>
-        <target>Find Tidligere</target>
+        <target>Find forrige</target>
         <note>Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV";</note>
       </trans-unit>
       <trans-unit id="Oyz-dy-DGm.title" xml:space="preserve">
         <source>Stop Speaking</source>
-        <target>Stop med at Tale</target>
+        <target>Stop oplæsning</target>
         <note>Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "Oyz-dy-DGm";</note>
       </trans-unit>
       <trans-unit id="Ptp-SP-VEL.title" xml:space="preserve">
@@ -846,7 +846,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="Q5e-8K-NDq.title" xml:space="preserve">
         <source>Show Fonts</source>
-        <target>Vis Skrifttyper</target>
+        <target>Vis skrifter</target>
         <note>Class = "NSMenuItem"; title = "Show Fonts"; ObjectID = "Q5e-8K-NDq";</note>
       </trans-unit>
       <trans-unit id="R4o-n2-Eq4.title" xml:space="preserve">
@@ -871,22 +871,22 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="RmO-tv-UKh.title" xml:space="preserve">
         <source>Logout</source>
-        <target>Log Ud</target>
+        <target>Log ud</target>
         <note>Class = "NSButtonCell"; title = "Logout"; ObjectID = "RmO-tv-UKh";</note>
       </trans-unit>
       <trans-unit id="Rqc-34-cIF.title" xml:space="preserve">
         <source>Superscript</source>
-        <target>Hævet Skrift</target>
+        <target>Hævet skrift</target>
         <note>Class = "NSMenuItem"; title = "Superscript"; ObjectID = "Rqc-34-cIF";</note>
       </trans-unit>
       <trans-unit id="Ruw-6m-B2m.title" xml:space="preserve">
         <source>Select All</source>
-        <target>Vælg Alle</target>
+        <target>Vælg alt</target>
         <note>Class = "NSMenuItem"; title = "Select All"; ObjectID = "Ruw-6m-B2m";</note>
       </trans-unit>
       <trans-unit id="S0p-oC-mLd.title" xml:space="preserve">
         <source>Jump to Selection</source>
-        <target>Gå til Markering</target>
+        <target>Hop til det valgte</target>
         <note>Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "S0p-oC-mLd";</note>
       </trans-unit>
       <trans-unit id="TEm-B8-gsH.title" xml:space="preserve">
@@ -901,22 +901,22 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="UEZ-Bs-lqG.title" xml:space="preserve">
         <source>Capitalize</source>
-        <target>Skriv med Stort</target>
+        <target>Med store forbogstaver</target>
         <note>Class = "NSMenuItem"; title = "Capitalize"; ObjectID = "UEZ-Bs-lqG";</note>
       </trans-unit>
       <trans-unit id="VIY-Ag-zcb.title" xml:space="preserve">
         <source>Center</source>
-        <target>Centrere</target>
+        <target>Centrer</target>
         <note>Class = "NSMenuItem"; title = "Center"; ObjectID = "VIY-Ag-zcb";</note>
       </trans-unit>
       <trans-unit id="Vdr-fp-XzO.title" xml:space="preserve">
         <source>Hide Others</source>
-        <target>Skjul Andre</target>
+        <target>Skjul andre</target>
         <note>Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO";</note>
       </trans-unit>
       <trans-unit id="Vjx-xi-njq.title" xml:space="preserve">
         <source>Italic</source>
-        <target>Italiensk</target>
+        <target>Kursiv</target>
         <note>Class = "NSMenuItem"; title = "Italic"; ObjectID = "Vjx-xi-njq";</note>
       </trans-unit>
       <trans-unit id="W48-6f-4Dl.title" xml:space="preserve">
@@ -931,7 +931,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="WeT-3V-zwk.title" xml:space="preserve">
         <source>Paste and Match Style</source>
-        <target>Sæt Ind og Tilpas Format</target>
+        <target>Indsæt og tilpas format</target>
         <note>Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "WeT-3V-zwk";</note>
       </trans-unit>
       <trans-unit id="Xz5-n4-O0W.title" xml:space="preserve">
@@ -941,7 +941,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="YEy-JH-Tfz.title" xml:space="preserve">
         <source>Find and Replace…</source>
-        <target>Find og Erstat…</target>
+        <target>Find og erstat…</target>
         <note>Class = "NSMenuItem"; title = "Find and Replace…"; ObjectID = "YEy-JH-Tfz";</note>
       </trans-unit>
       <trans-unit id="YGs-j5-SAR.title" xml:space="preserve">
@@ -951,12 +951,12 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="Ynk-f8-cLZ.title" xml:space="preserve">
         <source>Start Speaking</source>
-        <target>Start med at Tale</target>
+        <target>Start oplæsning</target>
         <note>Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "Ynk-f8-cLZ";</note>
       </trans-unit>
       <trans-unit id="ZM1-6Q-yy1.title" xml:space="preserve">
         <source>Align Left</source>
-        <target>Juster Venstre</target>
+        <target>Venstrejuster</target>
         <note>Class = "NSMenuItem"; title = "Align Left"; ObjectID = "ZM1-6Q-yy1";</note>
       </trans-unit>
       <trans-unit id="ZbA-hc-8PE.title" xml:space="preserve">
@@ -966,7 +966,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="Zsi-3o-ASl.title" xml:space="preserve">
         <source>Email:</source>
-        <target>Email:</target>
+        <target>E-mail:</target>
         <note>Class = "NSTextFieldCell"; title = "Email:"; ObjectID = "Zsi-3o-ASl";</note>
       </trans-unit>
       <trans-unit id="ZvO-Gk-QUH.title" xml:space="preserve">
@@ -986,17 +986,17 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="aXa-aM-Jaq.title" xml:space="preserve">
         <source>Font</source>
-        <target>Skrifttype</target>
+        <target>Skrift</target>
         <note>Class = "NSMenu"; title = "Font"; ObjectID = "aXa-aM-Jaq";</note>
       </trans-unit>
       <trans-unit id="agt-UL-0e3.title" xml:space="preserve">
         <source>Use Default</source>
-        <target>Brug Standard</target>
+        <target>Brug standard</target>
         <note>Class = "NSMenuItem"; title = "Use Default"; ObjectID = "agt-UL-0e3";</note>
       </trans-unit>
       <trans-unit id="bgn-CT-cEk.title" xml:space="preserve">
         <source>Show Colors</source>
-        <target>Vis Farver</target>
+        <target>Vis farver</target>
         <note>Class = "NSMenuItem"; title = "Show Colors"; ObjectID = "bgn-CT-cEk";</note>
       </trans-unit>
       <trans-unit id="bib-Uj-vzu.title" xml:space="preserve">
@@ -1006,32 +1006,32 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="buJ-ug-pKt.title" xml:space="preserve">
         <source>Use Selection for Find</source>
-        <target>Brug Markering til Find</target>
+        <target>Søg med det valgte</target>
         <note>Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "buJ-ug-pKt";</note>
       </trans-unit>
       <trans-unit id="c8a-y6-VQd.title" xml:space="preserve">
         <source>Transformations</source>
-        <target>Transformationer</target>
+        <target>Forvandlinger</target>
         <note>Class = "NSMenu"; title = "Transformations"; ObjectID = "c8a-y6-VQd";</note>
       </trans-unit>
       <trans-unit id="cDB-IK-hbR.title" xml:space="preserve">
         <source>Use None</source>
-        <target>Brug Ingen</target>
+        <target>Brug ingen</target>
         <note>Class = "NSMenuItem"; title = "Use None"; ObjectID = "cDB-IK-hbR";</note>
       </trans-unit>
       <trans-unit id="cqv-fj-IhA.title" xml:space="preserve">
         <source>Selection</source>
-        <target>Valg</target>
+        <target>Det valgte</target>
         <note>Class = "NSMenuItem"; title = "Selection"; ObjectID = "cqv-fj-IhA";</note>
       </trans-unit>
       <trans-unit id="cwL-P1-jid.title" xml:space="preserve">
         <source>Smart Links</source>
-        <target>Smarte Links</target>
+        <target>Smarte links</target>
         <note>Class = "NSMenuItem"; title = "Smart Links"; ObjectID = "cwL-P1-jid";</note>
       </trans-unit>
       <trans-unit id="d9M-CD-aMd.title" xml:space="preserve">
         <source>Make Lower Case</source>
-        <target>Brug Små Bogstaver</target>
+        <target>Med små bogstaver</target>
         <note>Class = "NSMenuItem"; title = "Make Lower Case"; ObjectID = "d9M-CD-aMd";</note>
       </trans-unit>
       <trans-unit id="d9c-me-L2H.title" xml:space="preserve">
@@ -1051,7 +1051,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="gVA-U4-sdL.title" xml:space="preserve">
         <source>Paste</source>
-        <target>Sæt Ind</target>
+        <target>Sæt ind</target>
         <note>Class = "NSMenuItem"; title = "Paste"; ObjectID = "gVA-U4-sdL";</note>
       </trans-unit>
       <trans-unit id="gm3-6i-EnL.title" xml:space="preserve">
@@ -1066,7 +1066,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="hQb-2v-fYv.title" xml:space="preserve">
         <source>Smart Quotes</source>
-        <target>Krøllede Anførselstegn</target>
+        <target>Typografiske anførselstegn</target>
         <note>Class = "NSMenuItem"; title = "Smart Quotes"; ObjectID = "hQb-2v-fYv";</note>
       </trans-unit>
       <trans-unit id="hkB-TU-Ps1.title" xml:space="preserve">
@@ -1076,12 +1076,12 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="hz2-CU-CR7.title" xml:space="preserve">
         <source>Check Document Now</source>
-        <target>Kontroller Dokument Nu</target>
+        <target>Kontroller dokument nu</target>
         <note>Class = "NSMenuItem"; title = "Check Document Now"; ObjectID = "hz2-CU-CR7";</note>
       </trans-unit>
       <trans-unit id="hz9-B4-Xy5.title" xml:space="preserve">
         <source>Services</source>
-        <target>Ydelser</target>
+        <target>Tjenester</target>
         <note>Class = "NSMenu"; title = "Services"; ObjectID = "hz9-B4-Xy5";</note>
       </trans-unit>
       <trans-unit id="i1d-Er-qST.title" xml:space="preserve">
@@ -1096,7 +1096,7 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="jBQ-r6-VK2.title" xml:space="preserve">
         <source>Kern</source>
-        <target>Overhæng</target>
+        <target>Knibning</target>
         <note>Class = "NSMenuItem"; title = "Kern"; ObjectID = "jBQ-r6-VK2";</note>
       </trans-unit>
       <trans-unit id="jFq-tB-4Kx.title" xml:space="preserve">
@@ -1121,22 +1121,22 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="mK6-2p-4JG.title" xml:space="preserve">
         <source>Check Grammar With Spelling</source>
-        <target>Kontroller Grammatik med Stavekontrol</target>
+        <target>Kontroller grammatik under stavekontrol</target>
         <note>Class = "NSMenuItem"; title = "Check Grammar With Spelling"; ObjectID = "mK6-2p-4JG";</note>
       </trans-unit>
       <trans-unit id="o6e-r0-MWq.title" xml:space="preserve">
         <source>Ligatures</source>
-        <target>Ligatur</target>
+        <target>Ligaturer</target>
         <note>Class = "NSMenuItem"; title = "Ligatures"; ObjectID = "o6e-r0-MWq";</note>
       </trans-unit>
       <trans-unit id="oas-Oc-fiZ.title" xml:space="preserve">
         <source>Open Recent</source>
-        <target>Åben Seneste</target>
+        <target>Åbn seneste</target>
         <note>Class = "NSMenu"; title = "Open Recent"; ObjectID = "oas-Oc-fiZ";</note>
       </trans-unit>
       <trans-unit id="ogc-rX-tC1.title" xml:space="preserve">
         <source>Loosen</source>
-        <target>Løsne</target>
+        <target>Løsere</target>
         <note>Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1";</note>
       </trans-unit>
       <trans-unit id="pa3-QI-u2k.title" xml:space="preserve">
@@ -1151,22 +1151,22 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="q09-fT-Sye.title" xml:space="preserve">
         <source>Find Next</source>
-        <target>Find Næste</target>
+        <target>Find næste</target>
         <note>Class = "NSMenuItem"; title = "Find Next"; ObjectID = "q09-fT-Sye";</note>
       </trans-unit>
       <trans-unit id="qIS-W8-SiK.title" xml:space="preserve">
         <source>Page Setup…</source>
-        <target>Sideopsætning…</target>
+        <target>Sidelayout…</target>
         <note>Class = "NSMenuItem"; title = "Page Setup…"; ObjectID = "qIS-W8-SiK";</note>
       </trans-unit>
       <trans-unit id="rbD-Rh-wIN.title" xml:space="preserve">
         <source>Check Spelling While Typing</source>
-        <target>Kontroller Stavekontrol Mens du Skriver</target>
+        <target>Løbende stavekontrol</target>
         <note>Class = "NSMenuItem"; title = "Check Spelling While Typing"; ObjectID = "rbD-Rh-wIN";</note>
       </trans-unit>
       <trans-unit id="rgM-f4-ycn.title" xml:space="preserve">
         <source>Smart Dashes</source>
-        <target>Smarte Streger</target>
+        <target>Typografiske tankestreger</target>
         <note>Class = "NSMenuItem"; title = "Smart Dashes"; ObjectID = "rgM-f4-ycn";</note>
       </trans-unit>
       <trans-unit id="sGd-zc-V0B.title" xml:space="preserve">
@@ -1176,22 +1176,22 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="snW-S8-Cw5.title" xml:space="preserve">
         <source>Show Toolbar</source>
-        <target>Vis Værktøjslinje</target>
+        <target>Vis værktøjslinje</target>
         <note>Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "snW-S8-Cw5";</note>
       </trans-unit>
       <trans-unit id="tRr-pd-1PS.title" xml:space="preserve">
         <source>Data Detectors</source>
-        <target>Datadetektorer</target>
+        <target>Datasøgning</target>
         <note>Class = "NSMenuItem"; title = "Data Detectors"; ObjectID = "tRr-pd-1PS";</note>
       </trans-unit>
       <trans-unit id="tXI-mr-wws.title" xml:space="preserve">
         <source>Open Recent</source>
-        <target>Åben Seneste</target>
+        <target>Åbn seneste</target>
         <note>Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "tXI-mr-wws";</note>
       </trans-unit>
       <trans-unit id="tlD-Oa-oAM.title" xml:space="preserve">
         <source>Kern</source>
-        <target>Overhæng</target>
+        <target>Knibning</target>
         <note>Class = "NSMenu"; title = "Kern"; ObjectID = "tlD-Oa-oAM";</note>
       </trans-unit>
       <trans-unit id="uQy-DD-JDr.title" xml:space="preserve">
@@ -1211,32 +1211,32 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="vKC-jM-MkH.title" xml:space="preserve">
         <source>Paste Style</source>
-        <target>Sæt Typografi Ind</target>
+        <target>Sæt format ind</target>
         <note>Class = "NSMenuItem"; title = "Paste Style"; ObjectID = "vKC-jM-MkH";</note>
       </trans-unit>
       <trans-unit id="vLm-3I-IUL.title" xml:space="preserve">
         <source>Show Ruler</source>
-        <target>Vis Lineal</target>
+        <target>Vis lineal</target>
         <note>Class = "NSMenuItem"; title = "Show Ruler"; ObjectID = "vLm-3I-IUL";</note>
       </trans-unit>
       <trans-unit id="vNY-rz-j42.title" xml:space="preserve">
         <source>Clear Menu</source>
-        <target>Ryd Menu</target>
+        <target>Ryd menu</target>
         <note>Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "vNY-rz-j42";</note>
       </trans-unit>
       <trans-unit id="vmV-6d-7jI.title" xml:space="preserve">
         <source>Make Upper Case</source>
-        <target>Lav Store Bogstaver Case</target>
+        <target>Med store bogstaver</target>
         <note>Class = "NSMenuItem"; title = "Make Upper Case"; ObjectID = "vmV-6d-7jI";</note>
       </trans-unit>
       <trans-unit id="w0m-vy-SC9.title" xml:space="preserve">
         <source>Ligatures</source>
-        <target>Ligatur</target>
+        <target>Ligaturer</target>
         <note>Class = "NSMenu"; title = "Ligatures"; ObjectID = "w0m-vy-SC9";</note>
       </trans-unit>
       <trans-unit id="wb2-vD-lq4.title" xml:space="preserve">
         <source>Align Right</source>
-        <target>Juster Højre</target>
+        <target>Højrejuster</target>
         <note>Class = "NSMenuItem"; title = "Align Right"; ObjectID = "wb2-vD-lq4";</note>
       </trans-unit>
       <trans-unit id="wpe-8d-5DV.title" xml:space="preserve">
@@ -1261,17 +1261,17 @@ The trial period will end in %d days, after that you will not be able to create 
       </trans-unit>
       <trans-unit id="xQD-1f-W4t.title" xml:space="preserve">
         <source>Use All</source>
-        <target>Brug Alle</target>
+        <target>Benyt alle</target>
         <note>Class = "NSMenuItem"; title = "Use All"; ObjectID = "xQD-1f-W4t";</note>
       </trans-unit>
       <trans-unit id="xrE-MZ-jX0.title" xml:space="preserve">
         <source>Speech</source>
-        <target>Tal</target>
+        <target>Tale</target>
         <note>Class = "NSMenuItem"; title = "Speech"; ObjectID = "xrE-MZ-jX0";</note>
       </trans-unit>
       <trans-unit id="z6F-FW-3nz.title" xml:space="preserve">
         <source>Show Substitutions</source>
-        <target>Vis Erstatninger</target>
+        <target>Vis erstatninger</target>
         <note>Class = "NSMenuItem"; title = "Show Substitutions"; ObjectID = "z6F-FW-3nz";</note>
       </trans-unit>
       <trans-unit id="zwS-9G-S0N.title" xml:space="preserve">
