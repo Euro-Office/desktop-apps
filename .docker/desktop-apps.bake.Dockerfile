@@ -67,6 +67,17 @@ FROM core-base AS desktop-linux
 
     ENV PATH="/opt/venv/bin:$PATH"
 
+    # depot_tools (v8 gclient sync) calls `git checkout --end-of-options`,
+    # which Ubuntu 22.04's git 2.34 does not understand. Use a current git.
+    RUN apt-get -y install software-properties-common && \
+        add-apt-repository -y ppa:git-core/ppa && \
+        apt-get -y update && \
+        apt-get -y install git && \
+        git --version && \
+        git config --global http.lowSpeedLimit 1000 && \
+        git config --global http.lowSpeedTime 60 && \
+        git config --global http.postBuffer 524288000
+
     COPY desktop-sdk /desktop-sdk
     COPY desktop-apps /desktop-apps
     COPY core-fonts /core-fonts
