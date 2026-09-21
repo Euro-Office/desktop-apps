@@ -145,7 +145,7 @@
 
 - (void)setupTabControl {
     self.tabsControl.minTabWidth = 48;
-    self.tabsControl.maxTabWidth = 135;
+    self.tabsControl.maxTabWidth = 300;
     
     [self.tabsControl.multicastDelegate addDelegate:self];
 }
