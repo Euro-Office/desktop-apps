@@ -46,6 +46,7 @@
 #import "ASCMenuButtonCell.h"
 #import "ASCThemesController.h"
 #import "ASCApplicationManager.h"
+#import "ASCHelper.h"
 #import "AppDelegate.h"
 #import "ASCLinguist.h"
 #import "NSWindow+Extensions.h"
@@ -221,17 +222,22 @@ static float kASCRTLTabsRightMargin = 0;
             portalButtonCell.bgColor            = [NSColor colorNamed:@"tab-inactiveColor"];
             portalButtonCell.bgHoverColor       = [NSColor colorNamed:@"tab-hoverInactiveColor"];
             portalButtonCell.bgActiveColor      = [ASCThemesController currentThemeColor:btnPortalActiveBackgroundColor];
-            portalButtonCell.textColor          = [NSColor clearColor];
-            portalButtonCell.textActiveColor    = [NSColor clearColor];
+            portalButtonCell.textColor          = [NSColor colorNamed:@"tab-inactiveTextColor"];
+            portalButtonCell.textActiveColor    = [NSColor colorNamed:@"tab-activeTextColor"];
             portalButtonCell.lineColor          = [NSColor clearColor];
         } else {
             portalButtonCell.bgColor            = kColorRGBA(255, 255, 255, 0.0);
             portalButtonCell.bgHoverColor       = kColorRGBA(255, 255, 255, 1.0);
             portalButtonCell.bgActiveColor      = kColorRGBA(255, 255, 255, 1.0);
-            portalButtonCell.textColor          = kColorRGBA(255, 255, 255, 0.0);
-            portalButtonCell.textActiveColor    = kColorRGBA(255, 255, 255, 0.0);
+            portalButtonCell.textColor          = UIColorFromRGB(0x000000);
+            portalButtonCell.textActiveColor    = UIColorFromRGB(0x000000);
             portalButtonCell.lineColor          = kColorRGBA(255, 255, 255, 0.0);
         }
+
+        // The product name, not baked into the logo image - unlike the old
+        // logo-tab-* PNGs, this tracks whatever's branded at build time
+        // (CFBundleName), same value shown in the window title.
+        self.portalButton.title = [ASCHelper appName];
 
         if ( [ASCThemesController isCurrentThemeDark] ) {
             [self.portalButton setImage:[NSImage imageNamed:@"logo-tab-light"]];
