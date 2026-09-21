@@ -143,7 +143,7 @@ static NSString * const kASCTabsMulticastDelegateKey = @"asctabsmulticastDelegat
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     self.minTabWidth = 50.0;
-    self.maxTabWidth = 150.0;
+    self.maxTabWidth = 300.0;
     
     self.scrollView = [[NSScrollView alloc] initWithFrame:self.bounds];
     [self.scrollView setDrawsBackground:NO];

@@ -108,8 +108,34 @@
     return NSNoCellMask;
 }
 
+// Icon inset from the left edge, and the gap between the icon and the title -
+// same values ASCTabViewCell already uses for real document tabs, kept
+// consistent so a button using this cell looks like it belongs in the same
+// tab strip.
+static const CGFloat kASCMenuButtonImageInset = 8.f;
+static const CGFloat kASCMenuButtonTitleGap   = 5.f;
+
+- (void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)controlView {
+    NSSize size = [image size];
+    CGRect rect = CGRectMake(kASCMenuButtonImageInset, (CGRectGetHeight(frame) - size.height) * .5, size.width, size.height);
+    if ( [self userInterfaceLayoutDirection] == NSUserInterfaceLayoutDirectionRightToLeft )
+        rect.origin.x = frame.size.width - kASCMenuButtonImageInset - size.width;
+
+    [super drawImage:image withFrame:rect inView:controlView];
+}
+
 - (NSRect)drawTitle:(NSAttributedString *)title withFrame:(NSRect)frame inView:(NSView *)controlView {
-    return [super drawTitle:title withFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height) inView:controlView];
+    CGFloat leftOffset = 0.f;
+
+    if (self.image) {
+        leftOffset = kASCMenuButtonImageInset + self.image.size.width + kASCMenuButtonTitleGap;
+    }
+
+    if ( [self userInterfaceLayoutDirection] == NSUserInterfaceLayoutDirectionRightToLeft ) {
+        return [super drawTitle:title withFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width - leftOffset, frame.size.height) inView:controlView];
+    }
+
+    return [super drawTitle:title withFrame:CGRectMake(frame.origin.x + leftOffset, frame.origin.y, frame.size.width - leftOffset, frame.size.height) inView:controlView];
 }
 
 - (NSAttributedString *)attributedTitle {
@@ -117,14 +143,16 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 //    NSFont *font = [NSFont boldSystemFontOfSize:11];
     NSColor *color = self.textColor;
-    
+
     if (self.state) {
         color = self.textActiveColor;
     }
-    
-    [paragraphStyle setAlignment:NSCenterTextAlignment];
+
+    if ( [self userInterfaceLayoutDirection] == NSUserInterfaceLayoutDirectionRightToLeft )
+        [paragraphStyle setAlignment:NSRightTextAlignment];
+    else [paragraphStyle setAlignment:NSLeftTextAlignment];
     [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-    
+
     [attributedTitle addAttributes:@{
                                      NSForegroundColorAttributeName:color,
                                      NSParagraphStyleAttributeName:paragraphStyle
