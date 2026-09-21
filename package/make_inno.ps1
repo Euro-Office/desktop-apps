@@ -23,11 +23,11 @@ if (-not (Test-Path "$BuildDir")) {
     Write-Error "Path `"$BuildDir`" does not exist"
 }
 $InnoFile = switch ($Target) {
-    "commercial" { "$CompanyName-$ProductName-Enterprise-$Version-$Arch.exe" }
-    "standalone" { "$CompanyName-$ProductName-Standalone-$Version-$Arch.exe" }
-    "update"     { "$CompanyName-$ProductName-Update-$Version-$Arch.exe" }
-    "xp"         { "$CompanyName-$ProductName-XP-$Version-$Arch.exe" }
-    default      { "$CompanyName-$ProductName-$Version-$Arch.exe" }
+    "commercial" { "$ProductName-Enterprise-$Version-$Arch.exe" }
+    "standalone" { "$ProductName-Standalone-$Version-$Arch.exe" }
+    "update"     { "$ProductName-Update-$Version-$Arch.exe" }
+    "xp"         { "$ProductName-XP-$Version-$Arch.exe" }
+    default      { "$ProductName-$Version-$Arch.exe" }
 }
 
 Write-Host @"

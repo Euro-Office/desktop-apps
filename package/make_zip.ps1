@@ -18,9 +18,9 @@ if (-not (Test-Path "$BuildDir")) {
     Write-Error "Path `"$BuildDir`" does not exist"
 }
 $ZipFile = switch ($Target) {
-    "commercial" { "$CompanyName-$ProductName-Enterprise-$Version-$Arch.zip" }
-    "xp"         { "$CompanyName-$ProductName-XP-$Version-$Arch.zip" }
-    default      { "$CompanyName-$ProductName-$Version-$Arch.zip" }
+    "commercial" { "$ProductName-Enterprise-$Version-$Arch.zip" }
+    "xp"         { "$ProductName-XP-$Version-$Arch.zip" }
+    default      { "$ProductName-$Version-$Arch.zip" }
 }
 
 Write-Host @"
