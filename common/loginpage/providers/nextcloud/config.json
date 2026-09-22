@@ -4,7 +4,7 @@
     "check": {
         "url": "status.php"
     },
-    "editorPage" : "/apps/onlyoffice/",
+    "editorPage" : "/apps/eurooffice/",
     "cryptoSupport" : "true",
     "order": 2,
     "icons": {
