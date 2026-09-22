@@ -2,22 +2,22 @@
 "1b7-l0-nxx.title" = "Find";
 
 /* Class = "NSMenuItem"; title = "Lower"; ObjectID = "1tx-W0-xDw"; */
-"1tx-W0-xDw.title" = "Lavere";
+"1tx-W0-xDw.title" = "Sænk";
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP"; */
-"1UK-8n-QPP.title" = "Tilpas værktøjslinje…";
+"1UK-8n-QPP.title" = "Indstil værktøjslinje…";
 
 /* Class = "NSMenuItem"; title = "ONLYOFFICE"; ObjectID = "1Xt-HY-uBw"; */
 "1Xt-HY-uBw.title" = "ONLYOFFICE";
 
 /* Class = "NSMenuItem"; title = "Raise"; ObjectID = "2h7-ER-AoG"; */
-"2h7-ER-AoG.title" = "Højere";
+"2h7-ER-AoG.title" = "Hæv";
 
 /* Class = "NSMenuItem"; title = "Transformations"; ObjectID = "2oI-Rn-ZJC"; */
-"2oI-Rn-ZJC.title" = "Transformationer";
+"2oI-Rn-ZJC.title" = "Forvandlinger";
 
 /* Class = "NSMenu"; title = "Spelling"; ObjectID = "3IN-sU-3Bg"; */
-"3IN-sU-3Bg.title" = "Stavemåde";
+"3IN-sU-3Bg.title" = "Stavekontrol";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "3Om-Ey-2VK"; */
 "3Om-Ey-2VK.title" = "Brug standard";
@@ -41,10 +41,10 @@
 "5QF-Oa-p0T.title" = "Rediger";
 
 /* Class = "NSMenuItem"; title = "Copy Style"; ObjectID = "5Vv-lz-BsD"; */
-"5Vv-lz-BsD.title" = "Kopier typografi";
+"5Vv-lz-BsD.title" = "Kopier format";
 
 /* Class = "NSMenuItem"; title = "Redo"; ObjectID = "6dh-zS-Vam"; */
-"6dh-zS-Vam.title" = "Fortryd";
+"6dh-zS-Vam.title" = "Gentag";
 
 /* Class = "NSButtonCell"; title = "License agreement"; ObjectID = "8Ga-Cu-VGe"; */
 "8Ga-Cu-VGe.title" = "Licensaftale";
@@ -62,16 +62,16 @@
 "9ic-FL-obx.title" = "Erstatninger";
 
 /* Class = "NSMenuItem"; title = "Smart Copy/Paste"; ObjectID = "9yt-4B-nSM"; */
-"9yt-4B-nSM.title" = "Smart Kopier/Sæt Ind";
+"9yt-4B-nSM.title" = "Smart kopiering/indsættelse";
 
 /* Class = "NSMenuItem"; title = "Tighten"; ObjectID = "46P-cB-AYj"; */
-"46P-cB-AYj.title" = "Stram";
+"46P-cB-AYj.title" = "Strammere";
 
 /* Class = "NSMenuItem"; title = "Correct Spelling Automatically"; ObjectID = "78Y-hA-62v"; */
-"78Y-hA-62v.title" = "Ret Stavekontrol Automatisk";
+"78Y-hA-62v.title" = "Ret stavefejl automatisk";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "agt-UL-0e3"; */
-"agt-UL-0e3.title" = "Brug Standard";
+"agt-UL-0e3.title" = "Brug standard";
 
 /* Class = "NSMenuItem"; title = "Print…"; ObjectID = "aTl-1u-JFS"; */
 "aTl-1u-JFS.title" = "Udskriv…";
@@ -80,7 +80,7 @@
 "aUF-d1-5bR.title" = "Vindue";
 
 /* Class = "NSMenu"; title = "Font"; ObjectID = "aXa-aM-Jaq"; */
-"aXa-aM-Jaq.title" = "Skrifttype";
+"aXa-aM-Jaq.title" = "Skrift";
 
 /* Class = "NSMenu"; title = "Main Menu"; ObjectID = "AYu-sK-qS6"; */
 "AYu-sK-qS6.title" = "Hovedmenu";
@@ -89,43 +89,43 @@
 "BgM-ve-c93.title" = "\tVenster til Højre";
 
 /* Class = "NSMenuItem"; title = "Show Colors"; ObjectID = "bgn-CT-cEk"; */
-"bgn-CT-cEk.title" = "Vis Farver";
+"bgn-CT-cEk.title" = "Vis farver";
 
 /* Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu"; */
-"bib-Uj-vzu.title" = "Fil";
+"bib-Uj-vzu.title" = "Arkiv";
 
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "BOF-NM-1cW"; */
 "BOF-NM-1cW.title" = "Indstillinger…";
 
 /* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "buJ-ug-pKt"; */
-"buJ-ug-pKt.title" = "Brug Markering til Find";
+"buJ-ug-pKt.title" = "Søg med det valgte";
 
 /* Class = "NSMenuItem"; title = "Save As…"; ObjectID = "Bw7-FT-i3A"; */
-"Bw7-FT-i3A.title" = "Gem Som…";
+"Bw7-FT-i3A.title" = "Gem som…";
 
 /* Class = "NSMenu"; title = "Transformations"; ObjectID = "c8a-y6-VQd"; */
-"c8a-y6-VQd.title" = "Transformationer";
+"c8a-y6-VQd.title" = "Forvandlinger";
 
 /* Class = "NSMenuItem"; title = "Use None"; ObjectID = "cDB-IK-hbR"; */
-"cDB-IK-hbR.title" = "Brug Ingen";
+"cDB-IK-hbR.title" = "Brug ingen";
 
 /* Class = "NSMenuItem"; title = "Acknowledgments"; ObjectID = "CJU-dx-a9l"; */
-"CJU-dx-a9l.title" = "Bekræftelser";
+"CJU-dx-a9l.title" = "Tak til";
 
 /* Class = "NSMenuItem"; title = "Selection"; ObjectID = "cqv-fj-IhA"; */
-"cqv-fj-IhA.title" = "Valg";
+"cqv-fj-IhA.title" = "Det valgte";
 
 /* Class = "NSMenuItem"; title = "Smart Links"; ObjectID = "cwL-P1-jid"; */
-"cwL-P1-jid.title" = "Smarte Links";
+"cwL-P1-jid.title" = "Smarte links";
 
 /* Class = "NSMenu"; title = "Text"; ObjectID = "d9c-me-L2H"; */
 "d9c-me-L2H.title" = "Tekst";
 
 /* Class = "NSMenuItem"; title = "Make Lower Case"; ObjectID = "d9M-CD-aMd"; */
-"d9M-CD-aMd.title" = "Brug Små Bogstaver";
+"d9M-CD-aMd.title" = "Med små bogstaver";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ"; */
-"dMs-cI-mzQ.title" = "Fil";
+"dMs-cI-mzQ.title" = "Arkiv";
 
 /* Class = "NSMenuItem"; title = "Spreadsheet"; ObjectID = "DOj-j9-dza"; */
 "DOj-j9-dza.title" = "Regneark";
@@ -134,7 +134,7 @@
 "dRJ-4n-Yzg.title" = "Fortryd";
 
 /* Class = "NSMenuItem"; title = "Spelling and Grammar"; ObjectID = "Dv1-io-Yv7"; */
-"Dv1-io-Yv7.title" = "Stavekontrol og Grammatik";
+"Dv1-io-Yv7.title" = "Stavekontrol og grammatik";
 
 /* Class = "NSMenuItem"; title = "Close"; ObjectID = "DVo-aG-piG"; */
 "DVo-aG-piG.title" = "Luk";
@@ -161,55 +161,55 @@
 "GEO-Iw-cKr.title" = "Format";
 
 /* Class = "NSMenuItem"; title = "Font"; ObjectID = "Gi5-1S-RQB"; */
-"Gi5-1S-RQB.title" = "Skrifttype";
+"Gi5-1S-RQB.title" = "Skrift";
 
 /* Class = "NSTextFieldCell"; title = "File Name"; ObjectID = "gm3-6i-EnL"; */
-"gm3-6i-EnL.title" = "Filnavn";
+"gm3-6i-EnL.title" = "Arkivnavn";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "GUa-eO-cwY"; */
 "GUa-eO-cwY.title" = "Brug standard";
 
 /* Class = "NSMenuItem"; title = "Paste"; ObjectID = "gVA-U4-sdL"; */
-"gVA-U4-sdL.title" = "Sæt Ind";
+"gVA-U4-sdL.title" = "Sæt ind";
 
 /* Class = "NSMenuItem"; title = "Writing Direction"; ObjectID = "H1b-Si-o9J"; */
 "H1b-Si-o9J.title" = "Skriveretning";
 
 /* Class = "NSMenuItem"; title = "View"; ObjectID = "H8h-7b-M4v"; */
-"H8h-7b-M4v.title" = "Visning";
+"H8h-7b-M4v.title" = "Oversigt";
 
 /* Class = "NSMenu"; title = "New"; ObjectID = "hD5-Cz-ItX"; */
 "hD5-Cz-ItX.title" = "Ny";
 
 /* Class = "NSMenuItem"; title = "Show Spelling and Grammar"; ObjectID = "HFo-cy-zxI"; */
-"HFo-cy-zxI.title" = "Vis Stavekontrol og Grammatik";
+"HFo-cy-zxI.title" = "Vis stavekontrol og grammatik";
 
 /* Class = "NSMenuItem"; title = "Text Replacement"; ObjectID = "HFQ-gK-NFA"; */
-"HFQ-gK-NFA.title" = "Teksterstatning";
+"HFQ-gK-NFA.title" = "Udskift tekst";
 
 /* Class = "NSMenuItem"; title = "Presentation"; ObjectID = "hkB-TU-Ps1"; */
 "hkB-TU-Ps1.title" = "Præsentation";
 
 /* Class = "NSMenuItem"; title = "Smart Quotes"; ObjectID = "hQb-2v-fYv"; */
-"hQb-2v-fYv.title" = "Krøllede Anførselstegn";
+"hQb-2v-fYv.title" = "Typografiske anførselstegn";
 
 /* Class = "NSMenu"; title = "View"; ObjectID = "HyV-fh-RgO"; */
-"HyV-fh-RgO.title" = "Visning";
+"HyV-fh-RgO.title" = "Oversigt";
 
 /* Class = "NSMenuItem"; title = "Check Document Now"; ObjectID = "hz2-CU-CR7"; */
-"hz2-CU-CR7.title" = "Kontroller Dokument Nu";
+"hz2-CU-CR7.title" = "Kontroller dokument nu";
 
 /* Class = "NSMenu"; title = "Services"; ObjectID = "hz9-B4-Xy5"; */
-"hz9-B4-Xy5.title" = "Ydelser";
+"hz9-B4-Xy5.title" = "Tjenester";
 
 /* Class = "NSMenuItem"; title = "Subscript"; ObjectID = "I0S-gh-46l"; */
-"I0S-gh-46l.title" = "Sænket Skrift";
+"I0S-gh-46l.title" = "Sænket skrift";
 
 /* Class = "NSMenuItem"; title = "Smaller"; ObjectID = "i1d-Er-qST"; */
 "i1d-Er-qST.title" = "Mindre";
 
 /* Class = "NSMenuItem"; title = "Open…"; ObjectID = "IAo-SY-fd9"; */
-"IAo-SY-fd9.title" = "Åben…";
+"IAo-SY-fd9.title" = "Åbn…";
 
 /* Class = "NSMenu"; title = "Baseline"; ObjectID = "ijk-EB-dga"; */
 "ijk-EB-dga.title" = "Grundlinje";
@@ -221,10 +221,10 @@
 "J5U-5w-g23.title" = "Lige margener";
 
 /* Class = "NSMenuItem"; title = "Use None"; ObjectID = "J7y-lM-qPV"; */
-"J7y-lM-qPV.title" = "Brug Ingen";
+"J7y-lM-qPV.title" = "Brug ingen";
 
 /* Class = "NSMenuItem"; title = "Kern"; ObjectID = "jBQ-r6-VK2"; */
-"jBQ-r6-VK2.title" = "Overhæng";
+"jBQ-r6-VK2.title" = "Knibning";
 
 /* Class = "NSMenuItem"; title = "\tRight to Left"; ObjectID = "jFq-tB-4Kx"; */
 "jFq-tB-4Kx.title" = "\tHøjre til Venstre";
@@ -233,61 +233,61 @@
 "jxT-CU-nIS.title" = "Format";
 
 /* Class = "NSMenuItem"; title = "Revert to Saved"; ObjectID = "KaW-ft-85H"; */
-"KaW-ft-85H.title" = "Vend Tilbage til Gemt";
+"KaW-ft-85H.title" = "Tilbage til gemt";
 
 /* Class = "NSTabViewItem"; label = "ONLYOFFICE"; ObjectID = "kcg-El-49G"; */
 "kcg-El-49G.label" = "ONLYOFFICE";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
-"Kd2-mp-pUS.title" = "Vis Alle";
+"Kd2-mp-pUS.title" = "Vis alle";
 
 /* Class = "NSMenuItem"; title = "\tLeft to Right"; ObjectID = "Lbh-J2-qVU"; */
 "Lbh-J2-qVU.title" = "\tVenstre til Højre";
 
 /* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "LE2-aR-0XJ"; */
-"LE2-aR-0XJ.title" = "Bring Alle Foran";
+"LE2-aR-0XJ.title" = "Anbring alle forrest";
 
 /* Class = "NSMenuItem"; title = "Paste Ruler"; ObjectID = "LVM-kO-fVI"; */
-"LVM-kO-fVI.title" = "Indsæt Lineal";
+"LVM-kO-fVI.title" = "Sæt lineal ind";
 
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "m0C-e9-0oc"; */
 "m0C-e9-0oc.title" = "Annuller";
 
 /* Class = "NSMenuItem"; title = "Check Grammar With Spelling"; ObjectID = "mK6-2p-4JG"; */
-"mK6-2p-4JG.title" = "Kontroller Grammatik med Stavekontrol";
+"mK6-2p-4JG.title" = "Kontroller grammatik under stavekontrol";
 
 /* Class = "NSMenuItem"; title = "Copy Ruler"; ObjectID = "MkV-Pr-PK5"; */
-"MkV-Pr-PK5.title" = "Kopier Lineal";
+"MkV-Pr-PK5.title" = "Kopier lineal";
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "NMo-om-nkz"; */
-"NMo-om-nkz.title" = "Ydelser";
+"NMo-om-nkz.title" = "Tjenester";
 
 /* Class = "NSMenuItem"; title = "\tDefault"; ObjectID = "Nop-cj-93Q"; */
 "Nop-cj-93Q.title" = "\tStandard";
 
 /* Class = "NSMenuItem"; title = "Ligatures"; ObjectID = "o6e-r0-MWq"; */
-"o6e-r0-MWq.title" = "Ligatur";
+"o6e-r0-MWq.title" = "Ligaturer";
 
 /* Class = "NSMenuItem"; title = "Baseline"; ObjectID = "OaQ-X3-Vso"; */
-"OaQ-X3-Vso.title" = "Basislinje";
+"OaQ-X3-Vso.title" = "Grundlinje";
 
 /* Class = "NSMenu"; title = "Open Recent"; ObjectID = "oas-Oc-fiZ"; */
-"oas-Oc-fiZ.title" = "Åben Seneste";
+"oas-Oc-fiZ.title" = "Åbn seneste";
 
 /* Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1"; */
-"ogc-rX-tC1.title" = "Løsne";
+"ogc-rX-tC1.title" = "Løsere";
 
 /* Class = "NSMenuItem"; title = "Hide ONLYOFFICE"; ObjectID = "Olw-nP-bQN"; */
 "Olw-nP-bQN.title" = "Skjul ONLYOFFICE";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
-"OwM-mh-QMV.title" = "Find Tidligere";
+"OwM-mh-QMV.title" = "Find forrige";
 
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "OY7-WF-poV"; */
 "OY7-WF-poV.title" = "Minimer";
 
 /* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "Oyz-dy-DGm"; */
-"Oyz-dy-DGm.title" = "Stop med at Tale";
+"Oyz-dy-DGm.title" = "Stop oplæsning";
 
 /* Class = "NSMenuItem"; title = "Delete"; ObjectID = "pa3-QI-u2k"; */
 "pa3-QI-u2k.title" = "Slet";
@@ -299,13 +299,13 @@
 "pxx-59-PXV.title" = "Gem";
 
 /* Class = "NSMenuItem"; title = "Show Fonts"; ObjectID = "Q5e-8K-NDq"; */
-"Q5e-8K-NDq.title" = "Vis Skrifttyper";
+"Q5e-8K-NDq.title" = "Vis skrifter";
 
 /* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "q09-fT-Sye"; */
-"q09-fT-Sye.title" = "Find Næste";
+"q09-fT-Sye.title" = "Find næste";
 
 /* Class = "NSMenuItem"; title = "Page Setup…"; ObjectID = "qIS-W8-SiK"; */
-"qIS-W8-SiK.title" = "Sideopsætning…";
+"qIS-W8-SiK.title" = "Sidelayout…";
 
 /* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "R4o-n2-Eq4"; */
 "R4o-n2-Eq4.title" = "Zoom";
@@ -314,10 +314,10 @@
 "RB4-Sm-HuC.title" = "\tHøjre til Venstre";
 
 /* Class = "NSMenuItem"; title = "Check Spelling While Typing"; ObjectID = "rbD-Rh-wIN"; */
-"rbD-Rh-wIN.title" = "Kontroller Stavekontrol Mens du Skriver";
+"rbD-Rh-wIN.title" = "Løbende stavekontrol";
 
 /* Class = "NSMenuItem"; title = "Smart Dashes"; ObjectID = "rgM-f4-ycn"; */
-"rgM-f4-ycn.title" = "Smarte Streger";
+"rgM-f4-ycn.title" = "Typografiske tankestreger";
 
 /* Class = "NSButtonCell"; title = "Close"; ObjectID = "Riu-oE-8dj"; */
 "Riu-oE-8dj.title" = "Luk";
@@ -326,22 +326,22 @@
 "Rkd-xb-FRJ.title" = "ingen";
 
 /* Class = "NSButtonCell"; title = "Logout"; ObjectID = "RmO-tv-UKh"; */
-"RmO-tv-UKh.title" = "Log Ud";
+"RmO-tv-UKh.title" = "Log ud";
 
 /* Class = "NSMenuItem"; title = "Superscript"; ObjectID = "Rqc-34-cIF"; */
-"Rqc-34-cIF.title" = "Hævet Skrift";
+"Rqc-34-cIF.title" = "Hævet skrift";
 
 /* Class = "NSMenuItem"; title = "Select All"; ObjectID = "Ruw-6m-B2m"; */
-"Ruw-6m-B2m.title" = "Vælg Alle";
+"Ruw-6m-B2m.title" = "Vælg alt";
 
 /* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "S0p-oC-mLd"; */
-"S0p-oC-mLd.title" = "Gå til Markering";
+"S0p-oC-mLd.title" = "Hop til det valgte";
 
 /* Class = "NSTextFieldCell"; title = "Copyright info"; ObjectID = "sGd-zc-V0B"; */
 "sGd-zc-V0B.title" = "Copyright oplysninger";
 
 /* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "snW-S8-Cw5"; */
-"snW-S8-Cw5.title" = "Vis Værktøjslinje";
+"snW-S8-Cw5.title" = "Vis værktøjslinje";
 
 /* Class = "NSMenu"; title = "Window"; ObjectID = "Td7-aD-5lo"; */
 "Td7-aD-5lo.title" = "Vindue";
@@ -350,19 +350,19 @@
 "TEm-B8-gsH.title" = "Dokument";
 
 /* Class = "NSMenu"; title = "Kern"; ObjectID = "tlD-Oa-oAM"; */
-"tlD-Oa-oAM.title" = "Overhæng";
+"tlD-Oa-oAM.title" = "Knibning";
 
 /* Class = "NSMenuItem"; title = "Data Detectors"; ObjectID = "tRr-pd-1PS"; */
-"tRr-pd-1PS.title" = "Datadetektorer";
+"tRr-pd-1PS.title" = "Datasøgning";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "tXI-mr-wws"; */
-"tXI-mr-wws.title" = "Åben Seneste";
+"tXI-mr-wws.title" = "Åbn seneste";
 
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "ud7-wC-A79"; */
 "ud7-wC-A79.title" = "Kontroller for Opdateringer…";
 
 /* Class = "NSMenuItem"; title = "Capitalize"; ObjectID = "UEZ-Bs-lqG"; */
-"UEZ-Bs-lqG.title" = "Skriv med Stort";
+"UEZ-Bs-lqG.title" = "Med store forbogstaver";
 
 /* Class = "NSMenu"; title = "ONLYOFFICE"; ObjectID = "uQy-DD-JDr"; */
 "uQy-DD-JDr.title" = "ONLYOFFICE";
@@ -371,37 +371,37 @@
 "uRl-iY-unG.title" = "Klip";
 
 /* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
-"Vdr-fp-XzO.title" = "Skjul Andre";
+"Vdr-fp-XzO.title" = "Skjul andre";
 
 /* Class = "NSMenuItem"; title = "Center"; ObjectID = "VIY-Ag-zcb"; */
-"VIY-Ag-zcb.title" = "Centrere";
+"VIY-Ag-zcb.title" = "Centrer";
 
 /* Class = "NSMenuItem"; title = "Italic"; ObjectID = "Vjx-xi-njq"; */
-"Vjx-xi-njq.title" = "Italiensk";
+"Vjx-xi-njq.title" = "Kursiv";
 
 /* Class = "NSMenuItem"; title = "Paste Style"; ObjectID = "vKC-jM-MkH"; */
-"vKC-jM-MkH.title" = "Sæt Typografi Ind";
+"vKC-jM-MkH.title" = "Sæt format ind";
 
 /* Class = "NSMenuItem"; title = "Show Ruler"; ObjectID = "vLm-3I-IUL"; */
-"vLm-3I-IUL.title" = "Vis Lineal";
+"vLm-3I-IUL.title" = "Vis lineal";
 
 /* Class = "NSMenuItem"; title = "Make Upper Case"; ObjectID = "vmV-6d-7jI"; */
-"vmV-6d-7jI.title" = "Lav Store Bogstaver Case";
+"vmV-6d-7jI.title" = "Med store bogstaver";
 
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "vNY-rz-j42"; */
-"vNY-rz-j42.title" = "Ryd Menu";
+"vNY-rz-j42.title" = "Ryd menu";
 
 /* Class = "NSMenu"; title = "Ligatures"; ObjectID = "w0m-vy-SC9"; */
-"w0m-vy-SC9.title" = "Ligatur";
+"w0m-vy-SC9.title" = "Ligaturer";
 
 /* Class = "NSMenu"; title = "Edit"; ObjectID = "W48-6f-4Dl"; */
 "W48-6f-4Dl.title" = "Rediger";
 
 /* Class = "NSMenuItem"; title = "Align Right"; ObjectID = "wb2-vD-lq4"; */
-"wb2-vD-lq4.title" = "Juster Højre";
+"wb2-vD-lq4.title" = "Højrejuster";
 
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "WeT-3V-zwk"; */
-"WeT-3V-zwk.title" = "Sæt Ind og Tilpas Format";
+"WeT-3V-zwk.title" = "Indsæt og tilpas format";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "wpe-8d-5DV"; */
 "wpe-8d-5DV.title" = "Tekstcelle";
@@ -419,34 +419,34 @@
 "xCO-ey-2lo.title" = "Produkt";
 
 /* Class = "NSMenuItem"; title = "Use All"; ObjectID = "xQD-1f-W4t"; */
-"xQD-1f-W4t.title" = "Brug Alle";
+"xQD-1f-W4t.title" = "Benyt alle";
 
 /* Class = "NSMenuItem"; title = "Speech"; ObjectID = "xrE-MZ-jX0"; */
-"xrE-MZ-jX0.title" = "Tal";
+"xrE-MZ-jX0.title" = "Tale";
 
 /* Class = "NSMenuItem"; title = "Find…"; ObjectID = "Xz5-n4-O0W"; */
 "Xz5-n4-O0W.title" = "Find…";
 
 /* Class = "NSMenuItem"; title = "Find and Replace…"; ObjectID = "YEy-JH-Tfz"; */
-"YEy-JH-Tfz.title" = "Find og Erstat…";
+"YEy-JH-Tfz.title" = "Find og erstat…";
 
 /* Class = "NSMenuItem"; title = "\tDefault"; ObjectID = "YGs-j5-SAR"; */
 "YGs-j5-SAR.title" = "\tStandard";
 
 /* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "Ynk-f8-cLZ"; */
-"Ynk-f8-cLZ.title" = "Start med at Tale";
+"Ynk-f8-cLZ.title" = "Start oplæsning";
 
 /* Class = "NSMenuItem"; title = "Show Substitutions"; ObjectID = "z6F-FW-3nz"; */
-"z6F-FW-3nz.title" = "Vis Erstatninger";
+"z6F-FW-3nz.title" = "Vis erstatninger";
 
 /* Class = "NSTextFieldCell"; title = "Version"; ObjectID = "ZbA-hc-8PE"; */
 "ZbA-hc-8PE.title" = "Version";
 
 /* Class = "NSMenuItem"; title = "Align Left"; ObjectID = "ZM1-6Q-yy1"; */
-"ZM1-6Q-yy1.title" = "Juster Venstre";
+"ZM1-6Q-yy1.title" = "Venstrejuster";
 
 /* Class = "NSTextFieldCell"; title = "Email:"; ObjectID = "Zsi-3o-ASl"; */
-"Zsi-3o-ASl.title" = "Email:";
+"Zsi-3o-ASl.title" = "E-mail:";
 
 /* Class = "NSMenuItem"; title = "Paragraph"; ObjectID = "ZvO-Gk-QUH"; */
 "ZvO-Gk-QUH.title" = "Afsnit";

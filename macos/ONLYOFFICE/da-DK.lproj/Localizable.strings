@@ -1,11 +1,11 @@
 /* No comment provided by engineer. */
-"%@ Help" = "%@ Hjælp";
+"%@ Help" = "Hjælp til %@";
 
 /* No comment provided by engineer. */
 "About %@" = "Om %@";
 
 /* No comment provided by engineer. */
-"Acknowledgments" = "Bekræftelser";
+"Acknowledgments" = "Tak til";
 
 /* No comment provided by engineer. */
 "Before signing the document, it must be saved." = "Dokumentet skal gemmes, inden det kan underskrives.";
@@ -14,13 +14,13 @@
 "Cancel" = "Annuller";
 
 /* No comment provided by engineer. */
-"Cannot open file of Digital Signature" = "Kan ikke åbne filen med digital signatur";
+"Cannot open file of Digital Signature" = "Arkivet med den digitale signatur kan ikke åbnes";
 
 /* No comment provided by engineer. */
-"Cannot open file of Private Key" = "Kan ikke åbne filen med den private nøgle";
+"Cannot open file of Private Key" = "Arkivet med den private nøgle kan ikke åbnes";
 
 /* No comment provided by engineer. */
-"Cannot open folder of the file location." = "Kan ikke åbne mappen på filplaceringen.";
+"Cannot open folder of the file location." = "Mappen med arkivet kan ikke åbnes.";
 
 /* No comment provided by engineer. */
 "Comma-Separated Values" = "Kommaseparerede værdier (*.csv)";
@@ -29,13 +29,13 @@
 "Create portal" = "Opret portal";
 
 /* No comment provided by engineer. */
-"Delete and Quit" = "Slet of Afslut";
+"Delete and Quit" = "Slet og slut";
 
 /* No comment provided by engineer. */
-"DjVu File" = "Digitalt dokument (*.djvu)";
+"DjVu File" = "DjVu-dokument (*.djvu)";
 
 /* No comment provided by engineer. */
-"Do you want to save the changes made to the document \"%@\"?" = "Vil du gemme ændringer der er blevet lavet i dokumentet \"%@\"?";
+"Do you want to save the changes made to the document \"%@\"?" = "Vil du gemme de ændringer, du har lavet i dokumentet \"%@\"?";
 
 /* No comment provided by engineer. */
 "Document %ld.docx" = "Dokument %ld.docx";
@@ -44,7 +44,7 @@
 "Document %ld.pdf" = "Dokument %ld.pdf";
 
 /* No comment provided by engineer. */
-"Document template" = "Word Open XML Dokumentskabelon (*.dotx)";
+"Document template" = "Dokumentskabelon (*.dotx)";
 
 /* No comment provided by engineer. */
 "Excel 97-2003 Spreadsheet" = "Excel 97-2003-regneark (*.xls)";
@@ -53,13 +53,13 @@
 "Excel 2007 Spreadsheet" = "Office Open XML-regneark (*.xlsx)";
 
 /* No comment provided by engineer. */
-"File \"%@\" can not be open or not exist." = "Fil \"%@\" kan ikke åbnes eller eksisterer ikke.";
+"File \"%@\" can not be open or not exist." = "Arkivet \"%@\" kan ikke åbnes eller findes ikke.";
 
 /* No comment provided by engineer. */
-"File can not be open." = "File kan ikke åbnes.";
+"File can not be open." = "Arkivet kan ikke åbnes.";
 
 /* No comment provided by engineer. */
-"File Format:" = "Filformat:";
+"File Format:" = "Arkivformat:";
 
 /* No comment provided by engineer. */
 "Hide %@" = "Skjul %@";
@@ -77,7 +77,7 @@
 "new-document" = "Nyt dokument";
 
 /* No comment provided by engineer. */
-"new-pdfform" = "Nyt PDF";
+"new-pdfform" = "Ny PDF-formular";
 
 /* No comment provided by engineer. */
 "new-presentation" = "Ny præsentation";
@@ -95,34 +95,34 @@
 "ONLYOFFICE can not open the Digital Signature file. Try opening another file." = "ONLYOFFICE kan ikke åbne filen med den digitale signatur. Prøv at åbne en anden fil.";
 
 /* No comment provided by engineer. */
-"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne en anden fil.";
+"ONLYOFFICE can not open the Private Key. Try opening another file." = "ONLYOFFICE kan ikke åbne den private nøgle. Prøv at åbne et andet arkiv.";
 
 /* No comment provided by engineer. */
-"OpenDocument Document Template" = "OpenDocument Dokumentskabelon (*.ott)";
+"OpenDocument Document Template" = "OpenDocument-dokumentskabelon (*.ott)";
 
 /* No comment provided by engineer. */
-"OpenDocument Presentation Template" = "OpenDocument Præsentationsskabelon  (*.otp)";
+"OpenDocument Presentation Template" = "OpenDocument-præsentationsskabelon (*.otp)";
 
 /* No comment provided by engineer. */
-"OpenDocument Spreadsheet Template" = "OpenDocument Regnearksskabelon (*.ots)";
+"OpenDocument Spreadsheet Template" = "OpenDocument-regnearksskabelon (*.ots)";
 
 /* No comment provided by engineer. */
 "Opening" = "Åbner";
 
 /* No comment provided by engineer. */
-"OpenOffice Document" = "OpenDocument Tekstfil (*.odt)";
+"OpenOffice Document" = "OpenDocument-tekst (*.odt)";
 
 /* No comment provided by engineer. */
-"OpenOffice Presentation" = "OpenDocument Præsentation (*.odp)";
+"OpenOffice Presentation" = "OpenDocument-præsentation (*.odp)";
 
 /* No comment provided by engineer. */
-"OpenOffice Spreadsheet" = "OpenDocument Regneark (*.ods)";
+"OpenOffice Spreadsheet" = "OpenDocument-regneark (*.ods)";
 
 /* No comment provided by engineer. */
-"PDF File" = "Portable Document (*.pdf)";
+"PDF File" = "PDF-dokument (*.pdf)";
 
 /* No comment provided by engineer. */
-"Plain Text" = "Almindelig tekst (*.txt)";
+"Plain Text" = "Alm. tekst";
 
 /* No comment provided by engineer. */
 "PowerPoint 97-2003 Presentation" = "PowerPoint 97-2003-præsentation (*.ppt)";
@@ -134,22 +134,22 @@
 "PowerPoint Slide Show" = "Office Open XML-diasshow (*.ppsx)";
 
 /* No comment provided by engineer. */
-"Preparing..." = "Forbereder...";
+"Preparing..." = "Forbereder…";
 
 /* No comment provided by engineer. */
 "Presentation %ld.pptx" = "Præsentation %ld.pptx";
 
 /* No comment provided by engineer. */
-"Presentation template" = "PowerPoint Open XML Præsentationsskabelon (*.potx)";
+"Presentation template" = "Præsentationsskabelon (*.potx)";
 
 /* No comment provided by engineer. */
-"Quit %@" = "Afslut %@";
+"Quit %@" = "Slut %@";
 
 /* No comment provided by engineer. */
-"Review Changes..." = "Gennemgå Ændringer...";
+"Review Changes..." = "Gennemgå ændringer...";
 
 /* No comment provided by engineer. */
-"Rich Text Document" = "Rich Text Format-fil (*.rtf)";
+"Rich Text Document" = "RTF-dokument";
 
 /* No comment provided by engineer. */
 "Save" = "Gem";
@@ -161,22 +161,22 @@
 "Spreadsheet %ld.xlsx" = "Regneark %ld.xlsx";
 
 /* No comment provided by engineer. */
-"Spreadsheet template" = "Excel Open XML Regnearksskabelon (*.xltx)";
+"Spreadsheet template" = "Regnearksskabelon (*.xltx)";
 
 /* No comment provided by engineer. */
-"Thank you for evaluating %@!" = "Tak for din evaluering %@!";
+"Thank you for evaluating %@!" = "Tak, fordi du prøvede %@!";
 
 /* No comment provided by engineer. */
 "The document \"%@\" must be built. Continue?" = "Dokumentet \"%@\" skal bygges. Ønsker du at fortsætte?";
 
 /* No comment provided by engineer. */
-"To open the file location, it must be saved." = "For at åbne filplaceringen, skal den være gemt.";
+"To open the file location, it must be saved." = "Arkivet skal gemmes, før du kan åbne dets placering.";
 
 /* No comment provided by engineer. */
 "Unconfirmed" = "Ikke bekræftet";
 
 /* No comment provided by engineer. */
-"Untitled" = "Ikke navngivet";
+"Untitled" = "Uden navn";
 
 /* No comment provided by engineer. */
 "Web Page" = "Webside";
@@ -200,7 +200,7 @@
 "You have successfully activated %@." = "Du har nu aktiveret %@.";
 
 /* No comment provided by engineer. */
-"Your changes will be lost if you don’t save them." = "Dine ændringer vil gå tabt hvis du ikke gemmer dem.";
+"Your changes will be lost if you don’t save them." = "Du mister ændringerne, hvis de ikke gemmes.";
 
 /* No comment provided by engineer. */
 "Your subscription has expired.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount." = "Dit abonnement er udløbet.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount.";
