@@ -1,0 +1,21 @@
+{
+  "name": "eo-mcp",
+  "version": "0.1.0",
+  "description": "Thin MCP wrapper around the DesktopEditors gateway (see ~/repos/eo-mcp-service-plan.md).",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "eo-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  }
+}
