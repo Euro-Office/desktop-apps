@@ -116,6 +116,13 @@ public:
     static void addToRecent(const std::wstring&);
     static void processMoreEvents(uint timeout = 60);
 
+    static bool isDatabaseFile(const QString& path);
+    // Shows the "can't recover constraints/procedures" warning for database
+    // files, honoring the "don't ask again" checkbox (mirrors the
+    // ignoreMsgAboutOpenTabs pattern in CMainWindow::close). No-op if path
+    // isn't a recognized database file.
+    static void warnIfDatabaseFile(QWidget* parent, const QString& path);
+
 #ifdef _WIN32
     enum class WinVer : uchar {
         Undef, WinXP, WinVista, Win7, Win8, Win8_1, Win10, Win11

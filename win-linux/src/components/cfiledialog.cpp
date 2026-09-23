@@ -146,6 +146,18 @@ bool CFileDialogWrapper::modalSaveAs(QString& fileName, int selected)
         _filters.append(";;" + _sel_filter);
     }
 
+    // The document's current extension may not match any of the offered
+    // Save As filters (e.g. a database-origin document, which is
+    // deliberately excluded as a save target). In that case _sel_filter is
+    // still empty here -- default it to the first available filter instead
+    // of leaving it blank, since native/portal file dialogs reject a
+    // filter with an empty name.
+    if ( _sel_filter.isEmpty() ) {
+        const QString _first = _filters.split(";;").value(0);
+        if ( !_first.isEmpty() )
+            _sel_filter = _first;
+    }
+
 #ifdef _WIN32
     // TODO: win 10 home doesn't crop file name by self. refactor for ver 7.5 with linux ver
 //    QString _croped_name = fileName;
@@ -257,6 +269,7 @@ QStringList CFileDialogWrapper::modalOpen(const QString& path, const QString& fi
                         " (*.docx *.doc *.odt *.ott *.rtf *.docm *.dot *.dotx *.dotm *.fb2 *.fodt *.hml *.wps *.wpt *.xml *.pdf *.djv *.djvu *.md *.sxw *.stw *.xps *.oxps);;" +
 #endif
                     tr("Spreadsheets") + " (*.xlsx *.xls *.xlsm *.xlsb *.ods *.ots *.xltx *.xltm *.xml *.fods *.et *.ett *.sxc *.numbers);;" +
+                    tr("Databases") + " (*.sqlite *.sqlite3 *.db *.db3 *.duckdb *.parquet *.pq *.mdb *.accdb);;" +
                     tr("Presentations") + " (*.pptx *.ppt *.odp *.odg *.otp *.ppsm *.pptm *.ppsx *.pps *.potx *.pot *.potm *.fodp *.dps *.dpt *.sxi *.key);;" +
                     tr("Visio diagram") + " (*.vsdx *.vssx *.vstx *.vsdm *.vssm *.vstm);;" +
                     tr("Web Page") + " (*.html *.htm *.mht *.mhtml *.epub);;" +
@@ -361,7 +374,7 @@ QStringList CFileDialogWrapper::modalOpenDocuments(const QString& path, bool mul
 QStringList CFileDialogWrapper::modalOpenSpreadsheets(const QString& path, bool multi)
 {
     QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN];
-    filter.prepend(tr("Spreadsheets") + " (*.xlsx *.xls *.ods *.ots *.csv *.tsv *.xltx *.xltm *.fods *.et *.ett);;");
+    filter.prepend(tr("Spreadsheets") + " (*.xlsx *.xls *.ods *.ots *.csv *.tsv *.xltx *.xltm *.fods *.et *.ett);;" + tr("Databases") + " (*.sqlite *.sqlite3 *.db *.db3 *.duckdb *.parquet *.pq *.mdb *.accdb);;");
 
     return modalOpen(path, filter, nullptr, multi);
 }
@@ -459,12 +472,18 @@ void CFileDialogWrapper::setFormats(std::vector<int>& vf)
 {
     m_filters.clear();
 
-    if ( vf.size() ) {
-        std::vector<int>::iterator i = vf.begin();
-        m_filters = m_mapFilters.value(*(i++));
-        while (i != vf.end()) {
-            m_filters += ";;" + m_mapFilters.value(*(i++));
-        }
+    // m_mapFilters.value() returns an empty string for any format id it
+    // doesn't have an entry for (e.g. a database-origin format that isn't a
+    // valid Save As target). Skip those instead of appending an empty
+    // filter, which the XDG portal / native file dialogs reject outright.
+    for (int id : vf) {
+        const QString filter = m_mapFilters.value(id);
+        if (filter.isEmpty())
+            continue;
+        if (m_filters.isEmpty())
+            m_filters = filter;
+        else
+            m_filters += ";;" + filter;
     }
 }
 

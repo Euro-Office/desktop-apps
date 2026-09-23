@@ -28,6 +28,7 @@
 #endif
 #include "utils.h"
 #include "defines.h"
+#include "components/cmessage.h"
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
@@ -745,6 +746,34 @@ void Utils::processMoreEvents(uint timeout)
     QEventLoop loop;
     QTimer::singleShot(timeout, &loop, SLOT(quit()));
     loop.exec();
+}
+
+bool Utils::isDatabaseFile(const QString& path)
+{
+    return path.endsWith(".sqlite", Qt::CaseInsensitive) || path.endsWith(".sqlite3", Qt::CaseInsensitive) ||
+           path.endsWith(".db", Qt::CaseInsensitive) || path.endsWith(".db3", Qt::CaseInsensitive) ||
+           path.endsWith(".duckdb", Qt::CaseInsensitive) || path.endsWith(".parquet", Qt::CaseInsensitive) ||
+           path.endsWith(".pq", Qt::CaseInsensitive) || path.endsWith(".mdb", Qt::CaseInsensitive) ||
+           path.endsWith(".accdb", Qt::CaseInsensitive);
+}
+
+void Utils::warnIfDatabaseFile(QWidget* parent, const QString& path)
+{
+    if (!isDatabaseFile(path))
+        return;
+
+    GET_REGISTRY_USER(reg_user);
+    if (reg_user.value("ignoreMsgAboutDatabaseFile", false).toBool())
+        return;
+
+    bool dontAskAgain = false;
+    CMessageOpts opts;
+    opts.checkBoxState = &dontAskAgain;
+    opts.chekBoxText = QObject::tr("Don't ask again.");
+    CMessage::showMessage(parent, QObject::tr("Warning: Cannot recover constraints, procedures, etc. from database files. You will need to save it as a spreadsheet."),
+                           MsgType::MSG_WARN, MsgBtns::mbOk, opts);
+    if (dontAskAgain)
+        reg_user.setValue("ignoreMsgAboutDatabaseFile", true);
 }
 
 #ifdef _WIN32

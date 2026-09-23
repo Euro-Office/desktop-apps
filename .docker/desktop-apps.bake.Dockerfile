@@ -61,7 +61,8 @@ FROM core-base AS desktop-linux
                     libasound2-dev \
                     libpulse-dev \
                     libnss3-dev \
-                    libnspr4-dev && \
+                    libnspr4-dev \
+                    mdbtools-dev && \
         python3 -m venv /opt/venv && \
         /opt/venv/bin/pip install --no-cache-dir aqtinstall
 
@@ -102,7 +103,7 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
-        cmake --build . && \
+        cmake --build . -- -j4 && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors
