@@ -319,26 +319,26 @@ public:
 
 		// start print dialog
 		NSPrintInfo* pPrintInfo = [NSPrintInfo sharedPrintInfo];
-		//        NSString* sKeyPrint = @"prihord"; // Ключ в котором расположен объект NSPrintInfo
+		//        NSString* sKeyPrint = @"prihord"; // Key for the stored NSPrintInfo object
 
-		// Пробуем извлечь
+		// Try to restore saved print settings
 		//        NSUserDefaults* pUserDef = [[NSUserDefaults alloc] init];
 		//        NSData* pDataInfo = [pUserDef dataForKey:sKeyPrint];
 		//        if (pDataInfo)
 		//        {
-		// Если удачно извлекли
+		// If saved settings were found
 		//            pPrintInfo = [NSUnarchiver unarchiveObjectWithData:pDataInfo];
 		//        }
 		//        else
 		{
 #if 0
-			// Иначе выводим панель настройки печати
+			// Otherwise show the page setup panel
 			NSPageLayout* pPageLayout = [[NSPageLayout alloc] init];
 			if ([pPageLayout runModal] == NSModalResponseOK)
 			{
 				pPrintInfo = pPageLayout.printInfo;
 
-				// сохраним введенные настройки в User Defaults
+				// Save the entered settings to User Defaults
 				pDataInfo = [NSArchiver archivedDataWithRootObject:pPrintInfo];
 				[pUserDef setObject:pDataInfo forKey:sKeyPrint];
 			}
@@ -392,7 +392,7 @@ public:
 		else
 			pro = [NSPrintOperation printOperationWithView:m_pView];
 
-		[pro setShowsPrintPanel:YES]; // Выводим на печать или предпросмотр
+		[pro setShowsPrintPanel:YES]; // Show the print panel for printing or preview
 		[[pro printPanel] setOptions:options];
 		//[pro runOperation];
 		[pro runOperationModalForWindow:pViewParent.window delegate:sender didRunSelector:didRunSelector contextInfo:nil];
