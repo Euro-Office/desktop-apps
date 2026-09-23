@@ -123,7 +123,6 @@
 		FC0BD689258B63F700C47F95 /* ASCDownloadCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = FCAA9A3D1BBA802100F3C47F /* ASCDownloadCellView.m */; };
 		FC0BD68A258B63F700C47F95 /* ASCSavePanelWithFormatController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC77C73206CEE5A001B7837 /* ASCSavePanelWithFormatController.m */; };
 		FC0BD68B258B63F700C47F95 /* ASCCommonViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA9A18F1BA6DC6000ABF3AB /* ASCCommonViewController.mm */; };
-		FC0BD68C258B63F700C47F95 /* AnalyticsEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFE61DF1CAD02D4000D2418 /* AnalyticsEvent.m */; };
 		FC0BD68D258B63F700C47F95 /* ASCTitleWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA9A1941BA6DE2700ABF3AB /* ASCTitleWindowController.mm */; };
 		FC0BD68E258B63F700C47F95 /* NSDictionary+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC64391A21B52E5700A25CD1 /* NSDictionary+Extensions.m */; };
 		FC0BD68F258B63F700C47F95 /* ASCExternalController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF2898021510C16002FD438 /* ASCExternalController.m */; };
@@ -140,7 +139,6 @@
 		FC0BD69A258B63F700C47F95 /* NSImage+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC13B5282080BBF500524968 /* NSImage+Extensions.m */; };
 		FC0BD69B258B63F700C47F95 /* ASCTouchBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCC2FE421E5E1CA00FB9209 /* ASCTouchBarController.m */; };
 		FC0BD69C258B63F700C47F95 /* NSLayoutConstraint+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC77C6B206CE28F001B7837 /* NSLayoutConstraint+Extensions.m */; };
-		FC0BD69D258B63F700C47F95 /* AnalyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFE61E11CAD02D4000D2418 /* AnalyticsHelper.m */; };
 		FC0BD69E258B63F700C47F95 /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE7D15F207D002700642010 /* NSLayoutConstraint+PureLayout.m */; };
 		FC0BD69F258B63F700C47F95 /* ASCTabsScrubberSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCC2FDE21E5E10D00FB9209 /* ASCTabsScrubberSelectionView.m */; };
 		FC0BD6A0258B63F700C47F95 /* ASCDocumentSignatureController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC8AA3142084C52500549F2D /* ASCDocumentSignatureController.m */; };
@@ -297,7 +295,6 @@
 		FCB4C6C026DD018B0012C20D /* ASCDownloadCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = FCAA9A3D1BBA802100F3C47F /* ASCDownloadCellView.m */; };
 		FCB4C6C126DD018B0012C20D /* ASCSavePanelWithFormatController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC77C73206CEE5A001B7837 /* ASCSavePanelWithFormatController.m */; };
 		FCB4C6C226DD018B0012C20D /* ASCCommonViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA9A18F1BA6DC6000ABF3AB /* ASCCommonViewController.mm */; };
-		FCB4C6C326DD018B0012C20D /* AnalyticsEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFE61DF1CAD02D4000D2418 /* AnalyticsEvent.m */; };
 		FCB4C6C426DD018B0012C20D /* ASCTitleWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA9A1941BA6DE2700ABF3AB /* ASCTitleWindowController.mm */; };
 		FCB4C6C526DD018B0012C20D /* NSDictionary+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FC64391A21B52E5700A25CD1 /* NSDictionary+Extensions.m */; };
 		FCB4C6C626DD018B0012C20D /* ASCExternalController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF2898021510C16002FD438 /* ASCExternalController.m */; };
@@ -315,7 +312,6 @@
 		FCB4C6D226DD018B0012C20D /* ASCCertificatePreviewTextWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2C43A025D45DAD003A39C4 /* ASCCertificatePreviewTextWindowController.m */; };
 		FCB4C6D326DD018B0012C20D /* ASCTouchBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCC2FE421E5E1CA00FB9209 /* ASCTouchBarController.m */; };
 		FCB4C6D426DD018B0012C20D /* NSLayoutConstraint+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC77C6B206CE28F001B7837 /* NSLayoutConstraint+Extensions.m */; };
-		FCB4C6D526DD018B0012C20D /* AnalyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFE61E11CAD02D4000D2418 /* AnalyticsHelper.m */; };
 		FCB4C6D626DD018B0012C20D /* ASCCertificateQLPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC2C43AF25D46D66003A39C4 /* ASCCertificateQLPreviewController.m */; };
 		FCB4C6D726DD018B0012C20D /* NSLayoutConstraint+PureLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE7D15F207D002700642010 /* NSLayoutConstraint+PureLayout.m */; };
 		FCB4C6D826DD018B0012C20D /* ASCTabsScrubberSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = FCCC2FDE21E5E10D00FB9209 /* ASCTabsScrubberSelectionView.m */; };
@@ -430,8 +426,6 @@
 		FCF2897D21510403002FD438 /* NSWindow+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF2897B21510402002FD438 /* NSWindow+Extensions.m */; };
 		FCF2898121510C16002FD438 /* ASCExternalController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF2898021510C16002FD438 /* ASCExternalController.m */; };
 		FCFC000D1BC54ACC00939341 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FCFC000B1BC54ACC00939341 /* Localizable.strings */; };
-		FCFE61E21CAD02D4000D2418 /* AnalyticsEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFE61DF1CAD02D4000D2418 /* AnalyticsEvent.m */; };
-		FCFE61E51CAD02D4000D2418 /* AnalyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFE61E11CAD02D4000D2418 /* AnalyticsHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1129,10 +1123,6 @@
 		FCFA5D021BC54631003E2B44 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		FCFC000C1BC54ACC00939341 /* Base */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FCFD46241C1ADAB300FDDCEE /* OfficeFileFormats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OfficeFileFormats.h; path = ../../core/Common/OfficeFileFormats.h; sourceTree = SOURCE_ROOT; };
-		FCFE61DE1CAD02D4000D2418 /* AnalyticsEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsEvent.h; sourceTree = "<group>"; };
-		FCFE61DF1CAD02D4000D2418 /* AnalyticsEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsEvent.m; sourceTree = "<group>"; };
-		FCFE61E01CAD02D4000D2418 /* AnalyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticsHelper.h; sourceTree = "<group>"; };
-		FCFE61E11CAD02D4000D2418 /* AnalyticsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnalyticsHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1424,7 +1414,6 @@
 			isa = PBXGroup;
 			children = (
 				FCE7D15C207D002700642010 /* PureLayout */,
-				FCFE61DD1CAD02D4000D2418 /* CocoaAnalytics */,
 				FC8AA30B2084BFE700549F2D /* KSNavigationController */,
 				FCB454FC1C326A4E00FEACF2 /* PFMoveApplication */,
 				FC3BFDF91BBE83AB0040C904 /* SFBPopover */,
@@ -1832,18 +1821,6 @@
 			);
 			path = UserInfo;
 			sourceTree = "<group>";
-		};
-		FCFE61DD1CAD02D4000D2418 /* CocoaAnalytics */ = {
-			isa = PBXGroup;
-			children = (
-				FCFE61DE1CAD02D4000D2418 /* AnalyticsEvent.h */,
-				FCFE61DF1CAD02D4000D2418 /* AnalyticsEvent.m */,
-				FCFE61E01CAD02D4000D2418 /* AnalyticsHelper.h */,
-				FCFE61E11CAD02D4000D2418 /* AnalyticsHelper.m */,
-			);
-			name = CocoaAnalytics;
-			path = Vendor/CocoaAnalytics;
-			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -2398,7 +2375,6 @@
 				FC0BD689258B63F700C47F95 /* ASCDownloadCellView.m in Sources */,
 				FC0BD68A258B63F700C47F95 /* ASCSavePanelWithFormatController.m in Sources */,
 				FC0BD68B258B63F700C47F95 /* ASCCommonViewController.mm in Sources */,
-				FC0BD68C258B63F700C47F95 /* AnalyticsEvent.m in Sources */,
 				FC0BD68D258B63F700C47F95 /* ASCTitleWindowController.mm in Sources */,
 				FC0BD68E258B63F700C47F95 /* NSDictionary+Extensions.m in Sources */,
 				F12F85D52EB6A38400370877 /* ASCEditorWindowController.mm in Sources */,
@@ -2419,7 +2395,6 @@
 				FC2C43A225D45DAD003A39C4 /* ASCCertificatePreviewTextWindowController.m in Sources */,
 				FC0BD69B258B63F700C47F95 /* ASCTouchBarController.m in Sources */,
 				FC0BD69C258B63F700C47F95 /* NSLayoutConstraint+Extensions.m in Sources */,
-				FC0BD69D258B63F700C47F95 /* AnalyticsHelper.m in Sources */,
 				FC2C43B125D46D66003A39C4 /* ASCCertificateQLPreviewController.m in Sources */,
 				FC0BD69E258B63F700C47F95 /* NSLayoutConstraint+PureLayout.m in Sources */,
 				F14CD3C52EB73EBC00D476FE /* ASCEditorWindow.m in Sources */,
@@ -2477,7 +2452,6 @@
 				FCB4C6C026DD018B0012C20D /* ASCDownloadCellView.m in Sources */,
 				FCB4C6C126DD018B0012C20D /* ASCSavePanelWithFormatController.m in Sources */,
 				FCB4C6C226DD018B0012C20D /* ASCCommonViewController.mm in Sources */,
-				FCB4C6C326DD018B0012C20D /* AnalyticsEvent.m in Sources */,
 				FCB4C6C426DD018B0012C20D /* ASCTitleWindowController.mm in Sources */,
 				FCB4C6C526DD018B0012C20D /* NSDictionary+Extensions.m in Sources */,
 				F12F85D32EB6A38400370877 /* ASCEditorWindowController.mm in Sources */,
@@ -2498,7 +2472,6 @@
 				FCB4C6D226DD018B0012C20D /* ASCCertificatePreviewTextWindowController.m in Sources */,
 				FCB4C6D326DD018B0012C20D /* ASCTouchBarController.m in Sources */,
 				FCB4C6D426DD018B0012C20D /* NSLayoutConstraint+Extensions.m in Sources */,
-				FCB4C6D526DD018B0012C20D /* AnalyticsHelper.m in Sources */,
 				FCB4C6D626DD018B0012C20D /* ASCCertificateQLPreviewController.m in Sources */,
 				FCB4C6D726DD018B0012C20D /* NSLayoutConstraint+PureLayout.m in Sources */,
 				F14CD3C32EB73EBC00D476FE /* ASCEditorWindow.m in Sources */,
@@ -2556,7 +2529,6 @@
 				FCAA9A3E1BBA802100F3C47F /* ASCDownloadCellView.m in Sources */,
 				FCC77C7C206CEE5B001B7837 /* ASCSavePanelWithFormatController.m in Sources */,
 				FCA9A1901BA6DC6000ABF3AB /* ASCCommonViewController.mm in Sources */,
-				FCFE61E21CAD02D4000D2418 /* AnalyticsEvent.m in Sources */,
 				FCA9A1961BA6DE2700ABF3AB /* ASCTitleWindowController.mm in Sources */,
 				FC64391B21B52E5800A25CD1 /* NSDictionary+Extensions.m in Sources */,
 				F12F85D42EB6A38400370877 /* ASCEditorWindowController.mm in Sources */,
@@ -2577,7 +2549,6 @@
 				FC2C43A125D45DAD003A39C4 /* ASCCertificatePreviewTextWindowController.m in Sources */,
 				FCCC2FE621E5E1CA00FB9209 /* ASCTouchBarController.m in Sources */,
 				FCC77C6C206CE28F001B7837 /* NSLayoutConstraint+Extensions.m in Sources */,
-				FCFE61E51CAD02D4000D2418 /* AnalyticsHelper.m in Sources */,
 				FC2C43B025D46D66003A39C4 /* ASCCertificateQLPreviewController.m in Sources */,
 				FCE7D166207D002700642010 /* NSLayoutConstraint+PureLayout.m in Sources */,
 				F14CD3C42EB73EBC00D476FE /* ASCEditorWindow.m in Sources */,

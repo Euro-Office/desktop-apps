@@ -34,7 +34,6 @@
 #import "ASCEditorWindow.h"
 #import "AppDelegate.h"
 #import "ASCConstants.h"
-#import "AnalyticsHelper.h"
 #import "ASCHelper.h"
 #import "NSCefView.h"
 #import "NSCefData.h"

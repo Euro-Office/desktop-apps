@@ -50,7 +50,6 @@
 #import "ASCDownloadController.h"
 #import "ASCSharedSettings.h"
 #import "ASCReplacePresentationAnimator.h"
-#import "AnalyticsHelper.h"
 #import "PureLayout.h"
 #import "NSWindow+Extensions.h"
 #import "ASCExternalController.h"
@@ -1385,21 +1384,11 @@
                 int fileFormatType = CCefViewEditor::GetFileFormat([filePath stdwstring]);
                 [cefView openFileWithName:filePath type:fileFormatType];
                 
-                [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                         action:@"Open local file"
-                                                                          label:nil
-                                                                          value:nil];
-                
                 break;
             }
             case ASCTabActionOpenLocalRecoverFile: {
                 NSInteger docId = [tab.params[@"fileId"] intValue];
                 [cefView openRecoverFileWithId:docId];
-                
-                [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                         action:@"Open local recover file"
-                                                                          label:nil
-                                                                          value:nil];
                 
                 break;
             }
@@ -1413,11 +1402,6 @@
                     if ( filePath && filePath.length )
                         [cefView loadWithUrl:filePath];
                 }
-                
-                [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                         action:@"Open local file"
-                                                                          label:nil
-                                                                          value:nil];
                 
                 break;
             }
@@ -1523,11 +1507,6 @@
         
         if (portal) {
             appManager->Logout([portal stdwstring]);
-            
-            [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                     action:@"Portal Logout"
-                                                                      label:nil
-                                                                      value:nil];
         }
     }
 }

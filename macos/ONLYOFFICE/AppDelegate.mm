@@ -46,7 +46,6 @@
 #import "NSString+Extensions.h"
 #import "NSCefView.h"
 #import "ASCHelper.h"
-#import "AnalyticsHelper.h"
 #import "ASCExternalController.h"
 #import "ASCEditorJSVariables.h"
 #import "ASCThemesController.h"
@@ -120,15 +119,7 @@
     addObserverFor(ASCEventNameRecoveryFiles, @selector(onRecoveryFiles:));
     addObserverFor(ASCEventNameEditorWindowMoving, @selector(onEditorWindowMoving:));
         
-    // Google Analytics
-    
-#ifdef _PRODUCT_ONLYOFFICE
-//    [[AnalyticsHelper sharedInstance] beginPeriodicReportingWithAccount:@"UA-XXXXXXXXX-1"
-//                                                                   name:@"ONLYOFFICE"
-//                                                                version:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-#endif
-    
-    
+
 //    // Hotkey conflict resolve
 //    [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:^NSEvent * _Nullable(NSEvent * _Nonnull event) {
 //        NSEventModifierFlags flags = [event modifierFlags] & NSDeviceIndependentModifierFlagsMask;
@@ -315,10 +306,7 @@
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
 
-#ifdef _PRODUCT_ONLYOFFICE
-    [[AnalyticsHelper sharedInstance] handleApplicationWillClose];
     [[NSUserDefaults standardUserDefaults] synchronize];
-#endif
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
@@ -1040,21 +1028,11 @@
                     int fileFormatType = CCefViewEditor::GetFileFormat([filePath stdwstring]);
                     [cefView openFileWithName:filePath type:fileFormatType];
                     
-                    [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                             action:@"Open local file"
-                                                                              label:nil
-                                                                              value:nil];
-                    
                     break;
                 }
                 case ASCTabActionOpenLocalRecoverFile: {
                     NSInteger docId = [params[@"fileId"] intValue];
                     [cefView openRecoverFileWithId:docId];
-                    
-                    [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                             action:@"Open local recover file"
-                                                                              label:nil
-                                                                              value:nil];
                     
                     break;
                 }
@@ -1068,11 +1046,6 @@
                         if ( filePath && filePath.length )
                             [cefView loadWithUrl:filePath];
                     }
-                    
-                    [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                             action:@"Open local file"
-                                                                              label:nil
-                                                                              value:nil];
                     
                     break;
                 }
@@ -1174,10 +1147,6 @@
                     [controller.tabsControl selectTab:tab];
                     [self saveLocalFileWithParams:tab.params];
                     
-                    [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                             action:@"Save local file"
-                                                                              label:nil
-                                                                              value:nil];
                     break;
                 }
                 
@@ -1189,10 +1158,6 @@
                     [controller.params addEntriesFromDictionary:params];
                     [self saveLocalFileWithParams:params];
                     
-                    [[AnalyticsHelper sharedInstance] recordCachedEventWithCategory:ASCAnalyticsCategoryApplication
-                                                                             action:@"Save local file"
-                                                                              label:nil
-                                                                              value:nil];
                     break;
                 }
             }
