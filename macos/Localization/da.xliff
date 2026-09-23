@@ -1288,7 +1288,7 @@ Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dok
     <body>
       <trans-unit id="Could not move to Applications folder" xml:space="preserve">
         <source>Could not move to Applications folder</source>
-        <target>Kunne ikke flytte til Applikationsmappen</target>
+        <target>Kunne ikke flytte til mappen Programmer</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Do Not Move" xml:space="preserve">
@@ -1298,22 +1298,22 @@ Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dok
       </trans-unit>
       <trans-unit id="I can move myself to the Applications folder if you'd like." xml:space="preserve">
         <source>I can move myself to the Applications folder if you'd like.</source>
-        <target>Jeg kan flytte mig selv til Applikationsmappen hvis du vil have det.</target>
+        <target>Jeg kan flytte mig selv til mappen Programmer hvis du vil have det.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to Applications Folder" xml:space="preserve">
         <source>Move to Applications Folder</source>
-        <target>Flyt til Applikationsmappen</target>
+        <target>Flyt til mappen Programmer</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to Applications folder in your Home folder?" xml:space="preserve">
         <source>Move to Applications folder in your Home folder?</source>
-        <target>Flyt til Applikationsmappen i din Hjemmemappe?</target>
+        <target>Flyt til mappen Programmer i din hjemmemappe?</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to Applications folder?" xml:space="preserve">
         <source>Move to Applications folder?</source>
-        <target>Flyt til Applikationsmappen?</target>
+        <target>Flyt til mappen Programmer?</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Note that this will require an administrator password." xml:space="preserve">
