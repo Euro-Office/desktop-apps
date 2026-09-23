@@ -13,7 +13,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d dage tilbage indtil licensen udløber.</string>
+			<string>%d dag tilbage indtil licensen udløber.</string>
 			<key>other</key>
 			<string>%d dage tilbage indtil licensen udløber.</string>
 		</dict>
@@ -30,11 +30,11 @@ The trial period will end in %d days, after that you will not be able to create 
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Du bruger en prøveversion af applikationen.
-The trial period will end in %d day, after that you will not be able to create and edit documents.</string>
+			<string>Du bruger en prøveversion af programmet.
+Prøveperioden slutter om %d dag, hvorefter du ikke kan oprette og redigere dokumenter.</string>
 			<key>other</key>
-			<string>You are using a trial version of the application.
-The trial period will end in %d days, after that you will not be able to create and edit documents.</string>
+			<string>Du bruger en prøveversion af programmet.
+Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dokumenter.</string>
 		</dict>
 	</dict>
 	<key>You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?</key>
@@ -48,7 +48,7 @@ The trial period will end in %d days, after that you will not be able to create 
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Du har %ld %@ dokumenter med ubekræftede ændringer. Vil du gennemgå disse ændringer før du afslutter?</string>
+			<string>Du har %ld %@ dokument med ubekræftede ændringer. Vil du gennemgå disse ændringer før du afslutter?</string>
 			<key>other</key>
 			<string>Du har %ld %@ dokumenter med ubekræftede ændringer. Vil du gennemgå disse ændringer før du afslutter?</string>
 		</dict>
