@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QWidget>
+#include <functional>
 #ifdef Q_OS_WIN
 # include <Windows.h>
 #endif
@@ -90,10 +91,27 @@ public:
     static void openUrl(const QString&);
     static void openFileLocation(const QString&);
     static QString getPortalName(const QString&);
-    static double getScreenDpiRatio(int);
     static double getScreenDpiRatio(const QPoint&);
     static double getScreenDpiRatioByHWND(int);
     static double getScreenDpiRatioByWidget(QWidget*);
+
+    // Installs a watcher (child of w, cleaned up automatically with it) that
+    // calls onChange whenever the display scale w should be drawn at may
+    // have changed. Triggers on:
+    //   * QEvent::DevicePixelRatioChange -- Wayland's per-surface scale,
+    //     including the async compositor answer arriving after the widget's
+    //     initial DPI-dependent sizing was computed from a transient reading;
+    //   * QWindow::screenChanged -- the window moved to another monitor.
+    //     This is the only trigger on X11, where Qt's own scaling is
+    //     deliberately neutralized (main.cpp) so devicePixelRatio() is a
+    //     constant 1.0 and never reports a change, even though the app's
+    //     own per-screen scale (QDpiChecker::GetMonitorDpi) does differ;
+    //   * the current screen's DPI/geometry changing under a stationary
+    //     window (xrandr, display settings, docking).
+    // Calls are debounced and non-reentrant, so onChange may itself resize
+    // or move w. Safe to call multiple times on the same widget; each call
+    // adds an independent watcher.
+    static void WatchForDpiChange(QWidget* w, std::function<void()> onChange);
     static QScreen * screenAt(const QPoint&);
     static QString replaceBackslash(const QString&);
     static std::wstring normalizeAppProtocolUrl(const std::wstring &url);

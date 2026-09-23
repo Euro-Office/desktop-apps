@@ -4,7 +4,9 @@
 #include "gtkutils.h"
 #include "gtkfilechooser.h"
 #include "cascapplicationmanagerwrapper.h"
+#ifdef HAVE_X11
 #include <gdk/gdkx.h>
+#endif
 
 
 //static void find_children(GList **list, GtkWidget *wgt, const gchar *name)
@@ -53,7 +55,7 @@ static GSList* parseString(const char *str, const char *delim)
     return list;
 }
 
-static void nativeFileDialog(const Window &parent_xid,
+static void nativeFileDialog(ulong parent_xid,
                       Gtk::Mode mode,
                       char*** filenames,
                       int* files_count,
@@ -181,7 +183,7 @@ QStringList Gtk::openGtkFileChooser(QWidget *parent,
     char **filenames = nullptr;
     char *_sel_filter = (sel_filter) ? strdup(sel_filter->toLocal8Bit().data()) : nullptr;
     int files_count = 0;
-    Window parent_xid = (parent) ? (Window)parent->winId() : 0L;
+    ulong parent_xid = (parent) ? (ulong)parent->winId() : 0;
     nativeFileDialog(parent_xid,
                      mode,
                      &filenames,

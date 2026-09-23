@@ -31,6 +31,7 @@ FROM core-base AS desktop-linux
                     bison \
                     libnotify-dev \
                     libcups2-dev \
+                    libwayland-dev \
                     libdbus-1-dev \
                     libxcb-util0-dev \
                     libxcb-xkb-dev \
@@ -102,7 +103,7 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
-        cmake --build . && \
+        cmake --build . -- -j4 && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors

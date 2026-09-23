@@ -40,10 +40,17 @@
 #include "chelp.h"
 #include "common/File.h"
 #include <QStyleFactory>
+#include <vector>
+#include <QGuiApplication>
+#include <QDebug>
 
 
 int main( int argc, char *argv[] )
 {
+    bool isWayland = false;
+    int new_argc = argc;
+    char** new_argv = argv;
+    std::vector<char*> dynamic_argv;
 #ifdef _WIN32
     Core_SetProcessDpiAwareness();
     Utils::setAppUserModelId();
@@ -53,9 +60,30 @@ int main( int argc, char *argv[] )
         return 0;
     }
 #else
-    qputenv("QT_QPA_PLATFORM", "xcb");
-    qputenv("GDK_BACKEND", "x11");
-    InputArgs::init(argc, argv);
+    dynamic_argv.assign(argv, argv + argc);
+    QByteArray platform = qgetenv("QT_QPA_PLATFORM");
+    if (platform.isEmpty()) {
+        QByteArray sessionType = qgetenv("XDG_SESSION_TYPE");
+        if (sessionType == "wayland") {
+            platform = "wayland";
+        } else {
+            platform = "xcb";
+        }
+        qputenv("QT_QPA_PLATFORM", platform);
+    }
+    isWayland = (platform == "wayland");
+
+    if (isWayland) {
+        qputenv("GDK_BACKEND", "wayland");
+        dynamic_argv.push_back(const_cast<char*>("--ozone-platform=wayland"));
+    } else {
+        qputenv("GDK_BACKEND", "x11");
+    }
+    dynamic_argv.push_back(nullptr);
+    new_argc = dynamic_argv.size() - 1;
+    new_argv = dynamic_argv.data();
+
+    InputArgs::init(new_argc, new_argv);
     if (geteuid() == 0) {
         CMessage::warning(nullptr, WARNING_LAUNCH_WITH_ADMIN_RIGHTS);
         return 0;
@@ -65,12 +93,47 @@ int main( int argc, char *argv[] )
         return 0;
     }
 #endif
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
-#else
-    QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+#ifdef __linux
+    char* qpaPlatform = getenv("QT_QPA_PLATFORM");
+    char* xdgSessionType = getenv("XDG_SESSION_TYPE");
+    if ((qpaPlatform && strcmp(qpaPlatform, "wayland") == 0) ||
+        (xdgSessionType && strcmp(xdgSessionType, "wayland") == 0)) {
+        isWayland = true;
+    }
 #endif
-    QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
+
+    if (!isWayland) {
+        // Plasma and other environments export QT_SCREEN_SCALE_FACTORS /
+        // QT_SCALE_FACTOR on X11. In Qt 6 these activate high-DPI scaling
+        // even with QT_ENABLE_HIGHDPI_SCALING=0, which breaks this app:
+        // widgets become logical-pixel sized while native CEF child windows
+        // (SetWindowSize/XConfigureWindow) and _NET_WM_MOVERESIZE coordinates
+        // remain in device pixels. The app does its own DPI scaling on X11,
+        // so neutralize Qt's completely.
+        qunsetenv("QT_SCREEN_SCALE_FACTORS");
+        qunsetenv("QT_SCALE_FACTOR");
+        qunsetenv("QT_AUTO_SCREEN_SCALE_FACTOR");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        qputenv("QT_ENABLE_HIGHDPI_SCALING", "0");
+#else
+        QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+#endif
+    } else {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+        // Without this, Qt's Wayland platform plugin disables fractional-
+        // scale support and permanently rounds devicePixelRatio() to the
+        // nearest integer for ordinary widgets (e.g. a real 1.25 scale
+        // reports as 2) -- not a startup race, the default, permanent
+        // behavior regardless of how long you wait. Must be set before
+        // QGuiApplication is constructed.
+        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+    }
+    // On Wayland, skip AA_Use96Dpi to let the compositor's native DPI
+    // take effect — otherwise Qt overrides DPI, causing fuzzy text.
+    if (!isWayland)
+        QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
 #ifdef _WIN32
     QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);   // avoid Qt's ANGLE colliding with CEF's libEGL/libGLESv2
 #endif
@@ -139,7 +202,7 @@ int main( int argc, char *argv[] )
         reg_user.remove("lockPortals");
     }
 
-    SingleApplication app(argc, argv);
+    SingleApplication app(new_argc, new_argv);
 
     if ( !app.isPrimary() ) {
         QString _out_args;
@@ -166,12 +229,16 @@ int main( int argc, char *argv[] )
 
     /* the order is important */
 #ifdef __linux
-    gtk_init(&argc, &argv);
+    gtk_disable_setlocale();
+    gtk_init(&new_argc, &new_argv);
 #endif
-    CApplicationCEF::Prepare(argc, argv);
+    CApplicationCEF::Prepare(new_argc, new_argv);
+    if (QGuiApplication::platformName() == "wayland") {
+        qputenv("GDK_BACKEND", "wayland");
+    }
     CApplicationCEF* application_cef = new CApplicationCEF();
     setup_paths(&AscAppManager::getInstance());
-    application_cef->Init_CEF(&AscAppManager::getInstance(), argc, argv);
+    application_cef->Init_CEF(&AscAppManager::getInstance(), new_argc, new_argv);
     /* ********************** */
 
 //    GET_REGISTRY_SYSTEM(reg_system)

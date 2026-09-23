@@ -32,10 +32,13 @@
 #endif
 #include <QTimer>
 #include <QApplication>
+#ifdef HAVE_X11
 #include "X11/Xlib.h"
 #include "X11/cursorfont.h"
 #include <X11/Xutil.h>
+#endif
 #include "platform_linux/linux_window_utils.h"
+#include "platform_linux/iplatformbackend.h"
 
 #define CUSTOM_BORDER_WIDTH MAIN_WINDOW_BORDER_WIDTH
 #define MOTION_TIMER_MS 250
@@ -50,6 +53,7 @@ const int k_NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT =  6;
 const int k_NET_WM_MOVERESIZE_SIZE_LEFT =        7;
 const int k_NET_WM_MOVERESIZE_MOVE =             8;
 
+#ifdef HAVE_X11
 #define MWM_HINTS_DECORATIONS   2
 typedef struct {
     unsigned long flags;
@@ -209,7 +213,7 @@ namespace {
         return false;
     }
 
-    auto supports_ewmh() -> bool {
+    bool supports_ewmh() {
         static bool supports_ewmh = false;
         static bool supports_ewmh_cached = false;
         if (!supports_ewmh_cached) {
@@ -229,7 +233,7 @@ namespace {
         return supports_ewmh;
     }
 
-    auto get_window_manager_name(std::string* wm_name) -> bool {
+    bool get_window_manager_name(std::string* wm_name) {
         if ( supports_ewmh() ) {
             int wm_window = 0;
             if (get_int_property(getRootWindow(), "_NET_SUPPORTING_WM_CHECK", &wm_window)) {
@@ -240,7 +244,7 @@ namespace {
         return false;
     }
 
-    auto guess_window_manager() -> Platform_WindowManagerName {
+    Platform_WindowManagerName guess_window_manager() {
         std::string name;
         if (!get_window_manager_name(&name)) return WM_UNNAMED;
         if (name == "awesome")            return WM_AWESOME;
@@ -267,27 +271,12 @@ namespace {
         if (name == "xmonad")             return WM_XMONAD;
         return Platform_WindowManagerName::WM_OTHER;
     }
-
 }
+#endif
 
 namespace WindowHelper {
     auto check_button_state(Qt::MouseButton b) -> bool {
-        Display * xdisplay_ = getXDisplay();
-        Window x_root_window_ = DefaultRootWindow(xdisplay_);
-
-        Window root_, child_;
-        int root_x, root_y, child_x, child_y;
-        uint mask;
-
-        Bool res = XQueryPointer(xdisplay_, x_root_window_, &root_, &child_,
-                                    &root_x, &root_y, &child_x, &child_y, &mask);
-
-        if ( res ) {
-            if ( b == Qt::LeftButton)
-                return mask & Button1MotionMask;
-        }
-
-        return false;
+        return IPlatformBackend::instance()->checkButtonState(b);
     }
 }
 
@@ -295,23 +284,25 @@ CPlatformDecoration::CPlatformDecoration(QWidget * w)
     : m_window(w)
     , m_title(NULL)
     , m_motionTimer(nullptr)
-    , m_currentCursor(0)
+    , m_currentCursor(-1)
     , m_decoration(true)
     , m_nBorderSize(CUSTOM_BORDER_WIDTH)
     , m_bIsMaximized(false)
     , m_startSize(QSize())
 {
-    createCursors();
     m_nDirection = -1;
 
-    need_to_check_motion = guess_window_manager() == WM_KWIN;
+#ifdef HAVE_X11
+    need_to_check_motion = (QGuiApplication::platformName() == "xcb") && (guess_window_manager() == WM_KWIN);
+#else
+    need_to_check_motion = false;
+#endif
     dpi_ratio = Utils::getScreenDpiRatioByWidget(w);
     m_nBorderSize = CUSTOM_BORDER_WIDTH * dpi_ratio;
 }
 
 CPlatformDecoration::~CPlatformDecoration()
 {
-    freeCursors();
     if ( m_motionTimer ) {
         m_motionTimer->stop();
         m_motionTimer->deleteLater();
@@ -323,29 +314,6 @@ void CPlatformDecoration::setTitleWidget(QWidget * w)
 {
     m_title = w;
     m_title->setMouseTracking(true);
-}
-
-void CPlatformDecoration::createCursors()
-{
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_TOPLEFT]     = XCreateFontCursor(getXDisplay(), XC_top_left_corner);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_TOP]         = XCreateFontCursor(getXDisplay(), XC_top_side);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_TOPRIGHT]    = XCreateFontCursor(getXDisplay(), XC_top_right_corner);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_RIGHT]       = XCreateFontCursor(getXDisplay(), XC_right_side);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT] = XCreateFontCursor(getXDisplay(), XC_bottom_right_corner);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_BOTTOM]      = XCreateFontCursor(getXDisplay(), XC_bottom_side);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT]  = XCreateFontCursor(getXDisplay(), XC_bottom_left_corner);
-    m_cursors[k_NET_WM_MOVERESIZE_SIZE_LEFT]        = XCreateFontCursor(getXDisplay(), XC_left_side);
-}
-
-void CPlatformDecoration::freeCursors()
-{
-    Display * _display = getXDisplay();
-    std::for_each(m_cursors.begin(), m_cursors.end(),
-        [_display](std::pair<int, Cursor> i) {
-            if (_display)
-                XFreeCursor(_display, i.second);
-        }
-    );
 }
 
 int CPlatformDecoration::hitTest(int x, int y) const
@@ -399,25 +367,16 @@ void CPlatformDecoration::checkCursor(QPoint & p)
 {
     int _hit_test = hitTest(p.x(), p.y());
 
-    Cursor _cursor = 0;
-    if (!(_hit_test < 0)) {
-        _cursor = m_cursors[_hit_test];
-    }
-
-    Display * _display = getXDisplay();
-    if (_cursor) {
-        if (m_currentCursor == 0 || m_currentCursor != _cursor) {
-            m_currentCursor = _cursor;
-            XDefineCursor(_display, m_window->winId(), _cursor);
-
-            XFlush(_display);
+    if (_hit_test >= 0) {
+        if (m_currentCursor != _hit_test) {
+            m_currentCursor = _hit_test;
+            IPlatformBackend::instance()->setCursor(m_window->winId(), _hit_test);
         }
-    } else
-    if (m_currentCursor) {
-        m_currentCursor = 0;
-        XUndefineCursor(_display, m_window->winId());
-
-        XFlush(_display);
+    } else {
+        if (m_currentCursor != -1) {
+            m_currentCursor = -1;
+            IPlatformBackend::instance()->resetCursor(m_window->winId());
+        }
     }
 }
 
@@ -451,46 +410,34 @@ void CPlatformDecoration::dispatchMouseMove(QMouseEvent *e)
                 }
             } else {
                 m_motionTimer->stop();
-                sendButtonRelease();
+                IPlatformBackend::instance()->sendButtonRelease(m_window);
                 QApplication::postEvent(m_window, new QEvent(static_cast<QEvent::Type>(UM_ENDMOVE)));
                 m_window->activateWindow();
-//                QTimer::singleShot(25, [=]() {
-//                    if (m_window->size() == m_startSize)
-//                        QApplication::postEvent(m_window, new QEvent(QEvent::User));
-//                });
             }
         });
     }
 
     if (m_nDirection >= 0 && e->buttons() == Qt::LeftButton)
     {
-        Display * xdisplay_ = getXDisplay();
-        Window x_root_window_ = DefaultRootWindow(xdisplay_);
-
-        XUngrabPointer(xdisplay_, CurrentTime);
         if ( !m_motionTimer->isActive() ) m_motionTimer->start(MOTION_TIMER_MS);
 
-        XEvent event;
-        memset(&event, 0, sizeof(event));
-        event.xclient.type = ClientMessage;
-        event.xclient.display = xdisplay_;
-        event.xclient.window = m_window->winId();
-//        event.xclient.message_type = XInternAtom(xdisplay_, "_NET_WM_MOVERESIZE", false);
-        event.xclient.message_type = GetAtom("_NET_WM_MOVERESIZE");
-        event.xclient.format = 32;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-        event.xclient.data.l[0] = e->globalPosition().toPoint().x();
-        event.xclient.data.l[1] = e->globalPosition().toPoint().y();
-#else
-        event.xclient.data.l[0] = e->globalPos().x();
-        event.xclient.data.l[1] = e->globalPos().y();
-#endif
-        event.xclient.data.l[2] = m_nDirection;
-        event.xclient.data.l[3] = Button1;
-        event.xclient.data.l[4] = 0;
-
-        XSendEvent(xdisplay_, x_root_window_, False, SubstructureRedirectMask | SubstructureNotifyMask, &event);
-        XFlush(xdisplay_);
+        QPoint globalPos = e->globalPosition().toPoint();
+        if (m_nDirection == k_NET_WM_MOVERESIZE_MOVE) {
+            IPlatformBackend::instance()->startInteractiveMove(m_window, globalPos);
+        } else {
+            Qt::Edges edges = Qt::Edges();
+            switch (m_nDirection) {
+                case k_NET_WM_MOVERESIZE_SIZE_TOPLEFT:     edges = Qt::TopEdge | Qt::LeftEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_TOP:         edges = Qt::TopEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_TOPRIGHT:    edges = Qt::TopEdge | Qt::RightEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_RIGHT:       edges = Qt::RightEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT: edges = Qt::BottomEdge | Qt::RightEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_BOTTOM:      edges = Qt::BottomEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT:  edges = Qt::BottomEdge | Qt::LeftEdge; break;
+                case k_NET_WM_MOVERESIZE_SIZE_LEFT:        edges = Qt::LeftEdge; break;
+            }
+            IPlatformBackend::instance()->startInteractiveResize(m_window, edges, globalPos);
+        }
         m_startSize = m_window->size();
         m_nDirection = -1;
     }
@@ -526,6 +473,7 @@ void CPlatformDecoration::turnOff()
     m_decoration = false;
 }
 
+#ifdef HAVE_X11
 void CPlatformDecoration::switchDecoration(bool on)
 {
     if (m_decoration != on) {
@@ -548,6 +496,11 @@ void CPlatformDecoration::switchDecoration(bool on)
         }
     }
 }
+#else
+void CPlatformDecoration::switchDecoration(bool)
+{
+}
+#endif
 
 bool CPlatformDecoration::isDecorated()
 {
@@ -577,66 +530,20 @@ int CPlatformDecoration::customWindowBorderWith()
 
 void CPlatformDecoration::raiseWindow()
 {
-    Display *disp = getXDisplay();
-    Atom atom_active_wnd = XInternAtom(disp, "_NET_ACTIVE_WINDOW", False);
-    if (atom_active_wnd == None)
-        return;
-    Window wnd = (Window)m_window->winId();
-    Window root = DefaultRootWindow(disp);
-    XEvent event;
-    memset(&event, 0, sizeof(XEvent));
-    event.xclient.type = ClientMessage;
-    event.xclient.serial = 0;
-    event.xclient.send_event = True;
-    event.xclient.message_type = atom_active_wnd;
-    event.xclient.window = wnd;
-    event.xclient.format = 32;
-    XSendEvent(disp, root, False, SubstructureRedirectMask | SubstructureNotifyMask, &event);
-    XMapRaised(disp, wnd);
-    XFlush(disp);
+    IPlatformBackend::instance()->raiseWindow(m_window);
 }
 
 void CPlatformDecoration::sendButtonRelease()
 {
-    Display * xdisplay_ = getXDisplay();
-    Window x_root_window_ = (Window)m_window->effectiveWinId();
-
-    XEvent event;
-    memset(&event, 0, sizeof(XEvent));
-
-    event.type = ButtonRelease;
-    event.xbutton.button = Button1;
-    event.xbutton.same_screen = True;
-
-//    event.xbutton.root = x_root_window_;
-//    event.xbutton.window = m_window->winId();
-
-    XQueryPointer(xdisplay_, x_root_window_, &event.xbutton.root, &event.xbutton.window,
-                        &event.xbutton.x_root, &event.xbutton.y_root, &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
-    XSendEvent(xdisplay_, PointerWindow, True, ButtonReleaseMask, &event);
-    XFlush(xdisplay_);
+    IPlatformBackend::instance()->sendButtonRelease(m_window);
 }
 
 void CPlatformDecoration::setCursorPos(int x, int y)
 {
-    Display *xdisplay_= getXDisplay();
-    Window root_window = DefaultRootWindow(xdisplay_);
-    XSelectInput(xdisplay_, root_window, KeyReleaseMask);
-    XWarpPointer(xdisplay_, None, root_window, 0, 0, 0, 0, x, y);
-    XFlush(xdisplay_);
+    IPlatformBackend::instance()->setCursorPos(x, y);
 }
 
 void CPlatformDecoration::setMinimized()
 {
-    XClientMessageEvent ev;
-    ev.type = ClientMessage;
-    ev.window = m_window->winId();
-    ev.message_type = GetAtom("WM_CHANGE_STATE");
-    ev.format = 32;
-    ev.data.l[0] = IconicState;
-
-    Display * xdisplay_ = getXDisplay();
-    XSendEvent(xdisplay_, RootWindow(xdisplay_, DefaultScreen(xdisplay_)), False,
-                    SubstructureRedirectMask|SubstructureNotifyMask, (XEvent *)&ev);
-    sendButtonRelease();
+    IPlatformBackend::instance()->minimizeWindow(m_window);
 }

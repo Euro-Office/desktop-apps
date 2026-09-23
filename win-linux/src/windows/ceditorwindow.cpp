@@ -28,6 +28,7 @@
 #include "iconfactory.h"
 #include "defines.h"
 #include <QApplication>
+#include <QGuiApplication>
 #include <clangater.h>
 
 #define CAPTURED_WINDOW_OFFSET_X  (6*TOOLBTN_WIDTH + 10) * m_dpiRatio
@@ -176,7 +177,9 @@ void CEditorWindow::undock(bool maximized)
     if (isCustomWindowStyle()) {
         m_restoreMaximized = false;
         CWindowPlatform::show(false);
-        captureMouse();
+        if (QGuiApplication::platformName() != "wayland") {
+            captureMouse();
+        }
     } else {
         CWindowPlatform::show(false);
     }

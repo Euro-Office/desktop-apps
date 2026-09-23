@@ -4,6 +4,7 @@
 #include "defines.h"
 #include "cefview.h"
 #include <QHBoxLayout>
+#include "cmessage.h"
 
 
 using namespace NSEditorApi;
