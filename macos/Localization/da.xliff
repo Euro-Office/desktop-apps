@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="If you have already purchased %@, you should find your activation key in an email confirmation." xml:space="preserve">
         <source>If you have already purchased %@, you should find your activation key in an email confirmation.</source>
-        <target>Hvis du allerede har købt %@, kan du finde din aktiveringsnøgle i en emailbekræftelse.</target>
+        <target>Hvis du allerede har købt %@, kan du finde din aktiveringsnøgle i en e-mailbekræftelse.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="License Agreement" xml:space="preserve">
@@ -1293,7 +1293,7 @@ Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dok
       </trans-unit>
       <trans-unit id="Do Not Move" xml:space="preserve">
         <source>Do Not Move</source>
-        <target>Flyt Ikke</target>
+        <target>Flyt ikke</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="I can move myself to the Applications folder if you'd like." xml:space="preserve">
@@ -1318,12 +1318,12 @@ Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dok
       </trans-unit>
       <trans-unit id="Note that this will require an administrator password." xml:space="preserve">
         <source>Note that this will require an administrator password.</source>
-        <target>Dette vil kræve en adminstratorkode.</target>
+        <target>Bemærk, at dette kræver en administratoradgangskode.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="This will keep your Downloads folder uncluttered." xml:space="preserve">
         <source>This will keep your Downloads folder uncluttered.</source>
-        <target>Dette vil holde din Downloadmappe enkel.</target>
+        <target>Det holder mappen Overførsler ryddelig.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
