@@ -77,6 +77,12 @@ int main( int argc, char *argv[] )
 
     QCoreApplication::setApplicationName(QString::fromUtf8(WINDOW_NAME));
     QApplication::setApplicationDisplayName(QString::fromUtf8(WINDOW_NAME));
+#ifdef __linux
+    // Without this Qt reports the executable name ("DesktopEditors") as the
+    // desktop file id, so taskbars cannot map the window to its launcher and
+    // pinning it breaks as soon as the window closes.
+    QGuiApplication::setDesktopFileName(QString::fromUtf8(DESKTOP_FILE_NAME));
+#endif
 
     QString user_data_path = Utils::getUserPath() + APP_DATA_PATH;
     auto setup_paths = [&user_data_path](CAscApplicationManager * manager) {
