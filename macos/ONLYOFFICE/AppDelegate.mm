@@ -56,6 +56,9 @@
 #import "PureLayout.h"
 #import "ascprinter.h"
 
+bool ASCPrinterContext::isCurrentlyPrinting = false;
+
+
 #ifndef _MAS
     #import "PFMoveApplication.h"
 #endif
