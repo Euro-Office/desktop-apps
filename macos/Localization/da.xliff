@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="If you have already purchased %@, you should find your activation key in an email confirmation." xml:space="preserve">
         <source>If you have already purchased %@, you should find your activation key in an email confirmation.</source>
-        <target>Hvis du allerede har købt %@, kan du finde din aktiveringsnøgle i en emailbekræftelse.</target>
+        <target>Hvis du allerede har købt %@, kan du finde din aktiveringsnøgle i en e-mailbekræftelse.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="License Agreement" xml:space="preserve">
@@ -420,9 +420,9 @@ The program works in the non-activated mode.
 Now you can prolong or upgrade your subscription with a discount.</source>
         <target>Dit abonnement er udløbet.
 
-The program works in the non-activated mode.
+Programmet kører i ikke-aktiveret tilstand.
 
-Now you can prolong or upgrade your subscription with a discount.</target>
+Nu kan du forlænge eller opgradere dit abonnement med rabat.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Your subscription is about to expire&#10;(%d days left).&#10;&#10;We have a special offer for you." xml:space="preserve">
@@ -486,15 +486,15 @@ Vi har et specielt tilbud til dig.</target>
       <trans-unit id="/You are using a trial version of the application.&#10;The trial period will end in %d days, after that you will not be able to create and edit documents.:dict/days:dict/one:dict/:string" xml:space="preserve">
         <source>You are using a trial version of the application.
 The trial period will end in %d day, after that you will not be able to create and edit documents.</source>
-        <target>Du bruger en prøveversion af applikationen.
-The trial period will end in %d day, after that you will not be able to create and edit documents.</target>
+        <target>Du bruger en prøveversion af programmet.
+Prøveperioden slutter om %d dag, hvorefter du ikke kan oprette og redigere dokumenter.</target>
         <note/>
       </trans-unit>
       <trans-unit id="/You are using a trial version of the application.&#10;The trial period will end in %d days, after that you will not be able to create and edit documents.:dict/days:dict/other:dict/:string" xml:space="preserve">
         <source>You are using a trial version of the application.
 The trial period will end in %d days, after that you will not be able to create and edit documents.</source>
-        <target>You are using a trial version of the application.
-The trial period will end in %d days, after that you will not be able to create and edit documents.</target>
+        <target>Du bruger en prøveversion af programmet.
+Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dokumenter.</target>
         <note/>
       </trans-unit>
       <trans-unit id="/You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?:dict/NSStringLocalizedFormatKey:dict/:string" xml:space="preserve">
@@ -1288,42 +1288,42 @@ The trial period will end in %d days, after that you will not be able to create 
     <body>
       <trans-unit id="Could not move to Applications folder" xml:space="preserve">
         <source>Could not move to Applications folder</source>
-        <target>Kunne ikke flytte til Applikationsmappen</target>
+        <target>Kunne ikke flytte til mappen Programmer</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Do Not Move" xml:space="preserve">
         <source>Do Not Move</source>
-        <target>Flyt Ikke</target>
+        <target>Flyt ikke</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="I can move myself to the Applications folder if you'd like." xml:space="preserve">
         <source>I can move myself to the Applications folder if you'd like.</source>
-        <target>Jeg kan flytte mig selv til Applikationsmappen hvis du vil have det.</target>
+        <target>Jeg kan flytte mig selv til mappen Programmer hvis du vil have det.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to Applications Folder" xml:space="preserve">
         <source>Move to Applications Folder</source>
-        <target>Flyt til Applikationsmappen</target>
+        <target>Flyt til mappen Programmer</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to Applications folder in your Home folder?" xml:space="preserve">
         <source>Move to Applications folder in your Home folder?</source>
-        <target>Flyt til Applikationsmappen i din Hjemmemappe?</target>
+        <target>Flyt til mappen Programmer i din hjemmemappe?</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Move to Applications folder?" xml:space="preserve">
         <source>Move to Applications folder?</source>
-        <target>Flyt til Applikationsmappen?</target>
+        <target>Flyt til mappen Programmer?</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="Note that this will require an administrator password." xml:space="preserve">
         <source>Note that this will require an administrator password.</source>
-        <target>Dette vil kræve en adminstratorkode.</target>
+        <target>Bemærk, at dette kræver en administratoradgangskode.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
       <trans-unit id="This will keep your Downloads folder uncluttered." xml:space="preserve">
         <source>This will keep your Downloads folder uncluttered.</source>
-        <target>Dette vil holde din Downloadmappe enkel.</target>
+        <target>Det holder mappen Overførsler ryddelig.</target>
         <note>No comment provided by engineer.</note>
       </trans-unit>
     </body>
