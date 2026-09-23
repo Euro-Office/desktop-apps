@@ -88,6 +88,13 @@ window.DocumentCreationGrid = function (config = {}) {
                 `).join('')}
                 </div>`;
 
+			// clear any previous render (e.g. a re-render with a new
+			// DocumentCreationGrid instance after the default save format
+			// changed) -- queried against the DOM rather than the local
+			// $el, since a fresh instance's own $el starts out empty
+			// regardless of what an earlier instance already rendered here
+			parentElement.find('.document-creation-grid').remove();
+
 			$parent = parentElement;
 			$el = $parent.append(_template).find('.document-creation-grid');
 		},

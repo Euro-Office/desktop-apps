@@ -521,6 +521,76 @@
             });
         };
 
+        function _document_types(format) {
+            const isODF = format === 'ODF';
+            return [
+                {
+                    id: 'word',
+                    title: utils.Lang.newDoc,
+                    langKey: 'newDoc',
+                    formatLabel: {
+                        value: isODF ? 'ODT' : 'DOCX',
+                        gradientColorStart: '#4298C5',
+                        gradientColorEnd: '#2D84B2',
+                        bgColorWinXP: '#287ca9',
+                    },
+                    icon: '#docx-big',
+                },
+                {
+                    id: 'cell',
+                    title: utils.Lang.newXlsx,
+                    langKey: 'newXlsx',
+                    formatLabel: {
+                        value: isODF ? 'ODS' : 'XLSX',
+                        gradientColorStart: '#5BB514',
+                        gradientColorEnd: '#318C2B',
+                        bgColorWinXP: '#3aa133',
+                    },
+                    icon: '#xlsx-big',
+                },
+                {
+                    id: 'slide',
+                    title: utils.Lang.newPptx,
+                    langKey: 'newPptx',
+                    formatLabel: {
+                        value: isODF ? 'ODP' : 'PPTX',
+                        gradientColorStart: '#F4893A',
+                        gradientColorEnd: '#DE7341',
+                        bgColorWinXP: '#f36700',
+                    },
+                    icon: '#pptx-big',
+                },
+                {
+                    // forms always stay DOCXF/PDF regardless of the
+                    // ODF/OOXML default save format setting
+                    id: 'form',
+                    title: utils.Lang.newForm,
+                    langKey: 'newForm',
+                    formatLabel: {
+                        value: 'PDF',
+                        gradientColorStart: '#F36653',
+                        gradientColorEnd: '#D2402D',
+                        bgColorWinXP: '#e54d39',
+                    },
+                    icon: '#pdf-big',
+                }
+            ];
+        }
+
+        // (re)renders the "create new" tile grid for the given default save
+        // format ('ODF' or anything else, treated as OOXML). Safe to call
+        // repeatedly -- DocumentCreationGrid.render() clears its own previous
+        // output before appending.
+        function _render_document_grid(format) {
+            const docGrid = new DocumentCreationGrid({
+                documentTypes: _document_types(format),
+                onDocumentSelect: (docType) => {
+                    window.sdk.command("create:new", docType);
+                }
+            });
+            docGrid.render(this.view.$panel.find("#area-document-creation-grid"));
+        }
+
         function _init_ppmenu() {
             if (ppmenu) {
                 Menu.closeAll();
@@ -657,6 +727,17 @@
                         }
 
                         this.appready = true;
+                    } else if (/settings:init/.test(cmd)) {
+                        // read directly rather than relying solely on the
+                        // Settings panel's own defaultformat:changed relay,
+                        // since that panel (and its settings:init parsing)
+                        // isn't constructed until the user opens Settings --
+                        // this fires at genuine startup regardless
+                        try {
+                            const settings = JSON.parse($('<div>').html(param).text());
+                            if (settings.defaultsaveformat)
+                                _render_document_grid.call(this, settings.defaultsaveformat.format);
+                        } catch (e) { /* ignore malformed settings:init */ }
                     }
                 });
 
@@ -674,65 +755,14 @@
                 this.dndZone = new DnDFileZone();
                 this.dndZone.render(this.view.$panel.find("#area-dnd-file"));
 
-                const docGrid = new DocumentCreationGrid({
-                    documentTypes: [
-                        {
-                            id: 'word',
-                            title: utils.Lang.newDoc,
-                            langKey: 'newDoc',
-                            formatLabel: {
-                                value: 'DOCX',
-                                gradientColorStart: '#4298C5',
-                                gradientColorEnd: '#2D84B2',
-                                bgColorWinXP: '#287ca9',
-                            },
-                            icon: '#docx-big',
-                        },
-                        {
-                            id: 'cell',
-                            title: utils.Lang.newXlsx,
-                            langKey: 'newXlsx',
-                            formatLabel: {
-                                value: 'XLSX',
-                                gradientColorStart: '#5BB514',
-                                gradientColorEnd: '#318C2B',
-                                bgColorWinXP: '#3aa133',
-                            },
-                            icon: '#xlsx-big',
-                        },
-                        {
-                            id: 'slide',
-                            title: utils.Lang.newPptx,
-                            langKey: 'newPptx',
-                            formatLabel: {
-                                value: 'PPTX',
-                                gradientColorStart: '#F4893A',
-                                gradientColorEnd: '#DE7341',
-                                bgColorWinXP: '#f36700',
-                            },
-                            icon: '#pptx-big',
-                        },
-                        {
-                            id: 'form',
-                            title: utils.Lang.newForm,
-                            langKey: 'newForm',
-                            formatLabel: {
-                                value: 'PDF',
-                                gradientColorStart: '#F36653',
-                                gradientColorEnd: '#D2402D',
-                                bgColorWinXP: '#e54d39',
-                            },
-                            icon: '#pdf-big',
-                        }
-                    ],
-                    onDocumentSelect: (docType) => {
-                        window.sdk.command("create:new", docType);
-                    }
-                });
+                // renders with the OOXML labels first (matches the
+                // compiled-in Tier-1 default); corrected via settings:init
+                // above or defaultformat:changed below as soon as the
+                // actual resolved/chosen format is known
+                _render_document_grid.call(this, 'OOXML');
+                CommonEvents.on('defaultformat:changed', _render_document_grid.bind(this));
 
                 CommonEvents.on('lang:changed', _init_ppmenu.bind(this));
-
-                docGrid.render(this.view.$panel.find("#area-document-creation-grid"));
 
                 $('#idx-recent-filter', this.view.$panel).on('input', _on_filter_recents.bind(this));
 

@@ -6,7 +6,9 @@
 #include "cascapplicationmanagerwrapper.h"
 #include <string>
 #include <algorithm>
+#ifdef HAVE_X11
 #include <gdk/gdkx.h>
+#endif
 #include <gtk/gtkunixprint.h>
 #include "components/cmessage.h"
 
@@ -183,7 +185,7 @@ void GtkPrintDialog::setPrintRange(PrintRange print_range)
 QDialog::DialogCode GtkPrintDialog::exec()
 {
     QDialog::DialogCode exit_code = QDialog::DialogCode::Rejected;
-    Window parent_xid = (m_parent) ? (Window)m_parent->winId() : 0L;
+    ulong parent_xid = (m_parent) ? (ulong)m_parent->winId() : 0;
 
     auto qt_printer_name = m_printer->printerName();
     auto qt_resolution = m_printer->resolution();

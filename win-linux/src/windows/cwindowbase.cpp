@@ -33,6 +33,7 @@
 # include "windows/platform_win/caption.h"
 #endif
 #include <QApplication>
+#include <QDebug>
 #include <QHBoxLayout>
 #include <QScreen>
 #include <functional>
@@ -67,9 +68,16 @@ CWindowBase::CWindowBase(const QRect& rect)
 {
     setWindowIcon(Utils::appIcon());
     m_window_rect = startRect(rect, m_dpiRatio);
+
     setMinimumSize(WINDOW_MIN_WIDTH * m_dpiRatio, WINDOW_MIN_HEIGHT * m_dpiRatio);
 #ifdef __linux__
     setGeometry(m_window_rect); // for Windows is set in CWindowPlatform
+
+    // m_dpiRatio above may have been computed from a transiently-wrong
+    // devicePixelRatio() (e.g. the startup Wayland compositor round-trip
+    // hasn't completed yet) -- re-derive and re-apply once Qt tells us
+    // this window's own ratio actually changed.
+    Utils::WatchForDpiChange(this, [this]() { updateScaling(); });
 #endif
 }
 
@@ -190,7 +198,13 @@ void CWindowBase::saveWindowState(const QString &baseKey)
 {
     if (!windowState().testFlag(Qt::WindowFullScreen)) {
         GET_REGISTRY_USER(reg_user)
-        reg_user.setValue(baseKey + "position", normalGeometry());
+        if (QGuiApplication::platformName() == "wayland") {
+            QRect rect = normalGeometry();
+            rect.moveTo(0, 0);
+            reg_user.setValue(baseKey + "position", rect);
+        } else {
+            reg_user.setValue(baseKey + "position", normalGeometry());
+        }
         if (windowState().testFlag(Qt::WindowMaximized)) {
             reg_user.setValue(baseKey + "maximized", true);
         } else {

@@ -29,6 +29,7 @@
 #include "defines.h"
 #include "utils.h"
 #include <QGridLayout>
+#include <QGuiApplication>
 #include <clangater.h>
 #include <qtcomp/qnativeevent.h>
 

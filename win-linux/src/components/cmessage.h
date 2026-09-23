@@ -44,7 +44,8 @@ enum class MsgBtns {
     mbSkipRemindInstall,
     mbSkipRemindSaveandinstall,
     mbSkipRemindDownload,
-    mbInslaterRestart
+    mbInslaterRestart,
+    mbOoxmlDefOdf
 };
 enum class MsgType {
     MSG_INFO = 0,
@@ -67,7 +68,9 @@ enum MsgRes {
     MODAL_RESULT_DOWNLOAD,
     MODAL_RESULT_INSTALL,
     MODAL_RESULT_INSLATER,
-    MODAL_RESULT_RESTART
+    MODAL_RESULT_RESTART,
+    MODAL_RESULT_OOXML,
+    MODAL_RESULT_ODF
 };
 
 struct CMessageOpts {
