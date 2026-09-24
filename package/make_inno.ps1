@@ -9,10 +9,17 @@
     [switch]$Sign,
     [string]$CertName = "Ascensio System SIA",
     [string]$TimestampServer = "http://timestamp.digicert.com",
+    # Full signtool argument list, see make.ps1.
+    [string[]]$SignArgs,
     [switch]$Debug
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $SignArgs) {
+    $SignArgs = "/fd", "sha256", "/a", "/n", $CertName,
+                "/tr", $TimestampServer, "/td", "sha256"
+}
 
 Set-Location $PSScriptRoot
 
@@ -124,8 +131,12 @@ switch ($Target) {
     }
 }
 if ($Sign) {
+    # Inno expands $q to a quote and $f to the (already quoted) file name.
+    $InnoSignArgs = ($SignArgs | ForEach-Object {
+        if ($_ -match '\s') { "`$q$_`$q" } else { $_ }
+    }) -join " "
     $InnoArgs += "/DSIGN",
-        "/Sbyparam=signtool sign /a /v /n `$q$CertName`$q /t $TimestampServer `$f"
+        "/Sbyparam=signtool sign $InnoSignArgs /v `$f"
 }
 if ($Debug) {
     $InnoArgs += "/DPREPROCSAVE"
