@@ -7,11 +7,20 @@
     [string]$SourceDir,
     [string]$BuildDir,
     [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
-    [string]$TimestampServer = "http://timestamp.digicert.com"
+    [string]$CertName = "",
+    [string]$TimestampServer = "http://timestamp.digicert.com",
+    # Full signtool argument list (everything between "signtool sign" and the
+    # file names). Overrides CertName/TimestampServer, e.g. to select the
+    # certificate by thumbprint (/sha1) or to use a dlib-based signer.
+    [string[]]$SignArgs
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $SignArgs) {
+    $SignArgs = "/fd", "sha256", "/a", "/n", $CertName,
+                "/tr", $TimestampServer, "/td", "sha256"
+}
 
 Set-Location $PSScriptRoot
 
@@ -88,18 +97,18 @@ if ($Sign) {
     $SignFiles = Get-ChildItem *.exe, *.dll -Recurse | Resolve-Path -Relative
 
     # Sign
-    Write-Host "signtool sign /a /n $CertName /t $TimestampServer ..."
-    & signtool sign /a /n $CertName /t $TimestampServer /v $SignFiles
+    Write-Host "signtool sign $SignArgs /v ..."
+    & signtool sign @SignArgs /v $SignFiles
     if ($LastExitCode -ne 0) { throw }
 
     # Verify
     Get-ChildItem *.exe, *.dll -Recurse | % { Get-AuthenticodeSignature $_ }
 
-    # VLC plugin cache
-    if (
+    # VLC plugin cache (only if the build ships the generator)
+    if ((Test-Path "vlc-cache-gen.exe") -and (
             (($Arch -like "x??") -and ($env:PROCESSOR_ARCHITECTURE -eq "AMD64")) -or
             (($Arch -eq "arm64") -and ($env:PROCESSOR_ARCHITECTURE -eq "ARM64"))
-    )
+    ))
     {
         Write-Host ".\vlc-cache-gen $PWD\plugins"
         & .\vlc-cache-gen "$PWD\plugins"
