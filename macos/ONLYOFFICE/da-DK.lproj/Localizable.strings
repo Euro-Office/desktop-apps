@@ -65,7 +65,10 @@
 "Hide %@" = "Skjul %@";
 
 /* No comment provided by engineer. */
-"If you have already purchased %@, you should find your activation key in an email confirmation." = "Hvis du allerede har købt %@, kan du finde din aktiveringsnøgle i en emailbekræftelse.";
+"If you don't review your documents, all your changeses will be lost." = "Hvis du ikke gennemgår dine dokumenter, vil alle dine ændringer gå tabt.";
+
+/* No comment provided by engineer. */
+"If you have already purchased %@, you should find your activation key in an email confirmation." = "Hvis du allerede har købt %@, kan du finde din aktiveringsnøgle i en e-mailbekræftelse.";
 
 /* No comment provided by engineer. */
 "License Agreement" = "Licensaftale";
@@ -203,7 +206,7 @@
 "Your changes will be lost if you don’t save them." = "Du mister ændringerne, hvis de ikke gemmes.";
 
 /* No comment provided by engineer. */
-"Your subscription has expired.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount." = "Dit abonnement er udløbet.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount.";
+"Your subscription has expired.\n\nThe program works in the non-activated mode.\n\nNow you can prolong or upgrade your subscription with a discount." = "Dit abonnement er udløbet.\n\nProgrammet kører i ikke-aktiveret tilstand.\n\nNu kan du forlænge eller opgradere dit abonnement med rabat.";
 
 /* No comment provided by engineer. */
 "Your subscription is about to expire\n(%d days left).\n\nWe have a special offer for you." = "Dit abonnement er ved at udløbe\n(%d dage tilbage).\n\nVi har et specielt tilbud til dig.";
