@@ -470,7 +470,7 @@ Vi har et specielt tilbud til dig.</target>
       </trans-unit>
       <trans-unit id="/%d days are left until the license expiration.:dict/days:dict/one:dict/:string" xml:space="preserve">
         <source>%d day are left until the license expiration.</source>
-        <target>%d dage tilbage indtil licensen udløber.</target>
+        <target>%d dag tilbage indtil licensen udløber.</target>
         <note/>
       </trans-unit>
       <trans-unit id="/%d days are left until the license expiration.:dict/days:dict/other:dict/:string" xml:space="preserve">
@@ -504,7 +504,7 @@ Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dok
       </trans-unit>
       <trans-unit id="/You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?:dict/documents:dict/one:dict/:string" xml:space="preserve">
         <source>You have %ld %@ document with unconfirmed changes. Do you want to review these changes before quitting?</source>
-        <target>Du har %ld %@ dokumenter med ubekræftede ændringer. Vil du gennemgå disse ændringer før du afslutter?</target>
+        <target>Du har %ld %@ dokument med ubekræftede ændringer. Vil du gennemgå disse ændringer før du afslutter?</target>
         <note/>
       </trans-unit>
       <trans-unit id="/You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?:dict/documents:dict/other:dict/:string" xml:space="preserve">
