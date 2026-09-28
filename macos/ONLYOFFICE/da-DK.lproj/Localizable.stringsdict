@@ -5,7 +5,7 @@
 	<key>%d days are left until the license expiration.</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@dage@</string>
+		<string>%#@days@</string>
 		<key>days</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -22,7 +22,7 @@
 The trial period will end in %d days, after that you will not be able to create and edit documents.</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@dage@</string>
+		<string>%#@days@</string>
 		<key>days</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -40,7 +40,7 @@ Prøveperioden slutter om %d dage, hvorefter du ikke kan oprette og redigere dok
 	<key>You have %ld %@ documents with unconfirmed changes. Do you want to review these changes before quitting?</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@dokumenter@</string>
+		<string>%#@documents@</string>
 		<key>documents</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
