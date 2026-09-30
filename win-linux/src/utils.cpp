@@ -114,8 +114,12 @@ namespace InputArgs {
 
     auto argument_value(const std::wstring& param) -> std::wstring {
         for (const auto& item: in_args) {
-            if ( item.find(param) != std::wstring::npos ) {
-                return item.substr(param.size() + 1); // substring after '=' or ':' symbol
+            auto n = item.find(param);
+            if ( n != std::wstring::npos ) {
+                auto value_pos = n + param.size() + 1; // position after '=' or ':' symbol
+                if ( value_pos <= item.length() )
+                    return item.substr(value_pos);
+                return L"";
             }
         }
 

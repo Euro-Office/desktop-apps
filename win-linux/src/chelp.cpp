@@ -58,7 +58,9 @@ void CHelp::out()
         "    --unlock-portals disable forced hiding of the Connect to the cloud button on the start page"
         "    --updates-appcast-channel=dev set development URL for updates\n"
         "    --updates-interval=<time> set update check interval in seconds (minimum 30 sec)\n"
-        "    --updates-reset reset all update options\n";
+        "    --updates-reset reset all update options\n"
+        "    <input-file> --convert-to=path/to/output.ext convert a document without starting the UI\n"
+        "    <input-file> --print-to-file=path/to/output.pdf render a document to PDF without starting the UI\n";
 
 #ifdef _WIN32
     FILE *pFile = NULL;
