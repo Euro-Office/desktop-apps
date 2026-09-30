@@ -15,6 +15,12 @@
 #
 # Safe to run repeatedly - a substring that's already been replaced (e.g.
 # euro-office's own company name, already "Euro-Office") is a no-op replace.
+#
+# --version optionally sets CFBundleShortVersionString (the "About" dialog's
+# visible version, read by ASCAboutController.m). Unlike CFBundleVersion
+# (which already has its own auto-increment build-phase script) this key was
+# a static, hand-typed literal nothing ever touched, and drifted stale - if
+# omitted, whatever's currently committed in Info.plist is left as-is.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,14 +28,19 @@ RESOURCES_DIR="${SCRIPT_DIR}/Euro-Office/Resources/Euro-Office-arm"
 
 COMPANY_NAME=""
 PRODUCT_NAME=""
+VERSION=""
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") --company-name <name> --product-name <name>
+Usage: $(basename "$0") --company-name <name> --product-name <name> [--version <version>]
 
 Required:
   --company-name <name>   Replaces "Euro-Office" in NSHumanReadableCopyright.
   --product-name <name>   Replaces "ONLYOFFICE" in CFBundleName.
+
+Optional:
+  --version <version>     Sets CFBundleShortVersionString (e.g. "9.3.1").
+                           Left unchanged if omitted.
 EOF
 }
 
@@ -37,6 +48,7 @@ while [ $# -gt 0 ]; do
     case "$1" in
         --company-name) COMPANY_NAME="$2"; shift 2 ;;
         --product-name) PRODUCT_NAME="$2"; shift 2 ;;
+        --version) VERSION="$2"; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         *) echo "error: unknown argument: $1" 1>&2; usage 1>&2; exit 1 ;;
     esac
@@ -48,13 +60,17 @@ if [ -z "${COMPANY_NAME}" ] || [ -z "${PRODUCT_NAME}" ]; then
     exit 1
 fi
 
-echo "==> Applying branding: company=\"${COMPANY_NAME}\" product=\"${PRODUCT_NAME}\""
+echo "==> Applying branding: company=\"${COMPANY_NAME}\" product=\"${PRODUCT_NAME}\"${VERSION:+ version=\"${VERSION}\"}"
 
 INFO_PLIST="${RESOURCES_DIR}/Info.plist"
 if [ -f "${INFO_PLIST}" ]; then
     current="$(/usr/libexec/PlistBuddy -c "Print :NSHumanReadableCopyright" "${INFO_PLIST}")"
     replaced="${current//Euro-Office/${COMPANY_NAME}}"
     /usr/libexec/PlistBuddy -c "Set :NSHumanReadableCopyright ${replaced}" "${INFO_PLIST}"
+
+    if [ -n "${VERSION}" ]; then
+        /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${VERSION}" "${INFO_PLIST}"
+    fi
 fi
 
 count=0
