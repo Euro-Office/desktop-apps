@@ -45,6 +45,7 @@
 #include "cascapplicationmanagerwrapper.h"
 #include "qdpichecker.h"
 #include "common/File.h"
+#include "../Common/DatabaseFormats.h"
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 # include <QDesktopWidget>
 #endif
@@ -750,11 +751,14 @@ void Utils::processMoreEvents(uint timeout)
 
 bool Utils::isDatabaseFile(const QString& path)
 {
-    return path.endsWith(".sqlite", Qt::CaseInsensitive) || path.endsWith(".sqlite3", Qt::CaseInsensitive) ||
-           path.endsWith(".db", Qt::CaseInsensitive) || path.endsWith(".db3", Qt::CaseInsensitive) ||
-           path.endsWith(".duckdb", Qt::CaseInsensitive) || path.endsWith(".parquet", Qt::CaseInsensitive) ||
-           path.endsWith(".pq", Qt::CaseInsensitive) || path.endsWith(".mdb", Qt::CaseInsensitive) ||
-           path.endsWith(".accdb", Qt::CaseInsensitive) || path.endsWith(".bdb", Qt::CaseInsensitive);
+    // Single authoritative database-extension list (FR-005): consult
+    // GetSupportedDatabaseExtensions() instead of a second hardcoded list.
+    for (const auto& dbEntry : GetSupportedDatabaseExtensions())
+    {
+        if (path.endsWith(QString::fromStdWString(dbEntry.extension), Qt::CaseInsensitive))
+            return true;
+    }
+    return false;
 }
 
 void Utils::warnIfDatabaseFile(QWidget* parent, const QString& path)

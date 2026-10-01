@@ -30,8 +30,20 @@
 #include "utils.h"
 #include "components/cmessage.h"
 #include "../Common/OfficeFileFormats.h"
+#include "../Common/DatabaseFormats.h"
 #include <QList>
 #include <QMimeDatabase>
+
+// Single authoritative database-extension list (FR-005): build the dialog's
+// "*.ext *.ext2 ..." glob from GetSupportedDatabaseExtensions() instead of a
+// second hardcoded extension list.
+static QString databaseExtensionsFilterGlob()
+{
+    QStringList globs;
+    for (const auto& dbEntry : GetSupportedDatabaseExtensions())
+        globs << ("*" + QString::fromStdWString(dbEntry.extension));
+    return globs.join(' ');
+}
 
 #ifdef Q_OS_WIN
 # include <shobjidl.h>
@@ -269,7 +281,7 @@ QStringList CFileDialogWrapper::modalOpen(const QString& path, const QString& fi
                         " (*.docx *.doc *.odt *.ott *.rtf *.docm *.dot *.dotx *.dotm *.fb2 *.fodt *.hml *.wps *.wpt *.xml *.pdf *.djv *.djvu *.md *.sxw *.stw *.xps *.oxps);;" +
 #endif
                     tr("Spreadsheets") + " (*.xlsx *.xls *.xlsm *.xlsb *.ods *.ots *.xltx *.xltm *.xml *.fods *.et *.ett *.sxc *.numbers);;" +
-                    tr("Databases") + " (*.sqlite *.sqlite3 *.db *.db3 *.duckdb *.parquet *.pq *.mdb *.accdb *.bdb);;" +
+                    tr("Databases") + " (" + databaseExtensionsFilterGlob() + ");;" +
                     tr("Presentations") + " (*.pptx *.ppt *.odp *.odg *.otp *.ppsm *.pptm *.ppsx *.pps *.potx *.pot *.potm *.fodp *.dps *.dpt *.sxi *.key);;" +
                     tr("Visio diagram") + " (*.vsdx *.vssx *.vstx *.vsdm *.vssm *.vstm);;" +
                     tr("Web Page") + " (*.html *.htm *.mht *.mhtml *.epub);;" +
@@ -374,7 +386,7 @@ QStringList CFileDialogWrapper::modalOpenDocuments(const QString& path, bool mul
 QStringList CFileDialogWrapper::modalOpenSpreadsheets(const QString& path, bool multi)
 {
     QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN];
-    filter.prepend(tr("Spreadsheets") + " (*.xlsx *.xls *.ods *.ots *.csv *.tsv *.xltx *.xltm *.fods *.et *.ett);;" + tr("Databases") + " (*.sqlite *.sqlite3 *.db *.db3 *.duckdb *.parquet *.pq *.mdb *.accdb *.bdb);;");
+    filter.prepend(tr("Spreadsheets") + " (*.xlsx *.xls *.ods *.ots *.csv *.tsv *.xltx *.xltm *.fods *.et *.ett);;" + tr("Databases") + " (" + databaseExtensionsFilterGlob() + ");;");
 
     return modalOpen(path, filter, nullptr, multi);
 }
