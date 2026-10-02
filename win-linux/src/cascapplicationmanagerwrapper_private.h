@@ -46,6 +46,8 @@
 #else
 # include "platform_linux/linux_window_utils.h"
 # include <QProcess>
+# include <unistd.h>
+# include <sys/types.h>
 # define APP_LAUNCH_NAME "/DesktopEditors"
 # define RESTART_BATCH "/apprestart.sh"
 #endif
@@ -116,7 +118,12 @@ public:
             ts << "del \"%~f0\"&exit\n";
 #else
             ts << "#!/bin/bash\n";
-            ts << "\"" << QString::fromStdWString(NSFile::GetProcessDirectory()) << APP_LAUNCH_NAME << "\" &\n";
+            ts << "sleep 1\n";
+            QString appDir = QString::fromStdWString(NSFile::GetProcessDirectory());
+            ts << "cd \"" << appDir << "\"\n";
+            ts << "LD_LIBRARY_PATH=\"$PWD:$PWD/converter:$LD_LIBRARY_PATH\"";
+            ts << " LD_PRELOAD=libcef.so";
+            ts << " \"" << appDir << APP_LAUNCH_NAME << "\" &\n";
             ts << "rm -- \"$0\"\n";
 #endif
             if (!f.flush()) {
@@ -143,8 +150,17 @@ public:
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
 #else
-        if (!QProcess::startDetached("/bin/sh", QStringList{fileName}))
+        // Use fork/exec instead of QProcess::startDetached because
+        // this runs from a destructor after Qt's event loop has stopped,
+        // where QProcess may not work reliably.
+        pid_t pid = fork();
+        if (pid == 0) {
+            setsid();
+            execlp("/bin/sh", "/bin/sh", fileName.toLocal8Bit().constData(), (char *)nullptr);
+            _exit(1);
+        } else if (pid < 0) {
             CLogger::log("An error occurred while restarting the app!");
+        }
 #endif
     }
 
@@ -351,11 +367,7 @@ public:
                         openDocument(opts);
                     }
                 } else {
-                    int _f = format == L"word" ? AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCX :
-                                 format == L"cell" ? AVS_OFFICESTUDIO_FILE_SPREADSHEET_XLSX :
-                                 format == L"form" ? AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF :
-                                 // format == L"draw" ? AVS_OFFICESTUDIO_FILE_DRAW_VSDX :
-                                 format == L"slide" ? AVS_OFFICESTUDIO_FILE_PRESENTATION_PPTX : AVS_OFFICESTUDIO_FILE_UNKNOWN;
+                    int _f = m_appmanager.newFileFormat(format);
 
                     COpenOptions opts{m_appmanager.newFileName(_f), etNewFile};
                     opts.format = _f;
@@ -452,8 +464,20 @@ public:
                 do {
                     WId wid = (WId)hWnd;
 #else
-            std::vector<xcb_window_t> winStack;
+            std::vector<WId> winStack;
             LinuxWindowUtils::getWindowStack(winStack);
+            if (winStack.empty()) {
+                // Wayland fallback: use our tracked editors list
+                for (auto it = m_appmanager.m_vecEditors.rbegin(); it != m_appmanager.m_vecEditors.rend(); it++) {
+                    CEditorWindow *editor = reinterpret_cast<CEditorWindow*>(*it);
+                    if (editor && editor->editorType() == etype) {
+                        rc = editor->normalGeometry();
+                        rc.adjust(50, 50, 50, 50);
+                        isMaximized = editor->windowState().testFlag(Qt::WindowMaximized);
+                        return;
+                    }
+                }
+            }
             for (auto it = winStack.rbegin(); it != winStack.rend(); it++) {
                 WId wid = (WId)(*it);
 #endif
@@ -470,8 +494,10 @@ public:
                     }
 #ifdef _WIN32
                 } while ((hWnd = GetWindow(hWnd, GW_HWNDNEXT)) != nullptr);
-#endif
             }
+#else
+            }
+#endif
         }
 
         GET_REGISTRY_USER(reg_user);

@@ -1283,7 +1283,12 @@ bool CTabBar::eventFilter(QObject *watched, QEvent *event)
             QContextMenuEvent* cm_event = static_cast<QContextMenuEvent*>(event);
             for (int i = 0; i < d->tabList.size(); i++) {
                 if (d->_tabRect(i).contains(cm_event->pos())) {
-                        QPoint pos = d->tabArea->mapToGlobal(cm_event->pos());
+                        // mapToGlobal() is unreliable on Wayland (clients aren't
+                        // told their absolute window position), which was
+                        // rendering this menu at a bogus/centered location. The
+                        // event's own global position is computed correctly by
+                        // Qt's input pipeline when the event was generated.
+                        QPoint pos = cm_event->globalPos();
                         SKIP_EVENTS_QUEUE([=]() {
                             emit tabMenuRequested(i, pos);
                         });

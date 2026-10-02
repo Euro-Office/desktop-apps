@@ -150,6 +150,10 @@ void CMainWindowImpl::refreshAboutVersion()
 
     GET_REGISTRY_USER(reg_user);
     _json_obj["editorwindowmode"] = reg_user.value("editorWindowMode",false).toBool();
+    _json_obj["defaultsaveformat"] = QJsonObject({
+        {"format", Utils::defaultSaveFormat()},
+        {"locked", Utils::defaultSaveFormatEnforced()}
+    });
     _json_obj["usegpu"] = !(AscAppManager::userSettings(L"disable-gpu") == L"1");
     _json_obj["useai"] = !(AscAppManager::userSettings(L"disable-ai") == L"1");
 

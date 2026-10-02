@@ -193,6 +193,7 @@ public:
     static QCefView *       createViewer(QWidget * parent, const QSize& size);
     static QString          newFileName(int format);
     static QString          newFileName(const std::wstring& format);
+    static int              newFileFormat(const std::wstring& type);
     static CThemes &        themes();
     static CPrintData&      printData();
 

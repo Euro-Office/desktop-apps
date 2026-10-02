@@ -247,6 +247,18 @@
                                                 </section>
                                             </div>
                                         </div>
+                                        <div class='settings-field' id="opts-default-save-format" style='display:none;'>
+                                            <label class='sett__caption' l10n>${_lang.settDefaultSaveFormat}</label>
+                                            <div class='sett--label-lift-top hbox'>
+                                                <section class='box-cmp-select'>
+                                                    <select class='combobox'>
+                                                        <option value='OOXML' l10n>${_lang.settOptFormatOoxml}</option>
+                                                        <option value='ODF' l10n>${_lang.settOptFormatOdf}</option>
+                                                    </select>
+                                                </section>
+                                            </div>
+                                            <label class='sett__caption' id='sett-save-format-managed' style='display:none;' l10n>${_lang.settDefaultSaveFormatManaged}</label>
+                                        </div>
                                         <div class='settings-field' id="opts-spellcheck-mode" style='display:none;'>
                                             <label class='sett__caption' l10n>${_lang.settSpellcheckDetection}</label>
                                             <div class='sett--label-lift-top hbox'>
@@ -318,6 +330,7 @@
             $optsUITheme,
             $optsSpellcheckMode,
             $optsLaunchMode,
+            $optsDefaultSaveFormat,
             $optsAutoupdateMode;
         let $chGpu,
             $chUseAI;
@@ -454,6 +467,15 @@
                 if ( $optsSpellcheckMode ) {
                     _new_settings.spellcheckdetect = $optsSpellcheckMode.val();
                     $optsSpellcheckMode.selectpicker('refresh');
+                }
+
+                /* an enforced format is administrator policy: the combo is
+                   disabled, so nothing is sent back for the native shell to store */
+                if ( $optsDefaultSaveFormat && !appSettings.defaultsaveformat.locked ) {
+                    _new_settings.defaultsaveformat = $optsDefaultSaveFormat.val();
+                    $optsDefaultSaveFormat.selectpicker('refresh');
+
+                    CommonEvents.fire('defaultformat:changed', [_new_settings.defaultsaveformat]);
                 }
 
                 if ( $chGpu ) {
@@ -649,6 +671,20 @@
                             .selectpicker().on('change', e => {
                                 $btnApply.isdisabled() && $btnApply.disable(false);
                             });
+                        }
+
+                        if ( !!appSettings.defaultsaveformat ) {
+                            ($optsDefaultSaveFormat = ($('#opts-default-save-format', $panel).show().find('select')))
+                            .val(appSettings.defaultsaveformat.format)
+                            .prop('disabled', !!appSettings.defaultsaveformat.locked)
+                            .selectpicker().on('change', e => {
+                                $btnApply.isdisabled() && $btnApply.disable(false);
+                            });
+
+                            if ( appSettings.defaultsaveformat.locked )
+                                $('#sett-save-format-managed', $panel).show();
+
+                            CommonEvents.fire('defaultformat:changed', [appSettings.defaultsaveformat.format]);
                         }
 
                         if ( appSettings.spellcheckdetect !== undefined ) {

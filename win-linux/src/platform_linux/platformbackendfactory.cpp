@@ -23,23 +23,23 @@
  *
  */
 
-#ifndef LINUX_WINDOW_UTILS_H
-#define LINUX_WINDOW_UTILS_H
+#include "iplatformbackend.h"
+#include "x11backend.h"
+#include "waylandbackend.h"
+#include <QGuiApplication>
 
-#include <qwindowdefs.h>
-#include <vector>
+static IPlatformBackend* s_instance = nullptr;
 
-
-namespace LinuxWindowUtils
+IPlatformBackend* IPlatformBackend::create()
 {
-void moveWindow(WId window, int x, int y);
-void setNativeFocusTo(WId window);
-bool isNativeFocus(WId window);
-void findWindowAsync(const char *window_name, void *user_data,
-                     uint timeout_ms,
-                     void(*callback)(WId, void*));
-void getWindowStack(std::vector<WId> &winStack);
-void setInputEnabled(WId window, bool enabled);
+    if (QGuiApplication::platformName() == "wayland")
+        return new WaylandBackend();
+    return new X11Backend();
 }
 
-#endif // LINUX_WINDOW_UTILS_H
+IPlatformBackend* IPlatformBackend::instance()
+{
+    if (!s_instance)
+        s_instance = create();
+    return s_instance;
+}
