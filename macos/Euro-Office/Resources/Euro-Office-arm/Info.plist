@@ -478,7 +478,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>file-docxf</string>
 			<key>CFBundleTypeName</key>
-			<string>ONLYOFFICE Document Form Template</string>
+			<string>Document Form Template (.docxf)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -490,7 +490,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>file-oform</string>
 			<key>CFBundleTypeName</key>
-			<string>ONLYOFFICE Fillable Online Form</string>
+			<string>Fillable Online Form (.oform)</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -670,23 +670,21 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Euro-Office was based on ONLYOFFICE by Ascensio System SIA</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Once ONLYOFFICE Desktop Editors has permission, document tabs will be able to ask you for access.</string>
+	<string>Once Euro-Office has permission, document tabs will be able to ask you for access.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUFeedURL</key>
-	<string>https://download.onlyoffice.com/install/desktop/editors/mac/arm/onlyoffice.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>N2LfKoNN6LkD5qNMjt+lEh6LYrQMEFNCEXQ3Kk6nTlM=</string>
+	<key>SUEnableAutomaticChecks</key>
+	<false/>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
 	<key>UIDesignRequiresCompatibility</key>

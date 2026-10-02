@@ -36,7 +36,8 @@ Usage: $(basename "$0") --company-name <name> --product-name <name> [--version <
 
 Required:
   --company-name <name>   Replaces "Euro-Office" in NSHumanReadableCopyright.
-  --product-name <name>   Replaces "ONLYOFFICE" in CFBundleName.
+  --product-name <name>   Replaces "ONLYOFFICE" in CFBundleName, and "Euro-Office"
+                           in the camera/microphone/Bluetooth permission texts.
 
 Optional:
   --version <version>     Sets CFBundleShortVersionString (e.g. "9.3.1").
@@ -67,6 +68,14 @@ if [ -f "${INFO_PLIST}" ]; then
     current="$(/usr/libexec/PlistBuddy -c "Print :NSHumanReadableCopyright" "${INFO_PLIST}")"
     replaced="${current//Euro-Office/${COMPANY_NAME}}"
     /usr/libexec/PlistBuddy -c "Set :NSHumanReadableCopyright ${replaced}" "${INFO_PLIST}"
+
+    # Permission-prompt text names the app; committed default says "Euro-Office".
+    for key in NSBluetoothAlwaysUsageDescription NSBluetoothPeripheralUsageDescription \
+               NSCameraUsageDescription NSMicrophoneUsageDescription; do
+        current="$(/usr/libexec/PlistBuddy -c "Print :${key}" "${INFO_PLIST}" 2>/dev/null)" || continue
+        replaced="${current//Euro-Office/${PRODUCT_NAME}}"
+        /usr/libexec/PlistBuddy -c "Set :${key} ${replaced}" "${INFO_PLIST}"
+    done
 
     if [ -n "${VERSION}" ]; then
         /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${VERSION}" "${INFO_PLIST}"
