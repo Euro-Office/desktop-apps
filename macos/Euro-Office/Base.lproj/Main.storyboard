@@ -23,7 +23,7 @@
                                                 <action selector="onMenuAbout:" target="Voe-Tx-rLC" id="xuH-Yz-ETx"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Check for Updates…" keyEquivalent="u" id="ud7-wC-A79">
+                                        <menuItem title="Check for Updates…" hidden="YES" enabled="NO" keyEquivalent="u" id="ud7-wC-A79">
                                             <connections>
                                                 <action selector="checkForUpdates:" target="mg6-13-ksd" id="Whs-l9-OTO"/>
                                             </connections>
@@ -674,14 +674,14 @@
                                                 <action selector="onMenuAcknowledgments:" target="Voe-Tx-rLC" id="l5J-XJ-sBT"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="License Agreement" id="4et-TX-a4m">
+                                        <menuItem title="License Agreement" hidden="YES" enabled="NO" id="4et-TX-a4m">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="onMenuEULA:" target="Voe-Tx-rLC" id="2lA-bI-nm9"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wdG-cl-JBn"/>
-                                        <menuItem title="Product Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                                        <menuItem title="Product Help" hidden="YES" enabled="NO" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
                                                 <action selector="onShowHelp:" target="Voe-Tx-rLC" id="dwg-r0-5fC"/>
                                             </connections>
@@ -1404,7 +1404,7 @@
                                 </constraints>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="iPF-st-gBJ">
-                                <rect key="frame" x="191" y="0.0" width="874" height="38"/>
+                                <rect key="frame" x="281" y="0.0" width="784" height="38"/>
                                 <subviews>
                                     <customView horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aGv-DD-716" customClass="ASCTabsControl">
                                         <rect key="frame" x="0.0" y="-1" width="135" height="29"/>
@@ -1448,7 +1448,7 @@
                                 </connections>
                             </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="XZA-xX-bBL">
-                                <rect key="frame" x="190" y="0.0" width="1" height="29"/>
+                                <rect key="frame" x="280" y="0.0" width="1" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="1" id="70z-be-Jiz">
                                         <userDefinedRuntimeAttributes>
