@@ -490,7 +490,5 @@ public:
 	}
 };
 
-// TODO: move outside of the header file
-bool ASCPrinterContext::isCurrentlyPrinting = false;
-
 #endif  // NSASCPRINTER_H
+
