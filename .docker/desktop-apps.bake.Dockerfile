@@ -70,6 +70,7 @@ FROM core-base AS desktop-linux
     COPY desktop-sdk /desktop-sdk
     COPY desktop-apps /desktop-apps
     COPY core-fonts /core-fonts
+    COPY core /core
 
     ### Branding
     COPY --from=brand-icons /[d]esktop-apps /desktop-apps
