@@ -125,8 +125,13 @@ void CMainPanelImpl::updateScaling(double dpiratio)
 {
     CMainPanel::updateScaling(dpiratio);
 
-    m_pButtonMain->setIcon(":/logo.svg", AscAppManager::themes().current().isDark() ? "logo-light" : "logo-dark");
-    m_pButtonMain->setIconSize(QSize(85,20)*dpiratio);
+    // Use Euro-Office branded SVGs registered in resources.qrc (logo-light-eo /
+    // logo-dark-eo). The legacy ONLYOFFICE :/logo.svg sprite is not packaged.
+    const QString logo = AscAppManager::themes().current().isDark()
+            ? QStringLiteral(":/logo-dark-eo.svg")
+            : QStringLiteral(":/logo-light-eo.svg");
+    m_pButtonMain->setIcon(logo);
+    m_pButtonMain->setIconSize(QSize(84,20)*dpiratio);
 }
 
 void CMainPanelImpl::applyTheme(const std::wstring& theme)
@@ -134,8 +139,11 @@ void CMainPanelImpl::applyTheme(const std::wstring& theme)
     CMainPanel::applyTheme(theme);
 
     double dpiratio = scaling();
-    m_pButtonMain->setIcon(":/logo.svg", AscAppManager::themes().current().isDark() ? "logo-light" : "logo-dark");
-    m_pButtonMain->setIconSize(QSize(85,20)*dpiratio);
+    const QString logo = AscAppManager::themes().current().isDark()
+            ? QStringLiteral(":/logo-dark-eo.svg")
+            : QStringLiteral(":/logo-light-eo.svg");
+    m_pButtonMain->setIcon(logo);
+    m_pButtonMain->setIconSize(QSize(84,20)*dpiratio);
 }
 
 void CMainPanelImpl::onLocalOptions(const QString& json)
