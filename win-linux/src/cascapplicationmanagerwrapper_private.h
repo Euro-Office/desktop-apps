@@ -153,10 +153,13 @@ public:
         // Use fork/exec instead of QProcess::startDetached because
         // this runs from a destructor after Qt's event loop has stopped,
         // where QProcess may not work reliably.
+        // Build argv before fork(): the process is multi-threaded (CEF), so the
+        // child may only call async-signal-safe functions -- no allocation.
+        const QByteArray script = fileName.toLocal8Bit();
         pid_t pid = fork();
         if (pid == 0) {
             setsid();
-            execlp("/bin/sh", "/bin/sh", fileName.toLocal8Bit().constData(), (char *)nullptr);
+            execl("/bin/sh", "/bin/sh", script.constData(), (char *)nullptr);
             _exit(1);
         } else if (pid < 0) {
             CLogger::log("An error occurred while restarting the app!");

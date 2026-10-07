@@ -349,7 +349,10 @@ void QtMsg::applyScaling()
     m_boxButtons->layout()->setContentsMargins(0,int(10*m_priv->dpiRatio),0,0);
     m_boxButtons->layout()->setSpacing(int(8*m_priv->dpiRatio));
 
-    m_centralWidget->setMinimumWidth(m_priv->buttons.size() > 2 ? 400 : 350);
+    // dpiRatio is the residual after Qt's own scaling (see
+    // Utils::getScreenDpiRatioByWidget), so this is ~1 on Wayland and the
+    // full factor on X11/Windows where the app scales manually.
+    m_centralWidget->setMinimumWidth(int((m_priv->buttons.size() > 2 ? 400 : 350) * m_priv->dpiRatio));
 
     QString _styles(Utils::readStylesheets(":/styles/message.qss"));
     _styles.append(QString("QPushButton{min-width:%1px;}").arg(int(40*m_priv->dpiRatio)));
@@ -421,7 +424,7 @@ void QtMsg::setButtons(std::initializer_list<QString> btns)
     }
 
     if (_btn_num > 2)
-        m_centralWidget->setMinimumWidth(400);
+        m_centralWidget->setMinimumWidth(int(400 * m_priv->dpiRatio));
 }
 
 void QtMsg::setButtons(MsgBtns btns)
