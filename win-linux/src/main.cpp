@@ -61,16 +61,18 @@ int main( int argc, char *argv[] )
     }
 #else
     dynamic_argv.assign(argv, argv + argc);
+    // Decide the platform exactly once. Everything downstream (Qt, GTK, CEF,
+    // desktop-sdk) keys off the normalized QT_QPA_PLATFORM / platformName(),
+    // never XDG_SESSION_TYPE, so QT_QPA_PLATFORM=xcb stays a working
+    // XWayland fallback inside a Wayland session.
     QByteArray platform = qgetenv("QT_QPA_PLATFORM");
-    if (platform.isEmpty()) {
-        QByteArray sessionType = qgetenv("XDG_SESSION_TYPE");
-        if (sessionType == "wayland") {
-            platform = "wayland";
-        } else {
-            platform = "xcb";
-        }
-        qputenv("QT_QPA_PLATFORM", platform);
-    }
+    if (platform.isEmpty())
+        platform = (qgetenv("XDG_SESSION_TYPE") == "wayland" && !qgetenv("WAYLAND_DISPLAY").isEmpty()) ? "wayland" : "xcb";
+    // Qt accepts a fallback list ("wayland;xcb") and variants ("wayland-egl");
+    // we need one definite answer.
+    platform = platform.split(';').first().trimmed();
+    platform = platform.startsWith("wayland") ? "wayland" : "xcb";
+    qputenv("QT_QPA_PLATFORM", platform);
     isWayland = (platform == "wayland");
 
     if (isWayland) {
@@ -93,15 +95,6 @@ int main( int argc, char *argv[] )
         return 0;
     }
 #endif
-#ifdef __linux
-    char* qpaPlatform = getenv("QT_QPA_PLATFORM");
-    char* xdgSessionType = getenv("XDG_SESSION_TYPE");
-    if ((qpaPlatform && strcmp(qpaPlatform, "wayland") == 0) ||
-        (xdgSessionType && strcmp(xdgSessionType, "wayland") == 0)) {
-        isWayland = true;
-    }
-#endif
-
     if (!isWayland) {
         // Plasma and other environments export QT_SCREEN_SCALE_FACTORS /
         // QT_SCALE_FACTOR on X11. In Qt 6 these activate high-DPI scaling
@@ -233,9 +226,6 @@ int main( int argc, char *argv[] )
     gtk_init(&new_argc, &new_argv);
 #endif
     CApplicationCEF::Prepare(new_argc, new_argv);
-    if (QGuiApplication::platformName() == "wayland") {
-        qputenv("GDK_BACKEND", "wayland");
-    }
     CApplicationCEF* application_cef = new CApplicationCEF();
     setup_paths(&AscAppManager::getInstance());
     application_cef->Init_CEF(&AscAppManager::getInstance(), new_argc, new_argv);

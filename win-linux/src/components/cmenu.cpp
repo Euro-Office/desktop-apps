@@ -154,7 +154,9 @@ public:
         // own implicit pointer grab changes how those events are delivered
         // (grabbed globally rather than only within this widget), so watch
         // for that logic if dismiss behavior regresses.
-        QWidget(parent, Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+        // Popup only on Wayland; keep the long-standing Tool type elsewhere.
+        QWidget(parent, (QGuiApplication::platformName() == QLatin1String("wayland") ? Qt::Popup : Qt::Tool)
+                        | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     {
         m_dpiRatio = CScalingWrapper::parentScalingFactor(topLevelWidget());
         if (isCompositingEnabled()) {
