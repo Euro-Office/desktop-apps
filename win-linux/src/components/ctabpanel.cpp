@@ -3,6 +3,7 @@
 #include "cascapplicationmanagerwrapper.h"
 #include "defines.h"
 #include "cefview.h"
+#include <QGuiApplication>
 #include <QHBoxLayout>
 #include "cmessage.h"
 
@@ -34,8 +35,10 @@ CTabPanel::CTabPanel(QWidget *parent, const QSize& s, const QColor& c)
     m_pViewer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_pViewer->SetBackgroundCefColor(uchar(c.red()), uchar(c.green()), uchar(c.blue()));
 
-    setAttribute(Qt::WA_DontCreateNativeAncestors);
-    setAttribute(Qt::WA_NativeWindow);
+    if (QGuiApplication::platformName() != "wayland") {
+        setAttribute(Qt::WA_DontCreateNativeAncestors);
+        setAttribute(Qt::WA_NativeWindow);
+    }
 }
 
 CTabPanel::~CTabPanel()
