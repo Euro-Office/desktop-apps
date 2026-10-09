@@ -894,6 +894,15 @@ void CAscTabWidget::applyPageLoadingStatus(int id, int state)
             m_pBar->setTabLoading(tabIndex, false);
             panel(tabIndex)->applyLoader("hide");
             panel(tabIndex)->setReady();
+
+            // Shown here (once the tab has actually finished loading) rather
+            // than synchronously during any particular open path, so it's
+            // uniform across File > Open, Recent Files, and drag-and-drop --
+            // and so a modal dialog never pops while an OS-level operation
+            // (e.g. a Wayland drag-and-drop grab) triggering the open is
+            // still in progress. Utils::warnIfDatabaseFile no-ops for
+            // non-database files.
+            Utils::warnIfDatabaseFile(this, QString::fromStdWString(panel(tabIndex)->data()->url()));
         } else
         if ( state == DOCUMENT_CHANGED_PAGE_LOAD_FINISH ) {
             if ( !panel(tabIndex)->data()->eventLoadSupported() ) {
