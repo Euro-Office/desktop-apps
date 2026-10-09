@@ -351,7 +351,11 @@ $(TAR_HELP) : build
 build/main/usr/bin/$(DESKTOPEDITORS_EXEC) : common/linux/desktopeditors.sh.m4
 build/main/usr/share/applications/$(DESKTOPEDITORS_EXEC).desktop : common/linux/desktopeditors.desktop.m4
 
-$(BIN_FILES) $(DESKTOP_FILES) :
+$(BIN_FILES) :
+	mkdir -p $(@D) && m4 -I "$(BRANDING_DIR)/common/linux" $(M4_PARAMS) $< > $@
+	chmod 755 $@
+
+$(DESKTOP_FILES) :
 	mkdir -p $(@D) && m4 -I "$(BRANDING_DIR)/common/linux" $(M4_PARAMS) $< > $@
 
 % : %.m4
