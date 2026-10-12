@@ -342,6 +342,14 @@ set_default_options(DesktopEditors)
 if(WIN32)
     set_target_properties(DesktopEditors PROPERTIES WIN32_EXECUTABLE TRUE)
     target_link_libraries(DesktopEditors PRIVATE Qt6::EntryPointPrivate)
+
+    # Application and file type icons and Explorer "New" menu texts, referenced from package/inno
+    set(PROJICONS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extras/projicons")
+    configure_file(res/desktopeditors.rc.in "${CMAKE_CURRENT_BINARY_DIR}/desktopeditors.rc" @ONLY)
+    target_sources(DesktopEditors PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/desktopeditors.rc")
+    # translation.rc includes "src/resource.h" relative to projicons
+    set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/desktopeditors.rc"
+        PROPERTIES INCLUDE_DIRECTORIES "${PROJICONS_DIR}")
 endif()
 
 if(NOT WIN32)
@@ -470,6 +478,14 @@ install(TARGETS
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+# Shortcut and uninstaller icon (package/inno: {app}\app.ico)
+if(WIN32)
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/extras/projicons/res/icons/desktopeditors.ico"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        RENAME app.ico
+    )
+endif()
 
 # CEF binaries
 if(WIN32)
