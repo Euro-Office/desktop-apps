@@ -1113,6 +1113,10 @@ namespace WindowHelper {
         if (!wb) return;
 
         wb->setEnabled(enabled);
+        // winId() would turn the main panel into a native wl_subsurface on
+        // Wayland (see CTabPanel), and there is no input shape to set there.
+        if (QGuiApplication::platformName() == QLatin1String("wayland"))
+            return;
         WId wnd = wb->mainPanel()->winId();
         LinuxWindowUtils::setInputEnabled(wnd, enabled);
     }

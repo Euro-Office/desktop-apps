@@ -4,6 +4,7 @@
 #include "defines.h"
 #include "cefview.h"
 #include <QHBoxLayout>
+#include <QGuiApplication>
 #include "cmessage.h"
 
 
@@ -34,8 +35,15 @@ CTabPanel::CTabPanel(QWidget *parent, const QSize& s, const QColor& c)
     m_pViewer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_pViewer->SetBackgroundCefColor(uchar(c.red()), uchar(c.green()), uchar(c.blue()));
 
-    setAttribute(Qt::WA_DontCreateNativeAncestors);
-    setAttribute(Qt::WA_NativeWindow);
+    // The native window is only needed to host CEF's own window (X11/Windows).
+    // On Wayland CEF renders off-screen into the GL overlay, and a native child
+    // becomes an opaque wl_subsurface that fully covers the toplevel when the
+    // window is maximized. Mutter then withholds the toplevel's frame callbacks,
+    // so Qt stops repainting and the UI looks frozen.
+    if (QGuiApplication::platformName() != QLatin1String("wayland")) {
+        setAttribute(Qt::WA_DontCreateNativeAncestors);
+        setAttribute(Qt::WA_NativeWindow);
+    }
 }
 
 CTabPanel::~CTabPanel()
