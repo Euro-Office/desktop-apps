@@ -42,11 +42,14 @@ module.exports = function(grunt) {
         },
         replace: {
             brand: {
-                src: ['../locale/*.js', '../src/locale.js'],  // adjust globs
+                src: ['../locale/*.js', '../src/locale.js', '../src/panelrecent.js'],
                 overwrite: true,
                 replacements: [{
                     from: /__COMPANY_NAME__/g,
                     to: process.env.COMPANY_NAME || 'Euro-Office'
+                }, {
+                    from: /__HELP_URL__/g,
+                    to: process.env.HELP_URL || 'https://github.com/euro-office'
                 }]
             }
         }
