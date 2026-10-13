@@ -7,7 +7,7 @@
     [string]$BuildDir,
     [string]$BrandingDir,
     [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
+    [string]$CertName = "",
     [string]$TimestampServer = "http://timestamp.digicert.com",
     # Full signtool argument list, see make.ps1.
     [string[]]$SignArgs,

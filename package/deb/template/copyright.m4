@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: M4_COMPANY_NAME M4_PRODUCT_NAME
-Upstream-Contact: M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
+Upstream-Contact: Ascensio System SIA <support@onlyoffice.com>
 Source: M4_PUBLISHER_URL
 
 Files: *
-Copyright: 2016-M4_CURRENT_YEAR, M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
+Copyright: 2016-M4_CURRENT_YEAR, Ascensio System SIA <support@onlyoffice.com>
 ifelse(M4_PACKAGE_EDITION, commercial,
 `License: Proprietary
  Placeholder',

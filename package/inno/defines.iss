@@ -6,10 +6,10 @@
 #define sIntProductName                 "DesktopEditors"
 #define sAppName                        str(sCompanyName)
 #define sPackageName                    str(sIntCompanyName + "-" + sIntProductName)
-#define sAppPublisher                   "Ascensio System SIA"
-#define sAppPublisherURL                "https://www.onlyoffice.com/"
-#define sAppSupportURL                  "https://www.onlyoffice.com/support.aspx"
-#define sAppCopyright                   str("© " + sAppPublisher + " " + GetDateTimeString("yyyy",,) + ". All rights reserved.")
+#define sAppPublisher                   "Euro-Office"
+#define sAppPublisherURL                "https://github.com/Euro-Office/DesktopEditors"
+#define sAppSupportURL                  "https://github.com/Euro-Office/DesktopEditors/issues"
+#define sAppCopyright                   str("© Ascensio System SIA " + GetDateTimeString("yyyy",,) + ". All rights reserved.")
 #define sAppIconName                    "Euro-Office"
 #define sOldAppIconName                 "Euro-Office Editors"
 #define sAppProtocol                    'oo-office'

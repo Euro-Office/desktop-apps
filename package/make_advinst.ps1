@@ -6,7 +6,7 @@
     [string]$ProductName = "DesktopEditors",
     [string]$BuildDir,
     [switch]$Sign,
-    [string]$CertName = "Ascensio System SIA",
+    [string]$CertName = "",
     [string]$TimestampServer = "http://timestamp.digicert.com",
     [switch]$Debug
 )

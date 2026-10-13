@@ -1,7 +1,7 @@
 Source: M4_PACKAGE_NAME
 Section: editors
 Priority: optional
-Maintainer: M4_PUBLISHER_NAME <M4_SUPPORT_MAIL>
+Maintainer: M4_PUBLISHER_NAME`'ifelse(M4_SUPPORT_MAIL,,,` <M4_SUPPORT_MAIL>')
 Build-Depends: debhelper (>= 8.0.0)
 
 Package: M4_PACKAGE_NAME

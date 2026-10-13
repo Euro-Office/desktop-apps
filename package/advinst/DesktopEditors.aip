@@ -9,14 +9,14 @@
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="Free desktop office suite for document editing and collaboration" ValueLocId="*"/>
     <ROW Property="ARPCONTACT" Value="20A-6, Ernesta Birznieka-Upisha str., Riga, LV-1050" ValueLocId="-"/>
-    <ROW Property="ARPHELPLINK" Value="http://dev.onlyoffice.org/" ValueLocId="-"/>
+    <ROW Property="ARPHELPLINK" Value="https://github.com/Euro-Office/DesktopEditors/issues" ValueLocId="-"/>
     <ROW Property="ARPHELPTELEPHONE" Value="+371 66016425" ValueLocId="-"/>
     <ROW Property="ARPNOMODIFY" MultiBuildValue="MsiBuild64:1#MsiBuild32:1#MsiBuildARM64:1"/>
     <ROW Property="ARPNOREPAIR" Value="1"/>
     <ROW Property="ARPPRODUCTICON" Value="i_desktopeditors" Type="8"/>
     <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
-    <ROW Property="ARPURLINFOABOUT" Value="http://www.onlyoffice.com" ValueLocId="-"/>
-    <ROW Property="ARPURLUPDATEINFO" Value="http://www.onlyoffice.com/download.aspx" ValueLocId="-"/>
+    <ROW Property="ARPURLINFOABOUT" Value="https://github.com/Euro-Office/DesktopEditors" ValueLocId="-"/>
+    <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/Euro-Office/DesktopEditors/releases" ValueLocId="-"/>
     <ROW Property="AppName" Value="Euro-Office" ValueLocId="-"/>
     <ROW Property="AppUserModelID" Value="ASC.Documents.5" ValueLocId="-"/>
     <ROW Property="Arch" Value="x64" MultiBuildValue="MsiBuild32:x86#MsiBuildARM64:arm64" ValueLocId="-"/>
@@ -29,7 +29,7 @@
     <ROW Property="FORMS" Value="1" ValueLocId="-"/>
     <ROW Property="LOCALE" Value="en-US"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="MsiBuild64:7#MsiBuild32:7#MsiBuildARM64:7"/>
-    <ROW Property="Manufacturer" Value="Ascensio System SIA" ValueLocId="-"/>
+    <ROW Property="Manufacturer" Value="Euro-Office" ValueLocId="-"/>
     <ROW Property="MismatchInstalledArch_ErrorText" Value="The architecture of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing." ValueLocId="*"/>
     <ROW Property="MismatchInstalledEdition_ErrorText" Value="The edition of the installed version does not match this package. Please install the correct package or uninstall the existing version before continuing." ValueLocId="*"/>
     <ROW Property="MismatchInstalledType_ErrorText" Value="The installed version was deployed using a different type of installer. Please install the correct package or uninstall the existing version before continuing." ValueLocId="*"/>
