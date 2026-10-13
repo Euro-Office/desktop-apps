@@ -220,7 +220,8 @@ void setFilter(DBusMessageIter &msg_iter, const FilterItem &filterItem) {
             const unsigned nil = 0;
             __dbusAppend(&array_struct_iter, DBUS_TYPE_UINT32, &nil);
         }
-        char *ptrn = pattern.toUtf8().data();
+        QByteArray ptrn_ba = pattern.toUtf8();
+        char *ptrn = ptrn_ba.data();
         __dbusAppend(&array_struct_iter, DBUS_TYPE_STRING, &ptrn);
         __dbusClose(&array_iter, &array_struct_iter);
     }
@@ -245,8 +246,8 @@ void setFilters(DBusMessageIter &msg_iter, const FilterItem *filterList, uint fi
         __dbusClose(&dict_iter, &var_iter);
         __dbusClose(&msg_iter, &dict_iter);
 
-        // set current filter
-        if (selFilter && selFilter->name && selFilter->pattern) {
+        // set current filter (the portal rejects a filter with an empty name)
+        if (selFilter && selFilter->name && *selFilter->name && selFilter->pattern) {
             __dbusOpen(&msg_iter, DBUS_TYPE_DICT_ENTRY, nullptr, &dict_iter);
             __dbusAppend(&dict_iter, DBUS_TYPE_STRING, &CURRENT_FILTER);
             __dbusOpen(&dict_iter, DBUS_TYPE_VARIANT, "(sa(us))", &var_iter);
@@ -1129,7 +1130,7 @@ QStringList Xdg::openXdgPortal(QWidget *parent,
             index++;
         }
 
-        if (mode != Mode::FOLDER && sel_filter) {
+        if (mode != Mode::FOLDER && sel_filter && !sel_filter->isEmpty()) {
             sel_filter->replace("/", " \u2044 ");
             parseFilterString(mode, *sel_filter, selFilterItem);
         }
