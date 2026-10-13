@@ -7,10 +7,10 @@ PRODUCT_NAME_SHORT ?= $(subst $(empty) $(empty),,$(PRODUCT_NAME))
 COMPANY_NAME_LOW = $(shell echo $(COMPANY_NAME) | tr A-Z a-z | tr -s ' ' '-')
 PRODUCT_NAME_LOW = $(shell echo $(PRODUCT_NAME_SHORT) | tr A-Z a-z)
 
-PUBLISHER_NAME ?= Ascensio System SIA
-PUBLISHER_URL ?= http://onlyoffice.com
-SUPPORT_URL ?= http://support.onlyoffice.com
-SUPPORT_MAIL ?= support@onlyoffice.com
+PUBLISHER_NAME ?= Euro-Office
+PUBLISHER_URL ?= https://github.com/Euro-Office/DesktopEditors
+SUPPORT_URL ?= https://github.com/Euro-Office/DesktopEditors/issues
+SUPPORT_MAIL ?=
 SCHEME_HANDLER ?= oo-office
 
 PRODUCT_VERSION ?= 0.0.0
@@ -113,7 +113,9 @@ RPM_PARAMS += --define '_company_name $(COMPANY_NAME)'
 RPM_PARAMS += --define '_product_name $(PRODUCT_NAME)'
 RPM_PARAMS += --define '_publisher_name $(PUBLISHER_NAME)'
 RPM_PARAMS += --define '_publisher_url $(PUBLISHER_URL)'
+ifneq ($(SUPPORT_MAIL),)
 RPM_PARAMS += --define '_support_mail $(SUPPORT_MAIL)'
+endif
 RPM_PARAMS += --define '_package_name $(PACKAGE_NAME)'
 RPM_PARAMS += --define '_package_opensource $(PACKAGE_OPENSOURCE)'
 RPM_PARAMS += --define '_package_commercial $(PACKAGE_COMMERCIAL)'
