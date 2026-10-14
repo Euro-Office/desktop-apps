@@ -355,6 +355,32 @@ if(WIN32)
     # associations call (jump list, --assoc, file type icons).
     set_target_properties(DesktopEditors PROPERTIES WIN32_EXECUTABLE TRUE OUTPUT_NAME editors)
     target_link_libraries(DesktopEditors PRIVATE Qt6::EntryPointPrivate)
+
+    # processorArchitecture of the "converter" side-by-side assembly
+    # (converter\converter.manifest) and of everything depending on it
+    string(TOLOWER "${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}" _msvc_arch)
+    if(_msvc_arch STREQUAL "arm64")
+        set(EO_MANIFEST_ARCH arm64)
+    elseif(_msvc_arch STREQUAL "x86")
+        set(EO_MANIFEST_ARCH x86)
+    else()
+        set(EO_MANIFEST_ARCH amd64)
+    endif()
+
+    # The whole manifest of editors.exe lives in DesktopEditors.exe.manifest;
+    # the linker only adds an empty one for mt.exe to merge it into.
+    configure_file(res/manifest/DesktopEditors.exe.manifest
+        ${CMAKE_CURRENT_BINARY_DIR}/editors.exe.manifest @ONLY)
+
+    # App icon (IDI_MAINICON) + version info
+    target_sources(DesktopEditors PRIVATE
+        version.rc
+        ${CMAKE_CURRENT_BINARY_DIR}/editors.exe.manifest
+    )
+    set_source_files_properties(version.rc PROPERTIES
+        INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    target_link_options(DesktopEditors PRIVATE /MANIFESTUAC:NO)
 endif()
 
 if(NOT WIN32)
@@ -451,16 +477,15 @@ if(UNIX)
 endif()
 
 if(WIN32)
-    foreach(_t DesktopEditors editors_helper
+    # editors.exe declares its dependencies in DesktopEditors.exe.manifest
+    foreach(_t editors_helper
             doctrenderer DocxRenderer kernel kernel_network graphics
             UnicodeConverter PdfFile DjVuFile XpsFile ooxmlsignature
             Fb2File EpubFile HtmlFile2 OFDFile IWorkFile HWPFile
             StarMathConverter)
         target_link_options(${_t} PRIVATE
-            "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='amd64'")
+            "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='${EO_MANIFEST_ARCH}'")
     endforeach()
-    target_link_options(DesktopEditors PRIVATE
-        "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'")
 endif()
 
 # 9. Windows launcher (extras/projicons -> DesktopEditors.exe)
@@ -522,6 +547,11 @@ install(TARGETS
 
 if(WIN32)
     install(TARGETS projicons RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    # Start menu / desktop shortcuts and the uninstall entry use {app}\app.ico
+    install(FILES res/icons/desktopeditors-eo.ico
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        RENAME app.ico
+    )
 endif()
 
 # CEF binaries
@@ -595,6 +625,24 @@ install(DIRECTORY "${EO_CORE_OUTPUT_DIR}/"
     USE_SOURCE_PERMISSIONS
     DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
 )
+
+# Makes converter\ the private "converter" assembly the binaries above depend
+# on; without it they fail with 0xC0150002 (STATUS_SXS_CANT_GEN_ACTCTX)
+if(WIN32)
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+        "${CORE_ROOT_DIR}/Common/msvc/converter.manifest")
+    file(READ "${CORE_ROOT_DIR}/Common/msvc/converter.manifest" _converter_manifest)
+    string(REPLACE "processorArchitecture=\"amd64\""
+        "processorArchitecture=\"${EO_MANIFEST_ARCH}\""
+        _converter_manifest "${_converter_manifest}")
+    if(NOT _converter_manifest MATCHES "processorArchitecture=\"${EO_MANIFEST_ARCH}\"")
+        message(FATAL_ERROR "converter.manifest: could not set processorArchitecture to ${EO_MANIFEST_ARCH}")
+    endif()
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/converter.manifest" "${_converter_manifest}")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/converter.manifest"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
+    )
+endif()
 
 # Boost: on Windows it's static (linked into the binaries) — nothing to install
 if(NOT WIN32)
