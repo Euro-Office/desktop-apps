@@ -213,6 +213,7 @@ public:
     uint logoutCount(const std::wstring& portal) const;
     void Logout(const std::wstring& portal);
     void launchAppClose();
+    void OnTerminateRequest() override;
     void onDocumentReady(int uid);
     void OnEvent(NSEditorApi::CAscCefMenuEvent *);
     bool event(QEvent *event);
