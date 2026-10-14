@@ -126,7 +126,17 @@ set(ENV_PRODUCT_VERSION $ENV{PRODUCT_VERSION})
 if(ENV_PRODUCT_VERSION)
     set(FULL_PRODUCT_VERSION "${ENV_PRODUCT_VERSION}.$ENV{BUILD_NUMBER}")
     add_definitions(-DVER_PRODUCT_VERSION=${FULL_PRODUCT_VERSION})
-    string(REPLACE "." "," VERSION_COMMAS ${FULL_PRODUCT_VERSION})
+    # VERSIONINFO FILEVERSION needs exactly four numbers, so drop suffixes
+    # like ".dev" (9.3.5.dev + build 1 -> 9,3,5,1)
+    string(REGEX MATCHALL "[0-9]+" _ver_nums "${ENV_PRODUCT_VERSION}")
+    list(APPEND _ver_nums 0 0 0)
+    list(SUBLIST _ver_nums 0 3 _ver_nums)
+    set(_ver_build "$ENV{BUILD_NUMBER}")
+    if(NOT _ver_build MATCHES "^[0-9]+$")
+        set(_ver_build 0)
+    endif()
+    list(APPEND _ver_nums ${_ver_build})
+    string(REPLACE ";" "," VERSION_COMMAS "${_ver_nums}")
     add_definitions(-DVER_PRODUCT_VERSION_COMMAS=${VERSION_COMMAS})
 endif()
 
@@ -340,7 +350,10 @@ add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
 set_default_options(DesktopEditors) 
 
 if(WIN32)
-    set_target_properties(DesktopEditors PROPERTIES WIN32_EXECUTABLE TRUE)
+    # On Windows the editor ships as editors.exe; DesktopEditors.exe is the
+    # projicons launcher below, which the installer, shortcuts and file
+    # associations call (jump list, --assoc, file type icons).
+    set_target_properties(DesktopEditors PROPERTIES WIN32_EXECUTABLE TRUE OUTPUT_NAME editors)
     target_link_libraries(DesktopEditors PRIVATE Qt6::EntryPointPrivate)
 endif()
 
@@ -450,6 +463,42 @@ if(WIN32)
         "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'")
 endif()
 
+# 9. Windows launcher (extras/projicons -> DesktopEditors.exe)
+# Handles --create-jump-list / --remove-jump-list / --assoc from the installer
+# and the app, carries the file type icons referenced by index from the
+# registry and shortcuts, and otherwise starts editors.exe.
+if(WIN32)
+    set(PROJICONS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extras/projicons)
+    add_executable(projicons WIN32
+        ${PROJICONS_DIR}/src/main.cpp
+        ${PROJICONS_DIR}/version.rc
+    )
+    if(NOT BUILD_XP)
+        target_sources(projicons PRIVATE
+            ${PROJICONS_DIR}/src/jumplist.cpp
+            ${PROJICONS_DIR}/src/shellassoc.cpp
+        )
+    endif()
+    set_target_properties(projicons PROPERTIES OUTPUT_NAME DesktopEditors)
+    # projicons dir first for its res/icons/*.ico; this dir for APP_ICON_PATH
+    target_include_directories(projicons PRIVATE
+        ${PROJICONS_DIR}/src
+        ${PROJICONS_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    target_compile_definitions(projicons PRIVATE
+        UNICODE _UNICODE
+        APP_USER_MODEL_ID="ASC.Documents.5"
+    )
+    target_link_libraries(projicons PRIVATE
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt6::EntryPointPrivate
+        shlwapi shell32 advapi32 crypt32 rpcrt4 ole32
+    )
+    # version.rc embeds its own manifest
+    target_link_options(projicons PRIVATE /MANIFEST:NO)
+endif()
+
 # 10. Translations
 file(GLOB TS_FILES "langs/*.ts")
 qt6_add_translation(DesktopEditors TS_FILES ${TS_FILES})
@@ -470,6 +519,10 @@ install(TARGETS
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if(WIN32)
+    install(TARGETS projicons RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
 
 # CEF binaries
 if(WIN32)
