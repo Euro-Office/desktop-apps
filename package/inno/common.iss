@@ -74,7 +74,7 @@ PrivilegesRequired        =admin
 AppMutex                  ={code:getAppMutex}
 ChangesAssociations       =yes
 ChangesEnvironment        =yes
-SetupMutex                =ASC
+SetupMutex                =EuroOffice-DesktopEditors-Setup
 
 #if Ver < EncodeVer(6,0,0) & ARCH == "x64"
 ArchitecturesAllowed              = x64

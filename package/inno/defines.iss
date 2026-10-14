@@ -19,8 +19,8 @@
 #define APP_REG_PATH                    str("Software\" + APP_PATH)
 #define APP_REG_UNINST_KEY              str(sCompanyName + " " + sProductName)
 #define APP_USER_MODEL_ID               "ASC.Documents.5"
-#define APP_MUTEX_NAME                  "TEAMLAB"
-#define APPWND_CLASS_NAME               "DocEditorsWindowClass"
+#define APP_MUTEX_NAME                  "EuroOffice-DesktopEditors"
+#define APPWND_CLASS_NAME               "EuroOfficeEditorsWindowClass"
 
 #define iconsExe                        "DesktopEditors.exe"
 #define NAME_EXE_OUT                    "editors.exe"
