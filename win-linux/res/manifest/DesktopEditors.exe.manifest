@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Manifest of editors.exe. CMake configures @EO_MANIFEST_ARCH@ (amd64,
+     arm64, x86) to match the converter assembly installed in converter\. -->
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
    <assemblyIdentity
       version="1.0.0.0"
-      processorArchitecture="*"
-      name="DesktopEditors.exe"
+      processorArchitecture="@EO_MANIFEST_ARCH@"
+      name="editors.exe"
       type="win32"
    />
 
@@ -21,7 +23,7 @@
          <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>
          <!-- Windows 10 and Windows 11 -->
          <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
-      </application> 
+      </application>
    </compatibility>
 
    <dependency>
@@ -37,7 +39,19 @@
       </dependentAssembly>
    </dependency>
 
-   <asmv3:application>
+   <!-- Private assembly converter\converter.manifest (core libraries) -->
+   <dependency>
+      <dependentAssembly>
+         <assemblyIdentity
+            type="win32"
+            name="converter"
+            version="1.0.0.0"
+            processorArchitecture="@EO_MANIFEST_ARCH@"
+         />
+      </dependentAssembly>
+   </dependency>
+
+   <asmv3:application xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
       <asmv3:windowsSettings xmlns="http://schemas.microsoft.com/SMI/2020/WindowsSettings">
          <heapType>SegmentHeap</heapType>
       </asmv3:windowsSettings>
