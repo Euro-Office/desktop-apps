@@ -1531,8 +1531,9 @@ void CAscApplicationManagerWrapper::OnTerminateRequest()
 {
     // close windows as on session end, so unsaved documents are not dropped silently
     if ( m_vecEditors.empty() && !(m_pMainWindow && m_pMainWindow->isVisible()) )
-        CAscApplicationManager::OnTerminateRequest();
-    else closeAppWindows();
+    { CAscApplicationManager::OnTerminateRequest(); }
+    else
+    { closeAppWindows(); }
 }
 
 void CAscApplicationManagerWrapper::launchAppClose()
