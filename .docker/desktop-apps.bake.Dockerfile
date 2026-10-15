@@ -20,50 +20,83 @@ FROM core-base AS desktop-linux
     ARG PRODUCT_NAME
     ARG BRANDING_DIR
 
-    RUN apt-get -y update && \
-        apt-get -y upgrade && \ 
-        apt-get -y install \
-                    libgtk-3-dev \
-                    libatk1.0-dev \
-                    libxkbcommon-x11-dev \
-                    python3-venv \
-                    python3-pip \
+    # core-base is Rocky Linux 9 on amd64 (glibc 2.34, so the result runs on
+    # RHEL/Rocky/Alma 9) and Ubuntu 24.04 on arm64, see core.bake.Dockerfile.
+    RUN if command -v dnf >/dev/null; then \
+            dnf install -y \
+                    gtk3-devel \
+                    atk-devel \
                     bison \
-                    libnotify-dev \
-                    libcups2-dev \
-                    libwayland-dev \
-                    libdbus-1-dev \
-                    libxcb-util0-dev \
-                    libxcb-xkb-dev \
-                    libxcb-cursor-dev \
-                    libxcb-xinput-dev \
-                    build-essential \
-                    ninja-build \
-                    pkg-config \
-                    libx11-dev \
-                    libx11-xcb-dev \
-                    libxcb1-dev \
-                    libxcb-render0-dev \
-                    libxcb-shape0-dev \
-                    libxcb-xfixes0-dev \
-                    libxcb-randr0-dev \
-                    libxcb-keysyms1-dev \
-                    libxcb-image0-dev \
-                    libxcb-icccm4-dev \
-                    libxcb-sync-dev \
-                    libxcb-xinerama0-dev \
-                    libxcb-util-dev \
-                    libxrender-dev \
-                    libxi-dev \
-                    libxkbcommon-dev \
-                    libxkbcommon-x11-dev \
-                    libgl1-mesa-dev \
-                    libegl1-mesa-dev \
-                    libasound2-dev \
-                    libpulse-dev \
-                    libnss3-dev \
-                    libnspr4-dev && \
-        python3 -m venv /opt/venv && \
+                    libnotify-devel \
+                    cups-devel \
+                    wayland-devel \
+                    dbus-devel \
+                    libX11-devel \
+                    libxcb-devel \
+                    xcb-util-devel \
+                    xcb-util-cursor-devel \
+                    xcb-util-keysyms-devel \
+                    xcb-util-image-devel \
+                    xcb-util-wm-devel \
+                    xcb-util-renderutil-devel \
+                    libXrender-devel \
+                    libXi-devel \
+                    libxkbcommon-devel \
+                    libxkbcommon-x11-devel \
+                    mesa-libGL-devel \
+                    mesa-libEGL-devel \
+                    alsa-lib-devel \
+                    pulseaudio-libs-devel \
+                    nss-devel \
+                    nspr-devel && \
+            dnf clean all; \
+        else \
+            apt-get -y update && \
+            apt-get -y upgrade && \
+            apt-get -y install \
+                        libgtk-3-dev \
+                        libatk1.0-dev \
+                        libxkbcommon-x11-dev \
+                        python3-venv \
+                        python3-pip \
+                        bison \
+                        libnotify-dev \
+                        libcups2-dev \
+                        libwayland-dev \
+                        libdbus-1-dev \
+                        libxcb-util0-dev \
+                        libxcb-xkb-dev \
+                        libxcb-cursor-dev \
+                        libxcb-xinput-dev \
+                        build-essential \
+                        ninja-build \
+                        pkg-config \
+                        libx11-dev \
+                        libx11-xcb-dev \
+                        libxcb1-dev \
+                        libxcb-render0-dev \
+                        libxcb-shape0-dev \
+                        libxcb-xfixes0-dev \
+                        libxcb-randr0-dev \
+                        libxcb-keysyms1-dev \
+                        libxcb-image0-dev \
+                        libxcb-icccm4-dev \
+                        libxcb-sync-dev \
+                        libxcb-xinerama0-dev \
+                        libxcb-util-dev \
+                        libxrender-dev \
+                        libxi-dev \
+                        libxkbcommon-dev \
+                        libxkbcommon-x11-dev \
+                        libgl1-mesa-dev \
+                        libegl1-mesa-dev \
+                        libasound2-dev \
+                        libpulse-dev \
+                        libnss3-dev \
+                        libnspr4-dev && \
+            rm -rf /var/lib/apt/lists/*; \
+        fi && \
+        ${CORE_PYTHON} -m venv /opt/venv && \
         /opt/venv/bin/pip install --no-cache-dir aqtinstall
 
     ENV PATH="/opt/venv/bin:$PATH"
@@ -102,6 +135,7 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_MODE=ON \
             -DVCPKG_MANIFEST_DIR="/core" \
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
+            -DPYTHON_BIN=/opt/venv/bin/python \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             /desktop-apps/win-linux/ && \
         cmake --build . && \
