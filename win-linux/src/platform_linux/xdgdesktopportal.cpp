@@ -893,8 +893,9 @@ Result callXdgPortal(QWidget* parent, Xdg::Mode mode, const char* title,
     auto processIncoming = [&]() {
         while (!finished) {
             DBusMessage* msg = dbus_connection_pop_message(dbus_conn);
-            if (!msg)
+            if (!msg) {
                 break;
+            }
             const int type = dbus_message_get_type(msg);
             if (!got_reply && dbus_message_get_reply_serial(msg) == serial &&
                     (type == DBUS_MESSAGE_TYPE_METHOD_RETURN || type == DBUS_MESSAGE_TYPE_ERROR)) {
@@ -937,8 +938,9 @@ Result callXdgPortal(QWidget* parent, Xdg::Mode mode, const char* title,
         }
     };
     auto readIncoming = [&]() {
-        if (finished)
+        if (finished) {
             return;
+        }
         if (!dbus_connection_read_write(dbus_conn, 0)) {
             setErrorText("Portal did not give a reply");
             finish(ERROR);
@@ -1171,8 +1173,9 @@ QStringList Xdg::openXdgPortal(QWidget *parent,
     // Qt events are processed while the portal dialog is open,
     // so prevent a second dialog from being opened meanwhile
     static bool dialog_active = false;
-    if (dialog_active)
+    if (dialog_active) {
         return QStringList();
+    }
     QScopedValueRollback<bool> __dialogActiveRollback(dialog_active, true);
 
     initDBus();
