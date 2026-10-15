@@ -12,6 +12,11 @@
 #include <assert.h>
 #include <unistd.h>
 #include <dbus/dbus.h>
+#include <QEventLoop>
+#include <QScopedPointer>
+#include <QScopedValueRollback>
+#include <QSocketNotifier>
+#include <QTimer>
 #include <sys/syscall.h>
 #include <linux/random.h>
 #ifdef HAVE_X11
@@ -865,47 +870,99 @@ Result callXdgPortal(QWidget* parent, Xdg::Mode mode, const char* title,
     }
     __dbusClose(&iter, &arr_iter);
 
-    DBusMessage* reply = dbus_connection_send_with_reply_and_block(
-                            dbus_conn, methd, DBUS_TIMEOUT_INFINITE, &err);
-    if (!reply) {
-        dbus_error_free(&dbus_err);
-        dbus_move_error(&err, &dbus_err);
-        setErrorText(dbus_err.message);
+    dbus_uint32_t serial = 0;
+    if (!dbus_connection_send(dbus_conn, methd, &serial)) {
+        setErrorText("Not enough memory to send D-Bus message");
         return ERROR;
     }
-    UnrefLater_DBusMessage __replyUnrefLater(reply);
-    {
-        DBusMessageIter iter;
-        if (!dbus_message_iter_init(reply, &iter)) {
-            setErrorText("D-Bus reply is missing an argument");
-            return ERROR;
-        }
-        if (dbus_message_iter_get_arg_type(&iter) != DBUS_TYPE_OBJECT_PATH) {
-            setErrorText("D-Bus reply is not an object path");
-            return ERROR;
-        }
-        const char* path;
-        dbus_message_iter_get_basic(&iter, &path);
-        if (strcmp(path, handle_path) != 0) {
-            signal_hand.subscribe(path);
-        }
-    }
+    dbus_connection_flush(dbus_conn);
 
-    do {
-        while (true) {
+    // Wait for the method reply and the Response signal without blocking the GUI thread:
+    // otherwise Qt cannot answer compositor pings (xdg_wm_base) and the application
+    // is reported as not responding while the dialog is open.
+    QByteArray request_path(handle_path);
+    bool got_reply = false;
+    bool finished = false;
+    res = ERROR;
+    QEventLoop loop;
+    auto finish = [&](Result r) {
+        res = r;
+        finished = true;
+        loop.quit();
+    };
+    auto processIncoming = [&]() {
+        while (!finished) {
             DBusMessage* msg = dbus_connection_pop_message(dbus_conn);
             if (!msg)
                 break;
-            if (dbus_message_is_signal(msg, "org.freedesktop.portal.Request", "Response")) {
+            const int type = dbus_message_get_type(msg);
+            if (!got_reply && dbus_message_get_reply_serial(msg) == serial &&
+                    (type == DBUS_MESSAGE_TYPE_METHOD_RETURN || type == DBUS_MESSAGE_TYPE_ERROR)) {
+                UnrefLater_DBusMessage __replyUnrefLater(msg);
+                if (type == DBUS_MESSAGE_TYPE_ERROR) {
+                    dbus_set_error_from_message(&err, msg);
+                    dbus_error_free(&dbus_err);
+                    dbus_move_error(&err, &dbus_err);
+                    setErrorText(dbus_err.message);
+                    finish(ERROR);
+                    break;
+                }
+                DBusMessageIter iter;
+                if (!dbus_message_iter_init(msg, &iter)) {
+                    setErrorText("D-Bus reply is missing an argument");
+                    finish(ERROR);
+                    break;
+                }
+                if (dbus_message_iter_get_arg_type(&iter) != DBUS_TYPE_OBJECT_PATH) {
+                    setErrorText("D-Bus reply is not an object path");
+                    finish(ERROR);
+                    break;
+                }
+                const char* path;
+                dbus_message_iter_get_basic(&iter, &path);
+                if (strcmp(path, handle_path) != 0) {
+                    request_path = path;
+                    signal_hand.subscribe(path);
+                }
+                got_reply = true;
+                continue;
+            }
+            if (dbus_message_is_signal(msg, "org.freedesktop.portal.Request", "Response") &&
+                    dbus_message_has_path(msg, request_path.constData())) {
                 outMsg = msg;
-                return SUCCESS;
+                finish(SUCCESS);
+                break;
             }
             dbus_message_unref(msg);
         }
-    } while (dbus_connection_read_write(dbus_conn, -1));
+    };
+    auto readIncoming = [&]() {
+        if (finished)
+            return;
+        if (!dbus_connection_read_write(dbus_conn, 0)) {
+            setErrorText("Portal did not give a reply");
+            finish(ERROR);
+            return;
+        }
+        processIncoming();
+    };
 
-    setErrorText("Portal did not give a reply");
-    return ERROR;
+    // Messages may already have been read while flushing
+    processIncoming();
+    if (!finished) {
+        int fd = -1;
+        QScopedPointer<QSocketNotifier> notifier;
+        QTimer timer;
+        if (dbus_connection_get_unix_fd(dbus_conn, &fd)) {
+            notifier.reset(new QSocketNotifier(fd, QSocketNotifier::Read));
+            QObject::connect(notifier.data(), &QSocketNotifier::activated, &loop, readIncoming);
+        } else {
+            QObject::connect(&timer, &QTimer::timeout, &loop, readIncoming);
+            timer.start(50);
+        }
+        loop.exec();
+    }
+    return res;
 }
 
 const char* getErrorText(void) {
@@ -1111,6 +1168,13 @@ QStringList Xdg::openXdgPortal(QWidget *parent,
                                QString *sel_filter,
                                bool sel_multiple)
 {
+    // Qt events are processed while the portal dialog is open,
+    // so prevent a second dialog from being opened meanwhile
+    static bool dialog_active = false;
+    if (dialog_active)
+        return QStringList();
+    QScopedValueRollback<bool> __dialogActiveRollback(dialog_active, true);
+
     initDBus();
     const int pos = file_name.lastIndexOf('/');
     const QString _file_name = (pos != -1) ? file_name.mid(pos + 1) : file_name;
