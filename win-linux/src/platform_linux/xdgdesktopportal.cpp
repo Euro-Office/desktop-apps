@@ -1171,7 +1171,8 @@ QStringList Xdg::openXdgPortal(QWidget *parent,
                                bool sel_multiple)
 {
     // Qt events are processed while the portal dialog is open,
-    // so prevent a second dialog from being opened meanwhile
+    // so prevent a second dialog from being opened meanwhile.
+    // Callers treat the empty list like a cancelled dialog.
     static bool dialog_active = false;
     if (dialog_active) {
         return QStringList();
