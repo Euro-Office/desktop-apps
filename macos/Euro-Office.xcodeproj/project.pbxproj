@@ -1418,6 +1418,7 @@
 				FCB4C6BC26DD018B0012C20D /* Sources */,
 				FCB4C6FE26DD018B0012C20D /* Frameworks */,
 				FCB4C70426DD018B0012C20D /* Resources */,
+				F3C9E10127EBB0E3132ABA63 /* Render About text */,
 				FCB4C73026DD018B0012C20D /* Copy Frameworks */,
 				FCB4C73226DD018B0012C20D /* Rename symbols */,
 				FCB4C73326DD018B0012C20D /* Increment Build Number */,
@@ -1652,6 +1653,26 @@
 			shellPath = /bin/sh;
 			shellScript = "GenLocalized() {\n    rm $1/Localizable.strings\n    find -E . -regex '.*\\.(m|mm)' -exec echo {} \\; -exec genstrings -a -o $1 {} \\;\n}\n\ncd $(pwd)/ONLYOFFICE\n\nGenLocalized Base.lproj\nGenLocalized de.lproj\nGenLocalized fr.lproj\nGenLocalized ru.lproj\nGenLocalized es.lproj\n";
 			showEnvVarsInLog = 0;
+		};
+		F3C9E10127EBB0E3132ABA63 /* Render About text */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Render About text";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/about.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "NODE=$(command -v node || ls /opt/homebrew/bin/node /usr/local/bin/node 2>/dev/null | head -n 1)\nSCRIPT=\"${ABOUT_HTML_SCRIPT:-$SRCROOT/../../web-apps/build/about-html.mjs}\"\n[ -x \"$NODE\" ] || { echo \"error: node not found, it is needed to render the About text\"; exit 1; }\n[ -f \"$SCRIPT\" ] || { echo \"error: $SCRIPT not found, set ABOUT_HTML_SCRIPT\"; exit 1; }\n\"$NODE\" \"$SCRIPT\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

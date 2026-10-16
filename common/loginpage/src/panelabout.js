@@ -51,6 +51,9 @@
         baseView.prototype.constructor.call(this, args);
     };
 
+    // Filled at build time from web-apps/build/about-html.mjs, see Gruntfile.js
+    const _about = /*__ABOUT_HTML__*/{buildInfo: '', legal: ''};
+
     const version = function(commercial) {
         return commercial === true ? utils.Lang.strVersionCommercial : utils.Lang.strVersionCommunity;
     };
@@ -91,7 +94,7 @@
                                 </div>
                                 <div class="vbox">
                                     <p id="idx-about-appname">${_opts.appname}</p>
-                                    <p id="idx-about-version"><span l10n>${strVersion}</span> ${_opts.version}</p>
+                                    <p id="idx-about-version"><span l10n>${strVersion}</span> ${_opts.version}${_about.buildInfo}</p>
                                 </div>
                             </section><p></p>
                             <div class="separator"></div>
@@ -102,7 +105,7 @@
                                 <a class="ver-checkupdate link hidden" draggable='false' data-state='check' href="#" l10n>${_lang.checkUpdates}</a>
                                 <div class="about-field"><a class="ver-changelog link" draggable='false' target="popup" href=${_opts.changelog} l10n>${_lang.aboutChangelog}</a></div>
                                 <a class="ver-site link about-field" target="popup" href="${_opts.link}">${_opts.site}</a>
-                                <div class="ver-copyright about-field">${_opts.rights}</div> 
+                                <div class="about-legal">${_about.legal}</div>
                             </div>                    
                         </div>`+
                         // '<div class="box-license flex-fill">'+

@@ -51,6 +51,17 @@ module.exports = function(grunt) {
                     from: /__HELP_URL__/g,
                     to: process.env.HELP_URL || 'https://github.com/euro-office'
                 }]
+            },
+            about: {
+                src: ['../src/panelabout.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /\/\*__ABOUT_HTML__\*\/.*;$/m,
+                    to: () => '/*__ABOUT_HTML__*/' + require('child_process').execFileSync('node',
+                            [process.env.ABOUT_HTML_SCRIPT || require('path').resolve(__dirname, '../../../../web-apps/build/about-html.mjs')],
+                            {encoding: 'utf8'})
+                        .replace(/target=\\"_blank\\" class=\\"external\\"/g, 'target=\\"popup\\" class=\\"link\\" draggable=\\"false\\"') + ';'
+                }]
             }
         }
     });
@@ -277,5 +288,5 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy-connection-error', ['connection-error', 'terser:noconnect', 'copy', 'htmlmin', /*'svgmin',*/ 'compile-html:noconnect']);
     grunt.registerTask('deploy-desktop-startpage', ['prebuild-svg-sprites', 'desktop-app-extra', 'copy', 'less', 'terser:dialogconnect', 'terser:noconnect',
         'concat', 'clean', 'inline', 'terser:core', 'terser:langs', 'htmlmin', 'compile-html']);
-    grunt.registerTask('default', ['replace:brand','init-build-startpage','deploy-desktop-startpage','deploy-connection-error']);
+    grunt.registerTask('default', ['replace:brand','replace:about','init-build-startpage','deploy-desktop-startpage','deploy-connection-error']);
 };

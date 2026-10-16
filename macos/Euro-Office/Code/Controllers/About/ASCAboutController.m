@@ -50,6 +50,42 @@
 
 @implementation ASCAboutController
 
+/// {"buildInfo": html, "legal": html}, rendered at build time by the "Render About text" phase
++ (NSDictionary *)aboutHtml {
+    NSURL * url = [[NSBundle mainBundle] URLForResource:@"about" withExtension:@"json"];
+    NSData * data = url ? [NSData dataWithContentsOfURL:url] : nil;
+    id about = data ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
+    return [about isKindOfClass:[NSDictionary class]] ? about : @{};
+}
+
++ (NSMutableAttributedString *)attributedStringFromHtml:(NSString *)html {
+    NSData * data = [(html ?: @"") dataUsingEncoding:NSUTF8StringEncoding];
+    return [[NSMutableAttributedString alloc] initWithHTML:data
+                                                   options:@{NSCharacterEncodingDocumentOption: @(NSUTF8StringEncoding)}
+                                        documentAttributes:nil];
+}
+
+- (NSString *)buildSuffix {
+    // Plain text: the version label toggles on click, so it can't host links
+    return [[ASCAboutController attributedStringFromHtml:[ASCAboutController aboutHtml][@"buildInfo"]] string];
+}
+
+- (NSAttributedString *)legalText {
+    // #888888 marks headings so they can be mapped to the dynamic secondary colour below
+    NSString * style = @"<style>body{font:12px -apple-system,sans-serif}p{margin:0 0 8px}"
+                        ".about-legal-heading{font-weight:bold;text-transform:uppercase;letter-spacing:.05em;color:#888888;margin:12px 0 4px}"
+                        ".about-legal-commits{border-collapse:collapse}.about-legal-commits td{padding:1px 16px 1px 0}</style>";
+    NSString * legal = [ASCAboutController aboutHtml][@"legal"];
+    NSMutableAttributedString * text = [ASCAboutController attributedStringFromHtml:[style stringByAppendingString:legal ?: @""]];
+
+    NSColor * headingMarker = [NSColor colorWithSRGBRed:0x88/255.0 green:0x88/255.0 blue:0x88/255.0 alpha:1];
+    [text enumerateAttribute:NSForegroundColorAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(NSColor * color, NSRange range, BOOL * stop) {
+        BOOL isHeading = [[color colorUsingColorSpace:[NSColorSpace sRGBColorSpace]] isEqual:headingMarker];
+        [text addAttribute:NSForegroundColorAttributeName value:isHeading ? [NSColor secondaryLabelColor] : [NSColor labelColor] range:range];
+    }];
+    return text;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -108,7 +144,7 @@
         
         // Version
         NSString * tplVersion = !isCommercialVersion ? NSLocalizedString(@"Community version %@", nil) : NSLocalizedString(@"Enterprise version %@", nil);
-        [self.versionText setStringValue:[NSString stringWithFormat:tplVersion, [infoDictionary objectForKey:@"CFBundleShortVersionString"]]];
+        [self.versionText setStringValue:[[NSString stringWithFormat:tplVersion, [infoDictionary objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString:[self buildSuffix]]];
 
         NSClickGestureRecognizer *click = [[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(onVersionClick:)];
         [self.versionText addGestureRecognizer:click];
@@ -120,8 +156,28 @@
                                               NSLocalizedString(@"With access to pro features", nil)]];
         }
         
-        // Copyright
+        // Copyright and legal notices
         [self.copyrightText setStringValue:locCopyright];
+        [self.copyrightText setHidden:YES];
+
+        NSScrollView * legalScroll = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 350, 220)];
+        legalScroll.hasVerticalScroller = YES;
+        legalScroll.drawsBackground = NO;
+        legalScroll.borderType = NSNoBorder;
+        legalScroll.translatesAutoresizingMaskIntoConstraints = NO;
+
+        NSTextView * legalView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, legalScroll.contentSize.width, 220)];
+        legalView.editable = NO;
+        legalView.selectable = YES;
+        legalView.drawsBackground = NO;
+        legalView.autoresizingMask = NSViewWidthSizable;
+        legalView.textContainer.widthTracksTextView = YES;
+        [legalView.textStorage setAttributedString:[self legalText]];
+        legalScroll.documentView = legalView;
+
+        [self.infoStackView addArrangedSubview:legalScroll];
+        [legalScroll.widthAnchor constraintEqualToConstant:350].active = YES;
+        [legalScroll.heightAnchor constraintEqualToConstant:220].active = YES;
         
         // Window
         [self setTitle:[NSString stringWithFormat:NSLocalizedString(@"About %@", nil), locProductName]];
@@ -156,6 +212,7 @@
 #elif _ARM_ONLY
     [self.versionText setStringValue:[NSString stringWithFormat:@"%@ Apple Silicon", [self.versionText stringValue]]];
 #endif
+    [self.versionText setStringValue:[self.versionText.stringValue stringByAppendingString:[self buildSuffix]]];
 }
 
 - (IBAction)onLicenseButtonClick:(id)sender {

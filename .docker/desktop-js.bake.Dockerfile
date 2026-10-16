@@ -16,10 +16,17 @@ FROM ubuntu:24.04 AS web-base
 #### DESKTOP-JS
 FROM web-base AS desktop-js
     ARG COMPANY_NAME
+    ARG BUILD_COMMITS
+    ARG BUILD_DATE
 
     COPY desktop-apps/common app
+    COPY web-apps/build/about-html.mjs /web-apps/build/
+    COPY web-apps/theme /web-apps/theme
 
     ENV COMPANY_NAME=${COMPANY_NAME}
+    ENV BUILD_COMMITS=${BUILD_COMMITS}
+    ENV BUILD_DATE=${BUILD_DATE}
+    ENV ABOUT_HTML_SCRIPT=/web-apps/build/about-html.mjs
     RUN cd app/loginpage/build && \
         npm install && \
         grunt
