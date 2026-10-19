@@ -133,6 +133,9 @@ int main( int argc, char *argv[] )
 
     QCoreApplication::setApplicationName(QString::fromUtf8(WINDOW_NAME));
     QApplication::setApplicationDisplayName(QString::fromUtf8(WINDOW_NAME));
+#ifdef __linux
+    QGuiApplication::setDesktopFileName(QString::fromUtf8(DESKTOP_FILE_NAME));
+#endif
 
     QString user_data_path = Utils::getUserPath() + APP_DATA_PATH;
     auto setup_paths = [&user_data_path](CAscApplicationManager * manager) {
