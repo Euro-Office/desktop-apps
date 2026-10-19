@@ -459,6 +459,10 @@ if(ABOUT_PAGE_APP_NAME)
     add_compile_definitions(ABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}")
 endif()
 
+if(DESKTOP_FILE_NAME)
+    add_compile_definitions(DESKTOP_FILE_NAME="${DESKTOP_FILE_NAME}")
+endif()
+
 target_compile_definitions(DesktopEditors PRIVATE COMMON_OPENSSL_BUILDING_INTERNAL)
 
 if(WIN32)
