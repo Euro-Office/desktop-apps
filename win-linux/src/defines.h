@@ -37,7 +37,9 @@
 # define APP_DATA_PATH "/euro-office/desktopeditors"
 # define REG_GROUP_KEY "euro-office"
 # define APP_MUTEX_NAME "asc:editors"
-# define DESKTOP_FILE_NAME "euro-office-desktopeditors"
+# ifndef DESKTOP_FILE_NAME
+#  define DESKTOP_FILE_NAME "euro-office-desktopeditors"
+# endif
 #else
 # define APP_DATA_PATH "/Euro-Office/DesktopEditors"
 # define APP_REG_NAME  "Euro-Office"

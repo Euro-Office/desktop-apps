@@ -94,6 +94,9 @@ FROM core-base AS desktop-linux
         export NEXTCLOUD_USER="$(cat /run/secrets/nextcloud_user)" && \
         export NEXTCLOUD_PASS="$(cat /run/secrets/nextcloud_pass)" && \
         export CCACHE_DIR=/ccache && \
+        COMPANY_NAME_LOW=$(echo "${COMPANY_NAME}" | tr 'A-Z' 'a-z' | tr ' ' '-') && \
+        PRODUCT_NAME_LOW=$(echo "${PRODUCT_NAME}" | tr 'A-Z' 'a-z' | tr -d ' ') && \
+        PACKAGE_NAME="${COMPANY_NAME_LOW}-${PRODUCT_NAME_LOW}" && \
         cd /build-cache-desktop && \
         cmake -GNinja \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
@@ -103,6 +106,7 @@ FROM core-base AS desktop-linux
             -DVCPKG_MANIFEST_DIR="/core" \
             -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
+            -DDESKTOP_FILE_NAME="${PACKAGE_NAME}" \
             /desktop-apps/win-linux/ && \
         cmake --build . && \
         cmake --install . && \
