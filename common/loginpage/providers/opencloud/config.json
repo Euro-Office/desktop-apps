@@ -1,0 +1,20 @@
+{
+    "provider": "opencloud",
+    "name": "OpenCloud",
+    "check": {
+        "url": "status.php"
+    },
+    "editorPage": "regex:\\/external-[a-z0-9-]+",
+    "startPage": "/",
+    "order": 8,
+    "icons": {
+        "themeLight":{
+            "connectionsList": "./assets/listicon.svg",
+            "buttonLogo": "./assets/buttonlogo.svg"
+        },
+        "themeDark": {
+            "connectionsList": "./assets/listicon_dark.svg",
+            "buttonLogo": "./assets/buttonlogo_dark.svg"
+        }
+    }
+}
