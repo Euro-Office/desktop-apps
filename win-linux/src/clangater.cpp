@@ -237,7 +237,7 @@ private:
         ,{"pl-PL", {"Polski", "Polish"}}
         ,{"zh-CN", {"简体中文", "Chinese (Simplified)"}}
         ,{"zh-TW", {"繁體中文", "Chinese (Traditional)"}}
-        ,{"ca-ES", {"Catalan", "Catalan"}}
+        ,{"ca-ES", {"Català", "Catalan"}}
         ,{"da-DK", {"Dansk", "Danish"}}
         ,{"el-GR", {"Ελληνικά", "Greek"}}
 //        ,{"et-EE", "Eesti"}
