@@ -1672,7 +1672,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "NODE=$(command -v node || ls /opt/homebrew/bin/node /usr/local/bin/node 2>/dev/null | head -n 1)\nSCRIPT=\"${ABOUT_HTML_SCRIPT:-$SRCROOT/../../web-apps/build/about-html.mjs}\"\n[ -x \"$NODE\" ] || { echo \"error: node not found, it is needed to render the About text\"; exit 1; }\n[ -f \"$SCRIPT\" ] || { echo \"error: $SCRIPT not found, set ABOUT_HTML_SCRIPT\"; exit 1; }\n\"$NODE\" \"$SCRIPT\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			shellScript = "ROOT=\"$SRCROOT/../..\"\nif [ -z \"$BUILD_COMMITS\" ] && [ -f \"$ROOT/.gitmodules\" ]; then\n    export BUILD_COMMITS=\"$(cd \"$ROOT\" && echo \"DesktopEditors=$(git rev-parse HEAD) $(git submodule foreach --quiet 'echo $name=$(git rev-parse HEAD)' | tr '\\n' ' ')\")\"\nfi\nNODE=$(command -v node || ls /opt/homebrew/bin/node /usr/local/bin/node 2>/dev/null | head -n 1)\nSCRIPT=\"${ABOUT_HTML_SCRIPT:-$SRCROOT/../../web-apps/build/about-html.mjs}\"\n[ -x \"$NODE\" ] || { echo \"error: node not found, it is needed to render the About text\"; exit 1; }\n[ -f \"$SCRIPT\" ] || { echo \"error: $SCRIPT not found, set ABOUT_HTML_SCRIPT\"; exit 1; }\n\"$NODE\" \"$SCRIPT\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
