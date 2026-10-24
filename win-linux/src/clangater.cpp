@@ -303,28 +303,19 @@ void CLangater::init()
     if ( _lang.isEmpty() )
         _lang = reg_user.value("locale").value<QString>();
 
-#ifdef __linux
-//    if ( _lang.isEmpty() ) {
-//        _lang = QLocale::system().name();
-//    }
-
-    if ( _lang.isEmpty() ) {
-        if ( APP_DEFAULT_SYSTEM_LOCALE ) {
-            QRegularExpression _re;
-            QString _env_name = qgetenv("LANG");
-            _re.setPattern("^(\\w{2,5})\\.?");
-            QRegularExpressionMatch _re_match = _re.match(_env_name);
-
-            if ( _re_match.hasMatch() ) {
-                _lang = _re_match.captured(1);
-            }
-        } else _lang = APP_DEFAULT_LOCALE;
-    }
-#else
+#ifndef __linux
     // read setup language and set application locale
-    _lang.isEmpty() &&
-        !((_lang = reg_system.value("locale").value<QString>()).size()) && (_lang = APP_DEFAULT_LOCALE).size();
+    if ( _lang.isEmpty() )
+        _lang = reg_system.value("locale").value<QString>();
 #endif
+
+    // neither the user nor the installer chose a language: follow the system's display language
+    // (Windows display language; LANGUAGE, LC_ALL, LC_MESSAGES or LANG on Linux)
+    if ( _lang.isEmpty() && APP_DEFAULT_SYSTEM_LOCALE )
+        _lang = QLocale::system().uiLanguages().value(0);
+
+    if ( _lang.isEmpty() )
+        _lang = APP_DEFAULT_LOCALE;
     _lang = normalizeLocale(_lang);
     getInstance()->m_intf->addSearchPath({"./langs", ":/i18n/langs", ":/i18n"});
 
