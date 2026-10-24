@@ -309,14 +309,6 @@ void CLangater::init()
         _lang = reg_system.value("locale").value<QString>();
 #endif
 
-    // neither the user nor the installer chose a language: follow the system's display language
-    // (Windows display language; LANGUAGE, LC_ALL, LC_MESSAGES or LANG on Linux)
-    if ( _lang.isEmpty() && APP_DEFAULT_SYSTEM_LOCALE )
-        _lang = QLocale::system().uiLanguages().value(0);
-
-    if ( _lang.isEmpty() )
-        _lang = APP_DEFAULT_LOCALE;
-    _lang = normalizeLocale(_lang);
     getInstance()->m_intf->addSearchPath({"./langs", ":/i18n/langs", ":/i18n"});
 
     auto _check_lang = [=](const std::list<QString>& dirs, const QString& l) {
@@ -327,31 +319,49 @@ void CLangater::init()
         return false;
     };
 
-    bool _exist = _check_lang(getInstance()->m_intf->m_dirs, _lang);
-    if ( !_exist ) {
-        QString lang_part = getLocaleParts(_lang, LocaleParts::LanguageAndScript);
-        QString _close_lang = getInstance()->m_intf->findCloseLang(lang_part);
-        if (_close_lang.isEmpty() && lang_part.length() > 3) {
-            lang_part = getLocaleParts(_lang, LocaleParts::LanguageAndRegion);
-            _close_lang = getInstance()->m_intf->findCloseLang(lang_part);
+    // the translation that serves the locale, or an empty string when there is none
+    auto _find_lang = [=](const QString& locale) {
+        QString _l = normalizeLocale(locale);
+        bool _exist = _check_lang(getInstance()->m_intf->m_dirs, _l);
+        if ( !_exist ) {
+            QString lang_part = getLocaleParts(_l, LocaleParts::LanguageAndScript);
+            QString _close_lang = getInstance()->m_intf->findCloseLang(lang_part);
             if (_close_lang.isEmpty() && lang_part.length() > 3) {
-                lang_part = getLocaleParts(_lang);
+                lang_part = getLocaleParts(_l, LocaleParts::LanguageAndRegion);
                 _close_lang = getInstance()->m_intf->findCloseLang(lang_part);
+                if (_close_lang.isEmpty() && lang_part.length() > 3) {
+                    lang_part = getLocaleParts(_l);
+                    _close_lang = getInstance()->m_intf->findCloseLang(lang_part);
+                }
             }
+            if ( !_close_lang.isEmpty() )
+                _l = _close_lang,
+                _exist = _check_lang(getInstance()->m_intf->m_dirs, _l);
         }
-        if ( !_close_lang.isEmpty() )
-            _lang = _close_lang,
-            _exist = _check_lang(getInstance()->m_intf->m_dirs, _lang);
+
+        if ( !_exist && _l.length() > 2 ) {
+            if ( _l.at(2) == '-' ) _l.replace(2, 1, '_'); else
+            if ( _l.at(2) == '_' ) _l.replace(2, 1, '-');
+
+            _exist = _check_lang(getInstance()->m_intf->m_dirs, _l);
+        }
+
+        return _exist ? _l : QString();
+    };
+
+    if ( !_lang.isEmpty() )
+        _lang = _find_lang(_lang);
+    else
+    if ( APP_DEFAULT_SYSTEM_LOCALE ) {
+        // neither the user nor the installer chose a language: follow the system's display languages
+        // in order of preference (Windows display languages; LANGUAGE, LC_ALL, LC_MESSAGES or LANG on Linux)
+        for ( const auto& l : QLocale::system().uiLanguages() ) {
+            if ( !(_lang = _find_lang(l)).isEmpty() ) break;
+        }
     }
 
-    if ( !_exist ) {
-        if ( _lang.at(2) == '-' ) _lang.replace(2, 1, '_'); else
-        if ( _lang.at(2) == '_' ) _lang.replace(2, 1, '-');
-
-        if ( !_check_lang(getInstance()->m_intf->m_dirs, _lang) ) {
-            _lang = APP_DEFAULT_LOCALE;
-        }
-    }
+    if ( _lang.isEmpty() )
+        _lang = APP_DEFAULT_LOCALE;
 
     QTranslator * tr = getInstance()->m_intf->createTranslator("qtbase_" + _lang);
     if ( tr ) QCoreApplication::installTranslator(tr);
