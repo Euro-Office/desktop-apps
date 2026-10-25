@@ -42,7 +42,6 @@
 
     var ViewCustomPanel = function(args) {
         var _lang = utils.Lang;
-        const isSvgIcons = window.devicePixelRatio >= 2 || window.devicePixelRatio === 1;
 
         let _html = `<div class="action-panel style--free ${args.action}">
                       <div class="flexbox">
@@ -62,7 +61,7 @@
                         <svg class="icon" data-iconname="plugin" data-precls="tool-icon">
                             <use href="#plugin"></use>
                         </svg>
-                        ${!isSvgIcons ? '<i class="icon tool-icon plugin"></i>' : ''}
+                        <i class="icon tool-icon plugin"></i>
                     </div>
                     <span class="text" l10n>${args.itemtext}</span>
                 </a>
