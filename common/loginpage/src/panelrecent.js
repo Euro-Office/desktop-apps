@@ -40,7 +40,6 @@
 
     ControllerRecent.prototype = Object.create(baseController.prototype);
     ControllerRecent.prototype.constructor = ControllerRecent;
-    const isSvgIcons = window.devicePixelRatio >= 2 || window.devicePixelRatio === 1;
     var ViewRecent = function (args) {
         var _lang = utils.Lang;
 
@@ -146,8 +145,8 @@
                             ${info.crypted ? `<svg class="icon shield" data-iconname="shield" data-precls="tool-icon">
                                                 <use xlink:href="#shield"></use>
                                               </svg>` : ''}
-                            ${!isSvgIcons ? `<i class="icon ${info.type === 'folder' ? 'img-el folder' : `img-format ${info.format}`}"></i>` : ''}
-                            ${info.crypted && !isSvgIcons ? `<i class="icon img-el shield"></i>` : ''}
+                            <i class="icon ${info.type === 'folder' ? 'img-el folder' : `img-format ${info.format}`}"></i>
+                            ${info.crypted ? `<i class="icon img-el shield"></i>` : ''}
                         </div>
                         <p class="name">
                             ${info.name}<span class="ext">${info.ext}</span>
@@ -166,7 +165,7 @@
                         <svg class="icon">
                             <use xlink:href="#pin"/>
                         </svg>
-                        ${!isSvgIcons ? '<i class="icon tool-icon pin"></i>' : ''}
+                        <i class="icon tool-icon pin"></i>
                     </button>
                 </div>`;
 
@@ -182,7 +181,7 @@
                             <svg class="icon">
                                 <use xlink:href="#more"/>
                             </svg>
-                            ${!isSvgIcons ? '<i class="icon tool-icon more"></i>' : ''}
+                            <i class="icon tool-icon more"></i>
                         </button>
                     </div>`;
             }
