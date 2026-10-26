@@ -38,6 +38,7 @@
 #include "version.h"
 #include "utils.h"
 #include "chelp.h"
+#include "cbrowserauth.h"
 #include <QDir>
 #include <QStyleFactory>
 #include <vector>
@@ -243,6 +244,8 @@ int main( int argc, char *argv[] )
      * cmd argument --keeplang:en also keep the language for next sessions
     */
     CLangater::init();
+    CBrowserAuth::instance().restore();
+
     AscAppManager::initializeApp();
     AscAppManager::startApp();
     AscAppManager::getInstance().StartSpellChecker();
