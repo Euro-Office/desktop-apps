@@ -32,7 +32,10 @@ ifelse(M4_PACKAGE_EDITION, full,
   fonts-dejavu | ttf-dejavu,
   fonts-liberation,
   fonts-crosextra-carlito,
-  xdg-utils')
+  xdg-utils,
+  libpulse0,
+  libopengl0,
+  libnss3')
 Recommends: ttf-mscorefonts-installer, fonts-takao-gothic 
 ifelse(M4_COMPANY_NAME, Euro-Office,Suggests: M4_PACKAGE_NAME-help
 ,)dnl
