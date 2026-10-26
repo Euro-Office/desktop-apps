@@ -5,6 +5,9 @@
         "url": "status.php"
     },
     "editorPage" : "/apps/eurooffice/",
+    "auth": {
+        "type": "loginflow2"
+    },
     "cryptoSupport" : "true",
     "order": 2,
     "icons": {
