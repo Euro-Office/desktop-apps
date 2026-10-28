@@ -30,3 +30,17 @@ add_core_gtest(
     LIBS    desktopeditors_core
 )
 use_build_tree_qt(desktopeditors_utils_test)
+
+add_core_gtest(
+    NAME    desktopeditors_providers_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/providers_test.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+)
+use_build_tree_qt(desktopeditors_providers_test)
+
+add_core_gtest(
+    NAME    desktopeditors_tabdata_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/tabdata_test.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+)
+use_build_tree_qt(desktopeditors_tabdata_test)
