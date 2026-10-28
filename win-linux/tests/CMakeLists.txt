@@ -23,3 +23,10 @@ add_core_gtest(
     LIBS    Qt${QT_VERSION_MAJOR}::Widgets
 )
 use_build_tree_qt(desktopeditors_setup_test)
+
+add_core_gtest(
+    NAME    desktopeditors_utils_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/utils_test.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+)
+use_build_tree_qt(desktopeditors_utils_test)
