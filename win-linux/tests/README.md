@@ -28,7 +28,11 @@ ctest -R desktopeditors_setup_test --output-on-failure  # one suite
      `QApplication` (widgets, event loop, `QSettings`). It starts Qt on the
      offscreen platform.
    - otherwise pass `GTEST_MAIN`.
-3. List what it links in `LIBS`.
+3. List what it links in `LIBS`. Application code is in the
+   `desktopeditors_core` object library (everything but `main.cpp`), which
+   carries all include paths, definitions and dependencies of the app.
+4. Call `use_build_tree_qt(<name>)`, so the test finds Qt when it runs from
+   the build tree.
 
 `setup_test.cpp` only checks the test setup itself (GoogleTest, Qt, headless
 widgets) and is the minimal example.
