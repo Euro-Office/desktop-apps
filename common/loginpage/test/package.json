@@ -1,0 +1,14 @@
+{
+  "name": "loginpage-tests",
+  "private": true,
+  "description": "Unit tests for the start page scripts in ../src",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vitest": "^4.1.12"
+  }
+}
