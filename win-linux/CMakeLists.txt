@@ -20,6 +20,14 @@ set(DESKTOP_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../desktop-sdk")
 set(BUILD_DESKTOP TRUE CACHE INTERNAL "tell common to prepare third party for desktop")
 include(${CORE_ROOT_DIR}/common.cmake)
 
+# Unit tests, see tests/README.md. Needs the vcpkg 'tests' manifest feature.
+option(EO_BUILD_TESTS "Build the desktop-apps and desktop-sdk unit tests" OFF)
+if(EO_BUILD_TESTS)
+    # Before the desktop-sdk subdirectories below, so their tests are
+    # registered with this build tree's CTest as well.
+    enable_testing()
+endif()
+
 
 if(UNIX)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS DBus)
@@ -654,4 +662,8 @@ if(NOT WIN32)
         DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
         FILES_MATCHING PATTERN "lib*.so*"
     )
+endif()
+
+if(EO_BUILD_TESTS)
+    add_subdirectory(tests)
 endif()
