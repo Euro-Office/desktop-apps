@@ -108,7 +108,7 @@
     <ROW Property="ServiceName" Value="[|AppName] Update Service" ValueLocId="-"/>
     <ROW Property="ShortcutName" Value="[|AppName]" ValueLocId="-"/>
     <ROW Property="UPDATE_SERVICE" Value="0" ValueLocId="-"/>
-    <ROW Property="UpgradeCode" Value="{47EEF706-B0E4-4C43-944B-E5F914B92B79}"/>
+    <ROW Property="UpgradeCode" Value="{613C8B55-AD85-48EB-AB7B-4DF735A9945F}"/>
     <ROW Property="VC_REDIST" Value="1" ValueLocId="-"/>
     <ROW Property="Version" Value="0.0.0" ValueLocId="-"/>
   </COMPONENT>
