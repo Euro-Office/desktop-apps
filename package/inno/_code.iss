@@ -81,6 +81,19 @@ begin
    end;
 end;
 
+// IsMsiProductInstalled raises when Windows Installer has stale data for
+// the UpgradeCode (e.g. error 1605), which would abort setup. Treat that
+// as "not installed" instead.
+function SafeIsMsiProductInstalled(const UpgradeCode: String; const PackedMinVersion: Int64): Boolean;
+begin
+  try
+    Result := IsMsiProductInstalled(UpgradeCode, PackedMinVersion);
+  except
+    Log('IsMsiProductInstalled(' + UpgradeCode + ') failed: ' + GetExceptionMessage);
+    Result := False;
+  end;
+end;
+
 function CheckVCRedist(): Boolean;
 var
   Version: Integer;
@@ -88,19 +101,19 @@ begin
 #ifndef _WIN_XP
   Version := PackVersionComponents(14, 32, 31332, 0);
 #if ARCH == "arm64"
-  Result := IsMsiProductInstalled('{DC9BAE42-810B-423A-9E25-E4073F1C7B00}', Version);
+  Result := SafeIsMsiProductInstalled('{DC9BAE42-810B-423A-9E25-E4073F1C7B00}', Version);
 #else
   if Is64BitInstallMode then
-    Result := IsMsiProductInstalled('{36F68A90-239C-34DF-B58C-64B30153CE35}', Version)
+    Result := SafeIsMsiProductInstalled('{36F68A90-239C-34DF-B58C-64B30153CE35}', Version)
   else
-    Result := IsMsiProductInstalled('{65E5BD06-6392-3027-8C26-853107D3CF1A}', Version);
+    Result := SafeIsMsiProductInstalled('{65E5BD06-6392-3027-8C26-853107D3CF1A}', Version);
 #endif
 #else
   Version := PackVersionComponents(14, 27, 29114, 0);
   if Is64BitInstallMode then
-    Result := IsMsiProductInstalled('{C146EF48-4D31-3C3D-A2C5-1E91AF8A0A9B}', Version)
+    Result := SafeIsMsiProductInstalled('{C146EF48-4D31-3C3D-A2C5-1E91AF8A0A9B}', Version)
   else
-    Result := IsMsiProductInstalled('{F899BAD3-98ED-308E-A905-56B5338963FF}', Version);
+    Result := SafeIsMsiProductInstalled('{F899BAD3-98ED-308E-A905-56B5338963FF}', Version);
 #endif
 end;
 
@@ -825,7 +838,7 @@ begin
   Check := True;
 
   Check := Check and CheckAppRegData('PackageType', 'inno');
-  Check := Check and not IsMsiProductInstalled('{47EEF706-B0E4-4C43-944B-E5F914B92B79}', 0);
+  Check := Check and not SafeIsMsiProductInstalled('{#sMsiUpgradeCode}', 0);
   if Result and not Check then
   begin
     MsgBox(ExpandConstant('{cm:ErrorMismatchInstalledType}'), mbCriticalError, MB_OK);

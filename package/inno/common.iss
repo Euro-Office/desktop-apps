@@ -33,7 +33,8 @@
 #include BRANDING_DIR + '\branding.iss'
 #endif
 
-#define sUpgradeCode                 "607FEE744E0B34C449B45E9F419BB297"
+#define sMsiUpgradeCode              "{613C8B55-AD85-48EB-AB7B-4DF735A9945F}"
+#define sUpgradeCode                 "55B8C31658DABE84BAB7D47F539A49F5"
 
 [Setup]
 AppName                   ={#sAppName}
