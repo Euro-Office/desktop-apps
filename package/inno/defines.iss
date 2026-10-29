@@ -18,7 +18,7 @@
 #define UPD_PATH                        str(sIntProductName + "Updates")
 #define APP_REG_PATH                    str("Software\" + APP_PATH)
 #define APP_REG_UNINST_KEY              str(sCompanyName + " " + sProductName)
-#define APP_USER_MODEL_ID               "ASC.Documents.5"
+#define APP_USER_MODEL_ID               "EuroOffice.Documents.5"
 #define APP_MUTEX_NAME                  "EuroOffice-DesktopEditors"
 #define APPWND_CLASS_NAME               "EuroOfficeEditorsWindowClass"
 
@@ -26,7 +26,9 @@
 #define NAME_EXE_OUT                    "editors.exe"
 
 #define ASSC_APP_NAME                   "Euro-Office"
-#define ASCC_REG_PREFIX                 "ASC"
+#define ASCC_REG_PREFIX                 "EuroOffice"
+; ProgID prefix used by earlier releases; it clashes with ONLYOFFICE, so it is only cleaned up
+#define ASCC_LEGACY_REG_PREFIX          "ASC"
 #define ASCC_REG_REGISTERED_APP_NAME    "Euro-Office Editors"
-#define ASSOC_PROG_ID                   "ASC.Editors"
+#define ASSOC_PROG_ID                   "EuroOffice.Editors"
 #define ASSOC_APP_FRIENDLY_NAME         "Euro-Office Editors"

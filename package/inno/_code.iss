@@ -509,6 +509,63 @@ begin
   end;
 end;
 
+function IsLegacyProgIdOwned(progId: string): Boolean;
+var
+  cmd: string;
+begin
+  Result := RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + progId + '\shell\open\command', '', cmd) and
+              (Pos(LowerCase(ExpandConstant('{app}\{#iconsExe}')), LowerCase(cmd)) > 0);
+end;
+
+// Earlier releases registered ONLYOFFICE's ProgIDs (ASC.*) and overwrote them on install,
+// hiding ONLYOFFICE from "Open with". Remove the ones that still point to this installation.
+procedure RemoveLegacyProgIds;
+var
+  i: Integer;
+  ext, progId, legacyProgId, str: string;
+  argsArray, values: TArrayOfString;
+  shellNewItems: TArrayOfString;
+begin
+  if GetArrayLength(ExtensionRegistryInfo) = 0 then
+    initExtensions();
+
+  for i := 0 to GetArrayLength(AudioExts) - 1 do
+  begin
+    Explode(argsArray, ExtensionRegistryInfo[i],':');
+    progId := argsArray[0];
+    legacyProgId := '{#ASCC_LEGACY_REG_PREFIX}' + Copy(progId, Length('{#ASCC_REG_PREFIX}') + 1, Length(progId));
+    ext := LowerCase(AudioExts[i]);
+
+    if IsLegacyProgIdOwned(legacyProgId) then begin
+      RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, 'Software\Classes\' + legacyProgId);
+      RegDeleteValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext + '\OpenWithProgids', legacyProgId);
+
+      if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', str) and (CompareText(str, legacyProgId) = 0) then
+        RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', progId);
+
+      if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', str) and (CompareText(str, legacyProgId) = 0) then
+        RegWriteStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', progId);
+    end;
+  end;
+
+  if IsLegacyProgIdOwned('{#ASCC_LEGACY_REG_PREFIX}.Editors') then
+    RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, 'Software\Classes\{#ASCC_LEGACY_REG_PREFIX}.Editors');
+
+  shellNewItems := ['.docx:.Document.12', '.pptx:.Show.12', '.xlsx:.Sheet.12'
+#ifdef _EuroOffice
+                    ,'.pdf:.Pdf'
+#endif
+                    ];
+
+  for i := 0 to GetArrayLength(shellNewItems) - 1 do
+  begin
+    Explode(values, shellNewItems[i], ':');
+    if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\' + values[0] + '\{#ASCC_LEGACY_REG_PREFIX}' + values[1] + '\ShellNew', 'FileName', str) and
+          StartsWith(LowerCase(ExpandConstant('{app}\')), LowerCase(str)) then
+      RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, 'Software\Classes\' + values[0] + '\{#ASCC_LEGACY_REG_PREFIX}' + values[1]);
+  end;
+end;
+
 procedure DoPostInstall();
 var
   i, errorCode: Integer;
@@ -585,6 +642,7 @@ begin
 
   AddToDefaultPrograms;
   AddContextMenuNewItems;
+  RemoveLegacyProgIds;
 
 #ifndef _EuroOffice
   //TODO: for bug 55795. remove for ver 7.3
@@ -677,6 +735,8 @@ begin
 #ifdef _EuroOffice
   RegDeleteKeyIncludingSubkeys(HKEY_LOCAL_MACHINE, ExpandConstant('Software\Classes\.pdf\{#ASCC_REG_PREFIX}.Pdf'));
 #endif
+
+  RemoveLegacyProgIds;
 end;
 
 ////////////////////
