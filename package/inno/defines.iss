@@ -27,8 +27,6 @@
 
 #define ASSC_APP_NAME                   "Euro-Office"
 #define ASCC_REG_PREFIX                 "EuroOffice"
-; ProgID prefix used by earlier releases; it clashes with ONLYOFFICE, so it is only cleaned up
-#define ASCC_LEGACY_REG_PREFIX          "ASC"
 #define ASCC_REG_REGISTERED_APP_NAME    "Euro-Office Editors"
 #define ASSOC_PROG_ID                   "EuroOffice.Editors"
 #define ASSOC_APP_FRIENDLY_NAME         "Euro-Office Editors"
