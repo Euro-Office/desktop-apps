@@ -517,7 +517,7 @@ if(WIN32)
     )
     target_compile_definitions(projicons PRIVATE
         UNICODE _UNICODE
-        APP_USER_MODEL_ID="ASC.Documents.5"
+        APP_USER_MODEL_ID="EuroOffice.Documents.5"
     )
     target_link_libraries(projicons PRIVATE
         Qt${QT_VERSION_MAJOR}::Widgets
