@@ -211,9 +211,9 @@ var
   prefix: string;
 begin
 #ifdef _EuroOffice
-  SetArrayLength(AudioExts, 28);
+  SetArrayLength(AudioExts, 35);
 #else
-  SetArrayLength(AudioExts, 27);
+  SetArrayLength(AudioExts, 34);
 #endif
   SetArrayLength(AudioExtEnabled,  GetArrayLength(AudioExts));
 
@@ -245,8 +245,15 @@ begin
   AudioExts[24] := 'FODT';
   AudioExts[25] := 'VSDX';
   AudioExts[26] := 'XLSM';
+  AudioExts[27] := 'DOT';
+  AudioExts[28] := 'XLTX';
+  AudioExts[29] := 'XLT';
+  AudioExts[30] := 'POTX';
+  AudioExts[31] := 'OTT';
+  AudioExts[32] := 'OTS';
+  AudioExts[33] := 'OTP';
 #ifdef _EuroOffice
-  AudioExts[27] := 'DOCXF';
+  AudioExts[34] := 'DOCXF';
 #endif
 
   SetArrayLength(ExtensionRegistryInfo,  GetArrayLength(AudioExts));
@@ -281,8 +288,15 @@ begin
   ExtensionRegistryInfo[24] := prefix + 'Fodt:'         + ExpandConstant('{cm:extFODT}')            + ':' + '35';
   ExtensionRegistryInfo[25] := prefix + 'Vsdx:'         + ExpandConstant('{cm:extVSDX}')            + ':' + '36';
   ExtensionRegistryInfo[26] := prefix + 'Xlsm:'         + ExpandConstant('{cm:extXLSM}')            + ':' + '37';
+  ExtensionRegistryInfo[27] := prefix + 'Dot:'          + ExpandConstant('{cm:extDOT}')             + ':' + '11';
+  ExtensionRegistryInfo[28] := prefix + 'Xltx:'         + ExpandConstant('{cm:extXLTX}')            + ':' + '10';
+  ExtensionRegistryInfo[29] := prefix + 'Xlt:'          + ExpandConstant('{cm:extXLT}')             + ':' + '22';
+  ExtensionRegistryInfo[30] := prefix + 'Potx:'         + ExpandConstant('{cm:extPOTX}')            + ':' + '9';
+  ExtensionRegistryInfo[31] := prefix + 'Ott:'          + ExpandConstant('{cm:extOTT}')             + ':' + '18';
+  ExtensionRegistryInfo[32] := prefix + 'Ots:'          + ExpandConstant('{cm:extOTS}')             + ':' + '23';
+  ExtensionRegistryInfo[33] := prefix + 'Otp:'          + ExpandConstant('{cm:extOTP}')             + ':' + '3';
 #ifdef _EuroOffice
-  ExtensionRegistryInfo[27] := prefix + 'Docxf:'        + ExpandConstant('{cm:extDOCXF}')           + ':' + '13';
+  ExtensionRegistryInfo[34] := prefix + 'Docxf:'        + ExpandConstant('{cm:extDOCXF}')           + ':' + '13';
 #endif
 end;
 
