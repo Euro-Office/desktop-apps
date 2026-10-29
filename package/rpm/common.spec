@@ -21,13 +21,15 @@ Obsoletes: %{_package_opensource}
 Conflicts: %{_package_commercial}
 Obsoletes: %{_package_commercial}
 %endif
+%if "%{_with_help}" == "1"
 Suggests: %{_package_opensource}-help
+%endif
 
 %description
 Open-source office suite pack that comprises all the tools you need to
 work offline with documents, spreadsheets, presentations, PDFs, and PDF forms.
 
-%if "%{_company_name}" == "euro-office"
+%if "%{_with_help}" == "1"
 %package help
 Summary: Offline help for %{_company_name} %{_product_name}
 BuildArch: noarch
@@ -55,10 +57,12 @@ echo "package = rpm" > $OPT_DIR/%{_desktopeditors_prefix}/converter/package.conf
 
 %if "%{_company_name}" == "euro-office"
 ln -srf $BIN_DIR/%{_desktopeditors_exec} $BIN_DIR/desktopeditors
-cp -rt %{buildroot}/ $BUILD_DIR/help/*
 %else
 ETC_DIR=%{buildroot}%{_sysconfdir}
 mkdir -p $ETC_DIR/%{_package_name}
+%endif
+%if "%{_with_help}" == "1"
+cp -rt %{buildroot}/ $BUILD_DIR/help/*
 %endif
 
 %clean
@@ -71,9 +75,11 @@ rm -rf "%{buildroot}"
 %attr(-, root, root) %{_datadir}/icons/*
 %attr(-, root, root) %{_datadir}/licenses/*
 %attr(755, root, root) %{_bindir}/%{_desktopeditors_exec}
+%if "%{_with_help}" == "1"
+%exclude /opt/%{_desktopeditors_prefix}/editors/web-apps/apps/*/main/resources/help
+%endif
 %if "%{_company_name}" == "euro-office"
 %attr(-, root, root) %{_bindir}/desktopeditors
-%exclude /opt/%{_desktopeditors_prefix}/editors/web-apps/apps/*/main/resources/help
 %else
 #%attr(755, root, root) %{_bindir}/%{_imageviewer_exec}
 #%attr(755, root, root) %{_bindir}/%{_videoplayer_exec}
@@ -81,7 +87,7 @@ rm -rf "%{buildroot}"
 %attr(777, root, root) %{_sysconfdir}/%{_package_name}
 %endif
 
-%if "%{_company_name}" == "euro-office"
+%if "%{_with_help}" == "1"
 %files help
 %defattr(-, root, root, -)
 /opt/%{_desktopeditors_prefix}/editors/web-apps/apps/*/main/resources/help
