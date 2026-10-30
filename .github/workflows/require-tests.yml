@@ -1,0 +1,120 @@
+# This workflow is provided via the organization template repository
+#
+# https://github.com/Euro-Office/.github
+# https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+#
+# Fails feat and fix PRs that change source files but no tests. Other PR types
+# pass, and so does a PR with the "no-tests-needed" label.
+#
+# Which files are tests and which are source can be set per repository in
+# .github/require-tests.json, read from the PR's base branch:
+#
+#   {
+#     "tests":  ["win-linux/tests/*", "*.test.js"],
+#     "source": ["win-linux/src/*"],
+#     "ignore": ["*.md"]
+#   }
+#
+# Each key is optional and replaces its default below. Patterns are bash
+# patterns matched against the whole path, so "*" also matches "/". A file
+# counts as a test if it matches "tests", otherwise as source if it matches
+# "source" and not "ignore". Deleted files don't count, so removing a test
+# doesn't satisfy the check.
+#
+# SPDX-FileCopyrightText: 2026 Euro-Office contributors
+# SPDX-License-Identifier: MIT
+
+name: Require tests
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: require-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  require-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that feat and fix PRs change tests
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          FILES_URL: ${{ github.event.pull_request.url }}/files
+          CONFIG_URL: repos/${{ github.repository }}/contents/.github/require-tests.json?ref=${{ github.event.pull_request.base.ref }}
+        run: |
+          if jq -e 'index("no-tests-needed")' <<<"$LABELS" >/dev/null; then
+            echo "The no-tests-needed label is set."
+            exit 0
+          fi
+          pattern='^(feat|fix)(\([^)]+\))?!?: '
+          if ! [[ "$PR_TITLE" =~ $pattern ]]; then
+            echo "Not a feat or fix PR, no tests required."
+            exit 0
+          fi
+
+          tests_patterns=('test/*' '*/test/*' 'tests/*' '*/tests/*' 'e2e/*' '*/e2e/*' '*/__tests__/*'
+                          '*_test.*' '*.test.*' '*.spec.*')
+          source_patterns=('*')
+          ignore_patterns=('.github/*' 'docs/*' '*/docs/*' '*.md' 'LICENSE*' '*/LICENSE*'
+                           '*package-lock.json' '*npm-shrinkwrap.json' '*pnpm-lock.yaml' '*.lock'
+                           '*.lock.json' '*go.sum')
+          # only a missing file means defaults, other errors (rate limit, 5xx)
+          # fail the job instead of checking against the wrong patterns
+          if config=$(gh api -H "Accept: application/vnd.github.raw" "$CONFIG_URL" 2>&1); then
+            echo "Using .github/require-tests.json"
+            for key in tests source ignore; do
+              if jq -e --arg k "$key" 'has($k)' <<<"$config" >/dev/null; then
+                mapfile -t "${key}_patterns" < <(jq -r --arg k "$key" '.[$k][]' <<<"$config")
+              fi
+            done
+          elif [[ "$config" == *"(HTTP 404)"* ]]; then
+            echo "No .github/require-tests.json, using the defaults."
+          else
+            echo "$config"
+            echo "::error::Could not read .github/require-tests.json from the base branch."
+            exit 1
+          fi
+
+          matches() {
+            local file=$1 pattern
+            shift
+            for pattern; do
+              [[ "$file" == $pattern ]] && return 0
+            done
+            return 1
+          }
+
+          # fetched first, so a failing API call fails the job instead of
+          # looking like a PR without files
+          files=$(gh api --paginate "$FILES_URL" --jq '.[] | select(.status != "removed") | .filename')
+
+          changed_tests=()
+          changed_source=()
+          while IFS= read -r file; do
+            [[ -n "$file" ]] || continue
+            if matches "$file" "${tests_patterns[@]}"; then
+              changed_tests+=("$file")
+            elif matches "$file" "${source_patterns[@]}" && ! matches "$file" "${ignore_patterns[@]}"; then
+              changed_source+=("$file")
+            fi
+          done <<<"$files"
+
+          if (( ${#changed_tests[@]} )); then
+            printf 'ok    test: %s\n' "${changed_tests[@]}"
+            exit 0
+          fi
+          if (( ${#changed_source[@]} == 0 )); then
+            echo "No source files changed, no tests required."
+            exit 0
+          fi
+          printf 'no test for: %s\n' "${changed_source[@]}"
+          echo "::error::This feat or fix PR changes source files but no tests. Add or update a test, or set the no-tests-needed label and explain why in the PR description."
+          exit 1
