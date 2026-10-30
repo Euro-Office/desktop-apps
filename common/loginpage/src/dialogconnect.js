@@ -23,6 +23,144 @@
  *
 */
 
+/*
+*   Cloud login with the system browser, for providers with "auth": {"type": ...}
+*   in their config (loginpage/providers/<provider>/config.json).
+*
+*   A method's login(portal) returns {promise, cancel}; the promise resolves with
+*   {login, authorization} (Authorization header value) or rejects with
+*   {status: 'unsupported'|'error'|'canceled', error}. Requests go through
+*   AscSimpleRequest (CEF network stack). The native side (CBrowserAuth in win-linux)
+*   stores the authorization and sends it with all requests to the cloud.
+*/
+window.BrowserAuth = (function() {
+    "use strict";
+
+    function _request(opts) {
+        return new Promise((resolve, reject) => {
+            if ( !window.AscSimpleRequest || !window.AscSimpleRequest.createRequest ) {
+                reject({status: 'unsupported'});
+                return;
+            }
+
+            window.AscSimpleRequest.createRequest(Object.assign({
+                timeout: 15000,
+                complete: e => resolve(e),
+                error: e => reject({status: 'error', error: e && e.statusCode}),
+            }, opts));
+        });
+    };
+
+    function _json(text) {
+        try { return JSON.parse(text); } catch (e) { return undefined; }
+    };
+
+    function _is_http_url(url) {
+        return typeof url == 'string' && /^https?:\/\/[^\s\/]+/i.test(url);
+    };
+
+    // Nextcloud Login Flow v2: the user grants access in the browser and the
+    // app receives an app password
+    // https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/
+    const loginflow2 = {
+        login: function(portal) {
+            const POLL_INTERVAL = 2000,
+                  FLOW_LIFETIME = 20 * 60 * 1000;     // Login Flow v2 tokens expire after 20 minutes
+            let canceled = false, timer;
+
+            const promise = new Promise((resolve, reject) => {
+                _request({
+                    url: portal + '/index.php/login/v2',
+                    method: 'POST',
+                    headers: {'OCS-APIRequest': 'true'},
+                }).then(e => {
+                    if ( canceled ) return;
+
+                    const obj = _json(e.responseText);
+                    if ( e.responseStatus != 200 || !obj || !obj.poll || !obj.poll.token ||
+                            !_is_http_url(obj.poll.endpoint) || !_is_http_url(obj.login) )
+                    {
+                        // server without Login Flow v2
+                        reject({status: 'unsupported'});
+                        return;
+                    }
+
+                    window.sdk.execCommand('auth:browser:open', JSON.stringify({url: obj.login}));
+
+                    const started = Date.now();
+                    const poll = () => {
+                        if ( canceled ) return;
+                        if ( Date.now() - started > FLOW_LIFETIME ) {
+                            reject({status: 'error', error: 'timeout'});
+                            return;
+                        }
+
+                        _request({
+                            url: obj.poll.endpoint,
+                            method: 'POST',
+                            body: 'token=' + encodeURIComponent(obj.poll.token),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        }).then(e => {
+                            if ( canceled ) return;
+
+                            // 404 until the user has granted access in the browser
+                            const res = e.responseStatus == 200 && _json(e.responseText);
+                            if ( !res ) {
+                                timer = setTimeout(poll, POLL_INTERVAL);
+                            } else
+                            if ( !res.loginName || !res.appPassword ) {
+                                reject({status: 'error', error: 'invalid response'});
+                            } else {
+                                resolve({
+                                    login: res.loginName,
+                                    authorization: 'Basic ' + btoa(unescape(encodeURIComponent(res.loginName + ':' + res.appPassword))),
+                                });
+                            }
+                        }, () => {
+                            // network hiccup: keep polling until the flow expires
+                            timer = setTimeout(poll, POLL_INTERVAL);
+                        });
+                    };
+                    timer = setTimeout(poll, POLL_INTERVAL);
+                }, err => {
+                    if ( !canceled ) reject(err);
+                });
+            });
+
+            return {
+                promise: promise,
+                cancel: () => { canceled = true; clearTimeout(timer); },
+            };
+        },
+
+        revoke: function(portal, authorization) {
+            _request({
+                url: portal + '/ocs/v2.php/core/apppassword',
+                method: 'DELETE',
+                headers: {'OCS-APIRequest': 'true', 'Authorization': authorization},
+            }).catch(() => {});
+        },
+    };
+
+    const methods = {
+        loginflow2: loginflow2,
+    };
+
+    // the native side asks to invalidate the credentials on logout
+    window.sdk.on('on_native_message', (cmd, param) => {
+        if ( cmd == 'auth:browser:revoke' ) {
+            const obj = _json(param);
+            if ( obj && methods[obj.type] && methods[obj.type].revoke )
+                methods[obj.type].revoke(obj.portal, obj.authorization);
+        }
+    });
+
+    return {
+        // TODO: CBrowserAuth is not implemented in the macOS app yet
+        method: type => !utils.isMacOS && methods[type] ? methods[type] : undefined,
+    };
+})();
+
 window.DialogConnect = function(params) {
     "use strict";
 
@@ -51,13 +189,17 @@ window.DialogConnect = function(params) {
                                     <input id="auth-portal" type="text" name="" spellcheck="false" class="tbox dlg--option" placeholder="${utils.Lang.pshPortal}" value="">
                                 </div>
                                 <div style="height:12px;"></div>
-                                <div class="lr-flex">
+                                <div id="box-connect" class="lr-flex">
                                     <!--<a class="text-sub link newportal" target="popup" href="javascript:void(0)">${utils.Lang.linkCreatePortal}</a>-->
                                     <span />
                                     <div class="lr-flex">
                                         <img class="img-loader">
                                         <button id="btn-next" l10n class="btn btn--landing">${utils.Lang.btnConnect}</button>
                                     </div>
+                                </div>
+                                <div id="box-browser-login" class="lr-flex" style="display:none;">
+                                    <label class="text-sub" l10n>${utils.Lang.textBrowserLogin}</label>
+                                    <button id="btn-cancel-login" l10n class="btn btn--landing">${utils.Lang.btnCancelLogin}</button>
                                 </div>
                             </div>
                         </section>`;
@@ -86,6 +228,7 @@ window.DialogConnect = function(params) {
 
     function _close(opts) {
         // $el[0].hasAttribute('open') && $el[0].close();
+        _stop_browser_login();
         $el.remove();
 
         if ( _events.close ) {
@@ -148,6 +291,9 @@ window.DialogConnect = function(params) {
                     if ( obj.status == 'skipped' )
                         console.log(`get portal info skipped, ${obj.response.statusText}`);
 
+                    if ( _browser_auth_type(provider) )
+                        _start_browser_login(protocol+portal, provider);
+                    else
                     _close({
                         portal:protocol+portal,
                         provider:provider
@@ -173,6 +319,61 @@ window.DialogConnect = function(params) {
                 return obj;
             }
         ).then( _callback, _callback );
+    };
+
+    // providers with "auth": {"type": ...} in their config log in with the system browser
+    let _browser_login;
+
+    function _browser_auth_type(provider) {
+        const model = config.portals.providers.find(provider);
+        const type = !!model && !!model.auth ? model.auth.type : undefined;
+        return BrowserAuth.method(type) ? type : undefined;
+    };
+
+    function _show_browser_login(show) {
+        $body.find('#box-browser-login')[show ? 'show' : 'hide']();
+        $body.find('#box-connect').toggle(!show);
+        $body.find('.tbox, select').prop('disabled', show);
+    };
+
+    function _start_browser_login(portal, provider) {
+        _stop_browser_login();
+
+        const type = _browser_auth_type(provider);
+        const flow = BrowserAuth.method(type).login(portal);
+        _browser_login = flow;
+        _show_browser_login(true);
+
+        flow.promise.then(res => {
+            if ( _browser_login !== flow ) return;
+            _browser_login = undefined;
+
+            // the native side stores the credentials and opens the portal,
+            // which then reports "portal:login"
+            window.sdk.execCommand('auth:browser:store', JSON.stringify({
+                portal: portal, provider: provider, type: type,
+                login: res.login, authorization: res.authorization}));
+            _close();
+        }, err => {
+            if ( _browser_login !== flow ) return;
+            _stop_browser_login();
+
+            if ( err.status == 'unsupported' ) {
+                // fall back to the in-app login
+                _close({portal: portal, provider: provider});
+            } else
+            if ( err.status == 'error' ) {
+                _set_error(err.error == 'timeout' ? utils.Lang.errBrowserLoginTimeout : utils.Lang.errBrowserLogin);
+            }
+        });
+    };
+
+    function _stop_browser_login() {
+        if ( !_browser_login ) return;
+
+        _browser_login.cancel();
+        _browser_login = undefined;
+        _show_browser_login(false);
     };
 
     function _on_combo_provider_change(e) {
@@ -218,7 +419,7 @@ window.DialogConnect = function(params) {
     };
 
     function _disable_dialog(disable) {
-        $body.find('.tbox, #btn-login').prop('disabled', disable);
+        $body.find('.tbox, #btn-login').prop('disabled', disable || !!_browser_login);
         $body.find('.img-loader')[disable?'show':'hide']();
     };
 
@@ -327,6 +528,7 @@ window.DialogConnect = function(params) {
             let $portal = $body.find('#auth-portal');
             if ( !!params.portal ) $portal.val(utils.skipUrlProtocol(params.portal));
             $body.find('#btn-next').on('click', _on_click_connect);
+            $body.find('#btn-cancel-login').on('click', e => _stop_browser_login());
 
             _bind_events();
             $el.get(0).showModal();

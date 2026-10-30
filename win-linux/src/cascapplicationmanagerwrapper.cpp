@@ -27,6 +27,7 @@
 #include "cfilechecker.h"
 #include "OfficeFileFormats.h"
 #include "cproviders.h"
+#include "cbrowserauth.h"
 #ifndef __OS_WIN_XP
 # include "components/cnotification.h"
 #endif
@@ -281,6 +282,14 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
         } else
         if ( cmd.compare(L"provider:list") == 0 ) {
             CProviders::instance().init(QString::fromStdWString(pData->get_Param()));
+        } else
+        if ( cmd.compare(L"auth:browser:open") == 0 ) {
+            CBrowserAuth::instance().open(QString::fromStdWString(pData->get_Param()));
+            return true;
+        } else
+        if ( cmd.compare(L"auth:browser:store") == 0 ) {
+            CBrowserAuth::instance().store(QString::fromStdWString(pData->get_Param()));
+            return true;
         } else
         if ( cmd.compare(L"portal:login") == 0 ) {
             AscAppManager::sendCommandTo(SEND_TO_ALL_START_PAGE, L"portal:login", pData->get_Param());
@@ -2253,6 +2262,7 @@ void CAscApplicationManagerWrapper::Logout(const wstring& wjson)
             }
 
             for (auto& v: _portals) {
+                CBrowserAuth::instance().logout(QString::fromStdWString(v));
                 CAscApplicationManager::Logout(v);
 
                 int index = mainWindow()->tabWidget()->tabIndexByUrl(v);
