@@ -42,4 +42,11 @@ jobs:
         run: npm ci
 
       - name: Unit tests
-        run: npx vitest run
+        run: npx vitest run --coverage
+
+      - name: Coverage of the changed lines
+        if: github.event_name == 'pull_request'
+        uses: Euro-Office/.github/actions/diff-coverage@c6be61e1c3cc63761a8a70c71fad268bf9ee434e # main
+        with:
+          reports: common/loginpage/test/coverage/lcov.info
+          fail-under: 80
