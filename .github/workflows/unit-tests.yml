@@ -24,7 +24,7 @@ concurrency:
 
 env:
   # desktop-sdk branch whose headers the app builds against
-  DESKTOP_SDK_REF: feat/certificate-check
+  DESKTOP_SDK_REF: feature/nextcloud-login-flow
   # Same Qt as the release build (core/Common/3dParty/qt/nc-build.py)
   QT_VERSION: 6.10.1
 
