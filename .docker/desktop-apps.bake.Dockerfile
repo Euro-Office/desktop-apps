@@ -158,12 +158,14 @@ FROM core-base AS desktop-linux
             -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
             -DVCPKG_MANIFEST_MODE=ON \
             -DVCPKG_MANIFEST_DIR="/core" \
-            -DVCPKG_MANIFEST_FEATURES="desktop-editors" \
+            -DVCPKG_MANIFEST_FEATURES="desktop-editors;tests" \
+            -DEO_BUILD_TESTS=ON \
             -DPYTHON_BIN=/opt/venv/bin/python \
             -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
             -DDESKTOP_FILE_NAME="${PACKAGE_NAME}" \
             /desktop-apps/win-linux/ && \
         cmake --build . && \
+        ctest --output-on-failure && \
         cmake --install . && \
         ccache --show-stats && \
         cp -a desktopeditors /desktopeditors
