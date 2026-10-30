@@ -143,10 +143,6 @@ FROM core-base AS desktop-linux
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${TARGETARCH}-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
         --mount=type=cache,target=/ccache,id=ccache \
-        --mount=type=secret,id=nextcloud_user \
-        --mount=type=secret,id=nextcloud_pass \
-        export NEXTCLOUD_USER="$(cat /run/secrets/nextcloud_user)" && \
-        export NEXTCLOUD_PASS="$(cat /run/secrets/nextcloud_pass)" && \
         export CCACHE_DIR=/ccache && \
         COMPANY_NAME_LOW=$(echo "${COMPANY_NAME}" | tr 'A-Z' 'a-z' | tr ' ' '-') && \
         PRODUCT_NAME_LOW=$(echo "${PRODUCT_NAME}" | tr 'A-Z' 'a-z' | tr -d ' ') && \
