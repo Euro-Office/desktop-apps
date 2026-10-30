@@ -7,16 +7,18 @@
 
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { runInThisContext } from 'node:vm';
 
 // (jsdom replaces the global URL, so no new URL(..., import.meta.url) here)
 const loginpage = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 export function loadScripts(...paths) {
     for (const path of paths) {
-        const code = readFileSync(join(loginpage, path), 'utf8');
-        // indirect eval runs the script in the global scope, like a <script>
-        (0, eval)(`${code}\n//# sourceURL=${path}`);
+        const file = join(loginpage, path);
+        // Runs the script in the global scope, like a <script>, under its
+        // file name, so coverage can map it back to the file
+        runInThisContext(readFileSync(file, 'utf8'), { filename: pathToFileURL(file).href });
     }
 }
 
