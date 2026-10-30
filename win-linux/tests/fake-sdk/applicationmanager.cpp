@@ -258,6 +258,11 @@ bool CAscApplicationManager::RemoveRecentByViewId(const int& viewId)
     return true;
 }
 
+void CAscApplicationManager::SetPortalAuthorization(const std::wstring& sPortal, const std::wstring& sAuthorization)
+{
+    record("CAscApplicationManager::SetPortalAuthorization", sPortal + L" " + sAuthorization);
+}
+
 int CAscApplicationManager::CallCommand(const std::wstring& command)
 {
     record("CAscApplicationManager::CallCommand", command);
