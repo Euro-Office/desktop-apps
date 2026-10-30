@@ -18,14 +18,14 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://github.com/Euro-Office/DesktopEditors" ValueLocId="-"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/Euro-Office/DesktopEditors/releases" ValueLocId="-"/>
     <ROW Property="AppName" Value="Euro-Office" ValueLocId="-"/>
-    <ROW Property="AppUserModelID" Value="ASC.Documents.5" ValueLocId="-"/>
+    <ROW Property="AppUserModelID" Value="EuroOffice.Documents.5" ValueLocId="-"/>
     <ROW Property="Arch" Value="x64" MultiBuildValue="MsiBuild32:x86#MsiBuildARM64:arm64" ValueLocId="-"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="CompanyPath" Value="Euro-Office" ValueLocId="-"/>
     <ROW Property="DesktopPath" Value="DesktopEditors" ValueLocId="-"/>
     <ROW Property="EMPTY_LANG_DIR" Value="en-US"/>
     <ROW Property="Edition" Value="Community" ValueLocId="-"/>
-    <ROW Property="ExtPfx" Value="ASC" ValueLocId="-"/>
+    <ROW Property="ExtPfx" Value="EuroOffice" ValueLocId="-"/>
     <ROW Property="FORMS" Value="1" ValueLocId="-"/>
     <ROW Property="LOCALE" Value="en-US"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="MsiBuild64:7#MsiBuild32:7#MsiBuildARM64:7"/>
