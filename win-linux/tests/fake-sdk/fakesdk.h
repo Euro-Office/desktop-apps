@@ -21,7 +21,9 @@ namespace FakeSdk
     // Arguments of the calls the app made to the SDK function `name`, oldest
     // first, e.g. calls("CCefView::load") -> {L"https://..."}. Events are
     // recorded with their type, e.g. calls("CAscApplicationManager::Apply")
-    // -> {L"42"}.
+    // -> {L"42"}. Commands to the pages are recorded with their parameter too,
+    // e.g. calls("CAscApplicationManager::SetEventToAllMainWindows:command")
+    // -> {L"portal:logout https://..."}.
     std::vector<std::wstring> calls(const std::string& name);
     void clearCalls();
 
