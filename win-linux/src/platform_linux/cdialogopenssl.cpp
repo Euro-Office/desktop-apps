@@ -11,7 +11,6 @@
 #include <QLineEdit>
 #include <QToolButton>
 
-#include "../../../../core/DesktopEditor/xmlsec/src/include/CertificateCommon.h"
 
 class CSslDialog_Private
 {
@@ -230,55 +229,55 @@ bool CDialogOpenSsl::checkCertificate()
         return false;
     }
 
-    int _result  = NSOpenSSL::LoadCert( m_private->_txtCertPath->text().toStdWString(),
-                                        m_private->_txtCertPass->text().toStdString() );
+    CertificateFileStatus _result = CAscApplicationManager::CheckCertificateFile(m_private->_txtCertPath->text().toStdWString(),
+                                                                                m_private->_txtCertPass->text().toStdString());
 
     switch ( _result ) {
-    case OPEN_SSL_WARNING_ERR:
+    case CertificateFileStatus::Unsupported:
         CMessage::error(this, tr("Certificate is not supported"));
         break;
-    case OPEN_SSL_WARNING_PASS:
+    case CertificateFileStatus::NeedPassword:
         m_private->setPassDisabled("cert", false);
         m_private->_txtCertPass->setFocus();
         if ( m_private->_txtCertPass->text().isEmpty() )
             CMessage::info(this, tr("Enter certificate password"));
         else CMessage::info(this, tr("Wrong certificate password.<br>Please enter again"));
         break;
-    case OPEN_SSL_WARNING_OK:
-    case OPEN_SSL_WARNING_ALL_OK:
+    case CertificateFileStatus::Ok:
+    case CertificateFileStatus::Complete:
     default: break;
     }
 
-    if ( _result == OPEN_SSL_WARNING_OK ) {
+    if ( _result == CertificateFileStatus::Ok ) {
         if ( m_private->_txtKeyPath->text().isEmpty() ) {
             CMessage::info(this, tr("Enter valid private key"));
             m_private->_txtKeyPath->setDisabled(false);
             m_private->_btnKeyFile->setDisabled(false);
             m_private->_txtKeyPath->setFocus();
         } else {
-            _result = NSOpenSSL::LoadKey( m_private->_txtKeyPath->text().toStdWString(),
-                                            m_private->_txtKeyPass->text().toStdString() );
+            _result = CAscApplicationManager::CheckPrivateKeyFile(m_private->_txtKeyPath->text().toStdWString(),
+                                                                  m_private->_txtKeyPass->text().toStdString());
 
             switch ( _result ) {
-            case OPEN_SSL_WARNING_ERR:
+            case CertificateFileStatus::Unsupported:
                 CMessage::info(this, tr("Key is not supported"));
                 break;
-            case OPEN_SSL_WARNING_PASS:
+            case CertificateFileStatus::NeedPassword:
                 m_private->setPassDisabled("key", false);
                 m_private->_txtKeyPass->setFocus();
                 CMessage::info(this, tr("Enter key password"));
                 break;
-            case OPEN_SSL_WARNING_OK:
-                _result = OPEN_SSL_WARNING_ALL_OK;
+            case CertificateFileStatus::Ok:
+                _result = CertificateFileStatus::Complete;
                 break;
-            case OPEN_SSL_WARNING_ALL_OK:
+            case CertificateFileStatus::Complete:
             default:
                 break;
             }
         }
     }
 
-    return _result == OPEN_SSL_WARNING_ALL_OK;
+    return _result == CertificateFileStatus::Complete;
 }
 
 void CDialogOpenSsl::getResult(NSEditorApi::CAscOpenSslData& data)
