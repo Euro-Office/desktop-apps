@@ -347,15 +347,27 @@ elseif(UNIX AND NOT APPLE)
     endif()
 endif()
 
-# 7. Create Executable
+# 7. Create Library and Executable
 qt6_add_resources(RESOURCES resources.qrc)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/extras.qrc")
     qt6_add_resources(RESOURCES extras.qrc)
 endif()
 
-add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
+# Everything but main() is compiled once into an object library, so the unit
+# tests in tests/ can link the application code. The executable takes its
+# objects directly and gets its dependencies applied itself (section 8), not
+# through linking desktopeditors_core: through the library's link interface
+# CMake orders them differently, and the app then binds OpenSSL to the copy
+# that libkernel_network/libooxmlsignature export instead of linking it
+# statically. This way the executable links exactly as when it compiled the
+# sources itself.
+list(REMOVE_ITEM COMMON_SOURCES src/main.cpp)
+add_library(desktopeditors_core OBJECT ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
+set_default_options(desktopeditors_core)
 
-set_default_options(DesktopEditors) 
+add_executable(DesktopEditors src/main.cpp $<TARGET_OBJECTS:desktopeditors_core>)
+
+set_default_options(DesktopEditors)
 
 if(WIN32)
     # On Windows the editor ships as editors.exe; DesktopEditors.exe is the
@@ -396,73 +408,6 @@ if(NOT WIN32)
     pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
 
-# 8. Include Paths
-target_include_directories(DesktopEditors PRIVATE
-    src/prop
-    src
-    ${GTK3_INCLUDE_DIRS}
-    ${DBUS_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/qt_wrapper/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/DesktopEditor
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common
-    ${CMAKE_CURRENT_SOURCE_DIR}/extras/update-daemon/src/classes
-    ${OPENSSL_INSTALL_DIR_ABS}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
-    ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
-)
-
-if(WIN32)
-    target_link_libraries(DesktopEditors PRIVATE
-        Qt6::CorePrivate
-        Qt6::GuiPrivate
-        Qt6::PrintSupportPrivate)
-endif()
-
-target_link_directories(DesktopEditors PRIVATE
-    $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
-    $<$<NOT:$<CONFIG:Debug>>:${CEF_ROOT}/Release>
-    ${ICU_INSTALL_DIR}/include
-)
-
-target_link_libraries(DesktopEditors PRIVATE
-    # --- UI and High Level ---
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Svg
-    Qt${QT_VERSION_MAJOR}::PrintSupport
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
-    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
-    ${PLATFORM_LIBS}
-    ${DBUS_LIBRARIES}
-
-    # --- Circular Dependency Group ---
-    # This forces the linker to resolve symbols between core libs and dependencies
-    -Wl,--start-group
-        ascdocumentscore
-        qtascdocumentscore
-        kernel
-        kernel_network
-        graphics
-        UnicodeConverter
-        PdfFile
-        DjVuFile
-        XpsFile
-        ${OPENSSL_LIBSSL}
-        ${OPENSSL_LIBCRYPTO}
-    -Wl,--end-group                               
-
-    # --- System Essentials ---
-    hunspell_wrapper
-    ooxmlsignature
-)
-
-if(WIN32)
-    target_link_libraries(DesktopEditors PRIVATE libcef)
-else()
-    target_link_libraries(DesktopEditors PRIVATE cef X11 dl pthread rt z)
-endif()
-
 if(ABOUT_PAGE_APP_NAME)
     add_compile_definitions(ABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}")
 endif()
@@ -471,20 +416,97 @@ if(DESKTOP_FILE_NAME)
     add_compile_definitions(DESKTOP_FILE_NAME="${DESKTOP_FILE_NAME}")
 endif()
 
-target_compile_definitions(DesktopEditors PRIVATE COMMON_OPENSSL_BUILDING_INTERNAL)
-
-if(WIN32)
-    target_compile_definitions(DesktopEditors PRIVATE UNICODE _UNICODE WIN32 _WINDOWS _WIN32)
-endif()
-
-if(UNIX)
-    target_link_libraries(DesktopEditors PRIVATE
-        Qt${QT_VERSION_MAJOR}::DBus
-        ${LIBICUUC}
-        ${LIBICUDATA}
-        ${LIBICUI}
+# 8. Include Paths and Dependencies
+# Applied to the executable (PRIVATE) and to desktopeditors_core (PUBLIC, so
+# the unit tests get the same include paths, definitions and libraries as the
+# application code). See section 7 for why the executable gets its own copy.
+function(desktopeditors_add_dependencies target scope)
+    target_include_directories(${target} ${scope}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/prop
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${GTK3_INCLUDE_DIRS}
+        ${DBUS_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/qt_wrapper/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../core/DesktopEditor
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common
+        ${CMAKE_CURRENT_SOURCE_DIR}/extras/update-daemon/src/classes
+        ${OPENSSL_INSTALL_DIR_ABS}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
+        ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
     )
 
+    if(WIN32)
+        target_link_libraries(${target} ${scope}
+            Qt6::CorePrivate
+            Qt6::GuiPrivate
+            Qt6::PrintSupportPrivate)
+    endif()
+
+    target_link_directories(${target} ${scope}
+        $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
+        $<$<NOT:$<CONFIG:Debug>>:${CEF_ROOT}/Release>
+        ${ICU_INSTALL_DIR}/include
+    )
+
+    target_link_libraries(${target} ${scope}
+        # --- UI and High Level ---
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Svg
+        Qt${QT_VERSION_MAJOR}::PrintSupport
+        Qt${QT_VERSION_MAJOR}::Multimedia
+        Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+        Qt${QT_VERSION_MAJOR}::OpenGLWidgets
+        ${PLATFORM_LIBS}
+        ${DBUS_LIBRARIES}
+
+        # --- Circular Dependency Group ---
+        # This forces the linker to resolve symbols between core libs and dependencies
+        -Wl,--start-group
+            ascdocumentscore
+            qtascdocumentscore
+            kernel
+            kernel_network
+            graphics
+            UnicodeConverter
+            PdfFile
+            DjVuFile
+            XpsFile
+            ${OPENSSL_LIBSSL}
+            ${OPENSSL_LIBCRYPTO}
+        -Wl,--end-group
+
+        # --- System Essentials ---
+        hunspell_wrapper
+        ooxmlsignature
+    )
+
+    if(WIN32)
+        target_link_libraries(${target} ${scope} libcef)
+    else()
+        target_link_libraries(${target} ${scope} cef X11 dl pthread rt z)
+    endif()
+
+    target_compile_definitions(${target} ${scope} COMMON_OPENSSL_BUILDING_INTERNAL)
+
+    if(WIN32)
+        target_compile_definitions(${target} ${scope} UNICODE _UNICODE WIN32 _WINDOWS _WIN32)
+    endif()
+
+    if(UNIX)
+        target_link_libraries(${target} ${scope}
+            Qt${QT_VERSION_MAJOR}::DBus
+            ${LIBICUUC}
+            ${LIBICUDATA}
+            ${LIBICUI}
+        )
+    endif()
+endfunction()
+
+desktopeditors_add_dependencies(DesktopEditors PRIVATE)
+desktopeditors_add_dependencies(desktopeditors_core PUBLIC)
+
+if(UNIX)
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")
 endif()
 
