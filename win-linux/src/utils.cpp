@@ -47,7 +47,6 @@
 #include <QProcess>
 #include "cascapplicationmanagerwrapper.h"
 #include "qdpichecker.h"
-#include "common/File.h"
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 # include <QDesktopWidget>
 #endif
@@ -75,7 +74,7 @@ namespace InputArgs {
 
     auto init(int argc, char** const argv) -> void {
         for (int c(1); c < argc; ++c) {
-            in_args.push_back(UTF8_TO_U(std::string(argv[c])));
+            in_args.push_back(QString::fromUtf8(argv[c]).toStdWString());
         }
     }
 
@@ -403,7 +402,7 @@ void Utils::openUrl(const QString& url)
 		if (url.startsWith("xdg:")) {
 			// url is already encoded for xdg
 			std::wstring sUrlW = url.toStdWString().substr(4);
-			std::string sCommand = "LD_LIBRARY_PATH='' xdg-open " + U_TO_UTF8(sUrlW);
+			std::string sCommand = "LD_LIBRARY_PATH='' xdg-open " + QString::fromStdWString(sUrlW).toStdString();
 			system(sCommand.c_str());
 		} else {
 			// xdg-open workingpath path
