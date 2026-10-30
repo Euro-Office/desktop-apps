@@ -1,0 +1,3 @@
+{
+    "tests": ["*_test.cpp", "*.test.js"]
+}
