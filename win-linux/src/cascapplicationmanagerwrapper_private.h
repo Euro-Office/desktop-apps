@@ -37,8 +37,8 @@
 #include "components/cmessage.h"
 #include "cprintdata.h"
 #include "clogger.h"
-#include "common/File.h"
 #include <QApplication>
+#include <QDir>
 #include <QJsonParseError>
 #ifdef _WIN32
 # define APP_LAUNCH_NAME "\\DesktopEditors.exe"
@@ -114,12 +114,12 @@ public:
 #ifdef _WIN32
             ts << "@chcp 65001>nul\n";
             ts << "@echo off\n";
-            ts << "start \"\" \"" << QString::fromStdWString(NSFile::GetProcessDirectory()) << APP_LAUNCH_NAME << "\"\n";
+            ts << "start \"\" \"" << QDir::toNativeSeparators(QCoreApplication::applicationDirPath()) << APP_LAUNCH_NAME << "\"\n";
             ts << "del \"%~f0\"&exit\n";
 #else
             ts << "#!/bin/bash\n";
             ts << "sleep 1\n";
-            QString appDir = QString::fromStdWString(NSFile::GetProcessDirectory());
+            QString appDir = QCoreApplication::applicationDirPath();
             ts << "cd \"" << appDir << "\"\n";
             ts << "LD_LIBRARY_PATH=\"$PWD:$PWD/converter:$LD_LIBRARY_PATH\"";
             ts << " LD_PRELOAD=libcef.so";
