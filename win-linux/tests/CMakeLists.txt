@@ -68,3 +68,20 @@ desktop_test(
     LIBS    desktopeditors_core
     SCOPE   unit
 )
+
+# The suites below start a private D-Bus session bus (fakesecretservice.cpp)
+desktop_test(
+    NAME    desktopeditors_credentialstore_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/credentialstore_test.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/fakesecretservice.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+    SCOPE   unit
+)
+
+desktop_test(
+    NAME    desktopeditors_browserauth_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/browserauth_test.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/fakesecretservice.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+    SCOPE   unit
+)
