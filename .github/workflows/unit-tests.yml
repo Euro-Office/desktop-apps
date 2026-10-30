@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 Euro-Office contributors
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Builds the app code against the fake desktop-sdk (win-linux/tests/fake-sdk),
+# runs the unit tests and reports how much of a PR's changed lines they cover.
+# Needs only the desktop-sdk headers and a few header-only files from core,
+# not the full docker build. See win-linux/tests/README.md.
+
+name: Unit tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # desktop-sdk branch whose headers the app builds against
+  DESKTOP_SDK_REF: feat/certificate-check
+  # Same Qt as the release build (core/Common/3dParty/qt/nc-build.py)
+  QT_VERSION: 6.10.1
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Next to desktop-apps, as in the DesktopEditors superproject
+      - name: Check out desktop-sdk and core headers
+        run: |
+          git clone --quiet --depth 1 --branch "$DESKTOP_SDK_REF" https://github.com/Euro-Office/desktop-sdk.git ../desktop-sdk
+          git clone --quiet --depth 1 --filter=blob:none --no-checkout https://github.com/Euro-Office/core.git ../core
+          git -C ../core sparse-checkout set --no-cone \
+            /Common/OfficeFileFormats.h /Common/kernel_config.h /Common/Network/FileTransporter/include/FileTransporter.h \
+            /DesktopEditor/common/base_export.h /DesktopEditor/common/Types.h
+          git -C ../core checkout --quiet
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ninja-build \
+            libgtk-3-dev libnotify-dev libx11-dev libx11-xcb-dev libxcb1-dev libxext-dev \
+            libdbus-1-dev libcups2-dev libglib2.0-dev-bin libgtest-dev \
+            libgl-dev libegl-dev libxkbcommon-dev gcovr
+
+      - uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125 # v4.4.1
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: qtmultimedia
+          cache: true
+
+      - name: Build
+        run: |
+          cmake -S win-linux/tests/fake-sdk -B build -G Ninja -DEO_COVERAGE=ON
+          cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Coverage report
+        run: gcovr --root . --object-directory build --filter win-linux/src/ --cobertura coverage.xml --print-summary
+
+      - name: Coverage of the changed lines
+        if: github.event_name == 'pull_request'
+        uses: Euro-Office/.github/actions/diff-coverage@c6be61e1c3cc63761a8a70c71fad268bf9ee434e # main
+        with:
+          reports: coverage.xml
+          fail-under: 80
