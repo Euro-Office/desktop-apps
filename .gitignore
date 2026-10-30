@@ -30,6 +30,7 @@ package/common/changelog/*/news_???
 common/loginpage/res/img/generated/*
 common/loginpage/build/plugins/*
 common/**/node_modules/*
+common/loginpage/test/coverage/
 common/loginpage/deploy/*
 common/loginpage/src/dlglogin.min.js
 common/converter/*
