@@ -57,9 +57,6 @@ platform :mac do
       sh("mkdir -p ../Vendor/ONLYOFFICE/license && cp -fv ../../package/common/license/commercial/LICENSE.html ../Vendor/ONLYOFFICE/license/EULA.html")
     end
 
-    desc 'Record build commits for the About dialog'
-    ENV["BUILD_COMMITS"] ||= sh(%q(cd ../../.. && echo "DesktopEditors=$(git rev-parse HEAD) $(git submodule foreach --quiet 'echo $name=$(git rev-parse HEAD)' | tr '\n' ' ')"), log: false).strip
-
     desc 'Build for developer id and notarize'
     gym(
       scheme: scheme,
