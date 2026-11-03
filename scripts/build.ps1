@@ -14,10 +14,11 @@ built by core\scripts\build.ps1. A core checkout with local changes is always
 built (see core\scripts\core_package.py).
 
 The desktop build is in <BuildDir>\desktop, a core built here in
-<BuildDir>\core. Needs VCPKG_ROOT. CORE_PYTHON sets the Python for the build
-scripts (default: python). EO_CORE_CACHE: auto (default), off (always build
-core) or require (fail without a prebuilt core). Uses sccache when it is on
-PATH. Arguments after the named ones go to cmake.
+<BuildDir>\core, core's third-party libraries in -ThirdPartyDir (default
+<BuildDir>\third_party). Needs VCPKG_ROOT. CORE_PYTHON sets the Python for
+the build scripts (default: python). EO_CORE_CACHE: auto (default), off
+(always build core) or require (fail without a prebuilt core). Uses sccache
+when it is on PATH. Arguments after the named ones go to cmake.
 
 .EXAMPLE
 scripts\build.ps1 -Arch x64 -BuildDir build "-DABOUT_PAGE_APP_NAME=Euro-Office"
@@ -28,6 +29,7 @@ param(
     [string]$BuildDir = 'build',
     [string]$Core = '',
     [string]$CorePackage = '',
+    [string]$ThirdPartyDir = '',
     [switch]$Tests,
     [string]$SdkVersion = '10.0.19041.0',
     [Parameter(ValueFromRemainingArguments)]
@@ -51,7 +53,7 @@ if (-not $env:VCINSTALLDIR) { Import-VcVars -Arch $Arch -SdkVersion $SdkVersion 
 $BuildDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($BuildDir)
 $python = if ($env:CORE_PYTHON) { $env:CORE_PYTHON } else { 'python' }
 # Shared by the core and the desktop build, so each dependency is set up once
-$thirdParty = Join-Path $BuildDir 'third_party'
+$thirdParty = if ($ThirdPartyDir) { $ThirdPartyDir } else { Join-Path $BuildDir 'third_party' }
 
 if (-not $CorePackage) {
     $prebuilt = Join-Path $BuildDir 'core-prebuilt'
