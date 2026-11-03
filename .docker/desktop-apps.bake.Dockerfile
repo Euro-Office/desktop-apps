@@ -7,6 +7,8 @@
 # - desktop-sdk: builds/files from this repo
 # - core: files from this repo and core-base image
 # - core-fonts: files from this repo
+# - core-package: the prebuilt core for the core checkout
+#   (core/scripts/core_package.py fetch), or an empty directory to build core
 # ==============================================================================
 
 #### DESKTOP-APPS
@@ -116,6 +118,9 @@ FROM core-base AS desktop-linux
     COPY desktop-apps /desktop-apps
     COPY core-fonts /core-fonts
     COPY core /core
+    # Docker sees core without its git metadata, so whether the build cache
+    # has a package for it is decided outside: an empty context builds core
+    COPY --from=core-package / /core-package
 
     ### Branding
     COPY --from=brand-icons /[d]esktop-apps /desktop-apps
@@ -141,9 +146,14 @@ FROM core-base AS desktop-linux
         COMPANY_NAME_LOW=$(echo "${COMPANY_NAME}" | tr 'A-Z' 'a-z' | tr ' ' '-') && \
         PRODUCT_NAME_LOW=$(echo "${PRODUCT_NAME}" | tr 'A-Z' 'a-z' | tr -d ' ') && \
         PACKAGE_NAME="${COMPANY_NAME_LOW}-${PRODUCT_NAME_LOW}" && \
+        if [ -f /core-package/lib/eo-core-targets.cmake ]; then \
+            set -- --core-package /core-package; \
+        else \
+            set --; \
+        fi && \
         CORE_PYTHON=/opt/venv/bin/python /desktop-apps/scripts/build.sh \
             --build-dir /build-cache-desktop --core /core --desktop-sdk /desktop-sdk \
-            --tests --ccache \
+            --tests --ccache "$@" \
             -- -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
                -DDESKTOP_FILE_NAME="${PACKAGE_NAME}" && \
         ctest --test-dir /build-cache-desktop/desktop --output-on-failure && \
