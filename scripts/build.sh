@@ -19,6 +19,10 @@
 #   --desktop-sdk DIR   desktop-sdk checkout (default: ../desktop-sdk)
 #   --core-package DIR  use this core package instead of fetching or
 #                       building one
+#   --third-party-dir DIR
+#                       where core's third-party libraries are set up, for
+#                       the core and the desktop build (default:
+#                       <build-dir>/third_party)
 #   --tests             also build the unit tests (run them with ctest)
 #   --ccache            compile through ccache
 #
@@ -33,6 +37,7 @@ core="$apps/../core"
 sdk="$apps/../desktop-sdk"
 build_dir=build
 package=
+third_party=
 tests=OFF
 ccache=
 
@@ -44,6 +49,7 @@ while [ $# -gt 0 ]; do
         --core)         core="$2"; shift 2 ;;
         --desktop-sdk)  sdk="$2"; shift 2 ;;
         --core-package) package="$2"; shift 2 ;;
+        --third-party-dir) third_party="$2"; shift 2 ;;
         --tests)        tests=ON; shift ;;
         --ccache)       ccache=1; shift ;;
         -h|--help)      usage 0 ;;
@@ -59,7 +65,7 @@ build_dir="$(cd "$build_dir" && pwd)"
 core="$(cd "$core" && pwd)"
 sdk="$(cd "$sdk" && pwd)"
 # Shared by the core and the desktop build, so each dependency is set up once
-third_party="$build_dir/third_party"
+third_party="${third_party:-$build_dir/third_party}"
 
 case "$(uname -s)-$(uname -m)" in
     Linux-x86_64)            platform=linux-amd64 ;;
