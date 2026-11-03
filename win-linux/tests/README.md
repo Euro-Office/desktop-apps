@@ -46,14 +46,13 @@ test build fails to link; add the function to the fake then.
 
 ## Full build
 
-The Linux docker build (`build/linux/build.sh` in DesktopEditors) configures
+The Linux docker build (`build/linux/build.sh` in DesktopEditors) builds
 with tests enabled and runs `ctest` after compiling, so a failing test fails
-the build. In an existing build tree:
+the build. From a DesktopEditors checkout, in `desktop-apps/`:
 
 ```bash
-cmake -DEO_BUILD_TESTS=ON -DVCPKG_MANIFEST_FEATURES="desktop-editors;tests" .
-cmake --build .
-ctest --output-on-failure
+scripts/build.sh --tests        # Windows: scripts\build.ps1 -Tests
+ctest --test-dir build/desktop --output-on-failure
 ```
 
 ## Adding a suite
