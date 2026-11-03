@@ -18,6 +18,8 @@ set(CORE_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../../core")
 set(DESKTOP_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../desktop-sdk")
 
 set(BUILD_DESKTOP TRUE CACHE INTERNAL "tell common to prepare third party for desktop")
+# With EO_CORE_PREBUILT_DIR (a core package, see scripts/build.sh), common.cmake
+# defines the core targets, so the add_subdirectory() blocks below are skipped
 include(${CORE_ROOT_DIR}/common.cmake)
 
 # Unit tests, see tests/README.md. Needs the vcpkg 'tests' manifest feature.
@@ -34,8 +36,8 @@ if(UNIX)
     add_definitions(-DLINUX -D_LINUX -D_WAYLAND)
 endif()
 
-if(NOT TARGET hunspell-wrapper)
-    add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell-wrapper)
+if(NOT TARGET hunspell_wrapper)
+    add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell_wrapper)
 endif()
 
 if(NOT TARGET PdfFile)
@@ -318,15 +320,12 @@ if(UNIX)
 endif()
 
 if(WIN32)
-    # editors.exe declares its dependencies in DesktopEditors.exe.manifest
-    foreach(_t editors_helper
-            doctrenderer DocxRenderer kernel kernel_network graphics
-            UnicodeConverter PdfFile DjVuFile XpsFile ooxmlsignature
-            Fb2File EpubFile HtmlFile2 OFDFile IWorkFile HWPFile
-            StarMathConverter)
-        target_link_options(${_t} PRIVATE
-            "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='${EO_MANIFEST_ARCH}'")
-    endforeach()
+    # editors.exe declares its dependencies in DesktopEditors.exe.manifest.
+    # The core libraries built here get theirs from core, which also writes
+    # converter.manifest into EO_CORE_OUTPUT_DIR (a core package has both).
+    target_link_options(editors_helper PRIVATE
+        "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='${EO_MANIFEST_ARCH}'")
+    eo_core_converter_assembly()
 endif()
 
 # 9. Windows launcher (extras/projicons -> DesktopEditors.exe)
@@ -471,29 +470,13 @@ if(WIN32)
     )
 endif()
 
-# Core dependencies → converter/
+# Core dependencies → converter/. On Windows this includes converter.manifest,
+# which makes converter\ the private "converter" assembly the binaries above
+# depend on; without it they fail with 0xC0150002 (STATUS_SXS_CANT_GEN_ACTCTX)
 install(DIRECTORY "${EO_CORE_OUTPUT_DIR}/"
     USE_SOURCE_PERMISSIONS
     DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
 )
-
-# Makes converter\ the private "converter" assembly the binaries above depend
-# on; without it they fail with 0xC0150002 (STATUS_SXS_CANT_GEN_ACTCTX)
-if(WIN32)
-    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-        "${CORE_ROOT_DIR}/Common/msvc/converter.manifest")
-    file(READ "${CORE_ROOT_DIR}/Common/msvc/converter.manifest" _converter_manifest)
-    string(REPLACE "processorArchitecture=\"amd64\""
-        "processorArchitecture=\"${EO_MANIFEST_ARCH}\""
-        _converter_manifest "${_converter_manifest}")
-    if(NOT _converter_manifest MATCHES "processorArchitecture=\"${EO_MANIFEST_ARCH}\"")
-        message(FATAL_ERROR "converter.manifest: could not set processorArchitecture to ${EO_MANIFEST_ARCH}")
-    endif()
-    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/converter.manifest" "${_converter_manifest}")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/converter.manifest"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
-    )
-endif()
 
 # Boost: on Windows it's static (linked into the binaries) — nothing to install
 if(NOT WIN32)

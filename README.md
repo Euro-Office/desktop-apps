@@ -20,3 +20,5 @@ This repo contains the frontend for [Desktop Editors](https://github.com/Euro-Of
 ## **For developers: Building from source 👨‍💻**
 
 This repository (`desktop-apps`) contains the frontend shell for the Desktop Editors. The core editing engine and conversion components are located in the main [DesktopEditors](https://github.com/Euro-Office/DesktopEditors) repository.
+
+In a DesktopEditors checkout, `scripts/build.sh` (Linux, macOS) and `scripts/build.ps1` (Windows) build this repository against core. They download the prebuilt core for the `core` checkout when the build cache has it, and build core first otherwise, or when `core` has local changes. Options: `scripts/build.sh --help`, `Get-Help scripts\build.ps1`.
