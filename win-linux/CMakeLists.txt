@@ -18,7 +18,17 @@ set(CORE_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../../core")
 set(DESKTOP_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../desktop-sdk")
 
 set(BUILD_DESKTOP TRUE CACHE INTERNAL "tell common to prepare third party for desktop")
+# With EO_CORE_PREBUILT_DIR (a core package, see scripts/build.sh), common.cmake
+# defines the core targets, so the add_subdirectory() blocks below are skipped
 include(${CORE_ROOT_DIR}/common.cmake)
+
+# Unit tests, see tests/README.md. Needs the vcpkg 'tests' manifest feature.
+option(EO_BUILD_TESTS "Build the desktop-apps and desktop-sdk unit tests" OFF)
+if(EO_BUILD_TESTS)
+    # Before the desktop-sdk subdirectories below, so their tests are
+    # registered with this build tree's CTest as well.
+    enable_testing()
+endif()
 
 
 if(UNIX)
@@ -26,8 +36,8 @@ if(UNIX)
     add_definitions(-DLINUX -D_LINUX -D_WAYLAND)
 endif()
 
-if(NOT TARGET hunspell-wrapper)
-    add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell-wrapper)
+if(NOT TARGET hunspell_wrapper)
+    add_subdirectory(${CORE_ROOT_DIR}/Common/3dParty/hunspell/qt hunspell_wrapper)
 endif()
 
 if(NOT TARGET PdfFile)
@@ -140,214 +150,33 @@ if(ENV_PRODUCT_VERSION)
     add_definitions(-DVER_PRODUCT_VERSION_COMMAS=${VERSION_COMMAS})
 endif()
 
-# 4. Source and Header Lists
-set(COMMON_HEADERS
-    src/prop/defines_p.h
-    src/prop/cascapplicationmanagerwrapperintf.h
-    src/prop/version_p.h
-    src/prop/cmainwindowimpl.h
-    src/windows/cmainwindow.h
-    src/windows/cwindowbase.h
-    src/windows/ceditorwindow.h
-    src/windows/ceditorwindow_p.h
-    src/windows/cpresenterwindow.h
-    src/components/asctabwidget.h
-    src/components/cdownloadwidget.h
-    src/components/cpushbutton.h
-    src/components/cfiledialog.h
-    src/components/cprintprogress.h
-    src/components/ctabbar.h
-    src/components/cmessage.h
-    src/components/canimatedicon.h
-    src/components/ctabpanel.h
-    src/components/csvgpushbutton.h
-    src/components/celipsislabel.h
-    src/components/cfullscrwidget.h
-    src/components/cprintdialog.h
-    src/components/ctooltip.h
-    src/components/cmenu.h
-    src/version.h
-    src/defines.h
-    src/ccefeventstransformer.h
-    src/cascapplicationmanagerwrapper.h
-    src/cascapplicationmanagerwrapper_private.h
-    src/casctabdata.h
-    src/utils.h
-    src/chelp.h
-    src/cfilechecker.h
-    src/clogger.h
-    src/clangater.h
-    src/cprintdata.h
-    src/cproviders.h
-    src/cscalingwrapper.h
-    src/ctabundockevent.h
-    src/ccefeventsgate.h
-    src/ceditortools.h
-    src/cwindowsqueue.h
-    src/ceventdriver.h
-    src/cappeventfilter.h
-    src/iconfactory.h
-    src/cthemes.h
-)
-
-set(COMMON_SOURCES
-    src/prop/cmainwindowimpl.cpp
-    src/prop/utils.cpp
-    src/windows/cmainwindow.cpp
-    src/windows/cwindowbase.cpp
-    src/windows/ceditorwindow.cpp
-    src/windows/cpresenterwindow.cpp
-    src/components/asctabwidget.cpp
-    src/components/cdownloadwidget.cpp
-    src/components/cpushbutton.cpp
-    src/components/cfiledialog.cpp
-    src/components/cprintprogress.cpp
-    src/components/ctabbar.cpp
-    src/components/cmessage.cpp
-    src/components/canimatedicon.cpp
-    src/components/ctabpanel.cpp
-    src/components/csvgpushbutton.cpp
-    src/components/celipsislabel.cpp
-    src/components/cfullscrwidget.cpp
-    src/components/cprintdialog.cpp
-    src/components/ctooltip.cpp
-    src/components/cmenu.cpp
-    src/main.cpp
-    src/ccefeventstransformer.cpp
-    src/cascapplicationmanagerwrapper.cpp
-    src/casctabdata.cpp
-    src/chelp.cpp
-    src/cfilechecker.cpp
-    src/clogger.cpp
-    src/clangater.cpp
-    src/cprintdata.cpp
-    src/cproviders.cpp
-    src/cscalingwrapper.cpp
-    src/ctabundockevent.cpp
-    src/ccefeventsgate.cpp
-    src/ceditortools.cpp
-    src/ceventdriver.cpp
-    src/cappeventfilter.cpp
-    src/iconfactory.cpp
-    src/cthemes.cpp
-    ${CORE_ROOT_DIR}/Common/3dParty/openssl/common/common_openssl.cpp
-)
+# 4.-6. Sources, headers and platform libraries, see desktopeditors.cmake
+include(${CMAKE_CURRENT_LIST_DIR}/desktopeditors.cmake)
+# core code the app compiles in itself, kept out of the unit test build
+list(APPEND COMMON_SOURCES ${CORE_ROOT_DIR}/Common/3dParty/openssl/common/common_openssl.cpp)
 
 
-# 5. Conditional Updates Module
-if(NOT BUILD_XP AND UPDMODULE)
-    add_definitions(-D_UPDMODULE)
-    list(APPEND COMMON_HEADERS src/cupdatemanager.h extras/update-daemon/src/classes/csocket.h)
-    list(APPEND COMMON_SOURCES src/cupdatemanager.cpp extras/update-daemon/src/classes/csocket.cpp)
-    include_directories(extras/update-daemon/src/classes)
-endif()
-
-# 6. Platform Specific Logic
-if(WIN32)
-    list(APPEND COMMON_SOURCES 
-        src/windows/platform_win/cwindowplatform.cpp
-        src/platform_win/singleapplication.cpp
-        src/platform_win/association.cpp
-        src/platform_win/filechooser.cpp
-        src/platform_win/printdialog.cpp
-    )
-    list(APPEND COMMON_HEADERS 
-        src/windows/platform_win/cwindowplatform.h
-        src/windows/platform_win/caption.h
-        src/platform_win/singleapplication.h
-        src/platform_win/association.h
-        src/platform_win/filechooser.h
-        src/platform_win/printdialog.h
-        src/platform_win/resource.h
-    )
-    set(PLATFORM_LIBS 
-        wininet dnsapi version msimg32 ws2_32 usp10 psapi dbghelp 
-        winmm shlwapi kernel32 gdi32 winspool comdlg32 advapi32 
-        shell32 ole32 oleaut32 user32 uuid odbc32 odbccp32 delayimp 
-        credui netapi32 comctl32 rpcrt4
-    )
-    
-    if(BUILD_XP)
-        add_definitions(-D__OS_WIN_XP)
-    else()
-        list(APPEND COMMON_SOURCES src/platform_win/wintoastlib.cpp src/components/cnotification.cpp)
-    endif()
-
-
-
-elseif(UNIX AND NOT APPLE)
-    # Linux Resource Compiler (GResource)
-
-    list(APPEND COMMON_SOURCES 
-        src/windows/platform_linux/cplatformdecoration.cpp
-        src/windows/platform_linux/cwindowplatform.cpp
-        src/components/cnotification.cpp
-        src/platform_linux/cdialogopenssl.cpp
-        src/platform_linux/cdialogcertificateinfo.cpp
-        src/platform_linux/singleapplication.cpp
-        src/platform_linux/xdgdesktopportal.cpp
-        src/platform_linux/gtkfilechooser.cpp
-        src/platform_linux/gtkprintdialog.cpp
-        src/platform_linux/gtkutils.cpp
-        src/platform_linux/linux_window_utils.cpp
-        src/platform_linux/x11backend.cpp
-        src/platform_linux/waylandbackend.cpp
-        src/platform_linux/platformbackendfactory.cpp
-        extras/update-daemon/src/classes/csocket.cpp
-    )
-    list(APPEND COMMON_HEADERS 
-        src/windows/platform_linux/cplatformdecoration.h
-        #src/windows/platform_linux/gtk_addon.h
-        src/windows/platform_linux/cwindowplatform.h
-        src/components/cnotification.h
-        src/platform_linux/cdialogopenssl.h
-        src/platform_linux/cdialogcertificateinfo.h
-        src/platform_linux/singleapplication.h
-        src/platform_linux/xdgdesktopportal.h
-        src/platform_linux/gtkfilechooser.h
-        src/platform_linux/gtkprintdialog.h
-        src/platform_linux/gtkutils.h
-        src/platform_linux/linux_window_utils.h
-        src/platform_linux/iplatformbackend.h
-        src/platform_linux/x11backend.h
-        src/platform_linux/waylandbackend.h
-        extras/update-daemon/src/classes/csocket.h
-    )
-
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK3 REQUIRED glib-2.0 gtk+-3.0 atk gtk+-unix-print-3.0 libnotify)
-    pkg_check_modules(XCB_LIBS xcb xext)
-    pkg_check_modules(X11_LIBS x11 x11-xcb)
-    if(XCB_LIBS_FOUND AND X11_LIBS_FOUND)
-        add_definitions(-DHAVE_X11)
-    endif()
-    add_definitions(-DHAVE_WAYLAND)
-
-    # Custom command for glib-compile-resources
-    set(GRESOURCE_XML ${CMAKE_CURRENT_SOURCE_DIR}/res/gresource.xml)
-    set(GRESOURCE_C ${CMAKE_CURRENT_BINARY_DIR}/res/gresource.c)
-    add_custom_command(
-        OUTPUT ${GRESOURCE_C}
-        COMMAND glib-compile-resources --target=${GRESOURCE_C} --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}/res --generate-source ${GRESOURCE_XML}
-        DEPENDS ${GRESOURCE_XML}
-    )
-    list(APPEND COMMON_SOURCES ${GRESOURCE_C})
-    
-    set(PLATFORM_LIBS ${GTK3_LIBRARIES} cups)
-    if(XCB_LIBS_FOUND AND X11_LIBS_FOUND)
-        list(APPEND PLATFORM_LIBS ${X11_LIBS_LIBRARIES} ${XCB_LIBS_LIBRARIES})
-    endif()
-endif()
-
-# 7. Create Executable
+# 7. Create Library and Executable
 qt6_add_resources(RESOURCES resources.qrc)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/extras.qrc")
     qt6_add_resources(RESOURCES extras.qrc)
 endif()
 
-add_executable(DesktopEditors ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
+# Everything but main() is compiled once into an object library, so the unit
+# tests in tests/ can link the application code. The executable takes its
+# objects directly and gets its dependencies applied itself (section 8), not
+# through linking desktopeditors_core: through the library's link interface
+# CMake orders them differently, and the app then binds OpenSSL to the copy
+# that libkernel_network/libooxmlsignature export instead of linking it
+# statically. This way the executable links exactly as when it compiled the
+# sources itself.
+list(REMOVE_ITEM COMMON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+add_library(desktopeditors_core OBJECT ${COMMON_SOURCES} ${COMMON_HEADERS} ${RESOURCES})
+set_default_options(desktopeditors_core)
 
-set_default_options(DesktopEditors) 
+add_executable(DesktopEditors src/main.cpp $<TARGET_OBJECTS:desktopeditors_core>)
+
+set_default_options(DesktopEditors)
 
 if(WIN32)
     # On Windows the editor ships as editors.exe; DesktopEditors.exe is the
@@ -388,73 +217,6 @@ if(NOT WIN32)
     pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
 
-# 8. Include Paths
-target_include_directories(DesktopEditors PRIVATE
-    src/prop
-    src
-    ${GTK3_INCLUDE_DIRS}
-    ${DBUS_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/qt_wrapper/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/DesktopEditor
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common
-    ${CMAKE_CURRENT_SOURCE_DIR}/extras/update-daemon/src/classes
-    ${OPENSSL_INSTALL_DIR_ABS}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
-    ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
-)
-
-if(WIN32)
-    target_link_libraries(DesktopEditors PRIVATE
-        Qt6::CorePrivate
-        Qt6::GuiPrivate
-        Qt6::PrintSupportPrivate)
-endif()
-
-target_link_directories(DesktopEditors PRIVATE
-    $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
-    $<$<NOT:$<CONFIG:Debug>>:${CEF_ROOT}/Release>
-    ${ICU_INSTALL_DIR}/include
-)
-
-target_link_libraries(DesktopEditors PRIVATE
-    # --- UI and High Level ---
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Svg
-    Qt${QT_VERSION_MAJOR}::PrintSupport
-    Qt${QT_VERSION_MAJOR}::Multimedia
-    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
-    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
-    ${PLATFORM_LIBS}
-    ${DBUS_LIBRARIES}
-
-    # --- Circular Dependency Group ---
-    # This forces the linker to resolve symbols between core libs and dependencies
-    -Wl,--start-group
-        ascdocumentscore
-        qtascdocumentscore
-        kernel
-        kernel_network
-        graphics
-        UnicodeConverter
-        PdfFile
-        DjVuFile
-        XpsFile
-        ${OPENSSL_LIBSSL}
-        ${OPENSSL_LIBCRYPTO}
-    -Wl,--end-group                               
-
-    # --- System Essentials ---
-    hunspell_wrapper
-    ooxmlsignature
-)
-
-if(WIN32)
-    target_link_libraries(DesktopEditors PRIVATE libcef)
-else()
-    target_link_libraries(DesktopEditors PRIVATE cef X11 dl pthread rt z)
-endif()
-
 if(ABOUT_PAGE_APP_NAME)
     add_compile_definitions(ABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}")
 endif()
@@ -463,33 +225,107 @@ if(DESKTOP_FILE_NAME)
     add_compile_definitions(DESKTOP_FILE_NAME="${DESKTOP_FILE_NAME}")
 endif()
 
-target_compile_definitions(DesktopEditors PRIVATE COMMON_OPENSSL_BUILDING_INTERNAL)
-
-if(WIN32)
-    target_compile_definitions(DesktopEditors PRIVATE UNICODE _UNICODE WIN32 _WINDOWS _WIN32)
-endif()
-
-if(UNIX)
-    target_link_libraries(DesktopEditors PRIVATE
-        Qt${QT_VERSION_MAJOR}::DBus
-        ${LIBICUUC}
-        ${LIBICUDATA}
-        ${LIBICUI}
+# 8. Include Paths and Dependencies
+# Applied to the executable (PRIVATE) and to desktopeditors_core (PUBLIC, so
+# the unit tests get the same include paths, definitions and libraries as the
+# application code). See section 7 for why the executable gets its own copy.
+function(desktopeditors_add_dependencies target scope)
+    target_include_directories(${target} ${scope}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/prop
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${GTK3_INCLUDE_DIRS}
+        ${DBUS_INCLUDE_DIRS}
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../desktop-sdk/ChromiumBasedEditors/lib/qt_wrapper/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../core/DesktopEditor
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common
+        ${CMAKE_CURRENT_SOURCE_DIR}/extras/update-daemon/src/classes
+        ${OPENSSL_INSTALL_DIR_ABS}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../core/Common/3dParty/openssl/common
+        ${CORE_ROOT_DIR}/Common/3dParty/openssl/common
     )
 
+    if(WIN32)
+        target_link_libraries(${target} ${scope}
+            Qt6::CorePrivate
+            Qt6::GuiPrivate
+            Qt6::PrintSupportPrivate)
+    endif()
+
+    target_link_directories(${target} ${scope}
+        $<$<CONFIG:Debug>:${CEF_ROOT}/Debug>
+        $<$<NOT:$<CONFIG:Debug>>:${CEF_ROOT}/Release>
+        ${ICU_INSTALL_DIR}/include
+    )
+
+    target_link_libraries(${target} ${scope}
+        # --- UI and High Level ---
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Svg
+        Qt${QT_VERSION_MAJOR}::PrintSupport
+        Qt${QT_VERSION_MAJOR}::Multimedia
+        Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+        Qt${QT_VERSION_MAJOR}::OpenGLWidgets
+        ${PLATFORM_LIBS}
+        ${DBUS_LIBRARIES}
+
+        # --- Circular Dependency Group ---
+        # This forces the linker to resolve symbols between core libs and dependencies
+        -Wl,--start-group
+            ascdocumentscore
+            qtascdocumentscore
+            kernel
+            kernel_network
+            graphics
+            UnicodeConverter
+            PdfFile
+            DjVuFile
+            XpsFile
+            ${OPENSSL_LIBSSL}
+            ${OPENSSL_LIBCRYPTO}
+        -Wl,--end-group
+
+        # --- System Essentials ---
+        hunspell_wrapper
+        ooxmlsignature
+    )
+
+    if(WIN32)
+        target_link_libraries(${target} ${scope} libcef)
+    else()
+        target_link_libraries(${target} ${scope} cef X11 dl pthread rt z)
+    endif()
+
+    target_compile_definitions(${target} ${scope} COMMON_OPENSSL_BUILDING_INTERNAL)
+
+    if(WIN32)
+        target_compile_definitions(${target} ${scope} UNICODE _UNICODE WIN32 _WINDOWS _WIN32)
+    endif()
+
+    if(UNIX)
+        target_link_libraries(${target} ${scope}
+            Qt${QT_VERSION_MAJOR}::DBus
+            ${LIBICUUC}
+            ${LIBICUDATA}
+            ${LIBICUI}
+        )
+    endif()
+endfunction()
+
+desktopeditors_add_dependencies(DesktopEditors PRIVATE)
+desktopeditors_add_dependencies(desktopeditors_core PUBLIC)
+
+if(UNIX)
     target_link_options(DesktopEditors PRIVATE "-Wl,-rpath,$ORIGIN" "-Wl,-rpath,$ORIGIN/converter")
 endif()
 
 if(WIN32)
-    # editors.exe declares its dependencies in DesktopEditors.exe.manifest
-    foreach(_t editors_helper
-            doctrenderer DocxRenderer kernel kernel_network graphics
-            UnicodeConverter PdfFile DjVuFile XpsFile ooxmlsignature
-            Fb2File EpubFile HtmlFile2 OFDFile IWorkFile HWPFile
-            StarMathConverter)
-        target_link_options(${_t} PRIVATE
-            "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='${EO_MANIFEST_ARCH}'")
-    endforeach()
+    # editors.exe declares its dependencies in DesktopEditors.exe.manifest.
+    # The core libraries built here get theirs from core, which also writes
+    # converter.manifest into EO_CORE_OUTPUT_DIR (a core package has both).
+    target_link_options(editors_helper PRIVATE
+        "/MANIFESTDEPENDENCY:type='win32' name='converter' version='1.0.0.0' processorArchitecture='${EO_MANIFEST_ARCH}'")
+    eo_core_converter_assembly()
 endif()
 
 # 9. Windows launcher (extras/projicons -> DesktopEditors.exe)
@@ -624,29 +460,13 @@ if(WIN32)
     )
 endif()
 
-# Core dependencies → converter/
+# Core dependencies → converter/. On Windows this includes converter.manifest,
+# which makes converter\ the private "converter" assembly the binaries above
+# depend on; without it they fail with 0xC0150002 (STATUS_SXS_CANT_GEN_ACTCTX)
 install(DIRECTORY "${EO_CORE_OUTPUT_DIR}/"
     USE_SOURCE_PERMISSIONS
     DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
 )
-
-# Makes converter\ the private "converter" assembly the binaries above depend
-# on; without it they fail with 0xC0150002 (STATUS_SXS_CANT_GEN_ACTCTX)
-if(WIN32)
-    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-        "${CORE_ROOT_DIR}/Common/msvc/converter.manifest")
-    file(READ "${CORE_ROOT_DIR}/Common/msvc/converter.manifest" _converter_manifest)
-    string(REPLACE "processorArchitecture=\"amd64\""
-        "processorArchitecture=\"${EO_MANIFEST_ARCH}\""
-        _converter_manifest "${_converter_manifest}")
-    if(NOT _converter_manifest MATCHES "processorArchitecture=\"${EO_MANIFEST_ARCH}\"")
-        message(FATAL_ERROR "converter.manifest: could not set processorArchitecture to ${EO_MANIFEST_ARCH}")
-    endif()
-    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/converter.manifest" "${_converter_manifest}")
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/converter.manifest"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
-    )
-endif()
 
 # Boost: on Windows it's static (linked into the binaries) — nothing to install
 if(NOT WIN32)
@@ -654,4 +474,8 @@ if(NOT WIN32)
         DESTINATION ${CMAKE_INSTALL_BINDIR}/converter
         FILES_MATCHING PATTERN "lib*.so*"
     )
+endif()
+
+if(EO_BUILD_TESTS)
+    add_subdirectory(tests)
 endif()
