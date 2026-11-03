@@ -151,24 +151,15 @@ FROM core-base AS desktop-linux
         COMPANY_NAME_LOW=$(echo "${COMPANY_NAME}" | tr 'A-Z' 'a-z' | tr ' ' '-') && \
         PRODUCT_NAME_LOW=$(echo "${PRODUCT_NAME}" | tr 'A-Z' 'a-z' | tr -d ' ') && \
         PACKAGE_NAME="${COMPANY_NAME_LOW}-${PRODUCT_NAME_LOW}" && \
-        cd /build-cache-desktop && \
-        cmake -GNinja \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_TOOLCHAIN_FILE=/opt/vcpkg/scripts/buildsystems/vcpkg.cmake \
-            -DVCPKG_MANIFEST_MODE=ON \
-            -DVCPKG_MANIFEST_DIR="/core" \
-            -DVCPKG_MANIFEST_FEATURES="desktop-editors;tests" \
-            -DEO_BUILD_TESTS=ON \
-            -DPYTHON_BIN=/opt/venv/bin/python \
-            -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
-            -DDESKTOP_FILE_NAME="${PACKAGE_NAME}" \
-            /desktop-apps/win-linux/ && \
-        cmake --build . && \
-        ctest --output-on-failure && \
-        cmake --install . && \
+        CORE_PYTHON=/opt/venv/bin/python /desktop-apps/scripts/build.sh \
+            --build-dir /build-cache-desktop --core /core --desktop-sdk /desktop-sdk \
+            --tests --ccache \
+            -- -DABOUT_PAGE_APP_NAME="${ABOUT_PAGE_APP_NAME}" \
+               -DDESKTOP_FILE_NAME="${PACKAGE_NAME}" && \
+        ctest --test-dir /build-cache-desktop/desktop --output-on-failure && \
+        cmake --install /build-cache-desktop/desktop && \
         ccache --show-stats && \
-        cp -a desktopeditors /desktopeditors
+        cp -a /build-cache-desktop/desktop/desktopeditors /desktopeditors
 
     COPY --from=desktop-common / /desktopeditors/
 
