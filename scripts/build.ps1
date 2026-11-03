@@ -23,6 +23,8 @@ when it is on PATH. Arguments after the named ones go to cmake.
 .EXAMPLE
 scripts\build.ps1 -Arch x64 -BuildDir build "-DABOUT_PAGE_APP_NAME=Euro-Office"
 #>
+# Not positional: arguments without a name go to cmake
+[CmdletBinding(PositionalBinding = $false)]
 param(
     [ValidateSet('x64', 'arm64')]
     [string]$Arch = $(if ($env:PROCESSOR_ARCHITECTURE -eq 'ARM64') { 'arm64' } else { 'x64' }),
@@ -72,7 +74,7 @@ if (-not $CorePackage) {
 $CorePackage = (Resolve-Path $CorePackage).Path
 
 $features = if ($Tests) { 'desktop-editors;tests' } else { 'desktop-editors' }
-$cmakeArgs = @(
+$configureArgs = @(
     '-G', 'Ninja', '-S', "$Apps\win-linux", '-B', "$BuildDir\desktop",
     '-DCMAKE_BUILD_TYPE=Release',
     "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake",
@@ -83,17 +85,17 @@ $cmakeArgs = @(
     "-DEO_CORE_PREBUILT_DIR=$CorePackage",
     "-DEO_CORE_3RD_PARTY_DIR=$thirdParty"
 )
-if ($env:CORE_PYTHON) { $cmakeArgs += "-DPYTHON_BIN=$env:CORE_PYTHON" }
+if ($env:CORE_PYTHON) { $configureArgs += "-DPYTHON_BIN=$env:CORE_PYTHON" }
 # sccache only caches with debug info embedded in the objects (/Z7)
 if (Get-Command sccache -ErrorAction SilentlyContinue) {
-    $cmakeArgs += @(
+    $configureArgs += @(
         '-DCMAKE_C_COMPILER_LAUNCHER=sccache',
         '-DCMAKE_CXX_COMPILER_LAUNCHER=sccache',
         '-DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded'
     )
 }
 
-cmake @cmakeArgs @CMakeArgs
+cmake @configureArgs @CMakeArgs
 Assert-LastExit 'CMake configure'
 cmake --build "$BuildDir\desktop" --parallel
 Assert-LastExit 'CMake build'
