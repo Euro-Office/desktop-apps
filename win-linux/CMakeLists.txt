@@ -598,9 +598,19 @@ endif()
 
 # Qt runtime
 if(WIN32)
+    # Qt Multimedia's default Windows backend (multimedia/ffmpegmediaplugin.dll)
+    # links against the FFmpeg DLLs that Qt ships next to Qt6*.dll in bin/.
+    # Without them the plugin fails to load (error 126), Qt falls back to a
+    # dummy backend and no audio/video in presentations can be played.
     install(DIRECTORY "${QT_ROOT}/bin/"
         DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "Qt6*.dll"
+        FILES_MATCHING
+        PATTERN "Qt6*.dll"
+        PATTERN "avcodec-*.dll"
+        PATTERN "avformat-*.dll"
+        PATTERN "avutil-*.dll"
+        PATTERN "swresample-*.dll"
+        PATTERN "swscale-*.dll"
     )
     install(DIRECTORY "${QT_ROOT}/plugins/"
         DESTINATION ${CMAKE_INSTALL_BINDIR}
