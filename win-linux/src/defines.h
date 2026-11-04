@@ -98,7 +98,8 @@ typedef unsigned char BYTE;
 #define APP_PORT   12010
 #define SVC_PORT   12011
 #define INSTANCE_SVC_PORT 12012
-#define INSTANCE_APP_PORT 13012
+// ONLYOFFICE uses 13012, so a different port lets both run side by side on Linux
+#define INSTANCE_APP_PORT 13013
 
 #define WARNING_LAUNCH_WITH_ADMIN_RIGHTS "App can't working correctly under admin rights."
 
