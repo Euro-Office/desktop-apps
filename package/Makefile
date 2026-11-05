@@ -18,6 +18,10 @@ BUILD_NUMBER ?= 0
 
 BRANDING_DIR ?= .
 
+# Offline help is still ONLYOFFICE-branded and disabled in the editors, so it
+# is not packaged by default. WITH_HELP=1 builds the -help packages again.
+WITH_HELP ?= 0
+
 PACKAGE_NAME := $(COMPANY_NAME_LOW)-$(PRODUCT_NAME_LOW)
 PACKAGE_OPENSOURCE := $(PACKAGE_NAME)
 PACKAGE_COMMERCIAL := $(PACKAGE_NAME)-enterprise
@@ -81,7 +85,9 @@ DEB_DEPS += deb/build/debian/source/format
 DEB_DEPS += deb/build/debian/$(PACKAGE_NAME).dirs
 DEB_DEPS += deb/build/debian/$(PACKAGE_NAME).install
 DEB_DEPS += deb/build/debian/$(PACKAGE_NAME).links
+ifeq ($(WITH_HELP), 1)
 DEB_DEPS += deb/build/debian/$(PACKAGE_NAME)-help.install
+endif
 DEB_DEPS += deb/build/package.config
 
 SOURCE_DIR := /build/package/out/$(PLATFORM)/$(COMPANY_NAME_LOW)
@@ -101,6 +107,7 @@ M4_PARAMS += -D M4_DESKTOPEDITORS_PREFIX='$(DESKTOPEDITORS_PREFIX)'
 M4_PARAMS += -D M4_DESKTOPEDITORS_EXEC='$(DESKTOPEDITORS_EXEC)'
 M4_PARAMS += -D M4_SCHEME_HANDLER='$(SCHEME_HANDLER)'
 M4_PARAMS += -D M4_DEB_ARCH='$(DEB_ARCH)'
+M4_PARAMS += -D M4_WITH_HELP='$(WITH_HELP)'
 M4_PARAMS += -D M4_CURRENT_YEAR='$(shell date +"%Y")'
 
 M4_DEB_PARAMS = $(M4_PARAMS)
@@ -124,6 +131,7 @@ RPM_PARAMS += --define '_product_version $(PRODUCT_VERSION)'
 RPM_PARAMS += --define '_desktopeditors_prefix $(DESKTOPEDITORS_PREFIX)'
 RPM_PARAMS += --define '_desktopeditors_exec $(DESKTOPEDITORS_EXEC)'
 RPM_PARAMS += --define '_scheme_handler $(SCHEME_HANDLER)'
+RPM_PARAMS += --define '_with_help $(WITH_HELP)'
 RPM_PARAMS += --define '_binary_payload $(RPMBUILD_BINARY_PAYLOAD)'
 ifeq ($(shell rpm --eval %_arch):$(RPM_ARCH),x86_64:aarch64)
 	RPM_PARAMS += --define '__strip /usr/bin/aarch64-linux-gnu-strip'
@@ -142,7 +150,10 @@ all : deb rpm rpm-suse tar
 deb : $(DEB)
 rpm : $(RPM)
 rpm-suse : $(RPM_SUSE)
-tar : $(TAR) $(TAR_HELP)
+tar : $(TAR)
+ifeq ($(WITH_HELP), 1)
+tar : $(TAR_HELP)
+endif
 
 clean :
 	rm -rf \
@@ -171,12 +182,16 @@ else
 		$@/main/opt/$(DESKTOPEDITORS_PREFIX)/EULA.txt
 endif
 
+ifeq ($(WITH_HELP), 1)
 	cd $@; \
 	for path in main/$(HELP_GLOB); do \
 		path_new=$$(echo $$path | sed 's|^main/|help/|'); \
 		mkdir -p $$path_new; \
 		mv -fT $$path $$path_new; \
 	done
+else
+	rm -rf $@/main/$(HELP_GLOB)
+endif
 
 ifdef MEDIAVIEWER_PREFIX
 	mkdir -p $@/main/opt/$(MEDIAVIEWER_PREFIX)
