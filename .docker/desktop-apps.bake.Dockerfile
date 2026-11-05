@@ -26,16 +26,10 @@ FROM core-base AS desktop-linux
     # core-base is Rocky Linux 9 on amd64 (glibc 2.34, so the result runs on
     # RHEL/Rocky/Alma 9) and Ubuntu 24.04 on arm64, see core.bake.Dockerfile.
     #
-    # On Rocky, current mesa needs LLVM 21, and dnf would replace the pinned
-    # clang 13 (V8) with clang 21 + gcc-toolset-15. Its libstdc++ headers emit
-    # GCC 13+ symbols (std::ios_base_library_init) that el9's libstdc++ lacks.
-    # Keep the toolchain fixed and take mesa from the Rocky 9.0 vault (built
-    # against LLVM 13), which is only needed for GL/EGL headers at build time.
-    ARG MESA_EL9_VERSION=21.3.4-2.el9
+    # On Rocky, core-base's clang/LLVM 21 (for V8) is also what current mesa
+    # needs. Keep the toolchain as core-base has it.
     RUN if command -v dnf >/dev/null; then \
             dnf install -y \
-                    --enablerepo=rocky90-appstream \
-                    --setopt=rocky90-appstream.module_hotfixes=1 \
                     --exclude="clang*,llvm*,lld*,compiler-rt*,libomp*,gcc-toolset-*" \
                     gtk3-devel \
                     atk-devel \
@@ -56,14 +50,14 @@ FROM core-base AS desktop-linux
                     libXi-devel \
                     libxkbcommon-devel \
                     libxkbcommon-x11-devel \
-                    mesa-libGL-devel-${MESA_EL9_VERSION} \
-                    mesa-libEGL-devel-${MESA_EL9_VERSION} \
-                    mesa-libGL-${MESA_EL9_VERSION} \
-                    mesa-libEGL-${MESA_EL9_VERSION} \
-                    mesa-dri-drivers-${MESA_EL9_VERSION} \
-                    mesa-filesystem-${MESA_EL9_VERSION} \
-                    mesa-libgbm-${MESA_EL9_VERSION} \
-                    mesa-libglapi-${MESA_EL9_VERSION} \
+                    mesa-libGL-devel \
+                    mesa-libEGL-devel \
+                    mesa-libGL \
+                    mesa-libEGL \
+                    mesa-dri-drivers \
+                    mesa-filesystem \
+                    mesa-libgbm \
+                    mesa-libglapi \
                     alsa-lib-devel \
                     pulseaudio-libs-devel \
                     nss-devel \
@@ -148,10 +142,6 @@ FROM core-base AS desktop-linux
     RUN --mount=type=cache,target=/build-cache-desktop,id=build-cache-desktop-${TARGETARCH}-${CACHE_BUST} \
         --mount=type=cache,target=/nuget-cache,id=nuget-cache-${CACHE_BUST} \
         --mount=type=cache,target=/ccache,id=ccache \
-        --mount=type=secret,id=nextcloud_user \
-        --mount=type=secret,id=nextcloud_pass \
-        export NEXTCLOUD_USER="$(cat /run/secrets/nextcloud_user)" && \
-        export NEXTCLOUD_PASS="$(cat /run/secrets/nextcloud_pass)" && \
         export CCACHE_DIR=/ccache && \
         COMPANY_NAME_LOW=$(echo "${COMPANY_NAME}" | tr 'A-Z' 'a-z' | tr ' ' '-') && \
         PRODUCT_NAME_LOW=$(echo "${PRODUCT_NAME}" | tr 'A-Z' 'a-z' | tr -d ' ') && \
