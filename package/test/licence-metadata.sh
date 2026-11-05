@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Renders debian/copyright and fails if upstream additional terms come back
 # or the SPDX License fields of the deb and rpm metadata regress, and checks
-# that the Windows copyright strings name Euro-Office contributors.
+# that the Windows copyright strings name Euro-Office contributors and that
+# the deb and rpm ship a NOTICE with the ONLYOFFICE origin notice.
 set -eu
 cd "$(dirname "$0")/../.."
 make -C package deb/build/debian/copyright
@@ -19,3 +20,9 @@ grep -qx 'License: AGPL-3.0-only AND CC-BY-SA-4.0' package/rpm/common.spec || { 
 for f in package/inno/defines.iss win-linux/src/version.h win-linux/extras/update-daemon/src/version.h win-linux/extras/projicons/src/version.h; do
   grep -q 'Ascensio System SIA, Euro-Office contributors' "$f" || { echo "::error::$f copyright string lacks Euro-Office contributors"; exit 1; }
 done
+notice=build/main/usr/share/licenses/euro-office-desktopeditors/NOTICE
+rm -f "package/$notice"
+make -C package -n build | grep -q "> $notice\$" || { echo "::error::NOTICE is not part of the package layout"; exit 1; }
+make -C package "$notice"
+tr -s ' \n' '  ' < "package/$notice" | grep -q 'based on the original ONLYOFFICE software developed by Ascensio System SIA' \
+  || { echo "::error::NOTICE lacks the ONLYOFFICE origin notice"; exit 1; }

@@ -75,6 +75,7 @@ LINUX_DEPS += $(patsubst $(BRANDING_DIR)/common/linux/icons-eo/%.png, \
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/3DPARTYLICENSE
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE-CC.txt
+LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/NOTICE
 
 DEB_DEPS += $(CHANGELOG_DEB)
 DEB_DEPS += deb/build/debian/compat
@@ -220,6 +221,9 @@ CC_LICENSE_FILE = common/license/opensource/LICENSE-CC.txt
 build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE : $(LICENSE_FILE)
 build/main/usr/share/licenses/$(PACKAGE_NAME)/3DPARTYLICENSE : $(BRANDING_DIR)/common/license/3dparty/3DPARTYLICENSE
 build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE-CC.txt : $(CC_LICENSE_FILE)
+
+build/main/usr/share/licenses/$(PACKAGE_NAME)/NOTICE : NOTICE.m4
+	mkdir -p $(@D) && m4 $(M4_PARAMS) $< > $@
 
 build/main/usr/share/licenses/% :
 	install -m 644 -D $< $@
