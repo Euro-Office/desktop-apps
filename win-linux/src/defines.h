@@ -55,7 +55,7 @@
 #define REG_APP_NAME "DesktopEditors"
 #define APP_DEFAULT_LOCALE "en-US"
 #define APP_DEFAULT_SYSTEM_LOCALE 1
-#define APP_USER_MODEL_ID "ASC.Documents.5"
+#define APP_USER_MODEL_ID "EuroOffice.Documents.5"
 #define APP_SIMPLE_WINDOW_TITLE "Euro-Office Editor"
 #define APP_PROTOCOL "oo-office"
 #define FILE_PREFIX "eurooffice_"
@@ -98,7 +98,8 @@ typedef unsigned char BYTE;
 #define APP_PORT   12010
 #define SVC_PORT   12011
 #define INSTANCE_SVC_PORT 12012
-#define INSTANCE_APP_PORT 13012
+// ONLYOFFICE uses 13012, so a different port lets both run side by side on Linux
+#define INSTANCE_APP_PORT 13013
 
 #define WARNING_LAUNCH_WITH_ADMIN_RIGHTS "App can't working correctly under admin rights."
 
