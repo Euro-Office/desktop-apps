@@ -18,7 +18,8 @@ The desktop build is in <BuildDir>\desktop, a core built here in
 <BuildDir>\third_party). Needs VCPKG_ROOT. CORE_PYTHON sets the Python for
 the build scripts (default: python). EO_CORE_CACHE: auto (default), off
 (always build core) or require (fail without a prebuilt core). Uses sccache
-when it is on PATH. Arguments after the named ones go to cmake.
+when it is on PATH; -Ccache builds core through ccache instead. Arguments after
+the named ones go to cmake.
 
 .EXAMPLE
 scripts\build.ps1 -Arch x64 -BuildDir build "-DABOUT_PAGE_APP_NAME=Euro-Office"
@@ -33,6 +34,7 @@ param(
     [string]$CorePackage = '',
     [string]$ThirdPartyDir = '',
     [switch]$Tests,
+    [switch]$Ccache,
     [string]$SdkVersion = '10.0.19041.0',
     [Parameter(ValueFromRemainingArguments)]
     [string[]]$CMakeArgs = @()
@@ -65,7 +67,7 @@ if (-not $CorePackage) {
         0 { $CorePackage = $prebuilt }
         3 {
             & "$Core\scripts\build.ps1" -Arch $Arch -BuildDir (Join-Path $BuildDir 'core') `
-                -SdkVersion $SdkVersion "-DEO_CORE_3RD_PARTY_DIR=$thirdParty"
+                -SdkVersion $SdkVersion -Ccache:$Ccache "-DEO_CORE_3RD_PARTY_DIR=$thirdParty"
             $CorePackage = Join-Path $BuildDir 'core\package'
         }
         default { throw "core_package.py fetch failed with exit code $LASTEXITCODE" }
