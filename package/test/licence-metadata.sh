@@ -23,9 +23,12 @@ grep -qx 'License: AGPL-3.0-only AND CC-BY-SA-4.0' package/rpm/common.spec || { 
 for f in package/inno/defines.iss win-linux/src/version.h win-linux/extras/update-daemon/src/version.h win-linux/extras/projicons/src/version.h; do
   grep -q 'Ascensio System SIA, Euro-Office contributors' "$f" || { echo "::error::$f copyright string lacks Euro-Office contributors"; exit 1; }
 done
-notice=build/main/usr/share/licenses/euro-office-desktopeditors/NOTICE
-rm -f "package/$notice"
-make -C package -n build | grep -q "> $notice\$" || { echo "::error::NOTICE is not part of the package layout"; exit 1; }
-make -C package "$notice"
-tr -s ' \n' '  ' < "package/$notice" | grep -q 'based on the original ONLYOFFICE software developed by Ascensio System SIA' \
-  || { echo "::error::NOTICE lacks the ONLYOFFICE origin notice"; exit 1; }
+# Brands of the DesktopEditors build matrix (COMPANY_NAME = PRODUCT_NAME there).
+for brand in 'Euro-Office' 'Nextcloud Office'; do
+  vars=("COMPANY_NAME=$brand" "PRODUCT_NAME=$brand")
+  notice=$(make -C package -n -W NOTICE.m4 build "${vars[@]}" | sed -n 's/.* > \(build\/.*\/NOTICE\)$/\1/p')
+  [ -n "$notice" ] || { echo "::error::NOTICE is not part of the $brand package layout"; exit 1; }
+  make -B -C package "$notice" "${vars[@]}"
+  tr -s ' \n' '  ' < "package/$notice" | grep -qF "$brand is based on the original ONLYOFFICE software developed by Ascensio System SIA. $brand is not affiliated with" \
+    || { echo "::error::$brand NOTICE lacks the ONLYOFFICE origin notice"; exit 1; }
+done

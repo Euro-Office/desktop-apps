@@ -1,10 +1,10 @@
 Copyright (C) Ascensio System SIA, 2009-M4_CURRENT_YEAR
 Copyright (C) M4_CONTRIBUTORS_YEARS Euro-Office contributors
 
-Euro-Office Desktop Editors is based on the original ONLYOFFICE software
-developed by Ascensio System SIA. Euro-Office is not affiliated with,
-endorsed by, or sponsored by Ascensio System SIA. ONLYOFFICE is a
-trademark of Ascensio System SIA.
+M4_COMPANY_NAME is based on the original ONLYOFFICE software developed by
+Ascensio System SIA. M4_COMPANY_NAME is not affiliated with, endorsed by, or
+sponsored by Ascensio System SIA. ONLYOFFICE is a trademark of Ascensio
+System SIA.
 
 This program is free software, licensed under the GNU Affero General Public
 License version 3 (AGPL-3.0-only), see the LICENSE file. Bundled third-party
