@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Renders debian/copyright and fails if upstream additional terms come back
-# or the SPDX License fields of the deb and rpm metadata regress, and checks
-# that the Windows copyright strings name Euro-Office contributors and that
-# the deb and rpm ship a NOTICE with the ONLYOFFICE origin notice.
+# Renders debian/copyright and fails if upstream additional terms come back,
+# the Section 7(a) warranty term goes missing or the SPDX License fields of
+# the deb and rpm metadata regress, and checks that the Windows copyright
+# strings name Euro-Office contributors and that the deb and rpm ship a
+# NOTICE with the ONLYOFFICE origin notice.
 set -eu
 cd "$(dirname "$0")/../.."
 make -C package deb/build/debian/copyright
@@ -14,6 +15,8 @@ fi
 for field in 'License: AGPL-3.0-only' 'License: CC-BY-SA-4.0' 'License: other'; do
   grep -qx "$field" "$copyright" || { echo "::error::debian/copyright lacks '$field'"; exit 1; }
 done
+tr -s ' \n' '  ' < "$copyright" | grep -qF 'In accordance with Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect that Ascensio System SIA expressly excludes the warranty of non-infringement of any third-party rights.' \
+  || { echo "::error::debian/copyright lacks the Section 7(a) warranty term"; exit 1; }
 grep -q 'Version 3, 19 November 2007' "$copyright" || { echo "::error::AGPL text not inlined"; exit 1; }
 grep -q 'Attribution-ShareAlike 4.0 International' "$copyright" || { echo "::error::CC BY-SA text not inlined"; exit 1; }
 grep -qx 'License: AGPL-3.0-only AND CC-BY-SA-4.0' package/rpm/common.spec || { echo "::error::rpm License field regressed"; exit 1; }

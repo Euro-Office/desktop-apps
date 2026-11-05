@@ -8,6 +8,10 @@ Copyright: (c) Copyright Ascensio System SIA, 2009-M4_CURRENT_YEAR
            (c) Copyright Euro-Office contributors, M4_CONTRIBUTORS_YEARS
 Comment: Bundled third-party components are listed with their licences in
  3DPARTYLICENSE.
+ .
+ In accordance with Section 7(a) of the GNU AGPL its Section 15 shall
+ be amended to the effect that Ascensio System SIA expressly excludes the
+ warranty of non-infringement of any third-party rights.
 License: AGPL-3.0-only
 
 Files: *.gif *.ico *.jpg *.png *.svg
