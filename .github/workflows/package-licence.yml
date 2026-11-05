@@ -4,12 +4,16 @@ on:
   pull_request:
     paths:
       - 'package/**'
+      - 'win-linux/src/version.h'
+      - 'win-linux/extras/*/src/version.h'
       - '.github/workflows/package-licence.yml'
   push:
     branches:
       - main
     paths:
       - 'package/**'
+      - 'win-linux/src/version.h'
+      - 'win-linux/extras/*/src/version.h'
       - '.github/workflows/package-licence.yml'
 
 permissions:
