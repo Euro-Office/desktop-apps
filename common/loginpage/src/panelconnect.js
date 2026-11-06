@@ -225,6 +225,12 @@
                 portal: model.path,
                 provider: model.provider,
                 onclose: opts => {
+                    if ( opts && opts.login ) {
+                        // logged in with the system browser, the native side opens the portal
+                        _on_login_message.call(this, JSON.stringify({
+                            displayName: opts.login, email: '',
+                            domain: opts.portal, provider: opts.provider}));
+                    } else
                     if ( opts ) {
                         opts.type = 'outer';
 
