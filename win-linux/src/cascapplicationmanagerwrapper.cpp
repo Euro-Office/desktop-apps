@@ -2040,6 +2040,8 @@ bool CAscApplicationManagerWrapper::applySettings(const wstring& wstrjson)
                 if (MODAL_RESULT_YES == CMessage::showMessage(mainWindow(), tr("You must restart the application for the settings to take effect."),
                                                               MsgType::MSG_INFO, MsgBtns::mbYesDefNo)) {
                     m_private.get()->m_needRestart = true;
+                    // restartApp() runs after QApplication is destroyed
+                    m_private.get()->m_restartAppDir = QCoreApplication::applicationDirPath();
                     AscAppManager::closeAppWindows();
                 }
             });

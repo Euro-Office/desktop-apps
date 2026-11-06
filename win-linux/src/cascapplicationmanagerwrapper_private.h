@@ -114,12 +114,12 @@ public:
 #ifdef _WIN32
             ts << "@chcp 65001>nul\n";
             ts << "@echo off\n";
-            ts << "start \"\" \"" << QDir::toNativeSeparators(QCoreApplication::applicationDirPath()) << APP_LAUNCH_NAME << "\"\n";
+            ts << "start \"\" \"" << QDir::toNativeSeparators(m_restartAppDir) << APP_LAUNCH_NAME << "\"\n";
             ts << "del \"%~f0\"&exit\n";
 #else
             ts << "#!/bin/bash\n";
             ts << "sleep 1\n";
-            QString appDir = QCoreApplication::applicationDirPath();
+            const QString &appDir = m_restartAppDir;
             ts << "cd \"" << appDir << "\"\n";
             ts << "LD_LIBRARY_PATH=\"$PWD:$PWD/converter:$LD_LIBRARY_PATH\"";
             ts << " LD_PRELOAD=libcef.so";
@@ -606,6 +606,7 @@ public:
     QPointer<QCefView> m_pStartPanel;
     bool m_openEditorWindow = false;
     bool m_needRestart = false;
+    QString m_restartAppDir;
     bool m_notificationSupported = false;
     std::shared_ptr<CPrintData> m_printData;
 #ifndef _CAN_SCALE_IMMEDIATELY
