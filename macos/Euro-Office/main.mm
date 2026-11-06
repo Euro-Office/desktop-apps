@@ -46,6 +46,7 @@
 #import "ASCSharedSettings.h"
 #import "ASCEventsController.h"
 #import "ASCThemesController.h"
+#import "ASCBrowserAuth.h"
 
 CAscApplicationManager * createASCApplicationManager() {
     return new ASCApplicationManager();
@@ -110,6 +111,9 @@ int main(int argc, const char * argv[]) {
     
     // Create CEF event listener
     [ASCEventsController sharedInstance];
+
+    // authorize the clouds connected with the system browser in previous sessions
+    [[ASCBrowserAuth shared] restore];
 
     //[worker Start:argc :argv];
     [worker Start:argc argv:argv];
