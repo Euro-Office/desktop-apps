@@ -433,34 +433,120 @@ else()
 endif()
 
 # Qt runtime
+#
+# The aqt Qt package is a full SDK (Quick, Qml, Designer, Sql, Test, ...,
+# plus debug DLLs on Windows), so only install what the app needs: the modules
+# it links, their transitive Qt dependencies and the plugins a desktop Widgets
+# app loads. Check with ldd/dumpbin after bumping Qt or linking a new module.
+#
+# Qt modules, by base name. Network and, on Linux, Qml/Quick are only pulled
+# in by the FFmpeg multimedia plugin.
+set(EO_QT_MODULES
+    Core Gui Widgets Svg PrintSupport OpenGL OpenGLWidgets Concurrent
+    Multimedia MultimediaWidgets Network)
+if(NOT WIN32)
+    list(APPEND EO_QT_MODULES
+        DBus XcbQpa WaylandClient WlShellIntegration
+        Qml QmlMeta QmlModels QmlWorkerScript Quick)
+endif()
+
+# Plugin directories installed as a whole. Leaves out e.g. sqldrivers,
+# qmltooling, designer, tls, generic and the eglfs/vnc/linuxfb platforms.
+set(EO_QT_PLUGIN_DIRS imageformats iconengines multimedia)
 if(WIN32)
+    list(APPEND EO_QT_PLUGIN_DIRS styles)
+    set(EO_QT_PLATFORM_PLUGINS qwindows.dll)
+else()
+    list(APPEND EO_QT_PLUGIN_DIRS
+        printsupport platformthemes platforminputcontexts xcbglintegrations
+        wayland-decoration-client wayland-graphics-integration-client
+        wayland-shell-integration)
+    set(EO_QT_PLATFORM_PLUGINS libqxcb.so libqwayland.so)
+endif()
+
+# Qt for MSVC ships each DLL with a debug twin (Qt6Cored.dll, qgifd.dll).
+# Drop X d.dll only when X.dll exists, as qdirect2d.dll or
+# qopensslbackend.dll are release builds that just end in "d".
+function(eo_drop_qt_debug_dlls out_var)
+    set(_kept)
+    foreach(_f IN LISTS ARGN)
+        if(_f MATCHES "^(.*)d\\.dll$")
+            if(EXISTS "${CMAKE_MATCH_1}.dll")
+                continue()
+            endif()
+        endif()
+        list(APPEND _kept "${_f}")
+    endforeach()
+    set(${out_var} ${_kept} PARENT_SCOPE)
+endfunction()
+
+if(WIN32)
+    set(_qt_libs)
+    foreach(_m IN LISTS EO_QT_MODULES)
+        if(NOT EXISTS "${QT_ROOT}/bin/Qt6${_m}.dll")
+            message(FATAL_ERROR "Qt runtime: ${QT_ROOT}/bin/Qt6${_m}.dll not found")
+        endif()
+        list(APPEND _qt_libs "${QT_ROOT}/bin/Qt6${_m}.dll")
+    endforeach()
     # Qt Multimedia's default Windows backend (multimedia/ffmpegmediaplugin.dll)
     # links against the FFmpeg DLLs that Qt ships next to Qt6*.dll in bin/.
     # Without them the plugin fails to load (error 126), Qt falls back to a
     # dummy backend and no audio/video in presentations can be played.
-    install(DIRECTORY "${QT_ROOT}/bin/"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING
-        PATTERN "Qt6*.dll"
-        PATTERN "avcodec-*.dll"
-        PATTERN "avformat-*.dll"
-        PATTERN "avutil-*.dll"
-        PATTERN "swresample-*.dll"
-        PATTERN "swscale-*.dll"
-    )
-    install(DIRECTORY "${QT_ROOT}/plugins/"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*.dll"
-    )
+    file(GLOB _qt_ffmpeg
+        "${QT_ROOT}/bin/avcodec-*.dll"
+        "${QT_ROOT}/bin/avformat-*.dll"
+        "${QT_ROOT}/bin/avutil-*.dll"
+        "${QT_ROOT}/bin/swresample-*.dll"
+        "${QT_ROOT}/bin/swscale-*.dll")
+    install(FILES ${_qt_libs} ${_qt_ffmpeg} DESTINATION ${CMAKE_INSTALL_BINDIR})
 else()
-    install(DIRECTORY "${QT_ROOT}/lib/"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "lib*.so*"
-    )
-    install(DIRECTORY "${QT_ROOT}/plugins/"
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
+    # Versioned names only (libQt6Core.so.6 symlink + real file), not the
+    # unversioned development symlinks.
+    set(_qt_libs)
+    foreach(_m IN LISTS EO_QT_MODULES)
+        file(GLOB _lib "${QT_ROOT}/lib/libQt6${_m}.so.*")
+        if(NOT _lib)
+            message(FATAL_ERROR "Qt runtime: ${QT_ROOT}/lib/libQt6${_m}.so.* not found")
+        endif()
+        list(APPEND _qt_libs ${_lib})
+    endforeach()
+    # FFmpeg (and the stubs it dlopens) for the multimedia plugin, and the
+    # ICU build Qt Core links against (not the ICU the editors use)
+    file(GLOB _qt_extra
+        "${QT_ROOT}/lib/libQt6FFmpegStub-*.so.*"
+        "${QT_ROOT}/lib/libavcodec.so.*"
+        "${QT_ROOT}/lib/libavformat.so.*"
+        "${QT_ROOT}/lib/libavutil.so.*"
+        "${QT_ROOT}/lib/libswresample.so.*"
+        "${QT_ROOT}/lib/libswscale.so.*"
+        "${QT_ROOT}/lib/libicudata.so.*"
+        "${QT_ROOT}/lib/libicui18n.so.*"
+        "${QT_ROOT}/lib/libicuuc.so.*")
+    install(FILES ${_qt_libs} ${_qt_extra} DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
+
+cmake_path(APPEND CMAKE_INSTALL_BINDIR platforms OUTPUT_VARIABLE _dest)
+cmake_path(NORMAL_PATH _dest)
+foreach(_p IN LISTS EO_QT_PLATFORM_PLUGINS)
+    if(NOT EXISTS "${QT_ROOT}/plugins/platforms/${_p}")
+        message(FATAL_ERROR "Qt runtime: platform plugin ${_p} not found")
+    endif()
+    install(FILES "${QT_ROOT}/plugins/platforms/${_p}" DESTINATION ${_dest})
+endforeach()
+
+foreach(_d IN LISTS EO_QT_PLUGIN_DIRS)
+    if(WIN32)
+        file(GLOB _plugins "${QT_ROOT}/plugins/${_d}/*.dll")
+        eo_drop_qt_debug_dlls(_plugins ${_plugins})
+    else()
+        file(GLOB _plugins "${QT_ROOT}/plugins/${_d}/*.so")
+    endif()
+    if(_plugins)
+        cmake_path(APPEND CMAKE_INSTALL_BINDIR ${_d} OUTPUT_VARIABLE _dest)
+        cmake_path(NORMAL_PATH _dest)
+        install(FILES ${_plugins} DESTINATION ${_dest})
+    endif()
+endforeach()
 
 # vcpkg runtime DLLs (hunspell, etc. — x64-windows triplet is dynamic)
 if(WIN32)
