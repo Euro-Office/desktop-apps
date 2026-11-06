@@ -74,6 +74,8 @@ LINUX_DEPS += $(patsubst $(BRANDING_DIR)/common/linux/icons-eo/%.png, \
 	$(wildcard $(BRANDING_DIR)/common/linux/icons-eo/*.png))
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE
 LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/3DPARTYLICENSE
+LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE-CC.txt
+LINUX_DEPS += build/main/usr/share/licenses/$(PACKAGE_NAME)/NOTICE
 
 DEB_DEPS += $(CHANGELOG_DEB)
 DEB_DEPS += deb/build/debian/compat
@@ -108,7 +110,9 @@ M4_PARAMS += -D M4_DESKTOPEDITORS_EXEC='$(DESKTOPEDITORS_EXEC)'
 M4_PARAMS += -D M4_SCHEME_HANDLER='$(SCHEME_HANDLER)'
 M4_PARAMS += -D M4_DEB_ARCH='$(DEB_ARCH)'
 M4_PARAMS += -D M4_WITH_HELP='$(WITH_HELP)'
-M4_PARAMS += -D M4_CURRENT_YEAR='$(shell date +"%Y")'
+CURRENT_YEAR := $(shell date +"%Y")
+M4_PARAMS += -D M4_CURRENT_YEAR=$(CURRENT_YEAR)
+M4_PARAMS += -D M4_CONTRIBUTORS_YEARS=$(if $(filter 2026,$(CURRENT_YEAR)),2026,2026-$(CURRENT_YEAR))
 
 M4_DEB_PARAMS = $(M4_PARAMS)
 M4_DEB_PARAMS += -D M4_PACKAGE_VERSION='$(PACKAGE_VERSION)$(DEB_RELEASE_SUFFIX)'
@@ -212,14 +216,27 @@ $(RPM) : build rpm/$(PACKAGE_NAME).spec
 build/main/usr/share/icons/hicolor/%/apps/$(DESKTOPEDITORS_EXEC).png : $(BRANDING_DIR)/common/linux/icons-eo/%.png
 	install -m 644 -D $< $@
 
-build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE : $(BRANDING_DIR)/common/license/$(PACKAGE_EDITION)/LICENSE.txt
+LICENSE_FILE = $(BRANDING_DIR)/common/license/$(PACKAGE_EDITION)/LICENSE.txt
+CC_LICENSE_FILE = common/license/opensource/LICENSE-CC.txt
+build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE : $(LICENSE_FILE)
 build/main/usr/share/licenses/$(PACKAGE_NAME)/3DPARTYLICENSE : $(BRANDING_DIR)/common/license/3dparty/3DPARTYLICENSE
+build/main/usr/share/licenses/$(PACKAGE_NAME)/LICENSE-CC.txt : $(CC_LICENSE_FILE)
+
+build/main/usr/share/licenses/$(PACKAGE_NAME)/NOTICE : NOTICE.m4
+	mkdir -p $(@D) && m4 $(M4_PARAMS) $< > $@
 
 build/main/usr/share/licenses/% :
 	install -m 644 -D $< $@
 
 deb/build/debian/% : deb/template/%
 	mkdir -pv $(@D) && cp -fv $< $@
+
+deb/build/debian/copyright : deb/template/copyright.m4 $(LICENSE_FILE) $(CC_LICENSE_FILE)
+	mkdir -pv $(@D) && m4 $(M4_DEB_PARAMS) $< > $@
+	awk -v MAIN_LICENSE="$(LICENSE_FILE)" -v CC_LICENSE="$(CC_LICENSE_FILE)" '\
+		/^License: CC-BY-SA-4.0$$/ { print; while ((getline l < CC_LICENSE)   > 0) print (l == "" ? " ." : " " l); next }\
+		/^License: AGPL-3.0-only$$/ { print; while ((getline l < MAIN_LICENSE) > 0) print (l == "" ? " ." : " " l); next }\
+		                           { print }' $@ > $@.tmp && mv $@.tmp $@
 
 deb/build/debian/% : deb/template/%.m4
 	mkdir -pv $(@D) && m4 $(M4_DEB_PARAMS) $< > $@

@@ -2,11 +2,7 @@ Name: %{_package_name}
 Version: %{_product_version}
 Release: %{_build_number}
 Summary: Desktop editors for text docs, spreadsheets, presentations, PDFs, and PDF forms.
-%if "%{_package_edition}" == "commercial"
-License: Proprietary
-%else
-License: AGPLv3
-%endif
+License: AGPL-3.0-only AND CC-BY-SA-4.0
 Group: Applications/Office
 URL: %{_publisher_url}
 Vendor: %{_publisher_name}

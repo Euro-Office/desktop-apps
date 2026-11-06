@@ -9,7 +9,7 @@
 #define sAppPublisher                   "Euro-Office"
 #define sAppPublisherURL                "https://github.com/Euro-Office/DesktopEditors"
 #define sAppSupportURL                  "https://github.com/Euro-Office/DesktopEditors/issues"
-#define sAppCopyright                   str("© Ascensio System SIA " + GetDateTimeString("yyyy",,) + ". All rights reserved.")
+#define sAppCopyright                   str("© Ascensio System SIA, Euro-Office contributors " + GetDateTimeString("yyyy",,) + ". All rights reserved.")
 #define sAppIconName                    "Euro-Office"
 #define sOldAppIconName                 "Euro-Office Editors"
 #define sAppProtocol                    'oo-office'
