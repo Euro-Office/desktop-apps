@@ -20,7 +20,6 @@
 #include "components/cfiledialog.h"
 #include "utils.h"
 #include "common/Types.h"
-#include "common/File.h"
 #include "ctabundockevent.h"
 #include "clangater.h"
 #include "components/cmessage.h"
@@ -1025,7 +1024,7 @@ void CAscApplicationManagerWrapper::handleInputCmd(const std::vector<wstring>& v
                 if ( _c_pos == std::wstring::npos )
                     _c_pos = open_opts.wurl.rfind(L"/");
 #else
-                int _error = access(U_TO_UTF8(open_opts.wurl).c_str(), F_OK);
+                int _error = access(QString::fromStdWString(open_opts.wurl).toStdString().c_str(), F_OK);
                 auto _c_pos = open_opts.wurl.rfind(QString(QDir::separator()).toStdWString());
 #endif
                 if ( _error == 0 ) {
@@ -2041,6 +2040,8 @@ bool CAscApplicationManagerWrapper::applySettings(const wstring& wstrjson)
                 if (MODAL_RESULT_YES == CMessage::showMessage(mainWindow(), tr("You must restart the application for the settings to take effect."),
                                                               MsgType::MSG_INFO, MsgBtns::mbYesDefNo)) {
                     m_private.get()->m_needRestart = true;
+                    // restartApp() runs after QApplication is destroyed
+                    m_private.get()->m_restartAppDir = QCoreApplication::applicationDirPath();
                     AscAppManager::closeAppWindows();
                 }
             });

@@ -38,7 +38,7 @@
 #include "version.h"
 #include "utils.h"
 #include "chelp.h"
-#include "common/File.h"
+#include <QDir>
 #include <QStyleFactory>
 #include <vector>
 #include <QGuiApplication>
@@ -157,7 +157,7 @@ int main( int argc, char *argv[] )
         {
             manager->m_oSettings.SetUserDataPath(user_data_path.toStdWString());
         }
-        std::wstring app_path = NSFile::GetProcessDirectory();
+        std::wstring app_path = QDir::toNativeSeparators(QCoreApplication::applicationDirPath()).toStdWString();
         manager->m_oSettings.spell_dictionaries_path    = app_path + L"/dictionaries";
         manager->m_oSettings.file_converter_path        = app_path + L"/converter";
         manager->m_oSettings.recover_path               = (user_data_path + "/recover").toStdWString();
