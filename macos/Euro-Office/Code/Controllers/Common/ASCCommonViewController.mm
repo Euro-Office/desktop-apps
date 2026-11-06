@@ -58,6 +58,7 @@
 #import "ASCLinguist.h"
 #import "ASCThemesController.h"
 #import "ASCEditorJSVariables.h"
+#import "ASCBrowserAuth.h"
 #import "ASCPresentationReporter.h"
 #import "ASCLicenseController.h"
 #import <Carbon/Carbon.h>
@@ -973,6 +974,19 @@
             CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
             
             for ( NSString * u in portals ) {
+                // invalidate the credentials of a browser login on the server
+                NSString * revoke = [[ASCBrowserAuth shared] logout:u];
+                if ( revoke ) {
+                    NSEditorApi::CAscExecCommandJS * pRevoke = new NSEditorApi::CAscExecCommandJS;
+                    pRevoke->put_Command(L"auth:browser:revoke");
+                    pRevoke->put_Param([revoke stdwstring]);
+
+                    NSEditorApi::CAscMenuEvent * pRevokeEvent = new NSEditorApi::CAscMenuEvent(ASC_MENU_EVENT_TYPE_CEF_EXECUTE_COMMAND_JS);
+                    pRevokeEvent->m_pData = pRevoke;
+
+                    [self.cefStartPageView apply:pRevokeEvent];
+                }
+
                 appManager->Logout([u stdwstring]);
             }
             

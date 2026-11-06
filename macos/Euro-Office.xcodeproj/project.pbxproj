@@ -87,6 +87,7 @@
 		FCB4C6DD26DD018B0012C20D /* ASCTitleBarController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA9A1921BA6DE2700ABF3AB /* ASCTitleBarController.mm */; };
 		FCB4C6DE26DD018B0012C20D /* SFBPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3BFDFB1BBE83AB0040C904 /* SFBPopover.m */; };
 		FCB4C6DF26DD018B0012C20D /* ASCEventsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC3B77841BB2A94300DB9705 /* ASCEventsController.mm */; };
+		7242D8CD883511428FE5C209 /* ASCBrowserAuth.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADB32074136C530240735E83 /* ASCBrowserAuth.mm */; };
 		FCB4C6E026DD018B0012C20D /* ASCAboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC659BF81C75EE8B00C99776 /* ASCAboutController.m */; };
 		FCB4C6E126DD018B0012C20D /* ASCMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD294651BB97C8B00318930 /* ASCMulticastDelegate.m */; };
 		FCB4C6E226DD018B0012C20D /* ASCButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC77C78206CEE5B001B7837 /* ASCButtonCell.m */; };
@@ -510,6 +511,8 @@
 		FC3B777A1BB28CE900DB9705 /* login */ = {isa = PBXFileReference; lastKnownFileType = folder; name = login; path = "Vendor/Euro-Office/login"; sourceTree = SOURCE_ROOT; };
 		FC3B77831BB2A94300DB9705 /* ASCEventsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCEventsController.h; sourceTree = "<group>"; };
 		FC3B77841BB2A94300DB9705 /* ASCEventsController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASCEventsController.mm; sourceTree = "<group>"; };
+		308DF3AD762A24ACFD680EAF /* ASCBrowserAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCBrowserAuth.h; sourceTree = "<group>"; };
+		ADB32074136C530240735E83 /* ASCBrowserAuth.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASCBrowserAuth.mm; sourceTree = "<group>"; };
 		FC3BFDFA1BBE83AB0040C904 /* SFBPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBPopover.h; sourceTree = "<group>"; };
 		FC3BFDFB1BBE83AB0040C904 /* SFBPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFBPopover.m; sourceTree = "<group>"; };
 		FC3BFDFC1BBE83AB0040C904 /* SFBPopoverWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBPopoverWindow.h; sourceTree = "<group>"; };
@@ -1334,6 +1337,8 @@
 				5AA06CBC27AC3BA000D67BEE /* ASCLinguist.m */,
 				FC3B77831BB2A94300DB9705 /* ASCEventsController.h */,
 				FC3B77841BB2A94300DB9705 /* ASCEventsController.mm */,
+				308DF3AD762A24ACFD680EAF /* ASCBrowserAuth.h */,
+				ADB32074136C530240735E83 /* ASCBrowserAuth.mm */,
 				FCF2897F21510C16002FD438 /* ASCExternalController.h */,
 				FCF2898021510C16002FD438 /* ASCExternalController.m */,
 				5AAE526C28B53B9A001E31F4 /* ASCThemesController.m */,
@@ -1720,6 +1725,7 @@
 				FCB4C6DD26DD018B0012C20D /* ASCTitleBarController.mm in Sources */,
 				FCB4C6DE26DD018B0012C20D /* SFBPopover.m in Sources */,
 				FCB4C6DF26DD018B0012C20D /* ASCEventsController.mm in Sources */,
+				7242D8CD883511428FE5C209 /* ASCBrowserAuth.mm in Sources */,
 				FCB4C6E026DD018B0012C20D /* ASCAboutController.m in Sources */,
 				FCB4C6E126DD018B0012C20D /* ASCMulticastDelegate.m in Sources */,
 				FCB4C6E226DD018B0012C20D /* ASCButtonCell.m in Sources */,
