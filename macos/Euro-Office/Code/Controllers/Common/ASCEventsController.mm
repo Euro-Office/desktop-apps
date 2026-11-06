@@ -45,6 +45,59 @@
 #import "NSApplication+Extensions.h"
 #import "ASCEditorJSVariables.h"
 #import "ASCThemesController.h"
+#import "ASCBrowserAuth.h"
+
+// opens the cloud in a tab: {portal, provider, entrypage}
+static void openPortal(NSDictionary * json) {
+    if (![json isKindOfClass:[NSDictionary class]])
+        return;
+
+    NSString * portal = json[@"portal"];
+    NSString * provider = json[@"provider"];
+
+    if (portal && provider) {
+        NSURLComponents * urlPage = [NSURLComponents componentsWithString:portal];
+        id <ASCExternalDelegate> externalDelegate = [[ASCExternalController shared] delegate];
+
+        NSMutableString * entrypage = [NSMutableString stringWithString:[json objectForKey:@"entrypage"]];
+        if ( entrypage ) {
+            if ( [entrypage characterAtIndex:0] != '/' )
+                [entrypage insertString:@"/" atIndex:0];
+
+            if ( urlPage.path )
+                [entrypage insertString:urlPage.path atIndex:0];
+
+            NSRange pathrange = [entrypage rangeOfString:@"?"];
+            if ( pathrange.location != NSNotFound ) {
+                urlPage.path = [entrypage substringToIndex:pathrange.location];
+                urlPage.query = [entrypage substringFromIndex:pathrange.location+1];
+            } else {
+                urlPage.path = entrypage;
+            }
+        }
+
+        NSURLQueryItem *countryCode = [NSURLQueryItem queryItemWithName:@"lang" value:[[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode] lowercaseString]];
+
+        if (externalDelegate && [externalDelegate respondsToSelector:@selector(onAppPreferredLanguage)]) {
+            countryCode = [NSURLQueryItem queryItemWithName:@"lang" value:[externalDelegate onAppPreferredLanguage]];
+        }
+
+        NSURLQueryItem *portalAddress = [NSURLQueryItem queryItemWithName:@"desktop" value:@"true"];
+
+        NSMutableArray * qitems = urlPage.queryItems ? [NSMutableArray arrayWithArray:urlPage.queryItems] : [[NSMutableArray alloc] init];
+        [qitems addObjectsFromArray:@[countryCode, portalAddress]];
+        urlPage.queryItems = qitems;
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameCreateTab
+                                                            object:nil
+                                                          userInfo:@{
+                                                                     @"action"  : @(ASCTabActionOpenPortal),
+                                                                     @"url"     : [urlPage string],
+                                                                     @"provider": provider,
+                                                                     @"active"  : @(YES)
+                                                                     }];
+    }
+}
 
 #pragma mark -
 #pragma mark ========================================================
@@ -511,51 +564,15 @@ public:
 #endif
 
                         if (cmd.compare(L"portal:open") == 0 || cmd.find(L"auth:outer") != std::wstring::npos) {
-                            NSDictionary * json = [[NSString stringWithstdwstring:param] dictionary];
-                            NSString * portal = json[@"portal"];
-                            NSString * provider = json[@"provider"];
-
-                            if (portal && provider) {
-                                NSURLComponents * urlPage = [NSURLComponents componentsWithString:portal];
-                                id <ASCExternalDelegate> externalDelegate = [[ASCExternalController shared] delegate];
-
-                                NSMutableString * entrypage = [NSMutableString stringWithString:[json objectForKey:@"entrypage"]];
-                                if ( entrypage ) {
-                                    if ( [entrypage characterAtIndex:0] != '/' )
-                                        [entrypage insertString:@"/" atIndex:0];
-
-                                    if ( urlPage.path )
-                                        [entrypage insertString:urlPage.path atIndex:0];
-
-                                    NSRange pathrange = [entrypage rangeOfString:@"?"];
-                                    if ( pathrange.location != NSNotFound ) {
-                                        urlPage.path = [entrypage substringToIndex:pathrange.location];
-                                        urlPage.query = [entrypage substringFromIndex:pathrange.location+1];
-                                    } else {
-                                        urlPage.path = entrypage;
-                                    }
-                                }
-
-                                NSURLQueryItem *countryCode = [NSURLQueryItem queryItemWithName:@"lang" value:[[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode] lowercaseString]];
-
-                                if (externalDelegate && [externalDelegate respondsToSelector:@selector(onAppPreferredLanguage)]) {
-                                    countryCode = [NSURLQueryItem queryItemWithName:@"lang" value:[externalDelegate onAppPreferredLanguage]];
-                                }
-
-                                NSURLQueryItem *portalAddress = [NSURLQueryItem queryItemWithName:@"desktop" value:@"true"];
-
-                                NSMutableArray * qitems = urlPage.queryItems ? [NSMutableArray arrayWithArray:urlPage.queryItems] : [[NSMutableArray alloc] init];
-                                [qitems addObjectsFromArray:@[countryCode, portalAddress]];
-                                urlPage.queryItems = qitems;
-
-                                [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameCreateTab
-                                                                                    object:nil
-                                                                                  userInfo:@{
-                                                                                             @"action"  : @(ASCTabActionOpenPortal),
-                                                                                             @"url"     : [urlPage string],
-                                                                                             @"provider": provider,
-                                                                                             @"active"  : @(YES)
-                                                                                             }];
+                            openPortal([[NSString stringWithstdwstring:param] dictionary]);
+                        } else if (cmd.compare(L"auth:browser:open") == 0) {
+                            [[ASCBrowserAuth shared] open:[NSString stringWithstdwstring:param]];
+                        } else if (cmd.compare(L"auth:browser:store") == 0) {
+                            // the cloud page is now logged in by the Authorization header
+                            // and reports "portal:login" from there, as with the in-app login
+                            NSDictionary * account = [[ASCBrowserAuth shared] store:[NSString stringWithstdwstring:param]];
+                            if (account) {
+                                openPortal(@{@"portal": account[@"portal"], @"provider": account[@"provider"], @"entrypage": @"/"});
                             }
                         } else if (cmd.compare(L"portal:login") == 0) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNamePortalLogin

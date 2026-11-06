@@ -30,7 +30,8 @@
 *   A method's login(portal) returns {promise, cancel}; the promise resolves with
 *   {login, authorization} (Authorization header value) or rejects with
 *   {status: 'unsupported'|'error'|'canceled', error}. Requests go through
-*   AscSimpleRequest (CEF network stack). The native side (CBrowserAuth in win-linux)
+*   AscSimpleRequest (CEF network stack). The native side (CBrowserAuth in win-linux,
+*   ASCBrowserAuth in macos)
 *   stores the authorization and sends it with all requests to the cloud.
 */
 window.BrowserAuth = (function() {
@@ -156,8 +157,7 @@ window.BrowserAuth = (function() {
     });
 
     return {
-        // TODO: CBrowserAuth is not implemented in the macOS app yet
-        method: type => !utils.isMacOS && methods[type] ? methods[type] : undefined,
+        method: type => methods[type],
     };
 })();
 
