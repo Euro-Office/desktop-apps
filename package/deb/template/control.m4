@@ -35,7 +35,12 @@ ifelse(M4_PACKAGE_EDITION, full,
   xdg-utils,
   libpulse0,
   libopengl0,
-  libnss3')
+  libegl1,
+  libnss3,
+  libatomic1,
+  libxcb-icccm4,
+  libxcb-keysyms1,
+  libxcb-shape0')
 Recommends: ttf-mscorefonts-installer, fonts-takao-gothic 
 ifelse(M4_WITH_HELP, 1,Suggests: M4_PACKAGE_NAME-help
 ,)dnl
