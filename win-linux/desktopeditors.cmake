@@ -45,6 +45,8 @@ set(COMMON_HEADERS
     src/clangater.h
     src/cprintdata.h
     src/cproviders.h
+    src/cbrowserauth.h
+    src/ccredentialstore.h
     src/cscalingwrapper.h
     src/ctabundockevent.h
     src/ccefeventsgate.h
@@ -88,6 +90,8 @@ set(COMMON_SOURCES
     src/clangater.cpp
     src/cprintdata.cpp
     src/cproviders.cpp
+    src/cbrowserauth.cpp
+    src/ccredentialstore.cpp
     src/cscalingwrapper.cpp
     src/ctabundockevent.cpp
     src/ccefeventsgate.cpp

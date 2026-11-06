@@ -109,6 +109,8 @@ HEADERS += \
     $$PWD/src/clangater.h \
     $$PWD/src/cprintdata.h \
     $$PWD/src/cproviders.h \
+    $$PWD/src/cbrowserauth.h \
+    $$PWD/src/ccredentialstore.h \
     $$PWD/src/cscalingwrapper.h \
     $$PWD/src/ctabundockevent.h \
     $$PWD/src/ccefeventsgate.h \
@@ -150,6 +152,8 @@ SOURCES += \
     $$PWD/src/clangater.cpp \
     $$PWD/src/cprintdata.cpp \
     $$PWD/src/cproviders.cpp \
+    $$PWD/src/cbrowserauth.cpp \
+    $$PWD/src/ccredentialstore.cpp \
     $$PWD/src/cscalingwrapper.cpp \
     $$PWD/src/ctabundockevent.cpp \
     $$PWD/src/ccefeventsgate.cpp \
