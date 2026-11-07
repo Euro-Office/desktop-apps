@@ -44,3 +44,10 @@ add_core_gtest(
     LIBS    desktopeditors_core
 )
 use_build_tree_qt(desktopeditors_tabdata_test)
+
+add_core_gtest(
+    NAME    desktopeditors_filedialog_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/filedialog_test.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+)
+use_build_tree_qt(desktopeditors_filedialog_test)
