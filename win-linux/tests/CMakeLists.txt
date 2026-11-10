@@ -68,3 +68,9 @@ desktop_test(
     LIBS    desktopeditors_core
     SCOPE   unit
 )
+
+desktop_test(
+    NAME    desktopeditors_filedialog_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/filedialog_test.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+)
