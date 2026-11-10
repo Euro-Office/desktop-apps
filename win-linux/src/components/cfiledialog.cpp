@@ -308,31 +308,6 @@ QString CFileDialogWrapper::modalOpenSingle(const QString& path, const QString& 
     return _list.isEmpty() ? QString() : _list.at(0);
 }
 
-QString CFileDialogWrapper::imagePatterns(bool multiple)
-{
-    return multiple ? "*.jpeg *.jpg *.png *.gif *.bmp *.heif *.heic *.webp *.avif *.svg"
-                    : "*.jpeg *.jpg *.png *.gif *.bmp *.tiff *.tif *.heif *.heic *.webp *.avif *.svg";
-}
-
-bool CFileDialogWrapper::hasMimeType(const QString& file, const QString& type)
-{
-    return QMimeDatabase().mimeTypeForFile(file).name().startsWith(type);
-}
-
-QString CFileDialogWrapper::imageFilter(bool multiple, QString * selected) const
-{
-    *selected = tr("All Images") + " (" + imagePatterns(multiple) + ")";
-    QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN] + ";;" + *selected + ";;";
-    if (multiple)
-        filter.append(tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Heif (*.heif *.heic)"));
-    else
-        filter.append(tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Tiff (*.tiff *.tif);;Heif (*.heif *.heic)"));
-    // Outside the translated lists above, so their translations stay valid
-    filter.append(";;WebP (*.webp);;AVIF (*.avif)");
-    filter.append(";;" + m_mapFilters[AVS_OFFICESTUDIO_FILE_CROSSPLATFORM_SVG]);
-    return filter;
-}
-
 QStringList CFileDialogWrapper::modalOpenImage(const QString& path)
 {
     QString selected, filter = imageFilter(false, &selected);
@@ -349,6 +324,28 @@ QStringList CFileDialogWrapper::modalOpenImages(const QString& path)
     auto result = modalOpen(path, filter, &selected, true);
     checkForMimeTypes(result, IMAGE_TYPE);
     return result;
+}
+
+QString CFileDialogWrapper::imagePatterns(bool multiple)
+{
+    return multiple ? "*.jpeg *.jpg *.png *.gif *.bmp *.heif *.heic *.webp *.avif *.svg"
+                    : "*.jpeg *.jpg *.png *.gif *.bmp *.tiff *.tif *.heif *.heic *.webp *.avif *.svg";
+}
+
+bool CFileDialogWrapper::hasMimeType(const QString& file, const QString& type)
+{
+    return QMimeDatabase().mimeTypeForFile(file).name().startsWith(type);
+}
+
+QString CFileDialogWrapper::imageFilter(bool multiple, QString * selected) const
+{
+    *selected = tr("All Images") + " (" + imagePatterns(multiple) + ")";
+    return m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN] + ";;" + *selected + ";;" +
+           (multiple ? tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Heif (*.heif *.heic)") :
+                       tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Tiff (*.tiff *.tif);;Heif (*.heif *.heic)")) +
+           // Outside the translated lists above, so their translations stay valid
+           ";;WebP (*.webp);;AVIF (*.avif)" +
+           ";;" + m_mapFilters[AVS_OFFICESTUDIO_FILE_CROSSPLATFORM_SVG];
 }
 
 QStringList CFileDialogWrapper::modalOpenPlugin(const QString& path)
