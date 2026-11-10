@@ -1637,7 +1637,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $CONFIGURATION == Release ]; then\n\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\nfi\n";
+			shellScript = "if [ $CONFIGURATION == Release ]; then\n\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\n# Set by apply-branding.sh --bundle-version for the updater\ncase \"$buildNumber\" in *[!0-9]*) exit 0 ;; esac\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\nfi\n";
 		};
 		FCD2B9151BC64D6D00F54560 /* Generate Localizable.strings */ = {
 			isa = PBXShellScriptBuildPhase;

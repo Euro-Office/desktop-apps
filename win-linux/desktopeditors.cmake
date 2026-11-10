@@ -111,6 +111,7 @@ endif()
 # giving the appcast URL and the EdDSA public key its updates are signed with.
 set(EO_UPDATE_FEED_URL "" CACHE STRING "Appcast URL for in-app updates (Windows); empty disables them")
 set(EO_UPDATE_PUBLIC_KEY "" CACHE STRING "Base64 EdDSA public key the appcast's updates are signed with")
+set(EO_UPDATE_VERSION "" CACHE STRING "Version compared with the appcast's sparkle:version (default: FileVersion)")
 if(WIN32 AND EO_UPDATE_FEED_URL)
     if(NOT EO_UPDATE_PUBLIC_KEY)
         message(FATAL_ERROR "EO_UPDATE_FEED_URL needs EO_UPDATE_PUBLIC_KEY")

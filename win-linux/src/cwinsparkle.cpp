@@ -29,8 +29,11 @@ void __cdecl shutdownRequest()
 
 void WinSparkle::init()
 {
-    // Name, version and registry key come from editors.exe's VERSIONINFO
+    // Name and registry key come from editors.exe's VERSIONINFO
     win_sparkle_set_appcast_url(EO_UPDATE_FEED_URL);
+    // e.g. 9.3.8rc.1; FileVersion has no room for release candidates
+    if (EO_UPDATE_VERSION[0])
+        win_sparkle_set_app_build_version(EO_UPDATE_VERSION);
     if (!win_sparkle_set_eddsa_public_key(EO_UPDATE_PUBLIC_KEY))
         return; // invalid key: never install unverified updates
     win_sparkle_set_can_shutdown_callback(&canShutdown);

@@ -184,7 +184,8 @@ if(EO_UPDATER)
     target_link_libraries(DesktopEditors PRIVATE winsparkle)
     set_property(SOURCE src/cwinsparkle.cpp APPEND PROPERTY COMPILE_DEFINITIONS
         "EO_UPDATE_FEED_URL=\"${EO_UPDATE_FEED_URL}\""
-        "EO_UPDATE_PUBLIC_KEY=\"${EO_UPDATE_PUBLIC_KEY}\"")
+        "EO_UPDATE_PUBLIC_KEY=\"${EO_UPDATE_PUBLIC_KEY}\""
+        "EO_UPDATE_VERSION=L\"${EO_UPDATE_VERSION}\"")
 endif()
 
 if(WIN32)
