@@ -17,6 +17,7 @@
 #include "cbrowserauth.h"
 #include "cascapplicationmanagerwrapper.h"
 #include "defines.h"
+#include "windows/cmainwindow.h"
 #include "fakesdk.h"
 #include "fakesecretservice.h"
 
@@ -52,13 +53,14 @@ void setStoredAccounts(const QJsonArray& accounts)
     reg_user.setValue("browserAuthAccounts", QJsonDocument(accounts).toJson(QJsonDocument::Compact));
 }
 
-void sendCommand(const std::wstring& command, const QString& param)
+void sendCommand(const std::wstring& command, const QString& param, int senderId = -1)
 {
     auto* data = new NSEditorApi::CAscExecCommand;
     data->put_Command(command);
     data->put_Param(param.toStdWString());
     auto* event = new NSEditorApi::CAscCefMenuEvent(ASC_MENU_EVENT_TYPE_CEF_EXECUTE_COMMAND);
     event->m_pData = data;
+    event->put_SenderId(senderId);
     FakeSdk::sendEvent(event);
 
     // the app handles SDK events queued
@@ -238,9 +240,24 @@ TEST_F(BrowserAuthTest, OpenIgnoresUrlsThatAreNotWebPages)
 
 TEST_F(BrowserAuthTest, StartPageCommandsReachBrowserAuth)
 {
-    sendCommand(L"auth:browser:store", storeJson(PORTAL));
+    AscAppManager::gotoMainWindow();
+    const int startPage = AscAppManager::mainWindow()->startPanelId();
+
+    sendCommand(L"auth:browser:store", storeJson(PORTAL), startPage);
     EXPECT_EQ(FakeSdk::calls(SET_AUTHORIZATION).size(), 1u);
 
     // nothing to open: only checks that the command is taken
-    sendCommand(L"auth:browser:open", R"({"url": "ftp://cloud.example.com"})");
+    sendCommand(L"auth:browser:open", R"({"url": "ftp://cloud.example.com"})", startPage);
+}
+
+TEST_F(BrowserAuthTest, CommandsFromOtherViewsAreIgnored)
+{
+    // a cloud page must not store credentials, not even for another cloud
+    AscAppManager::gotoMainWindow();
+    const int cloudPage = AscAppManager::mainWindow()->startPanelId() + 1000;
+
+    sendCommand(L"auth:browser:store", storeJson(PORTAL), cloudPage);
+    EXPECT_TRUE(FakeSdk::calls(SET_AUTHORIZATION).empty());
+    EXPECT_TRUE(m_service->secretFor(PORTAL).isEmpty());
+    EXPECT_TRUE(storedAccounts().isEmpty());
 }

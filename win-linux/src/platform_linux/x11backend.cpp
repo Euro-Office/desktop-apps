@@ -258,6 +258,8 @@ void X11Backend::findWindowAsync(const char *name, void *data,
 void X11Backend::raiseWindow(QWidget *window)
 {
     Display *disp = getXDisplay();
+    if (!disp)  // not on X11, e.g. the offscreen platform
+        return;
     Atom atom_active_wnd = XInternAtom(disp, "_NET_ACTIVE_WINDOW", False);
     if (atom_active_wnd == None)
         return;
