@@ -178,6 +178,15 @@ add_executable(DesktopEditors src/main.cpp $<TARGET_OBJECTS:desktopeditors_core>
 
 set_default_options(DesktopEditors)
 
+if(EO_UPDATER)
+    # PUBLIC: the unit tests link desktopeditors_core's objects too
+    target_link_libraries(desktopeditors_core PUBLIC winsparkle)
+    target_link_libraries(DesktopEditors PRIVATE winsparkle)
+    set_property(SOURCE src/cwinsparkle.cpp APPEND PROPERTY COMPILE_DEFINITIONS
+        "EO_UPDATE_FEED_URL=\"${EO_UPDATE_FEED_URL}\""
+        "EO_UPDATE_PUBLIC_KEY=\"${EO_UPDATE_PUBLIC_KEY}\"")
+endif()
+
 if(WIN32)
     # On Windows the editor ships as editors.exe; DesktopEditors.exe is the
     # projicons launcher below, which the installer, shortcuts and file
@@ -384,6 +393,10 @@ install(TARGETS
     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if(EO_UPDATER)
+    install(FILES "$<TARGET_FILE:winsparkle>" DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
 
 if(WIN32)
     install(TARGETS projicons RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

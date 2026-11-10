@@ -19,6 +19,9 @@
 #include "version.h"
 #include "components/cfiledialog.h"
 #include "utils.h"
+#ifdef _EO_UPDATER
+# include "cwinsparkle.h"
+#endif
 #include "common/Types.h"
 #include "ctabundockevent.h"
 #include "clangater.h"
@@ -117,6 +120,9 @@ CAscApplicationManagerWrapper::~CAscApplicationManagerWrapper()
     // Start update installation
     if (m_pUpdateManager)
         m_pUpdateManager->handleAppClose();
+#endif
+#ifdef _EO_UPDATER
+    WinSparkle::cleanup();
 #endif
     if (m_private.get()->m_needRestart)
         m_private.get()->restartApp();
@@ -365,6 +371,13 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
                 }
                 return true;
             }
+        } else
+#endif
+#ifdef _EO_UPDATER
+        if ( cmd.compare(L"updates:action") == 0 ) {    // the About panel's button
+            if ( pData->get_Param() == L"check" )
+                WinSparkle::checkWithUi();
+            return true;
         } else
 #endif
         if ( cmd.compare(L"title:button") == 0 ) {
@@ -1151,6 +1164,18 @@ void CAscApplicationManagerWrapper::onDocumentReady(int uid)
         QTimer::singleShot(50, this, [=]() {
             m_pUpdateManager->refreshStartPage();
         });
+    }
+#endif
+#ifdef _EO_UPDATER
+    static bool updaterStarted = false;
+    if (!updaterStarted) {
+        updaterStarted = true;
+        WinSparkle::init();
+    }
+    if (uid < 0) {
+        // WinSparkle has its own dialogs; the About panel only needs the button
+        QJsonObject btn{{"text", QCoreApplication::translate("CUpdateManager", "Check for updates")}, {"action", "check"}};
+        sendCommandTo(SEND_TO_ALL_START_PAGE, "updates:status", Utils::stringifyJson(QJsonObject{{"button", btn}}));
     }
 #endif
 
