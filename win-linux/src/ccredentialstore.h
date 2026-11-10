@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Euro-Office contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 #ifndef CCREDENTIALSTORE_H
 #define CCREDENTIALSTORE_H
 

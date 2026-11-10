@@ -171,6 +171,7 @@
         
         self.cefStartPageView = [[NSCefView alloc] initWithFrame:tab.view.frame];
         [self.cefStartPageView create:appManager withType:cvwtSimple];
+        [ASCBrowserAuth shared].startPageViewId = self.cefStartPageView.uuid;
         NSColor * backColor = [ASCThemesController currentThemeColor:windowBackgroundColor];
         [self.cefStartPageView setBackgroundColor:backColor];
         [tab.view addSubview:self.cefStartPageView];

@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
+// view id of the start page, the only view allowed to send the commands
+// above; -1 until the start page is created
+@property (nonatomic) NSInteger startPageViewId;
+
 // authorize the clouds connected in previous sessions; call after the
 // application manager is created
 - (void)restore;

@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Euro-Office contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
 #include "ccredentialstore.h"
 
 #ifdef _WIN32
