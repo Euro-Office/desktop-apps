@@ -60,6 +60,12 @@ window.BrowserAuth = (function() {
         return typeof url == 'string' && /^https?:\/\/[^\s\/]+/i.test(url);
     };
 
+    // a server behind a TLS proxy may hand out http:// addresses for an https
+    // portal; keep the credentials on https then
+    function _with_portal_scheme(url, portal) {
+        return /^https:/i.test(portal) ? url.replace(/^http:/i, 'https:') : url;
+    };
+
     // Nextcloud Login Flow v2: the user grants access in the browser and the
     // app receives an app password
     // https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/
@@ -85,6 +91,9 @@ window.BrowserAuth = (function() {
                         reject({status: 'unsupported'});
                         return;
                     }
+
+                    obj.login = _with_portal_scheme(obj.login, portal);
+                    obj.poll.endpoint = _with_portal_scheme(obj.poll.endpoint, portal);
 
                     window.sdk.execCommand('auth:browser:open', JSON.stringify({url: obj.login}));
 

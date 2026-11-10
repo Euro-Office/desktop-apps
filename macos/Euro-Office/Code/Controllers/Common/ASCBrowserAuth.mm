@@ -98,6 +98,7 @@ static NSString * keychainLoad(NSString * portal) {
 - (instancetype)init {
     if (self = [super init]) {
         _session = [NSMutableDictionary dictionary];
+        _startPageViewId = -1;
     }
     return self;
 }

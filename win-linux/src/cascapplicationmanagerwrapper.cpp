@@ -283,12 +283,16 @@ bool CAscApplicationManagerWrapper::processCommonEvent(NSEditorApi::CAscCefMenuE
         if ( cmd.compare(L"provider:list") == 0 ) {
             CProviders::instance().init(QString::fromStdWString(pData->get_Param()));
         } else
-        if ( cmd.compare(L"auth:browser:open") == 0 ) {
-            CBrowserAuth::instance().open(QString::fromStdWString(pData->get_Param()));
-            return true;
-        } else
-        if ( cmd.compare(L"auth:browser:store") == 0 ) {
-            CBrowserAuth::instance().store(QString::fromStdWString(pData->get_Param()));
+        if ( cmd.compare(L"auth:browser:open") == 0 || cmd.compare(L"auth:browser:store") == 0 ) {
+            // only the start page may run the browser login: a cloud page
+            // could otherwise store credentials for another cloud
+            if ( m_pMainWindow && event->get_SenderId() == m_pMainWindow->startPanelId() ) {
+                const QString param = QString::fromStdWString(pData->get_Param());
+                if ( cmd.compare(L"auth:browser:open") == 0 )
+                    CBrowserAuth::instance().open(param);
+                else
+                    CBrowserAuth::instance().store(param);
+            }
             return true;
         } else
         if ( cmd.compare(L"portal:login") == 0 ) {

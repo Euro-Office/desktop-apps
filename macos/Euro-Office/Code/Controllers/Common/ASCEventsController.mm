@@ -565,6 +565,10 @@ public:
 
                         if (cmd.compare(L"portal:open") == 0 || cmd.find(L"auth:outer") != std::wstring::npos) {
                             openPortal([[NSString stringWithstdwstring:param] dictionary]);
+                        } else if ((cmd.compare(L"auth:browser:open") == 0 || cmd.compare(L"auth:browser:store") == 0) &&
+                                   senderId != [ASCBrowserAuth shared].startPageViewId) {
+                            // only the start page may run the browser login: a cloud page
+                            // could otherwise store credentials for another cloud
                         } else if (cmd.compare(L"auth:browser:open") == 0) {
                             [[ASCBrowserAuth shared] open:[NSString stringWithstdwstring:param]];
                         } else if (cmd.compare(L"auth:browser:store") == 0) {
