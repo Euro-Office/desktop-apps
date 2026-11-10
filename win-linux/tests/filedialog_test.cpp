@@ -48,6 +48,40 @@ TEST(FileDialogImagePatterns, OffersWebPAndAvif)
     }
 }
 
+TEST(FileDialogImageFilter, SelectsAllImagesAndListsWebPAndAvif)
+{
+    CFileDialogWrapper dialog;
+    for (bool multiple : {false, true}) {
+        QString selected;
+        const QStringList filters = dialog.imageFilter(multiple, &selected).split(";;");
+        EXPECT_EQ(selected, "All Images (" + CFileDialogWrapper::imagePatterns(multiple) + ")") << multiple;
+        // After "All files", so the dialog opens on the images
+        ASSERT_GE(filters.size(), 2) << multiple;
+        EXPECT_EQ(filters.at(1), selected) << multiple;
+        EXPECT_TRUE(filters.contains("WebP (*.webp)")) << multiple;
+        EXPECT_TRUE(filters.contains("AVIF (*.avif)")) << multiple;
+        EXPECT_TRUE(filters.contains("Heif (*.heif *.heic)")) << multiple;
+        // Only the single image dialog offers TIFF, as before
+        EXPECT_EQ(filters.contains("Tiff (*.tiff *.tif)"), !multiple) << multiple;
+    }
+}
+
+TEST(FileDialogMimeCheck, KeepsChosenWebPAvifAndHeicFiles)
+{
+    QTemporaryDir dir;
+    ASSERT_TRUE(dir.isValid());
+
+    QStringList files{writeFile(dir, "photo.webp", c_webp),
+                      writeFile(dir, "photo.avif", isoMediaHeader("avif")),
+                      writeFile(dir, "photo.heic", isoMediaHeader("heic"))};
+    ASSERT_FALSE(files.contains(QString()));
+    const QStringList chosen = files;
+
+    CFileDialogWrapper dialog;
+    dialog.checkForMimeTypes(files, "image");
+    EXPECT_EQ(files, chosen);
+}
+
 TEST(FileDialogMimeCheck, AcceptsWebPAvifAndHeic)
 {
     QTemporaryDir dir;

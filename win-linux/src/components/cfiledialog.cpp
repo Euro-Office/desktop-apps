@@ -319,14 +319,23 @@ bool CFileDialogWrapper::hasMimeType(const QString& file, const QString& type)
     return QMimeDatabase().mimeTypeForFile(file).name().startsWith(type);
 }
 
-QStringList CFileDialogWrapper::modalOpenImage(const QString& path)
+QString CFileDialogWrapper::imageFilter(bool multiple, QString * selected) const
 {
-    QString selected = tr("All Images") + " (" + imagePatterns(false) + ")";
-    QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN];
-    filter.append(";;" + selected + ";;" + tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Tiff (*.tiff *.tif);;Heif (*.heif *.heic)"));
-    // Outside the translated list above, so its translations stay valid
+    *selected = tr("All Images") + " (" + imagePatterns(multiple) + ")";
+    QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN] + ";;" + *selected + ";;";
+    if (multiple)
+        filter.append(tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Heif (*.heif *.heic)"));
+    else
+        filter.append(tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Tiff (*.tiff *.tif);;Heif (*.heif *.heic)"));
+    // Outside the translated lists above, so their translations stay valid
     filter.append(";;WebP (*.webp);;AVIF (*.avif)");
     filter.append(";;" + m_mapFilters[AVS_OFFICESTUDIO_FILE_CROSSPLATFORM_SVG]);
+    return filter;
+}
+
+QStringList CFileDialogWrapper::modalOpenImage(const QString& path)
+{
+    QString selected, filter = imageFilter(false, &selected);
 
     auto result = modalOpen(path, filter, &selected, false);
     checkForMimeTypes(result, IMAGE_TYPE);
@@ -335,12 +344,7 @@ QStringList CFileDialogWrapper::modalOpenImage(const QString& path)
 
 QStringList CFileDialogWrapper::modalOpenImages(const QString& path)
 {
-    QString selected = tr("All Images") + " (" + imagePatterns(true) + ")";
-    QString filter = m_mapFilters[AVS_OFFICESTUDIO_FILE_UNKNOWN];
-    filter.append(";;" + selected + ";;" + tr("Jpeg (*.jpeg *.jpg);;Png (*.png);;Gif (*.gif);;Bmp (*.bmp);;Heif (*.heif *.heic)"));
-    // Outside the translated list above, so its translations stay valid
-    filter.append(";;WebP (*.webp);;AVIF (*.avif)");
-    filter.append(";;" + m_mapFilters[AVS_OFFICESTUDIO_FILE_CROSSPLATFORM_SVG]);
+    QString selected, filter = imageFilter(true, &selected);
 
     auto result = modalOpen(path, filter, &selected, true);
     checkForMimeTypes(result, IMAGE_TYPE);
