@@ -86,6 +86,15 @@ int main( int argc, char *argv[] )
         // then create its own borderless Wayland window instead of embedding
         // into the Qt X11 window, leaving the editor area black.
         dynamic_argv.push_back(const_cast<char*>("--ozone-platform=x11"));
+        if (!qgetenv("WAYLAND_DISPLAY").isEmpty()) {
+            // XWayland: with ANGLE's GL backend, closing a browser window can
+            // block the GPU process in Mesa's DRI3 swap barrier (XWayland
+            // never completes the Present for the already hidden window) and
+            // freeze the UI until the GPU watchdog fires (~15-20 s). ANGLE's
+            // Vulkan backend avoids that path. Has no effect with GPU disabled.
+            dynamic_argv.push_back(const_cast<char*>("--use-angle=vulkan"));
+            dynamic_argv.push_back(const_cast<char*>("--enable-features=Vulkan"));
+        }
     }
     dynamic_argv.push_back(nullptr);
     new_argc = dynamic_argv.size() - 1;
