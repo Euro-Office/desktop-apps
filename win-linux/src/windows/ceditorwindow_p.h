@@ -40,6 +40,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QGridLayout>
+#include <QGuiApplication>
 #include <QAction>
 
 #include <qtcomp/qnativeevent.h>
@@ -547,6 +548,25 @@ public:
         }
     }
 
+    // Hides the window once its CEF view has been asked to close.
+    void hideClosingWindow()
+    {
+#ifdef Q_OS_LINUX
+        // On X11 CEF's GPU process may still have a frame in flight for this
+        // window. DestroyCefView() only posts CloseBrowser, so hiding right
+        // away unmaps the window before the browser tears down its
+        // compositor; XWayland then never completes that Present, Mesa blocks
+        // in loader_dri3_wait_for_sbc() during the teardown, and the browser
+        // UI thread waits on it synchronously until the GPU watchdog kills the
+        // GPU process (~15 s freeze). The window is deleted in
+        // onEditorAllowedClose() once the browser is closed, so keep it mapped
+        // until then. Wayland renders off-screen and is not affected.
+        if (QGuiApplication::platformName() != QLatin1String("wayland"))
+            return;
+#endif
+        window->hide();
+    }
+
     void onDocumentSave(int id, bool cancel = false) override
     {
         CCefEventsGate::onDocumentSave(id, cancel);
@@ -554,7 +574,7 @@ public:
         if ( m_panel->data()->closed() ) {
             if ( !((CCefViewEditor *)m_panel->cef())->CheckCloudCryptoNeedBuild() ) {
                 AscAppManager::getInstance().DestroyCefView(m_panel->cef()->GetId());
-                window->hide();
+                hideClosingWindow();
             }
         } else {
             if (!cancel && window->menu())
@@ -594,7 +614,7 @@ public:
 
         if ( m_panel->data()->closed() ) {
             AscAppManager::getInstance().DestroyCefView(m_panel->cef()->GetId());
-            window->hide();
+            hideClosingWindow();
         } else AscAppManager::cancelClose();
     }
 
