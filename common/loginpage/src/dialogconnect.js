@@ -357,12 +357,13 @@ window.DialogConnect = function(params) {
             if ( _browser_login !== flow ) return;
             _browser_login = undefined;
 
-            // the native side stores the credentials and opens the portal,
-            // which then reports "portal:login"
+            // the native side stores the credentials and opens the portal
             window.sdk.execCommand('auth:browser:store', JSON.stringify({
                 portal: portal, provider: provider, type: type,
                 login: res.login, authorization: res.authorization}));
-            _close();
+            // the portal list keeps the cloud even if its page never reports
+            // "portal:login" (e.g. Nextcloud without the eurooffice app)
+            _close({portal: portal, provider: provider, login: res.login});
         }, err => {
             if ( _browser_login !== flow ) return;
             _stop_browser_login();
