@@ -81,6 +81,11 @@ int main( int argc, char *argv[] )
         dynamic_argv.push_back(const_cast<char*>("--ozone-platform=wayland"));
     } else {
         qputenv("GDK_BACKEND", "x11");
+        // Chromium auto-selects Ozone/Wayland whenever WAYLAND_DISPLAY is
+        // set. Inside a Wayland session with QT_QPA_PLATFORM=xcb, CEF would
+        // then create its own borderless Wayland window instead of embedding
+        // into the Qt X11 window, leaving the editor area black.
+        dynamic_argv.push_back(const_cast<char*>("--ozone-platform=x11"));
     }
     dynamic_argv.push_back(nullptr);
     new_argc = dynamic_argv.size() - 1;
