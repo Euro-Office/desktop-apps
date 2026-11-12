@@ -1254,7 +1254,9 @@
                             ASCCommonViewController * controller = (ASCCommonViewController *)window.contentViewController;
                             ASCTabView * tab = [controller.tabsControl tabWithUUID:viewId];
                             if (tab) {
-                                [controller.tabsControl removeTab:tab selected:NO animated:NO];
+                                if ([controller tabs:controller.tabsControl willRemovedTab:tab]) {
+                                    [controller.tabsControl removeTab:tab selected:NO animated:NO];
+                                }
                                 break;
                             }
                             
@@ -1263,7 +1265,7 @@
                             ASCEditorWindow *editor = (ASCEditorWindow *)window;
                             ASCEditorWindowController *controller = (ASCEditorWindowController *)editor.windowController;
                             if (controller && [controller holdView:viewId]) {
-                                [editor close];
+                                [editor performClose:nil];
                                 break;
                             }
                         }
