@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1BD986611FC952AE8BBB505D /* ASCFileCloseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 16BB300CBF2BA60FBD9DBF90 /* ASCFileCloseTests.m */; };
 		5A0229502CCFBF260011C6EC /* file-fods.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5A02294F2CCFBF260011C6EC /* file-fods.icns */; };
 		5A0229542CCFC01B0011C6EC /* file-dotx.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5A0229532CCFC01B0011C6EC /* file-dotx.icns */; };
 		5A0229582CCFC02B0011C6EC /* file-oxps.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5A0229572CCFC02B0011C6EC /* file-oxps.icns */; };
@@ -45,6 +46,7 @@
 		5AD24E2A2902AE3C00748926 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD24E292902AE3C00748926 /* Sparkle.framework */; };
 		5AD24E2E291464E100748926 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 5AD24E292902AE3C00748926 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5AFA1CF4277A6DF100619952 /* file-docxf.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5AB20F5D274D35F2003732A0 /* file-docxf.icns */; };
+		7242D8CD883511428FE5C209 /* ASCBrowserAuth.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADB32074136C530240735E83 /* ASCBrowserAuth.mm */; };
 		BE5EE54C2E3391440010A8A8 /* ascdocumentscore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5EE5492E3382D20010A8A8 /* ascdocumentscore.framework */; };
 		BE5EE54D2E3391440010A8A8 /* ooxmlsignature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5EE5482E3382D20010A8A8 /* ooxmlsignature.framework */; };
 		F10175932EAB756000C6C1B8 /* ASCLicenseController.m in Sources */ = {isa = PBXBuildFile; fileRef = F10175922EAB756000C6C1B8 /* ASCLicenseController.m */; };
@@ -87,7 +89,6 @@
 		FCB4C6DD26DD018B0012C20D /* ASCTitleBarController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCA9A1921BA6DE2700ABF3AB /* ASCTitleBarController.mm */; };
 		FCB4C6DE26DD018B0012C20D /* SFBPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = FC3BFDFB1BBE83AB0040C904 /* SFBPopover.m */; };
 		FCB4C6DF26DD018B0012C20D /* ASCEventsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC3B77841BB2A94300DB9705 /* ASCEventsController.mm */; };
-		7242D8CD883511428FE5C209 /* ASCBrowserAuth.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADB32074136C530240735E83 /* ASCBrowserAuth.mm */; };
 		FCB4C6E026DD018B0012C20D /* ASCAboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC659BF81C75EE8B00C99776 /* ASCAboutController.m */; };
 		FCB4C6E126DD018B0012C20D /* ASCMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD294651BB97C8B00318930 /* ASCMulticastDelegate.m */; };
 		FCB4C6E226DD018B0012C20D /* ASCButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCC77C78206CEE5B001B7837 /* ASCButtonCell.m */; };
@@ -161,6 +162,16 @@
 		FCB4C77D26DD027B0012C20D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FCB4C76826DD02640012C20D /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		1D44C595ADD5DADEF516856E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FCBC42601B9D650400405301 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FCB4C6BA26DD018B0012C20D;
+			remoteInfo = "Euro-Office-arm";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		FCB4C73026DD018B0012C20D /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -176,6 +187,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		16BB300CBF2BA60FBD9DBF90 /* ASCFileCloseTests.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ASCFileCloseTests.m; sourceTree = "<group>"; };
+		308DF3AD762A24ACFD680EAF /* ASCBrowserAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCBrowserAuth.h; sourceTree = "<group>"; };
 		5A0229392C4A54600011C6EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A02293A2C7770DF0011C6EC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Document-Sign.strings"; sourceTree = "<group>"; };
 		5A02293B2C7770E00011C6EC /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -470,6 +483,8 @@
 		5AC644252D36901A00145A90 /* sq-AL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sq-AL"; path = "sq-AL.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5ACC12842BC033080089A585 /* file-xlsb.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "file-xlsb.icns"; sourceTree = "<group>"; };
 		5AD24E292902AE3C00748926 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Vendor/Sparkle/Sparkle.framework; sourceTree = SOURCE_ROOT; };
+		7FC240CBA8FDE70011834B8E /* Euro-OfficeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Euro-OfficeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ADB32074136C530240735E83 /* ASCBrowserAuth.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASCBrowserAuth.mm; sourceTree = "<group>"; };
 		BE59EE322B9623FF00F12D5D /* mac_cefviewmedia.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mac_cefviewmedia.h; sourceTree = "<group>"; };
 		BE5EE5482E3382D20010A8A8 /* ooxmlsignature.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ooxmlsignature.framework; path = ../../build_tools/out/mac_64/onlyoffice/desktopeditors/converter/ooxmlsignature.framework; sourceTree = "<group>"; };
 		BE5EE5492E3382D20010A8A8 /* ascdocumentscore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ascdocumentscore.framework; path = ../../build_tools/out/mac_64/onlyoffice/desktopeditors/ascdocumentscore.framework; sourceTree = "<group>"; };
@@ -511,8 +526,6 @@
 		FC3B777A1BB28CE900DB9705 /* login */ = {isa = PBXFileReference; lastKnownFileType = folder; name = login; path = "Vendor/Euro-Office/login"; sourceTree = SOURCE_ROOT; };
 		FC3B77831BB2A94300DB9705 /* ASCEventsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCEventsController.h; sourceTree = "<group>"; };
 		FC3B77841BB2A94300DB9705 /* ASCEventsController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASCEventsController.mm; sourceTree = "<group>"; };
-		308DF3AD762A24ACFD680EAF /* ASCBrowserAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASCBrowserAuth.h; sourceTree = "<group>"; };
-		ADB32074136C530240735E83 /* ASCBrowserAuth.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ASCBrowserAuth.mm; sourceTree = "<group>"; };
 		FC3BFDFA1BBE83AB0040C904 /* SFBPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBPopover.h; sourceTree = "<group>"; };
 		FC3BFDFB1BBE83AB0040C904 /* SFBPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFBPopover.m; sourceTree = "<group>"; };
 		FC3BFDFC1BBE83AB0040C904 /* SFBPopoverWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFBPopoverWindow.h; sourceTree = "<group>"; };
@@ -750,6 +763,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C954024FBAB432C6E463F1B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCB4C6FE26DD018B0012C20D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -765,6 +785,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F4536F95302AFE4A8D32FC7 /* Euro-OfficeTests */ = {
+			isa = PBXGroup;
+			children = (
+				16BB300CBF2BA60FBD9DBF90 /* ASCFileCloseTests.m */,
+			);
+			name = "Euro-OfficeTests";
+			path = "Euro-OfficeTests";
+			sourceTree = "<group>";
+		};
+		814DA5979811185A54B22614 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
 		F10175902EAB739E00C6C1B8 /* License */ = {
 			isa = PBXGroup;
 			children = (
@@ -1116,6 +1152,7 @@
 				FCBC426A1B9D650400405301 /* Euro-Office */,
 				FCBC42691B9D650400405301 /* Products */,
 				FCF2761F22C10D9300984E83 /* Frameworks */,
+				1F4536F95302AFE4A8D32FC7 /* Euro-OfficeTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1123,6 +1160,7 @@
 			isa = PBXGroup;
 			children = (
 				FCB4C73726DD018B0012C20D /* Euro-Office.app */,
+				7FC240CBA8FDE70011834B8E /* Euro-OfficeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1274,6 +1312,7 @@
 				BE5EE5492E3382D20010A8A8 /* ascdocumentscore.framework */,
 				BE5EE5482E3382D20010A8A8 /* ooxmlsignature.framework */,
 				5A02294C2CB9C0410011C6EC /* QuickLookUI.framework */,
+				814DA5979811185A54B22614 /* OS X */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1415,6 +1454,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2D9D8FED1F4E85F095BCFE76 /* Euro-OfficeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2D4E93FD2303A03D4E06973 /* Build configuration list for PBXNativeTarget "Euro-OfficeTests" */;
+			buildPhases = (
+				BE7542BFF4A06C1428ABC9FA /* Sources */,
+				C954024FBAB432C6E463F1B7 /* Frameworks */,
+				E865C50C091294AABDBD585C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8486AAFB1F7FC135F2471403 /* PBXTargetDependency */,
+			);
+			name = "Euro-OfficeTests";
+			productName = "Euro-OfficeTests";
+			productReference = 7FC240CBA8FDE70011834B8E /* Euro-OfficeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FCB4C6BA26DD018B0012C20D /* Euro-Office-arm */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FCB4C73426DD018B0012C20D /* Build configuration list for PBXNativeTarget "Euro-Office-arm" */;
@@ -1518,11 +1575,19 @@
 			targets = (
 				FCB4C6BA26DD018B0012C20D /* Euro-Office-arm */,
 				FCD2B9111BC64D5F00F54560 /* Localization */,
+				2D9D8FED1F4E85F095BCFE76 /* Euro-OfficeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E865C50C091294AABDBD585C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCB4C70426DD018B0012C20D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1592,6 +1657,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		F3C9E10127EBB0E3132ABA63 /* Render About text */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Render About text";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/about.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "NODE=$(command -v node || ls /opt/homebrew/bin/node /usr/local/bin/node 2>/dev/null | head -n 1)\nSCRIPT=\"${ABOUT_HTML_SCRIPT:-$SRCROOT/../../web-apps/build/about-html.mjs}\"\n[ -x \"$NODE\" ] || { echo \"error: node not found, it is needed to render the About text\"; exit 1; }\n[ -f \"$SCRIPT\" ] || { echo \"error: $SCRIPT not found, set ABOUT_HTML_SCRIPT\"; exit 1; }\n\"$NODE\" \"$SCRIPT\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
 		FCB4C6BB26DD018B0012C20D /* Copy Library */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1659,29 +1744,17 @@
 			shellScript = "GenLocalized() {\n    rm $1/Localizable.strings\n    find -E . -regex '.*\\.(m|mm)' -exec echo {} \\; -exec genstrings -a -o $1 {} \\;\n}\n\ncd $(pwd)/ONLYOFFICE\n\nGenLocalized Base.lproj\nGenLocalized de.lproj\nGenLocalized fr.lproj\nGenLocalized ru.lproj\nGenLocalized es.lproj\n";
 			showEnvVarsInLog = 0;
 		};
-		F3C9E10127EBB0E3132ABA63 /* Render About text */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Render About text";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/about.json",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "NODE=$(command -v node || ls /opt/homebrew/bin/node /usr/local/bin/node 2>/dev/null | head -n 1)\nSCRIPT=\"${ABOUT_HTML_SCRIPT:-$SRCROOT/../../web-apps/build/about-html.mjs}\"\n[ -x \"$NODE\" ] || { echo \"error: node not found, it is needed to render the About text\"; exit 1; }\n[ -f \"$SCRIPT\" ] || { echo \"error: $SCRIPT not found, set ABOUT_HTML_SCRIPT\"; exit 1; }\n\"$NODE\" \"$SCRIPT\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BE7542BFF4A06C1428ABC9FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BD986611FC952AE8BBB505D /* ASCFileCloseTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCB4C6BC26DD018B0012C20D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1763,6 +1836,15 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8486AAFB1F7FC135F2471403 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Euro-Office-arm";
+			target = FCB4C6BA26DD018B0012C20D /* Euro-Office-arm */;
+			targetProxy = 1D44C595ADD5DADEF516856E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F1376CA22EF581FA00EC5E08 /* Separate-Editor.storyboard */ = {
@@ -2153,6 +2235,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8B3FEA79EE2E9478C9FC2BEB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "eu.euro-office.desktop.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Euro-Office.app/Contents/MacOS/Euro-Office";
+			};
+			name = Debug;
+		};
+		A012CC98A9D652276CCBDE0C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "eu.euro-office.desktop.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Euro-Office.app/Contents/MacOS/Euro-Office";
+			};
+			name = Release;
+		};
 		FCB4C73526DD018B0012C20D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2348,6 +2462,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C2D4E93FD2303A03D4E06973 /* Build configuration list for PBXNativeTarget "Euro-OfficeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A012CC98A9D652276CCBDE0C /* Release */,
+				8B3FEA79EE2E9478C9FC2BEB /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FCB4C73426DD018B0012C20D /* Build configuration list for PBXNativeTarget "Euro-Office-arm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

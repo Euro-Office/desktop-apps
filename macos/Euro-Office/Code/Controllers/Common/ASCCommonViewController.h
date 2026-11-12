@@ -38,7 +38,7 @@
 
 #define rootTabId @"1CEF624D-9FF3-432B-9967-61361B5BFE8B"
 
-@interface ASCCommonViewController : NSViewController <NSTabViewDelegate>
+@interface ASCCommonViewController : NSViewController <NSTabViewDelegate, ASCTabsControlDelegate>
 - (BOOL)shouldCloseWindow;
 - (BOOL)shouldCloseWindowIfNoTabs;
 
