@@ -29,8 +29,10 @@ FROM core-base AS desktop-linux
     # app's and CEF's own build dependencies.
     #
     # Keep the toolchain as core-base has it (gcc-toolset-13, clang 21).
+    # LLVM's runtime library stays allowed: mesa-dri-drivers needs it
+    # (llvm-libs or llvm-compat-libs), and it brings no compiler.
     RUN dnf install -y \
-            --exclude="clang*,llvm*,lld*,compiler-rt*,libomp*,gcc-toolset-*" \
+            --exclude="clang*,llvm,llvm-devel,llvm-static,llvm-toolset*,lld*,compiler-rt*,libomp*,gcc-toolset-*" \
             gtk3-devel \
             atk-devel \
             bison \
