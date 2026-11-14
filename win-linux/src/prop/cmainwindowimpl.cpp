@@ -164,6 +164,9 @@ void CMainWindowImpl::refreshAboutVersion()
         _json_obj["updates"] = QJsonObject({{"mode", reg_user.value("autoUpdateMode","ask").toString()}});
     }
 #endif
+#ifdef _EO_UPDATER
+    AscAppManager::sendCommandTo(0, "updates:turn", "on");
+#endif
 
     AscAppManager::sendCommandTo(SEND_TO_ALL_START_PAGE, "settings:init", Utils::stringifyJson(_json_obj));
     if ( InputArgs::contains(L"--ascdesktop-reveal-app-config") )

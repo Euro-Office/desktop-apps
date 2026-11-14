@@ -58,6 +58,7 @@
 
 #ifndef _MAS
     #import "PFMoveApplication.h"
+    #import <Sparkle/Sparkle.h>
 #endif
 
 @interface AppDelegate () {
@@ -67,6 +68,9 @@
 }
 @property (weak) IBOutlet NSMenuItem *updateMenuItem;
 @property (weak) IBOutlet NSMenuItem *eulaMenuItem;
+#ifndef _MAS
+@property (nonatomic, strong) SPUStandardUpdaterController *updaterController;
+#endif
 @property (nonatomic, weak) NSWindow *dropEditorWindow;
 @property (nonatomic, assign) BOOL terminationAlreadyHandled;
 @property (nonatomic, assign) BOOL hasFilesToOpenOnLaunch;
@@ -87,6 +91,7 @@
     
 #ifndef _MAS
     PFMoveToApplicationsFolderIfNecessary();
+    [self setupUpdater];
 #endif
     
     // Remove 'Start Dictation' and 'Special Characters' from menu
@@ -503,7 +508,13 @@
     BOOL keyWindowSupportsDocumentOperations = hasKeyWindow && ([keyWindow isKindOfClass:[ASCEditorWindow class]] || tab != nil);
     NSString * productName = [ASCHelper appName];
     
-    if ([item action] == @selector(onMenuAbout:)) {
+    if ([item action] == @selector(checkForUpdates:)) {
+#ifndef _MAS
+        return self.updaterController.updater.canCheckForUpdates;
+#else
+        return NO;
+#endif
+    } else if ([item action] == @selector(onMenuAbout:)) {
         [item setTitle:[NSString stringWithFormat:NSLocalizedString(@"About %@", nil), productName]];
         return YES;
     } else if ([item action] == @selector(onMenuHide:)) {
@@ -639,6 +650,30 @@
     NSWindow * mainWindow = [self getMainWindow];
     ASCCommonViewController * controller = (ASCCommonViewController *)mainWindow.contentViewController;
     [controller openEULA];
+}
+
+#pragma mark - Updates
+
+#ifndef _MAS
+// apply-branding.sh puts the brand's SUFeedURL and SUPublicEDKey into
+// Info.plist. Without both the build has no updater.
+- (void)setupUpdater {
+    NSDictionary * info = [[NSBundle mainBundle] infoDictionary];
+    if ([info[@"SUFeedURL"] length] == 0 || [info[@"SUPublicEDKey"] length] == 0) {
+        return;
+    }
+
+    self.updaterController = [[SPUStandardUpdaterController alloc] initWithStartingUpdater:YES
+                                                                           updaterDelegate:nil
+                                                                        userDriverDelegate:nil];
+    [self.updateMenuItem setHidden:NO];
+}
+#endif
+
+- (IBAction)checkForUpdates:(id)sender {
+#ifndef _MAS
+    [self.updaterController checkForUpdates:sender];
+#endif
 }
 
 - (IBAction)onMenuAbout:(NSMenuItem *)sender {

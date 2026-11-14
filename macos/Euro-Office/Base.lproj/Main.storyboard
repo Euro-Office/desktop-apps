@@ -23,9 +23,9 @@
                                                 <action selector="onMenuAbout:" target="Voe-Tx-rLC" id="xuH-Yz-ETx"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Check for Updates…" hidden="YES" enabled="NO" keyEquivalent="u" id="ud7-wC-A79">
+                                        <menuItem title="Check for Updates…" hidden="YES" keyEquivalent="u" id="ud7-wC-A79">
                                             <connections>
-                                                <action selector="checkForUpdates:" target="mg6-13-ksd" id="Whs-l9-OTO"/>
+                                                <action selector="checkForUpdates:" target="Voe-Tx-rLC" id="Whs-l9-OTO"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
@@ -702,7 +702,6 @@
                     </connections>
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <customObject id="mg6-13-ksd" customClass="SUUpdater"/>
             </objects>
             <point key="canvasLocation" x="-153" y="-84"/>
         </scene>
