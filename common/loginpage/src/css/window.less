@@ -72,6 +72,13 @@ dialog {
 
             .body {
                 padding: 0px 30px 28px;
+                // the licence text and build commits are taller than a small window:
+                // scroll inside the dialog, and fade out over the bottom padding so
+                // the last line is still sharp once scrolled to the end
+                max-height: calc(100vh - 140px);
+                overflow-y: auto;
+                -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent);
+                mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent);
                 .separator {
                     padding-top: 5px;
                     border-bottom: @scaled-one-px solid @border-divider;
