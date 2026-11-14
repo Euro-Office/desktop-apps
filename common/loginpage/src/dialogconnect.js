@@ -522,7 +522,10 @@ window.DialogConnect = function(params) {
                         '></option>
                     `);
                 }
-                $combo.val(params.provider);
+                // "+" defaults the provider to onlyoffice, which may not be in the list;
+                // then preselect the only cloud, or leave the choice open with a translated hint
+                const _known = _clouds.some(c => c.provider == params.provider);
+                $combo.val(_known ? params.provider : (_clouds.length == 1 ? _clouds[0].provider : undefined));
 
                 let $newportal = $el.find('.newportal').disable(!(params.provider=='onlyoffice'));
                 $combo.on('change', e => {
@@ -530,7 +533,7 @@ window.DialogConnect = function(params) {
                     _clear_error();
                 });
 
-                $combo.selectpicker();
+                $combo.selectpicker({noneSelectedText: utils.Lang.txtSelectCloud});
                 $combo.on('change', _on_combo_provider_change.bind(this));
                 $combo.trigger('change');
             }
