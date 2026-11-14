@@ -93,3 +93,25 @@ describe('connecting a cloud with the system browser', () => {
         }
     });
 });
+
+describe('the connect dialog', () => {
+    it('preselects the only cloud and translates the empty choice', async () => {
+        vi.useFakeTimers();
+        try {
+            // "+" passes no provider; with one cloud it must not show bootstrap-select's "Nothing selected"
+            PortalsStore.keep({portal: 'https://other.example.com', provider: 'nextcloud', user: 'bob', email: ''});
+            $('<button class="login">').appendTo('body').trigger('click');
+            await vi.advanceTimersByTimeAsync(0);
+
+            const $combo = $('dialog select');
+            expect($combo.val()).toBe('nextcloud');
+            expect($combo.data('selectpicker').options.noneSelectedText).toBe(utils.Lang.txtSelectCloud);
+            expect($('dialog').text()).not.toContain('Nothing selected');
+
+            $('dialog .tool.close').trigger('click');
+            await vi.advanceTimersByTimeAsync(0);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+});
