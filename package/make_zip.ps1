@@ -4,7 +4,10 @@
     [string]$Target,
     [string]$CompanyName = "Euro-Office",
     [string]$ProductName = "DesktopEditors",
-    [string]$BuildDir
+    [string]$BuildDir,
+    # Offline help is still ONLYOFFICE-branded and disabled in the editors, so
+    # it is left out by default. -WithHelp adds it again.
+    [switch]$WithHelp
 )
 
 $ErrorActionPreference = "Stop"
@@ -49,7 +52,7 @@ Write-Host "7z a -y $ZipFile ..\$BuildDir\desktop\*"
 & 7z a -y "$ZipFile" "..\$BuildDir\desktop\*"
 if ($LastExitCode -ne 0) { throw }
 
-if ($Target -eq "standalone" -or $Target -eq "xp") {
+if ($WithHelp -and ($Target -eq "standalone" -or $Target -eq "xp")) {
     Write-Host "7z a -y $ZipFile ..\$BuildDir\help\*"
     & 7z a -y "$ZipFile" "..\$BuildDir\help\*"
     if ($LastExitCode -ne 0) { throw }

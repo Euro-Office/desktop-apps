@@ -200,7 +200,7 @@ Source: "vc_redist.{#ARCH}.exe"; DestDir: {app}; Flags: deleteafterinstall; \
   Check: not CheckVCRedist;
 
 Source: "{#BUILD_DIR}\desktop\*"; DestDir: {app}; Flags: ignoreversion recursesubdirs;
-#if defined(_WIN_XP) | defined(EMBED_HELP)
+#ifdef EMBED_HELP
 Source: "{#BUILD_DIR}\help\*"; DestDir: {app}; Flags: ignoreversion recursesubdirs;
 #endif
 Source: "{#BUILD_DIR}\desktop\*.exe"; DestDir: {app}; Flags: recursesubdirs signonce;
@@ -217,6 +217,15 @@ Source: "{#BRANDING_DIR}\..\common\license\3dparty\3DPARTYLICENSE"; DestDir: {ap
 Type: filesandordirs; Name: {app}\editors\sdkjs-plugins
 Type: files; Name: "{commondesktop}\{#sOldAppIconName}.lnk"; Tasks: desktopicon;
 Type: files; Name: "{group}\{#sOldAppIconName}.lnk";
+#ifndef EMBED_HELP
+; Older versions installed the offline help, remove it on upgrade
+Type: filesandordirs; Name: {app}\editors\web-apps\apps\common\main\resources\help
+Type: filesandordirs; Name: {app}\editors\web-apps\apps\documenteditor\main\resources\help
+Type: filesandordirs; Name: {app}\editors\web-apps\apps\presentationeditor\main\resources\help
+Type: filesandordirs; Name: {app}\editors\web-apps\apps\spreadsheeteditor\main\resources\help
+Type: filesandordirs; Name: {app}\editors\web-apps\apps\pdfeditor\main\resources\help
+Type: filesandordirs; Name: {app}\editors\web-apps\apps\visioeditor\main\resources\help
+#endif
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon,{#sAppName}}; GroupDescription: {cm:AdditionalIcons};

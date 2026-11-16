@@ -11,6 +11,9 @@
     [string]$TimestampServer = "http://timestamp.digicert.com",
     # Full signtool argument list, see make.ps1.
     [string[]]$SignArgs,
+    # Offline help is still ONLYOFFICE-branded and disabled in the editors, so
+    # it is left out by default. -WithHelp embeds it again.
+    [switch]$WithHelp,
     [switch]$Debug
 )
 
@@ -120,10 +123,12 @@ switch ($Target) {
         $InnoArgs += "/DPACKAGE_EDITION=Enterprise"
     }
     "standalone" {
-        $InnoArgs += "/DPACKAGE_EDITION=Standalone", "/DEMBED_HELP"
+        $InnoArgs += "/DPACKAGE_EDITION=Standalone"
+        if ($WithHelp) { $InnoArgs += "/DEMBED_HELP" }
     }
     "xp" {
         $InnoArgs += "/DPACKAGE_EDITION=XP", "/D_WIN_XP"
+        if ($WithHelp) { $InnoArgs += "/DEMBED_HELP" }
     }
     "update" {
         $InnoArgs += "/DTARGET_NAME=$CompanyName-$ProductName-$Version-$Arch"
