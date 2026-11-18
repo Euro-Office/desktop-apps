@@ -35,7 +35,7 @@ param(
     [string]$ThirdPartyDir = '',
     [switch]$Tests,
     [switch]$Ccache,
-    [string]$SdkVersion = '10.0.19041.0',
+    [string]$SdkVersion = '10.0.22621.0',
     [Parameter(ValueFromRemainingArguments)]
     [string[]]$CMakeArgs = @()
 )
