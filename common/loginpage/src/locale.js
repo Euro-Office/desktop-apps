@@ -73,6 +73,7 @@ l10n.en = {
     errLoginPass: 'Check the password',
     errLoginWrongPhone: 'Wrong phone number format',
     pshPortal: 'Cloud office URL',
+    txtSelectCloud: 'Select a cloud',
     pshEmail: 'email',
     pshPass: 'password',
     pshPhone: 'phone number',
