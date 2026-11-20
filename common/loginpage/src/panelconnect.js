@@ -70,7 +70,7 @@
                     `<div class="sidebar-block-title">
                         <span l10n>${_lang.actClouds}</span>
                         <button class="btn-quick login">
-                            ${isSvgIcons? `<svg class = "icon"><use xlink:href="#plus"></use></svg>` : ''}
+                            <svg class = "icon"><use xlink:href="#plus"></use></svg>
                                 <i class="icon tool-icon__20 plus" />
                         </button>
                     </div>
@@ -85,7 +85,6 @@
 
         baseView.prototype.constructor.call(this, args);
     };
-    var isSvgIcons = window.devicePixelRatio >=2 || window.devicePixelRatio == 1;
 
     ViewPortals.prototype = Object.create(baseView.prototype);
     ViewPortals.prototype.constructor = ViewPortals;
@@ -116,7 +115,7 @@
                                     <svg class = "icon" data-precls="tool-icon" data-iconname="more">
                                         <use xlink:href="#more"></use>
                                     </svg>
-                                    ${!isSvgIcons ? `<i class="icon tool-icon more" />` : ''}
+                                    <i class="icon tool-icon more" />
                                 </button>
                             </span>
                         </td>`;
