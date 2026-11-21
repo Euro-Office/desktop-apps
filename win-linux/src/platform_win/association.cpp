@@ -225,9 +225,9 @@ void Association::AssociationPrivate::showAssociationMessage(QWidget *parent, co
 {
     if (result == DLG_RESULT_NONE) {
         QString msg = unassocFileExts.size() == 1 ? QObject::tr("Do you want to make %1 your default application for extension: %2?")
-                                                        .arg(QString(WINDOW_NAME), QString::fromStdWString(unassocFileExts[0])) :
+                                                        .arg(QString(APP_DISPLAY_NAME), QString::fromStdWString(unassocFileExts[0])) :
                                                     QObject::tr("Do you want to make %1 your default application for all supported extensions?")
-                                                        .arg(QString(WINDOW_NAME));
+                                                        .arg(QString(APP_DISPLAY_NAME));
 #ifndef __OS_WIN_XP
         if (!forceModal && AscAppManager::notificationSupported()) {
             if (CNotification::instance().show(QObject::tr("Set Default App"), msg,

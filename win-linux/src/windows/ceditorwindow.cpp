@@ -226,7 +226,7 @@ QWidget * CEditorWindow::createMainPanel(QWidget * parent, const QString& title)
 
         if ( d_ptr->panel()->data()->hasError()) {
             mainGridLayout->addWidget(m_boxTitleBtns, 0, 0);
-            m_labelTitle->setText(APP_TITLE);
+            m_labelTitle->setText(APP_DISPLAY_NAME);
             mainPanel->setProperty("window", "pretty");
         } else {
             if (d_ptr->panel()->data()->contentType() != AscEditorType::etUndefined)

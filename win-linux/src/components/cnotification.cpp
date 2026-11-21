@@ -354,13 +354,13 @@ bool CNotification::init()
         return pimpl->isInit;
 
 #ifdef __linux__
-    pimpl->isInit = notify_init(WINDOW_TITLE);
+    pimpl->isInit = notify_init(APP_DISPLAY_NAME);
 #else
     if (Utils::getWinVersion() < Utils::WinVer::Win10) {
         pimpl->isInit = 0;
         return false;
     }
-    WinToast::instance()->setAppName(TEXT(WINDOW_TITLE));
+    WinToast::instance()->setAppName(TEXT(APP_DISPLAY_NAME));
     WinToast::instance()->setAppUserModelId(TEXT(APP_USER_MODEL_ID));
     if (IsPackage(Portable)) {
         WinToast::instance()->setShortcutPolicy(WinToastLib::WinToast::SHORTCUT_POLICY_IGNORE);
