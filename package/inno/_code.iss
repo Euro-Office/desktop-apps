@@ -375,8 +375,6 @@ begin
   if createPage then begin
     associatePage := CreateCustomPage(wpSelectTasks, CustomMessage('AssociateCaption'), CustomMessage('AssociateDescription'));
 
-    //GetWindowsVersionEx(version);
-    //if version.Major < 10 then begin
       lblAudio          := TLabel.Create(associatePage);
       lblAudio.Parent   := associatePage.Surface;
       lblAudio.Caption  := ExpandConstant('{cm:AssociateAudio}');
@@ -385,6 +383,27 @@ begin
       lblAudio.WordWrap := True;
       lblAudio.Left     := 0;
       lblAudio.Top      := 0;
+
+      // Windows 10 and later only let the user choose the default app, so
+      // say where, above the list. The list still registers the file types.
+      GetWindowsVersionEx(version);
+      if version.Major >= 10 then begin
+        labelDesc           := TNewStaticText.Create(associatePage);
+        labelDesc.Parent    := associatePage.Surface;
+        labelDesc.Width     := associatePage.SurfaceWidth;
+        labelDesc.WordWrap  := True;
+        labelDesc.Caption   := ExpandConstant('{cm:warnWin10FileAssociationDesc}');
+
+        labelPath           := TNewStaticText.Create(associatePage);
+        labelPath.Parent    := associatePage.Surface;
+        labelPath.Top       := labelDesc.Top + labelDesc.Height + ScaleY(4);
+        labelPath.Width     := associatePage.SurfaceWidth;
+        labelPath.WordWrap  := True;
+        labelPath.Caption   := ExpandConstant('{cm:warnWin10FileAssociationPath}');
+        labelPath.Font.Style := [fsBold];
+
+        lblAudio.Top        := labelPath.Top + labelPath.Height + ScaleY(12);
+      end;
 
       ChlbAudio         := TNewCheckListBox.Create(associatePage);
       ChlbAudio.Parent  := associatePage.Surface;
@@ -410,21 +429,6 @@ begin
 
       ChlbAudio.Checked[1] := True;
       ChlbAudioClickCheck(ChlbAudio);
-    //end else begin
-    //  labelDesc           := TNewStaticText.Create(associatePage);
-    //  labelDesc.Parent    := associatePage.Surface;
-    //  labelDesc.Width     := associatePage.SurfaceWidth;
-    //  labelDesc.WordWrap  := True;
-    //  labelDesc.Caption   := ExpandConstant('{cm:warnWin10FileAssociationDesc}');
-
-    //  labelPath           := TNewStaticText.Create(associatePage);
-    //  labelPath.Parent    := associatePage.Surface;
-    //  labelPath.Top       := labelDesc.Top + labelDesc.Height + ScaleY(8);
-    //  labelPath.Width     := associatePage.SurfaceWidth;
-    //  labelPath.WordWrap  := True;
-    //  labelPath.Caption   := ExpandConstant('{cm:warnWin10FileAssociationPath}');
-    //  labelPath.Font.Style := [fsBold];
-    //end
   end else begin
     associatePage := nil
   end;
@@ -442,6 +446,20 @@ begin
     else Result := False
   end else
     Result := ChlbAudio.Checked[1] or (ChlbAudio.Checked[2] and ChlbAudio.Checked[index + 3]);
+end;
+
+// The "Open Default apps" step at the end is offered only when file types
+// were chosen on the associate page.
+function IsAnyExtensionAssociated: Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  for i := 0 to GetArrayLength(AudioExts) - 1 do
+    if isAssociateExtension(i) then begin
+      Result := True;
+      Exit;
+    end;
 end;
 
 //----------

@@ -239,7 +239,7 @@ Name: "{group}\{cm:jumpDOCXF}"; IconFilename: "{app}\{#iconsExe}"; IconIndex: 17
 ;Filename: {app}\{#NAME_EXE_OUT}; Description: {cm:Launch,{#sAppName}}; Flags: postinstall nowait skipifsilent;
 Filename: {app}\{#iconsExe}; Description: {cm:Launch,{#sAppName}}; Flags: postinstall nowait skipifsilent runasoriginaluser;
 ;Filename: http://www.onlyoffice.com/remove-portal-feedback-form.aspx; Description: Visit website; Flags: postinstall shellexec nowait
-;Filename: ms-settings:defaultapps; Description: {cm:runOpenDefaultApps}; Flags:postinstall shellexec nowait unchecked; MinVersion: 10.0.10240;
+Filename: "ms-settings:defaultapps?registeredAppMachine={#StringChange(ASCC_REG_REGISTERED_APP_NAME, ' ', '%20')}"; Description: {cm:runOpenDefaultApps}; Flags: postinstall shellexec nowait skipifsilent runasoriginaluser; MinVersion: 10.0.10240; Check: IsAnyExtensionAssociated
 
 [Ini]
 ;Filename: {app}\opts; Section: app; Key: lang; String: {language};
