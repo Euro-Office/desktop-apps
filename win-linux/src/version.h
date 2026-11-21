@@ -58,12 +58,20 @@
 #define VER_LEGALCOPYRIGHT_STR      "© Ascensio System SIA, Euro-Office contributors " TO_STR(COPYRIGHT_YEAR) ". All rights reserved.\0"
 #define VER_COMPANYDOMAIN_STR       "https://github.com/Euro-Office\0"
 #define ABOUT_COPYRIGHT_STR         VER_LEGALCOPYRIGHT_STR
-#define VER_FILEDESCRIPTION_STR     "Euro-Office Desktop Editors\0"
+#ifdef ABOUT_PAGE_APP_NAME
+# define VER_FILEDESCRIPTION_STR    ABOUT_PAGE_APP_NAME "\0"
+#else
+# define VER_FILEDESCRIPTION_STR    "Euro-Office Desktop Editors\0"
+#endif
 #define VER_INTERNALNAME_STR        "Desktop Editors\0"
 #define VER_LEGALTRADEMARKS1_STR    "All Rights Reserved\0"
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
 #define VER_ORIGINALFILENAME_STR    "documenteditor.exe\0"
-#define VER_PRODUCTNAME_STR         "Euro-Office\0"
+#ifdef ABOUT_PAGE_APP_NAME
+# define VER_PRODUCTNAME_STR        ABOUT_PAGE_APP_NAME "\0"
+#else
+# define VER_PRODUCTNAME_STR        "Euro-Office\0"
+#endif
 
 #define VER_LANG_AND_CHARSET        "040904E4"
 #define VER_LANG_ID                 0x0409

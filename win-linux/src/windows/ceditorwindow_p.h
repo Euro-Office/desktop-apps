@@ -195,7 +195,7 @@ public:
             if (iconuser)
                 iconuser->hide();
             if (set_title)
-                window->m_labelTitle->setText(APP_TITLE);
+                window->m_labelTitle->setText(APP_DISPLAY_NAME);
             changeTheme(GetCurrentTheme().id());
         }
 
@@ -457,7 +457,7 @@ public:
 
         if ( window->isCustomWindowStyle() ) {
             if ( !canExtendTitle() && !fillformMode() ) {
-                window->m_labelTitle->setText(APP_TITLE);
+                window->m_labelTitle->setText(APP_DISPLAY_NAME);
             } else {
                 window->setWindowTitle(m_panel->data()->title());
                 window->m_boxTitleBtns->repaint();

@@ -587,7 +587,7 @@ namespace WinMsg
 {
 int showMessage(QWidget *parent, const QString &msg, MsgType msgType, MsgBtns msgBtns, const CMessageOpts &opts)
 {
-    std::wstring lpCaption = QString("  %1").arg(WINDOW_TITLE).toStdWString();
+    std::wstring lpCaption = QString("  %1").arg(APP_DISPLAY_NAME).toStdWString();
     std::wstring lpText = QTextDocumentFragment::fromHtml(msg).toPlainText().toStdWString();
     std::wstring lpContent = opts.contentText.toStdWString();
     if (!lpContent.empty() && !opts.linkText.isEmpty())
