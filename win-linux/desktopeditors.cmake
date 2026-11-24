@@ -111,6 +111,24 @@ if(NOT BUILD_XP AND UPDMODULE)
     include_directories(${CMAKE_CURRENT_LIST_DIR}/extras/update-daemon/src/classes)
 endif()
 
+# In-app updates through WinSparkle (core's winsparkle target). Enabled by
+# giving the appcast URL and the EdDSA public key its updates are signed with.
+set(EO_UPDATE_FEED_URL "" CACHE STRING "Appcast URL for in-app updates (Windows); empty disables them")
+set(EO_UPDATE_PUBLIC_KEY "" CACHE STRING "Base64 EdDSA public key the appcast's updates are signed with")
+set(EO_UPDATE_VERSION "" CACHE STRING "Version compared with the appcast's sparkle:version (default: FileVersion)")
+if(WIN32 AND EO_UPDATE_FEED_URL)
+    if(NOT EO_UPDATE_PUBLIC_KEY)
+        message(FATAL_ERROR "EO_UPDATE_FEED_URL needs EO_UPDATE_PUBLIC_KEY")
+    endif()
+    if(UPDMODULE)
+        message(FATAL_ERROR "EO_UPDATE_FEED_URL and UPDMODULE are two different updaters; pick one")
+    endif()
+    set(EO_UPDATER ON)
+    add_definitions(-D_EO_UPDATER)
+    list(APPEND COMMON_HEADERS src/cwinsparkle.h)
+    list(APPEND COMMON_SOURCES src/cwinsparkle.cpp)
+endif()
+
 # 6. Platform Specific Logic
 if(WIN32)
     list(APPEND COMMON_SOURCES 

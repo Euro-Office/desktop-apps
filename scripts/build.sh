@@ -117,3 +117,12 @@ args=(
 
 cmake "${args[@]}" "$@"
 cmake --build "$build_dir/desktop"
+
+if [ "$(uname -s)" = Darwin ]; then
+    # The Xcode project embeds Sparkle from here (git-ignored); core's
+    # third-party step fetched it during the configure above
+    sparkle="$apps/macos/Vendor/Sparkle"
+    rm -rf "$sparkle"
+    mkdir -p "$sparkle"
+    cp -R "$third_party/install/sparkle/Sparkle.framework" "$sparkle/"
+fi

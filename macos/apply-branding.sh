@@ -29,10 +29,14 @@ RESOURCES_DIR="${SCRIPT_DIR}/Euro-Office/Resources/Euro-Office-arm"
 COMPANY_NAME=""
 PRODUCT_NAME=""
 VERSION=""
+BUNDLE_VERSION=""
+UPDATE_FEED_URL=""
+UPDATE_PUBLIC_KEY=""
 
 usage() {
     cat <<EOF
 Usage: $(basename "$0") --company-name <name> --product-name <name> [--version <version>]
+       [--bundle-version <version>] [--update-feed-url <url> --update-public-key <key>]
 
 Required:
   --company-name <name>   Replaces "Euro-Office" in NSHumanReadableCopyright.
@@ -42,6 +46,13 @@ Required:
 Optional:
   --version <version>     Sets CFBundleShortVersionString (e.g. "9.3.1").
                            Left unchanged if omitted.
+  --bundle-version <v>    Sets CFBundleVersion, the version Sparkle compares
+                          with the feed's (e.g. "9.3.8rc.1"). The Xcode build
+                          only counts up plain numbers, so this one is kept.
+  --update-feed-url <url> Sparkle appcast (SUFeedURL). Together with
+  --update-public-key <key>
+                          the base64 EdDSA key (SUPublicEDKey) its updates are
+                          signed with, this turns on in-app updates.
 EOF
 }
 
@@ -50,6 +61,9 @@ while [ $# -gt 0 ]; do
         --company-name) COMPANY_NAME="$2"; shift 2 ;;
         --product-name) PRODUCT_NAME="$2"; shift 2 ;;
         --version) VERSION="$2"; shift 2 ;;
+        --bundle-version) BUNDLE_VERSION="$2"; shift 2 ;;
+        --update-feed-url) UPDATE_FEED_URL="$2"; shift 2 ;;
+        --update-public-key) UPDATE_PUBLIC_KEY="$2"; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         *) echo "error: unknown argument: $1" 1>&2; usage 1>&2; exit 1 ;;
     esac
@@ -58,6 +72,12 @@ done
 if [ -z "${COMPANY_NAME}" ] || [ -z "${PRODUCT_NAME}" ]; then
     echo "error: --company-name and --product-name are required." 1>&2
     usage 1>&2
+    exit 1
+fi
+
+if { [ -n "${UPDATE_FEED_URL}" ] && [ -z "${UPDATE_PUBLIC_KEY}" ]; } \
+   || { [ -z "${UPDATE_FEED_URL}" ] && [ -n "${UPDATE_PUBLIC_KEY}" ]; }; then
+    echo "error: --update-feed-url and --update-public-key go together." 1>&2
     exit 1
 fi
 
@@ -79,6 +99,17 @@ if [ -f "${INFO_PLIST}" ]; then
 
     if [ -n "${VERSION}" ]; then
         /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${VERSION}" "${INFO_PLIST}"
+    fi
+
+    if [ -n "${BUNDLE_VERSION}" ]; then
+        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${BUNDLE_VERSION}" "${INFO_PLIST}"
+    fi
+
+    if [ -n "${UPDATE_FEED_URL}" ]; then
+        for kv in "SUFeedURL=${UPDATE_FEED_URL}" "SUPublicEDKey=${UPDATE_PUBLIC_KEY}"; do
+            /usr/libexec/PlistBuddy -c "Delete :${kv%%=*}" "${INFO_PLIST}" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Add :${kv%%=*} string ${kv#*=}" "${INFO_PLIST}"
+        done
     fi
 fi
 
