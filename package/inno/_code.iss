@@ -199,6 +199,7 @@ var
   AChecked: Boolean;
   associatePage: TWizardPage;
   isFullAssociation: Boolean;
+  isDefaultAppsStepNeeded: Boolean;
 
 procedure Explode(var Dest: TArrayOfString; Text: String; Separator: String);
 var
@@ -351,6 +352,28 @@ begin
   end;
 end;
 
+// Windows 10 and later only let the user choose the default apps, in
+// Settings. registeredAppMachine opens the app's own page there, once the app
+// is in RegisteredApplications; before that, the general page.
+function GetDefaultAppsUri(Param: String): String;
+var
+  appName: String;
+begin
+  Result := 'ms-settings:defaultapps';
+  if RegValueExists(HKEY_LOCAL_MACHINE, 'Software\RegisteredApplications', '{#ASCC_REG_REGISTERED_APP_NAME}') then begin
+    appName := '{#ASCC_REG_REGISTERED_APP_NAME}';
+    StringChangeEx(appName, ' ', '%20', True);
+    Result := Result + '?registeredAppMachine=' + appName;
+  end;
+end;
+
+procedure DefaultAppsLinkClick(Sender: TObject);
+var
+  errorCode: Integer;
+begin
+  ShellExecAsOriginalUser('', GetDefaultAppsUri(''), '', '', SW_SHOWNORMAL, ewNoWait, errorCode);
+end;
+
 procedure InitializeAssociatePage;
 var
   lblAudio: TLabel;
@@ -358,8 +381,7 @@ var
   version: TWindowsVersion;
   createPage: Boolean;
   paramSkip: string;
-
-  labelDesc, labelPath: TNewStaticText;
+  linkDefaultApps: TNewStaticText;
 begin
   initExtensions();
 
@@ -375,8 +397,6 @@ begin
   if createPage then begin
     associatePage := CreateCustomPage(wpSelectTasks, CustomMessage('AssociateCaption'), CustomMessage('AssociateDescription'));
 
-    //GetWindowsVersionEx(version);
-    //if version.Major < 10 then begin
       lblAudio          := TLabel.Create(associatePage);
       lblAudio.Parent   := associatePage.Surface;
       lblAudio.Caption  := ExpandConstant('{cm:AssociateAudio}');
@@ -392,6 +412,23 @@ begin
       ChlbAudio.Top     := lblAudio.Top + lblAudio.Height + 4;
       ChlbAudio.Width   := associatePage.SurfaceWidth;
       ChlbAudio.Height  := associatePage.SurfaceHeight - ChlbAudio.Top - 4 - 3;
+
+      // A link below the list for users who want to change the default apps
+      // themselves. Setup offers the same page again at the end, but only when
+      // the chosen file types still don't open in the app.
+      GetWindowsVersionEx(version);
+      if version.Major >= 10 then begin
+        linkDefaultApps            := TNewStaticText.Create(associatePage);
+        linkDefaultApps.Parent     := associatePage.Surface;
+        linkDefaultApps.Caption    := ExpandConstant('{cm:warnWin10FileAssociationPath}');
+        linkDefaultApps.Cursor     := crHand;
+        linkDefaultApps.Font.Style := linkDefaultApps.Font.Style + [fsUnderline];
+        linkDefaultApps.Font.Color := clHotLight;
+        linkDefaultApps.OnClick    := @DefaultAppsLinkClick;
+        linkDefaultApps.Left       := 0;
+        linkDefaultApps.Top        := associatePage.SurfaceHeight - linkDefaultApps.Height;
+        ChlbAudio.Height           := linkDefaultApps.Top - ChlbAudio.Top - ScaleY(6);
+      end;
 
       ChlbAudio.AddRadioButton(ExpandConstant('{cm:AssociateDont}'), '', 0, False, True, nil);
       ChlbAudio.AddRadioButton(ExpandConstant('{cm:AssociateAll}'),  '', 0, False, True, nil);
@@ -410,21 +447,6 @@ begin
 
       ChlbAudio.Checked[1] := True;
       ChlbAudioClickCheck(ChlbAudio);
-    //end else begin
-    //  labelDesc           := TNewStaticText.Create(associatePage);
-    //  labelDesc.Parent    := associatePage.Surface;
-    //  labelDesc.Width     := associatePage.SurfaceWidth;
-    //  labelDesc.WordWrap  := True;
-    //  labelDesc.Caption   := ExpandConstant('{cm:warnWin10FileAssociationDesc}');
-
-    //  labelPath           := TNewStaticText.Create(associatePage);
-    //  labelPath.Parent    := associatePage.Surface;
-    //  labelPath.Top       := labelDesc.Top + labelDesc.Height + ScaleY(8);
-    //  labelPath.Width     := associatePage.SurfaceWidth;
-    //  labelPath.WordWrap  := True;
-    //  labelPath.Caption   := ExpandConstant('{cm:warnWin10FileAssociationPath}');
-    //  labelPath.Font.Style := [fsBold];
-    //end
   end else begin
     associatePage := nil
   end;
@@ -442,6 +464,42 @@ begin
     else Result := False
   end else
     Result := ChlbAudio.Checked[1] or (ChlbAudio.Checked[2] and ChlbAudio.Checked[index + 3]);
+end;
+
+// The ProgId the file type opens with for the current user. Newer Windows 11
+// builds keep the user's choice in UserChoiceLatest, older ones in
+// UserChoice; without a choice, Windows falls back to the class registration.
+function GetUserDefaultProgId(ext: String): String;
+var
+  key, value: String;
+begin
+  key := 'Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.' + ext;
+  Result := '';
+  if RegQueryStringValue(HKEY_CURRENT_USER, key + '\UserChoiceLatest', 'ProgId', value) and (value <> '') then
+    Result := value
+  else if RegQueryStringValue(HKEY_CURRENT_USER, key + '\UserChoiceLatest\ProgId', 'ProgId', value) and (value <> '') then
+    Result := value
+  else if RegQueryStringValue(HKEY_CURRENT_USER, key + '\UserChoice', 'ProgId', value) and (value <> '') then
+    Result := value
+  else if RegQueryStringValue(HKEY_CURRENT_USER, 'Software\Classes\.' + ext, '', value) and (value <> '') then
+    Result := value
+  else if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Classes\.' + ext, '', value) then
+    Result := value;
+end;
+
+function IsAppDefaultForExtension(ext, progId: String): Boolean;
+var
+  current: String;
+begin
+  current := GetUserDefaultProgId(ext);
+  Result := (CompareText(current, progId) = 0) or
+            (CompareText(current, 'Applications\{#iconsExe}') = 0);
+end;
+
+// Used by the "Open Default apps" step at the end of setup.
+function IsDefaultAppsStepNeeded: Boolean;
+begin
+  Result := isDefaultAppsStepNeeded;
 end;
 
 //----------
@@ -606,11 +664,31 @@ begin
       end;
     end;
 
+    // Register the app first, so Settings can find it by name.
+    AddToDefaultPrograms;
+
     if Length(assocArg) <> 0 then begin
-      ShellExecAsOriginalUser('', ExpandConstant('{app}\{#iconsExe}'), '--assoc ' + assocArg, '', SW_SHOW, ewNoWait, errorCode);
+      // Wait, so the check below sees what --assoc wrote. Setup offers the
+      // Default apps page itself, at the end, so --assoc shouldn't open it.
+      ShellExecAsOriginalUser('', ExpandConstant('{app}\{#iconsExe}'), '--assoc ' + assocArg + ' --no-default-apps', '', SW_SHOW, ewWaitUntilTerminated, errorCode);
     end;
 
-  AddToDefaultPrograms;
+    // Windows 10 and later may keep the user's previous choice (UCPD,
+    // UserChoiceLatest). Offer the Default apps page at the end of setup only
+    // if a chosen file type still doesn't open in the app.
+    isDefaultAppsStepNeeded := False;
+    if version.Major >= 10 then begin
+      for i := 0 to GetArrayLength(AudioExts) - 1 do begin
+        if isAssociateExtension(i) then begin
+          Explode(argsArray, ExtensionRegistryInfo[i], ':');
+          if not IsAppDefaultForExtension(LowerCase(AudioExts[i]), argsArray[0]) then begin
+            isDefaultAppsStepNeeded := True;
+            Break;
+          end;
+        end;
+      end;
+    end;
+
   AddContextMenuNewItems;
 
 #ifndef _EuroOffice
