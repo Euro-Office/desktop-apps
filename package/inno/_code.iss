@@ -199,7 +199,7 @@ var
   AChecked: Boolean;
   associatePage: TWizardPage;
   isFullAssociation: Boolean;
-  isDefaultAppsStepNeeded: Boolean;
+  defaultAppsStepNeeded: Boolean;
 
 procedure Explode(var Dest: TArrayOfString; Text: String; Separator: String);
 var
@@ -499,7 +499,7 @@ end;
 // Used by the "Open Default apps" step at the end of setup.
 function IsDefaultAppsStepNeeded: Boolean;
 begin
-  Result := isDefaultAppsStepNeeded;
+  Result := defaultAppsStepNeeded;
 end;
 
 //----------
@@ -676,13 +676,13 @@ begin
     // Windows 10 and later may keep the user's previous choice (UCPD,
     // UserChoiceLatest). Offer the Default apps page at the end of setup only
     // if a chosen file type still doesn't open in the app.
-    isDefaultAppsStepNeeded := False;
+    defaultAppsStepNeeded := False;
     if version.Major >= 10 then begin
       for i := 0 to GetArrayLength(AudioExts) - 1 do begin
         if isAssociateExtension(i) then begin
           Explode(argsArray, ExtensionRegistryInfo[i], ':');
           if not IsAppDefaultForExtension(LowerCase(AudioExts[i]), argsArray[0]) then begin
-            isDefaultAppsStepNeeded := True;
+            defaultAppsStepNeeded := True;
             Break;
           end;
         end;
