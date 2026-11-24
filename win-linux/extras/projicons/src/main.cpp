@@ -65,8 +65,11 @@ int main(int argc, char *argv[])
         return 0;
     } else
     if (_cmdArgs.contains("--assoc")) {
-        if (_cmdArgs.size() > 1) {
-            std::wstring assocLine = _cmdArgs.at(1).toStdWString();
+        // --no-default-apps: the caller (setup) offers Default apps itself
+        const bool openDefaultApps = !_cmdArgs.contains("--no-default-apps");
+        const int listIndex = _cmdArgs.indexOf("--assoc") + 1;
+        if (listIndex < _cmdArgs.size()) {
+            std::wstring assocLine = _cmdArgs.at(listIndex).toStdWString();
             size_t len = assocLine.length();
             if (len == 0)
                 return 0;
@@ -94,7 +97,7 @@ int main(int argc, char *argv[])
                 it++;
             }
             if (!assocList.empty())
-                SetUserFileAssoc(assocList);
+                SetUserFileAssoc(assocList, openDefaultApps);
         }
         return 0;
     }

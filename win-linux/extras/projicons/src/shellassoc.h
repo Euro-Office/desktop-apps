@@ -8,8 +8,8 @@ struct AssocPair {
     const wchar_t* progId;
 };
 
-bool SetUserFileAssoc(const std::vector<AssocPair> &assocList);
-// bool ResetUserFileAssoc(const wchar_t* ext, bool notifySystem = true);
-// bool ResetUserFileAssoc(const wchar_t** extArray, size_t count);
+// Protected types (UCPD) are left to the user: with openDefaultApps,
+// Settings > Default apps is opened for them.
+bool SetUserFileAssoc(const std::vector<AssocPair> &assocList, bool openDefaultApps = true);
 
 #endif // SHELLASSOC_H
