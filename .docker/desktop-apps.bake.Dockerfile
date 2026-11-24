@@ -179,5 +179,11 @@ FROM core-base AS desktop-linux
     RUN rm /desktopeditors/converter/allthemesgen && \
         rm /desktopeditors/converter/allfontsgen
 
-    RUN echo 'LD_LIBRARY_PATH=$PWD:$PWD/converter:$LD_LIBRARY_PATH LD_PRELOAD=libcef.so ./DesktopEditors' > /desktopeditors/start_desktop.sh && \
+    RUN printf '%s\n' \
+            '#!/bin/sh' \
+            'APP_DIR=$(dirname "$(readlink -f "$0")")' \
+            'export LD_LIBRARY_PATH="$APP_DIR:$APP_DIR/converter${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"' \
+            'export LD_PRELOAD=libcef.so' \
+            'exec "$APP_DIR/DesktopEditors" "$@"' \
+            > /desktopeditors/start_desktop.sh && \
         chmod +x /desktopeditors/start_desktop.sh
