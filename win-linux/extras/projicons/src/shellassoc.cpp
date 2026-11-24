@@ -1,6 +1,7 @@
 #include "shellassoc.h"
 #include <Windows.h>
 #include <Shlobj.h>
+#include <shellapi.h>
 #include <shlwapi.h>
 #include <sddl.h>
 #include <winternl.h>
@@ -56,7 +57,6 @@ struct AssocData
     std::string progId;
     std::string regKeyPath;
     std::string hash;
-    bool specialExt = false;
 };
 
 static const char REG_URL_IE_ASSOC[]   = "SOFTWARE\\Microsoft\\Internet Explorer\\Capabilities\\UrlAssociations";
@@ -93,36 +93,6 @@ static const uint8_t ASSOC_DESCRIPTOR[] = {
     0x30, 0x30, 0x33, 0x62, 0x61, 0x66, 0x61, 0x30,
     0x62, 0x7D
 };
-
-static const char HTA_BEGIN[] = R"(
-<!DOCTYPE html><html><head><title>ShellAssoc</title>
-<HTA:APPLICATION ID="oHTA"
-    APPLICATIONNAME="%s"
-    BORDER="none"
-    CAPTION="no"
-    SHOWINTASKBAR="no"
-    SINGLEINSTANCE="yes"
-    SYSMENU="no"
-    WINDOWSTATE="minimize">
-<script language="VBScript">
-Sub Window_OnLoad
-    Set WshShell = CreateObject("WScript.Shell")
-    On Error Resume Next
-)";
-static const char HTA_WRITE[] = R"(
-    WshShell.RegWrite "HKCU\%s\Hash", "%s", "REG_SZ"
-    WshShell.RegWrite "HKCU\%s\ProgId", "%s", "REG_SZ"
-)";
-static const char HTA_DELETE[] = R"(
-    WshShell.RegDelete "HKCU\%s\"
-)";
-static const char HTA_END[] = R"(
-    Set WshShell = Nothing
-    self.close
-End Sub
-</script>
-</head><body></body></html>
-)";
 
 enum WinVer {
     Undef, WinXP, WinVista, Win7, Win8, Win8_1,
@@ -435,101 +405,84 @@ bool Base64Encode(const BYTE *pData, DWORD cbData, std::string &base64Str)
     return CryptBinaryToStringA(pData, cbData, CRYPT_STRING_BASE64 | CRYPT_STRING_NOCRLF, &base64Str[0], &cchSize);
 }
 
-bool CreateRegWriteHTA(const char *fileName, const std::vector<AssocData> &assocData)
+// Finds the name under RegisteredApplications whose Capabilities map the
+// extension to our ProgId, so Settings can open on the app's own page.
+static bool FindRegisteredAppName(HKEY hRoot, const AssocPair &assoc, std::wstring &appName)
 {
-    FILE *f;
-    errno_t err = fopen_s(&f, fileName, "w");
-    if (err != 0) {
+    HKEY hKey;
+    if (RegOpenKeyExW(hRoot, L"SOFTWARE\\RegisteredApplications", 0, KEY_READ, &hKey) != ERROR_SUCCESS)
         return false;
+
+    bool found = false;
+    for (DWORD i = 0; !found; ++i) {
+        wchar_t name[256];
+        wchar_t capPath[MAX_PATH + 1] = {0};
+        DWORD cchName = _countof(name), type = 0;
+        DWORD cbData = MAX_PATH * sizeof(wchar_t);
+        LSTATUS res = RegEnumValueW(hKey, i, name, &cchName, NULL, &type, (LPBYTE)capPath, &cbData);
+        if (res == ERROR_NO_MORE_ITEMS)
+            break;
+        if (res != ERROR_SUCCESS || type != REG_SZ)
+            continue;
+        capPath[cbData / sizeof(wchar_t)] = L'\0';
+
+        std::wstring assocPath = std::wstring(capPath) + L"\\FileAssociations";
+        wchar_t progId[MAX_PATH];
+        DWORD cbProgId = sizeof(progId);
+        if (RegGetValueW(hRoot, assocPath.c_str(), assoc.extension, RRF_RT_REG_SZ, NULL, progId, &cbProgId) == ERROR_SUCCESS
+                && _wcsicmp(progId, assoc.progId) == 0) {
+            appName = name;
+            found = true;
+        }
     }
-    fprintf(f, HTA_BEGIN, "WriteToRegistry");
-    for (const auto &data : assocData) {
-        if (data.specialExt)
-            fprintf(f, HTA_WRITE, data.regKeyPath.c_str(), data.hash.c_str(), data.regKeyPath.c_str(), data.progId.c_str());
+    RegCloseKey(hKey);
+    return found;
+}
+
+static std::wstring EncodeUriComponent(const std::wstring &str)
+{
+    std::wstring res;
+    int len = WideCharToMultiByte(CP_UTF8, 0, str.c_str(), (int)str.length(), NULL, 0, NULL, NULL);
+    std::string utf8(len, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, str.c_str(), (int)str.length(), &utf8[0], len, NULL, NULL);
+    for (unsigned char c : utf8) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '.' || c == '_' || c == '~') {
+            res.push_back(c);
+        } else {
+            wchar_t buf[4];
+            swprintf_s(buf, _countof(buf), L"%%%02X", c);
+            res.append(buf);
+        }
     }
-    fputs(HTA_END, f);
-    return fclose(f) == 0;
+    return res;
 }
 
-bool CreateRegDeleteHTA(const char *fileName, const std::vector<std::string> &regPaths)
-{    
-    FILE *f;
-    errno_t err = fopen_s(&f, fileName, "w");
-    if (err != 0) {
-        return false;
+// Opens Settings > Apps > Default apps, on the app's own page where
+// Windows supports it, so the user can make the choice.
+static void OpenDefaultAppsSettings(const AssocPair &assoc)
+{
+    std::wstring uri(L"ms-settings:defaultapps");
+    std::wstring appName;
+    if (FindRegisteredAppName(HKEY_LOCAL_MACHINE, assoc, appName)) {
+        uri += L"?registeredAppMachine=" + EncodeUriComponent(appName);
+    } else
+    if (FindRegisteredAppName(HKEY_CURRENT_USER, assoc, appName)) {
+        uri += L"?registeredAppUser=" + EncodeUriComponent(appName);
     }
-    fprintf(f, HTA_BEGIN, "DeleteRegistryKey");
-    for (const auto &regPath : regPaths)
-        fprintf(f, HTA_DELETE, regPath.c_str());
-    fputs(HTA_END, f);
-    return fclose(f) == 0;
+    HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+    ShellExecuteW(NULL, L"open", uri.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    if (SUCCEEDED(hr))
+        CoUninitialize();
 }
 
-bool RunHTAScript(const char *filePath)
-{
-    char pCmd[MAX_PATH];
-    PROCESS_INFORMATION pi;
-    STARTUPINFOA si;
-    memset(&pi, 0, sizeof(pi));
-    memset(&si, 0, sizeof(si));
-    si.cb = sizeof(STARTUPINFOA);
-    si.dwFlags = STARTF_USESHOWWINDOW;
-    snprintf(pCmd, MAX_PATH, "mshta.exe \"%s\"", filePath);
-    if (!CreateProcessA(NULL, pCmd, NULL, NULL, 0, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
-        return false;
-    }
-    WaitForSingleObject(pi.hProcess, INFINITE);
-    CloseHandle(pi.hProcess);
-    return CloseHandle(pi.hThread);
-}
-
-bool GenerateFilePathHTA(DWORD nBufferLen, LPSTR lpBuffer)
-{
-    char tempPath[MAX_PATH];
-    DWORD ret = GetTempPathA(MAX_PATH, tempPath);
-    if (ret == 0 || ret > MAX_PATH)
-        return false;
-
-    UUID uuid;
-    RPC_CSTR wszUuid = NULL;
-    if (UuidCreate(&uuid) != RPC_S_OK || UuidToStringA(&uuid, &wszUuid) != RPC_S_OK)
-        return false;
-
-    const char *uid = (const char*)wszUuid;
-    snprintf(lpBuffer, nBufferLen, "%sfta_%s.hta", tempPath, uid);
-    RpcStringFreeA(&wszUuid);
-    return true;
-}
-
-bool RunWriteAssocWithHTA(const std::vector<AssocData> &assocData)
-{
-    char tempFile[MAX_PATH];
-    if (!GenerateFilePathHTA(MAX_PATH, tempFile))
-        return false;
-    CreateRegWriteHTA(tempFile, assocData);
-    RunHTAScript(tempFile);
-    return DeleteFileA(tempFile);
-}
-
-bool RunDeleteAssocWithHTA(const std::vector<std::string> &regPaths)
-{
-    char tempFile[MAX_PATH];
-    if (!GenerateFilePathHTA(MAX_PATH, tempFile))
-        return false;
-    CreateRegDeleteHTA(tempFile, regPaths);
-    RunHTAScript(tempFile);
-    return DeleteFileA(tempFile);
-}
-
-bool SetUserFileAssoc(const std::vector<AssocPair> &assocList)
+bool SetUserFileAssoc(const std::vector<AssocPair> &assocList, bool openDefaultApps)
 {
     int winVer = getWindowsVersion();
     if (winVer < WinVista)
         return false;
 
     HKEY hKey;
-    bool hasSpecialExt = false;
-    std::vector<std::string> specialRegKeyPaths;
+    std::vector<AssocPair> protectedList;
     std::vector<AssocData> assocData;
     for (const AssocPair &assoc : assocList) {
         size_t cbDest;
@@ -539,6 +492,14 @@ bool SetUserFileAssoc(const std::vector<AssocPair> &assocList)
         char progID[MAX_PATH];
         wcstombs_s(&cbDest, progID, sizeof(progID), assoc.progId, sizeof(progID) - 1);
 
+        // The User Choice Protection Driver (UCPD) guards these types: only
+        // the user may change them, so leave their UserChoice untouched and
+        // let the user decide in the Default apps settings.
+        if (winVer > Win8_1 && IsSpecialUrlOrExtension(ext)) {
+            protectedList.push_back(assoc);
+            continue;
+        }
+
         char subkey[MAX_PATH];
         snprintf(subkey, _countof(subkey), ext[0] == L'.' ? REG_EXT_USER_ASSOC : REG_URL_USER_ASSOC, ext);
 
@@ -547,29 +508,21 @@ bool SetUserFileAssoc(const std::vector<AssocPair> &assocList)
         data.progId = progID;
         data.regKeyPath = subkey;
 
-        if (winVer > Win7) {
-            data.specialExt = IsSpecialUrlOrExtension(ext);
-            if (data.specialExt && !hasSpecialExt)
-                hasSpecialExt = true;
-        }
-
         if (RegOpenKeyExA(HKEY_CURRENT_USER, subkey, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
             RegCloseKey(hKey);
-            if (winVer <= Win8_1 || !IsSpecialUrlOrExtension(ext)) {
-                if (RegDeleteKeyA(HKEY_CURRENT_USER, subkey) != ERROR_SUCCESS) {
-                    printf("Could not delete registry key %s\n", subkey);
-                    return false;
-                }
-            } else {
-                specialRegKeyPaths.push_back(subkey);
+            if (RegDeleteKeyA(HKEY_CURRENT_USER, subkey) != ERROR_SUCCESS) {
+                printf("Could not delete registry key %s\n", subkey);
+                return false;
             }
         }
         assocData.push_back(data);
     }
 
-    if (!specialRegKeyPaths.empty() && !RunDeleteAssocWithHTA(specialRegKeyPaths)) {
-        return false;
-    }
+    if (openDefaultApps && !protectedList.empty())
+        OpenDefaultAppsSettings(protectedList.front());
+
+    if (assocData.empty())
+        return true;
 
     for (auto &data : assocData) {
         if (RegCreateKeyExA(HKEY_CURRENT_USER, data.regKeyPath.c_str(), 0, NULL, 0, KEY_WRITE, 0, &hKey, 0) != ERROR_SUCCESS) {
@@ -642,64 +595,20 @@ bool SetUserFileAssoc(const std::vector<AssocPair> &assocList)
             data.hash = resHash;
         }
 
-        if (!data.specialExt) {
-            if (RegOpenKeyExA(HKEY_CURRENT_USER, data.regKeyPath.c_str(), 0, KEY_SET_VALUE, &hKey) != ERROR_SUCCESS) {
-                return false;
-            }
-            if (RegSetValueExA(hKey, "Hash", 0, REG_SZ, (const BYTE*)data.hash.c_str(), data.hash.length() + 1) != ERROR_SUCCESS) {
-                RegCloseKey(hKey);
-                return false;
-            }
-            if (RegSetValueExA(hKey, "ProgId", 0, REG_SZ, (const BYTE*)data.progId.c_str(), data.progId.length() + 1) != ERROR_SUCCESS) {
-                RegCloseKey(hKey);
-                return false;
-            }
-            RegCloseKey(hKey);
+        if (RegOpenKeyExA(HKEY_CURRENT_USER, data.regKeyPath.c_str(), 0, KEY_SET_VALUE, &hKey) != ERROR_SUCCESS) {
+            return false;
         }
+        if (RegSetValueExA(hKey, "Hash", 0, REG_SZ, (const BYTE*)data.hash.c_str(), data.hash.length() + 1) != ERROR_SUCCESS) {
+            RegCloseKey(hKey);
+            return false;
+        }
+        if (RegSetValueExA(hKey, "ProgId", 0, REG_SZ, (const BYTE*)data.progId.c_str(), data.progId.length() + 1) != ERROR_SUCCESS) {
+            RegCloseKey(hKey);
+            return false;
+        }
+        RegCloseKey(hKey);
     }
 
-    if (hasSpecialExt && !RunWriteAssocWithHTA(assocData)) {
-        return false;
-    }
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
     return true;
 }
-
-// bool ResetUserFileAssoc(const wchar_t* ext, bool notifySystem)
-// {
-//     int winVer = getWindowsVersion();
-//     if (winVer < WinVista)
-//         return false;
-
-//     char lpExt[MAX_PATH];
-//     size_t cbDest;
-//     wcstombs_s(&cbDest, lpExt, sizeof(lpExt), ext, sizeof(lpExt) - 1);
-
-//     char lpSubkey[MAX_PATH];
-//     snprintf(lpSubkey, _countof(lpSubkey), lpExt[0] == L'.' ? REG_EXT_USER_ASSOC : REG_URL_USER_ASSOC, lpExt);
-
-//     HKEY hKey;
-//     if (RegOpenKeyExA(HKEY_CURRENT_USER, lpSubkey, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-//         RegCloseKey(hKey);
-//         if (IsPdfOrHttpScheme(lpExt) && winVer > Win8_1) {
-//             if (!RunDeleteAssocWithHTA(lpSubkey))
-//                 return false;
-//         } else {
-//             if (RegDeleteKeyA(HKEY_CURRENT_USER, lpSubkey) != ERROR_SUCCESS)
-//                 return false;
-//         }
-//         if (notifySystem)
-//             SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
-//     }
-//     return true;
-// }
-
-// bool ResetUserFileAssoc(const wchar_t** extArray, size_t count)
-// {
-//     for (int i = 0; i < count; ++i) {
-//         if (!ResetUserFileAssoc(extArray[i], false))
-//             return false;
-//     }
-//     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
-//     return true;
-// }

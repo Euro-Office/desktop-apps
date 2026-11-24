@@ -60,7 +60,6 @@ build_xp {
             -lshell32 \
             -ladvapi32 \
             -lcrypt32 \
-            -lRpcrt4 \
             -lole32
 }
 
