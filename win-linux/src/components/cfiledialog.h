@@ -60,11 +60,21 @@ public:
     void    setFormats(std::vector<int>&);
     int     getFormat();
 
+    // The patterns of the "All Images" filter of modalOpenImage, or of
+    // modalOpenImages when multiple
+    static QString imagePatterns(bool multiple);
+    // The filters of modalOpenImage, or of modalOpenImages when multiple;
+    // selected gets the "All Images" filter
+    QString imageFilter(bool multiple, QString * selected) const;
+    // Whether the MIME type of the file is of the given type, e.g. "image"
+    static bool hasMimeType(const QString& file, const QString& type);
+    // Empties files and warns when one of them isn't of the given type
+    void checkForMimeTypes(QStringList &files, const QString &type);
+
 private:
     QString getFilter(const QString&) const;
     int getKey(const QString &value);
 //    QString joinFilters() const;
-    void checkForMimeTypes(QStringList &files, const QString &type);
     QString joinExtentions(const QString&) const;
     QString m_title;
     QString m_filters;
