@@ -116,6 +116,9 @@ $(document).ready(function() {
             placeholder: '#idx-sidebar-portals',
         })).init();
 
+    if (!!window.ControllerCloud)
+        window.app.controller.cloud = (new ControllerCloud).init();
+
     !!window.ControllerExternalPanel && (window.app.controller.externalpanel = (new ControllerExternalPanel({})).init());
 
     // if (!localStorage.welcome) {

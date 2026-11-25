@@ -202,7 +202,12 @@
 
         function _on_context_menu(menu, action, data) {
             var model = data;
-            if (/\:open/.test(action)) {
+            const _cloud = window.app && window.app.controller && window.app.controller.cloud;
+            if (/\:open$/.test(action) && _cloud && _cloud.handles(model.provider)) {
+                // the start page shows the cloud's files itself
+                _cloud.open({portal: model.path, provider: model.provider, user: model.user});
+            } else
+            if (/\:(open|web)$/.test(action)) {
                 const _provider_cfg = config.portals.providers[model.provider];
                 const _entrypage = !_provider_cfg ? '/' : _provider_cfg.startPage;
                 sdk.command("portal:open", JSON.stringify({
@@ -219,6 +224,12 @@
             }
         };
 
+        // whether the start page shows the cloud's files itself, see ControllerCloud
+        function _handles_files(model) {
+            const _cloud = window.app && window.app.controller && window.app.controller.cloud;
+            return !!_cloud && _cloud.handles(model.provider);
+        }
+
         var _do_connect = function(model) {
             let _dialog = new DialogConnect({
                 portal: model.path,
@@ -226,9 +237,12 @@
                 onclose: opts => {
                     if ( opts && opts.login ) {
                         // logged in with the system browser, the native side opens the portal
+                        // or the start page shows its files
                         _on_login_message.call(this, JSON.stringify({
                             displayName: opts.login, email: '',
                             domain: opts.portal, provider: opts.provider}));
+                        if ( _handles_files({provider: opts.provider}) )
+                            window.app.controller.cloud.open({portal: opts.portal, provider: opts.provider, user: opts.login});
                     } else
                     if ( opts ) {
                         opts.type = 'outer';
@@ -361,6 +375,7 @@
 
                         if ( !Menu.opened ) {
                             ppmenu.disableItem('portal:logout', !model.logged);
+                            ppmenu.hideItem('portal:web', !_handles_files(model));
                             ppmenu.showUnderElem(e.currentTarget, model);
                         } else {
                             Menu.closeAll();
@@ -391,6 +406,7 @@
 
                 collection.events.contextmenu.attach((collection, model, e)=>{
                     ppmenu.disableItem('portal:logout', !model.logged);
+                    ppmenu.hideItem('portal:web', !_handles_files(model));
                     ppmenu.show({left: e.clientX, top: e.clientY}, model);
                 });
         };
@@ -401,6 +417,9 @@
                 items: [{
                     caption: utils.Lang.menuFileOpen,
                     action: 'portal:open'
+                },{
+                    caption: utils.Lang.cloudOpenWeb,
+                    action: 'portal:web'
                 },{
                     caption: utils.Lang.menuLogout,
                     action: 'portal:logout'
@@ -610,6 +629,7 @@
                         if (!!model) {
                             if (!res[1]) {
                                 model.set('logged', false);
+                                window.CommonEvents.fire('portal:loggedout', [param]);
                                 if ( model.removed ) {
                                     model.set('removed', true);
                                     PortalsStore.forget(param);
@@ -650,6 +670,10 @@
                 });
 
                 window.CommonEvents.on('portal:create', _on_create_portal);
+                // the cloud panel lost its credentials: log in again
+                window.CommonEvents.on('portal:reconnect', account => {
+                    _do_connect.call(this, {path: account.portal, provider: account.provider});
+                });
                 window.CommonEvents.on('lang:changed', _on_lang_changed);
                 window.CommonEvents.on('theme:changed', _on_theme_changed);
                 window.CommonEvents.on("icons:svg", this.view.onscale);

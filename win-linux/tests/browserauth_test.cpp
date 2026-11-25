@@ -261,3 +261,51 @@ TEST_F(BrowserAuthTest, CommandsFromOtherViewsAreIgnored)
     EXPECT_TRUE(m_service->secretFor(PORTAL).isEmpty());
     EXPECT_TRUE(storedAccounts().isEmpty());
 }
+
+namespace {
+
+std::vector<std::wstring> loadsOf(const QString& prefix)
+{
+    std::vector<std::wstring> loads;
+    for (const std::wstring& url : FakeSdk::calls("CCefView::load"))
+        if ( QString::fromStdWString(url).startsWith(prefix) )
+            loads.push_back(url);
+    return loads;
+}
+
+} // namespace
+
+TEST_F(BrowserAuthTest, StoreOpensThePortalUnlessTheStartPageShowsItsFiles)
+{
+    AscAppManager::gotoMainWindow();
+    const int startPage = AscAppManager::mainWindow()->startPanelId();
+
+    QJsonObject obj = QJsonDocument::fromJson(storeJson(PORTAL).toUtf8()).object();
+    obj["open"] = false;
+    sendCommand(L"auth:browser:store", QJsonDocument(obj).toJson(), startPage);
+    QCoreApplication::processEvents();
+
+    EXPECT_EQ(FakeSdk::calls(SET_AUTHORIZATION).size(), 1u);
+    EXPECT_TRUE(loadsOf(PORTAL).empty());
+
+    sendCommand(L"auth:browser:store", storeJson("https://other.example.com"), startPage);
+    QCoreApplication::processEvents();
+    EXPECT_FALSE(loadsOf("https://other.example.com").empty());
+}
+
+// panelcloud.js: documents of a cloud the start page browses
+TEST_F(BrowserAuthTest, CloudOpenFromTheStartPageOpensTheEditorPage)
+{
+    AscAppManager::gotoMainWindow();
+    const int startPage = AscAppManager::mainWindow()->startPanelId();
+    const QString editor = PORTAL + "/apps/eurooffice/42?placement=desktop";
+
+    sendCommand(L"cloud:open", QJsonDocument(QJsonObject{{"url", editor}, {"name", "Report.docx"}}).toJson(), startPage + 1000);
+    sendCommand(L"cloud:open", R"({"url": "file:///etc/passwd", "name": "passwd"})", startPage);
+    QCoreApplication::processEvents();
+    EXPECT_TRUE(FakeSdk::calls("CCefView::load").empty());
+
+    sendCommand(L"cloud:open", QJsonDocument(QJsonObject{{"url", editor}, {"name", "Report.docx"}}).toJson(), startPage);
+    QCoreApplication::processEvents();
+    EXPECT_EQ(loadsOf(editor), std::vector<std::wstring>{editor.toStdWString()});
+}

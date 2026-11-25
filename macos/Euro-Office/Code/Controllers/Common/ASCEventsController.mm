@@ -575,7 +575,7 @@ public:
                             // the cloud page is now logged in by the Authorization header
                             // and reports "portal:login" from there, as with the in-app login
                             NSDictionary * account = [[ASCBrowserAuth shared] store:[NSString stringWithstdwstring:param]];
-                            if (account) {
+                            if (account && [account[@"open"] boolValue]) {
                                 openPortal(@{@"portal": account[@"portal"], @"provider": account[@"provider"], @"entrypage": @"/"});
                             }
                         } else if (cmd.compare(L"portal:login") == 0) {
@@ -833,6 +833,26 @@ public:
                                 if (NSArray * available = json[@"available"]) {
                                     [[ASCSharedSettings sharedInstance] setSetting:@([available count] > 0) forKey:kSettingsHasExtraFeatures];
                                 }
+                            }
+                        } else if (cmd.compare(L"cloud:open") == 0) {
+                            // a file of a cloud the start page browses (panelcloud.js) opens
+                            // in its editor page, as when the cloud's own page opens it
+                            NSDictionary * json = [[NSString stringWithstdwstring:param] dictionary];
+                            NSString * url = [json[@"url"] isKindOfClass:[NSString class]] ? json[@"url"] : nil;
+                            if (senderId == [ASCBrowserAuth shared].startPageViewId &&
+                                ([url hasPrefix:@"https://"] || [url hasPrefix:@"http://"])) {
+                                CAscApplicationManager * appManager = [NSAscApplicationWorker getAppManager];
+                                CCefView * pCefView = appManager->GetViewByUrl([url stdwstring]);
+                                int viewId = pCefView ? pCefView->GetId() : -1;
+
+                                [[NSNotificationCenter defaultCenter] postNotificationName:CEFEventNameCreateTab
+                                                                                    object:nil
+                                                                                  userInfo:@{
+                                                                                         @"action"  : @(ASCTabActionOpenUrl),
+                                                                                         @"viewId"  : [NSString stringWithFormat:@"%d", viewId],
+                                                                                         @"url"     : url,
+                                                                                         @"active"  : @(true)
+                                                                                         }];
                             }
                         } else if (cmd.find(L"open:document") != std::wstring::npos) {
                             if (!param.empty()) {

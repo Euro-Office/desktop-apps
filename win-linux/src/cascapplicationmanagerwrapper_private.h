@@ -304,6 +304,24 @@ public:
 
                 return true;
             } else
+            if ( cmd.compare(L"cloud:open") == 0 ) {
+                // a file of a cloud the start page browses (panelcloud.js) opens in its
+                // editor page, as when the cloud's own page opens it
+                if ( mainWindow() && event.m_nSenderId == mainWindow()->startPanelId() ) {
+                    const QJsonObject obj = Utils::parseJsonString(data.get_Param());
+                    const QString url = obj["url"].toString();
+                    if ( url.startsWith("https://") || url.startsWith("http://") ) {
+                        COpenOptions opts{url.toStdWString()};
+                        opts.parent_id = event.m_nSenderId;
+                        opts.name = obj["name"].toString();
+
+                        if ( !bringEditorToFront(url) )
+                            openDocument(opts);
+                    }
+                }
+
+                return true;
+            } else
             if ( cmd.compare(L"open:document") == 0 ) {
                 const std::wstring & _url = data.get_Param();
                 if ( !_url.empty() ) {

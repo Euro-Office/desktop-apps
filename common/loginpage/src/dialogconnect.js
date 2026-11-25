@@ -357,10 +357,13 @@ window.DialogConnect = function(params) {
             if ( _browser_login !== flow ) return;
             _browser_login = undefined;
 
-            // the native side stores the credentials and opens the portal
+            // the native side stores the credentials and opens the portal, unless
+            // the start page shows the cloud's files itself (ControllerCloud)
+            const _cloud = window.app && window.app.controller && window.app.controller.cloud;
             window.sdk.execCommand('auth:browser:store', JSON.stringify({
                 portal: portal, provider: provider, type: type,
-                login: res.login, authorization: res.authorization}));
+                login: res.login, authorization: res.authorization,
+                open: !(_cloud && _cloud.handles(provider))}));
             // the portal list keeps the cloud even if its page never reports
             // "portal:login" (e.g. Nextcloud without the eurooffice app)
             _close({portal: portal, provider: provider, login: res.login});
@@ -539,7 +542,8 @@ window.DialogConnect = function(params) {
             }
             
             let $portal = $body.find('#auth-portal');
-            if ( !!params.portal ) $portal.val(utils.skipUrlProtocol(params.portal));
+            // https is what the dialog tries first, so only http stays visible
+            if ( !!params.portal ) $portal.val(/^http:\/\//i.test(params.portal) ? params.portal : utils.skipUrlProtocol(params.portal));
             $body.find('#btn-next').on('click', _on_click_connect);
             $body.find('#btn-cancel-login').on('click', e => _stop_browser_login());
 

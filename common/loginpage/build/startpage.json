@@ -80,6 +80,8 @@
                     ,"../src/panelrecent.js"
                     ,"../src/panelfolders.js"
                     ,"../src/panelconnect.js"
+                    ,"../src/nextcloud.js"
+                    ,"../src/panelcloud.js"
                     ,"../src/panelabout.js"
                     ,"../src/panelwelcome.js"
                     ,"../src/panelsettings.js"

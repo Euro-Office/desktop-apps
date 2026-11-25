@@ -171,7 +171,10 @@ static NSString * keychainLoad(NSString * portal) {
         [self setAccounts:accounts];
     }
 
-    return @{@"portal": portal, @"provider": account[@"provider"]};
+    // the start page shows the files of clouds it browses itself ("open": false)
+    id open = obj[@"open"];
+    BOOL shouldOpen = ![open isKindOfClass:[NSNumber class]] || [open boolValue];
+    return @{@"portal": portal, @"provider": account[@"provider"], @"open": @(shouldOpen)};
 }
 
 - (NSString *)logout:(NSString *)portal {
