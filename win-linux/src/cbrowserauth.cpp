@@ -123,6 +123,10 @@ void CBrowserAuth::store(const QString& json)
         setAccounts(list);
     }
 
+    // the start page shows the files of clouds it browses itself ("open": false)
+    if ( !obj["open"].toBool(true) )
+        return;
+
     // the cloud page is now logged in by the Authorization header and reports
     // "portal:login" from there, as with the in-app login
     QMetaObject::invokeMethod(AscAppManager::mainWindow(), "onOutsideAuth", Qt::QueuedConnection,

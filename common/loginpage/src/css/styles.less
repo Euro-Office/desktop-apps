@@ -2868,3 +2868,439 @@ li.menu-item {
     }
   }
 }
+
+// Files of a Nextcloud account, see panelcloud.js
+.cloud-panel {
+  gap: 0;
+  padding-bottom: 32px;
+  text-align: start;
+
+  .cloud-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .cloud-account {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .cloud-account-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: @border-radius-sidebar-item-icon;
+    border: @scaled-one-px solid @border-sidebar-icon;
+    background-color: @background-icon-normal;
+
+    &:empty {
+      display: none;
+    }
+
+    img.icon {
+      width: 28px;
+      height: 28px;
+    }
+
+    .icon__dark {
+      display: none;
+    }
+
+    .theme-type-dark & {
+      .icon__light { display: none; }
+      .icon__dark { display: block; }
+    }
+  }
+
+  .cloud-account-text {
+    min-width: 0;
+  }
+
+  .cloud-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 28px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cloud-subtitle {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: @text-secondary;
+
+    .cloud-dot {
+      margin: 0 4px;
+    }
+
+    .cloud-web {
+      color: @text-link;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .cloud-search-box {
+    position: relative;
+    width: 260px;
+    height: 36px;
+
+    .icon-box {
+      position: absolute;
+      inset: 0 auto 0 0;
+      pointer-events: none;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      z-index: 2;
+
+      .rtl & {
+        left: auto;
+        right: 10px;
+      }
+    }
+
+    .cloud-search {
+      width: 100%;
+      height: 100%;
+      padding: 8px 32px 8px 40px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: @scaled-one-px solid @border-divider;
+      outline: none;
+      color: @text-normal;
+      background: @background-normal;
+
+      &:focus {
+        border-color: @border-control-focus;
+      }
+
+      .rtl & {
+        padding: 8px 40px 8px 32px;
+      }
+    }
+
+    .tool.close {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      z-index: 2;
+
+      .rtl & {
+        right: auto;
+        left: 10px;
+      }
+
+      &:before, &:after {
+        content: '';
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        margin-top: -1px;
+        background: @icon-normal;
+        opacity: .7;
+      }
+
+      &:before { transform: rotate(45deg); }
+      &:after { transform: rotate(-45deg); }
+    }
+  }
+
+  // the tiles of the home page, smaller
+  .cloud-create {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 28px;
+
+    .document-creation-item {
+      width: 128px;
+      height: 120px;
+      gap: 8px;
+      padding: 20px 8px 12px;
+      border: 0 none;
+      font: inherit;
+      color: @text-normal;
+
+      .format-label {
+        top: 10px;
+        left: 8px;
+        height: 22px;
+        padding: 0 5px;
+        border-radius: 5px;
+
+        span {
+          font-size: 12px;
+        }
+
+        .rtl & {
+          left: unset;
+          right: 8px;
+        }
+      }
+
+      .icon {
+        width: 64px;
+        height: 60px;
+      }
+
+      .title {
+        font-size: 13px;
+        line-height: 18px;
+      }
+
+      &:focus-visible {
+        outline: 2px solid @border-control-focus;
+      }
+    }
+
+    .cloud-upload {
+      background: transparent;
+      border: 1px dashed @border-regular-control;
+
+      .cloud-upload-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 60px;
+
+        .icon {
+          width: 28px;
+          height: 28px;
+          fill: @icon-normal;
+          stroke: @icon-normal;
+          color: @icon-normal;
+        }
+      }
+    }
+  }
+
+  // tabs as in the templates panel
+  .cloud-nav {
+    position: relative;
+    margin-top: 28px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: @border-divider;
+    }
+
+    .nav-item {
+      display: inline-block;
+      position: relative;
+      padding: 8px 10px 8px 0;
+      margin-inline-end: 16px;
+      cursor: pointer;
+      color: @text-normal;
+      font-size: 14px;
+      text-decoration: none;
+
+      // keeps the width when the selected tab turns bold
+      &::before {
+        content: attr(data-value);
+        font-weight: bold;
+        height: 0;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+      }
+
+      &.selected {
+        font-weight: bold;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 10px;
+          bottom: 0;
+          height: 4px;
+          border-radius: 2px;
+          background-color: @highlight-toolbar-tab-underline-document;
+          z-index: 1;
+        }
+      }
+    }
+  }
+
+  .cloud-location {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 40px;
+    font-size: 13px;
+    color: @text-secondary;
+  }
+
+  .cloud-crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cloud-crumb {
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: @text-secondary;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:first-child {
+      margin-inline-start: -6px;
+    }
+
+    &:hover {
+      background-color: @highlight-button-hover;
+      color: @text-normal;
+    }
+
+    &:last-child {
+      color: @text-normal;
+      font-weight: bold;
+    }
+  }
+
+  .cloud-crumb-sep {
+    color: @text-tertiary;
+  }
+
+  .cloud-progress {
+    color: @text-secondary;
+    font-style: italic;
+  }
+
+  .cloud-files {
+    &.no-location {
+      .col-location {
+        visibility: hidden;
+      }
+    }
+
+    .file-list-body .row {
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid @border-control-focus;
+        outline-offset: -2px;
+      }
+    }
+
+    .col-name {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .cloud-lock {
+    flex-shrink: 0;
+    margin-inline-start: 8px;
+    padding: 0 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 18px;
+    color: @text-secondary;
+    border: @scaled-one-px solid @border-regular-control;
+  }
+
+  .cloud-loading {
+    display: flex;
+    justify-content: center;
+    padding: 64px 0;
+  }
+
+  .cloud-spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid @border-divider;
+    border-top-color: @highlight-toolbar-tab-underline-document;
+    animation: cloud-spin .8s linear infinite;
+  }
+
+  .cloud-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 16px;
+    text-align: center;
+
+    .cloud-state-icon {
+      width: 160px;
+      height: 120px;
+      margin-bottom: 16px;
+
+      &.connection-error {
+        width: 96px;
+        height: 96px;
+      }
+    }
+
+    .nothing-found {
+      .dark { display: none; }
+
+      .theme-type-dark & {
+        .light { display: none; }
+        .dark { display: inline; }
+      }
+    }
+
+    .cloud-state-title {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: bold;
+      color: @text-normal;
+    }
+
+    .cloud-message {
+      margin: 0;
+      max-width: 420px;
+      font-size: 14px;
+      color: @text-secondary;
+    }
+
+    .btn {
+      margin-top: 20px;
+    }
+  }
+}
+
+@keyframes cloud-spin {
+  to { transform: rotate(360deg); }
+}

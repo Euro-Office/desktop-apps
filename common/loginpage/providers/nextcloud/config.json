@@ -8,6 +8,7 @@
     "auth": {
         "type": "loginflow2"
     },
+    "files": "nextcloud",
     "cryptoSupport" : "true",
     "order": 2,
     "icons": {
