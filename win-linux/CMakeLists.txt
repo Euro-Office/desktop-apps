@@ -434,20 +434,19 @@ endif()
 
 # Qt runtime
 #
-# The aqt Qt package is a full SDK (Quick, Qml, Designer, Sql, Test, ...,
+# The Qt prefix holds more than the app uses (Sql, Test, ShaderTools, ...,
 # plus debug DLLs on Windows), so only install what the app needs: the modules
 # it links, their transitive Qt dependencies and the plugins a desktop Widgets
 # app loads. Check with ldd/dumpbin after bumping Qt or linking a new module.
 #
-# Qt modules, by base name. Network and, on Linux, Qml/Quick are only pulled
-# in by the FFmpeg multimedia plugin.
+# Qt modules, by base name. Network is only pulled in by the FFmpeg
+# multimedia plugin. core's Qt build has no qtdeclarative, so no Qml/Quick.
 set(EO_QT_MODULES
     Core Gui Widgets Svg PrintSupport OpenGL OpenGLWidgets Concurrent
     Multimedia MultimediaWidgets Network)
 if(NOT WIN32)
     list(APPEND EO_QT_MODULES
-        DBus XcbQpa WaylandClient WlShellIntegration
-        Qml QmlMeta QmlModels QmlWorkerScript Quick)
+        DBus XcbQpa WaylandClient WlShellIntegration)
 endif()
 
 # Plugin directories installed as a whole. Leaves out e.g. sqldrivers,
