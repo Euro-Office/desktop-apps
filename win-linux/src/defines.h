@@ -50,6 +50,14 @@
 
 #define WINDOW_NAME "Euro-Office"
 #define WINDOW_TITLE WINDOW_NAME
+// The name users see in window titles, the taskbar, message boxes and
+// notifications. WINDOW_NAME stays fixed: it is also the application name,
+// which settings and data paths depend on.
+#ifdef ABOUT_PAGE_APP_NAME
+# define APP_DISPLAY_NAME ABOUT_PAGE_APP_NAME
+#else
+# define APP_DISPLAY_NAME APP_TITLE
+#endif
 #define WINDOW_CLASS_NAME L"EuroOfficeEditorsWindowClass"
 #define WINDOW_EDITOR_CLASS_NAME L"SingleWindowClass"
 #define REG_APP_NAME "DesktopEditors"

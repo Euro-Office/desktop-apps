@@ -147,7 +147,7 @@ int main( int argc, char *argv[] )
 #endif
 
     QCoreApplication::setApplicationName(QString::fromUtf8(WINDOW_NAME));
-    QApplication::setApplicationDisplayName(QString::fromUtf8(WINDOW_NAME));
+    QApplication::setApplicationDisplayName(QString::fromUtf8(APP_DISPLAY_NAME));
 #ifdef __linux
     QGuiApplication::setDesktopFileName(QString::fromUtf8(DESKTOP_FILE_NAME));
 #endif

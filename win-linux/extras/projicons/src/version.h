@@ -58,11 +58,15 @@
 #define VER_LANG_ID                 0x0409
 #define VER_CHARSET_ID              1252
 
-#define VER_FILEDESCRIPTION_STR     "ONLYOFFICE Editors\0"
-#define VER_PRODUCTNAME_STR         "ONLYOFFICE Editors\0"
+#ifdef ABOUT_PAGE_APP_NAME
+# define VER_FILEDESCRIPTION_STR    ABOUT_PAGE_APP_NAME "\0"
+# define VER_PRODUCTNAME_STR        ABOUT_PAGE_APP_NAME "\0"
+#else
+# define VER_FILEDESCRIPTION_STR    "Euro-Office Desktop Editors\0"
+# define VER_PRODUCTNAME_STR        "Euro-Office\0"
+#endif
 #define VER_COMPANYNAME_STR         "Ascensio System SIA\0"
 #define VER_LEGALCOPYRIGHT_STR      "© Ascensio System SIA, Euro-Office contributors " TO_STR(COPYRIGHT_YEAR) ". All rights reserved.\0"
-#define VER_COMPANYDOMAIN_STR       "www.onlyoffice.com\0"
 
 #define VER_INTERNALNAME_STR        "AppIcons\0"
 #define VER_LEGALTRADEMARKS1_STR    "All rights reserved\0"

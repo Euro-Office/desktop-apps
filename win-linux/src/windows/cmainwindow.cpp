@@ -472,11 +472,7 @@ QWidget* CMainWindow::createMainPanel(QWidget *parent)
     m_pButtonMain->setObjectName( "toolButtonMain" );
     // Icon-only image plus the product name as real text (instead of a
     // wordmark image), so the build-time brand name shows up here.
-#ifdef ABOUT_PAGE_APP_NAME
-    const QString productName = QString::fromUtf8(ABOUT_PAGE_APP_NAME);
-#else
-    const QString productName = QString::fromUtf8(APP_TITLE);
-#endif
+    const QString productName = QString::fromUtf8(APP_DISPLAY_NAME);
     m_pButtonMain->setText(productName);
     m_pButtonMain->setToolTip(productName);
     m_pButtonMain->setProperty("class", "active");

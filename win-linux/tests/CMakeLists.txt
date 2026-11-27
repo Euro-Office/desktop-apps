@@ -45,6 +45,12 @@ desktop_test(
 )
 
 desktop_test(
+    NAME    desktopeditors_brandname_test
+    SOURCES ${CMAKE_CURRENT_LIST_DIR}/brandname_test.cpp ${DESKTOP_TEST_MAIN}
+    LIBS    desktopeditors_core
+)
+
+desktop_test(
     NAME    desktopeditors_utils_test
     SOURCES ${CMAKE_CURRENT_LIST_DIR}/utils_test.cpp ${DESKTOP_TEST_MAIN}
     LIBS    desktopeditors_core
